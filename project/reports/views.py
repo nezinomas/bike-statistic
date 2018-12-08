@@ -1,5 +1,4 @@
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import CreateView
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from . import forms, models
@@ -13,27 +12,20 @@ def test(request):
     )
 
 
-class ViewData(CreateView):
-    model = models.Data
-    form_class = forms.DataForm
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        context['formset'] = forms.DataFormset()
-        context['helper'] = forms.DataFormSetHelper()
-
-        return context
-
-    def post(self, request, *args, **kwargs):
+def data_table(request, year, month):
+    if request.method == 'POST':
         formset = forms.DataFormset(request.POST)
         if formset.is_valid():
-            return self.form_valid(formset)
+            formset.save()
+            return redirect(reverse_lazy('reports:data_table', kwargs={'year': year , 'month': month}))
+    else:
+        queryset = models.Data.objects.filter(date__year=year).filter(date__month=month)
+        formset = forms.DataFormset(queryset=queryset)
 
-    def form_valid(self, formset, **kwargs):
-        formset.save()
-        return super().form_valid(form=formset)
+    helper = forms.DataFormSetHelper()
 
-    def get_success_url(self):
-        return reverse_lazy('reports:index')
-
+    return render(
+        request,
+        "reports/data_form.html",
+        {"formset": formset, 'helper': helper },
+    )
