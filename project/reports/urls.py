@@ -1,7 +1,4 @@
-from django.conf import settings
-from django.conf.urls import static
 from django.urls import path, register_converter
-from django.views.i18n import JavaScriptCatalog
 
 from ..core import converters
 
