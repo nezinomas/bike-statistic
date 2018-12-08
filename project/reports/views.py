@@ -15,6 +15,7 @@ def test(request):
         context={'var': 'kintamasis is view', 'var1': '? ar tikrai?'}
     )
 
+
 # @login_required(login_url='/admin/')
 def data_table(request, start_date, end_date):
     # submit paspaustas pagrindinėje formoje
