@@ -55,8 +55,6 @@ def index(request):
 class ViewData(CreateView):
     model = models.Data
     form_class = forms.DataForm
-    success_url = reverse_lazy('reports:index1')
-    # success_url = 'index1'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -75,6 +73,6 @@ class ViewData(CreateView):
         formset.save()
         return super().form_valid(form=formset)
 
-    # def get_success_url(self):
-    #     return reverse_lazy('reports:index1')
+    def get_success_url(self):
+        return reverse_lazy('reports:index')
 
