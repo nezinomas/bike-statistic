@@ -1,0 +1,67 @@
+form>.row {
+  width: 100%; 
+  margin: 0 auto;
+  padding: 0.05rem 0;
+  align-items: center;
+  justify-content: space-around;
+}
+
+form>.row:nth-child(odd) {
+  background-color: rgb(221, 235, 247);
+  border-radius: .2rem;
+}
+
+input, select {
+  font-size: .785rem!important;
+}
+
+input[id*='time'],
+input[id*='distance'],
+input[id*='temperature'],
+input[id*='ascent'],
+input[id*='descent'] {
+  margin-top: .035rem;
+}
+
+.formColumn {
+  padding: .15rem;
+  margin: 0;
+}
+
+.form-group {
+  margin: 0;
+  padding: 0;
+}
+
+.short_int {
+  width:5rem;
+}
+
+.form-actions {
+  margin: 0 .25rem;
+  text-align: right;
+}
+
+
+/* Top row */
+.rowHead {
+  display: flex;
+}
+
+.colHead {
+  padding: .25rem .25rem;
+  /* border: #0d47a1 solid 1px; */
+}
+
+.containerHead {
+  margin: .5rem 0 .1rem 0;
+  border-radius: .2rem;
+  display: flex;
+  /* background-color: lightskyblue; */
+  background-color: #9bc2e6;
+  /* border: #0d47a1 1px solid; */
+  border: #2f75b5 1px solid;
+  font-size: .9rem!important;
+}
+
+
