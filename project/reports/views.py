@@ -14,7 +14,8 @@ def test(request):
 
 @login_required(login_url='/admin/')
 def data_table(request, year, month):
-    if request.method == 'POST':
+    # submit paspaustas pagrindinėje formoje
+    if 'submit' in request.POST:
         formset = forms.DataFormset(request.POST)
         if formset.is_valid():
             formset.save()
