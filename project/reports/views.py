@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
 
 from . import forms, models
 
@@ -11,7 +12,7 @@ def test(request):
         context={'var': 'kintamasis is view', 'var1': '? ar tikrai?'}
     )
 
-
+@login_required(login_url='/admin/')
 def data_table(request, year, month):
     if request.method == 'POST':
         formset = forms.DataFormset(request.POST)
