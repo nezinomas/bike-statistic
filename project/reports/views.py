@@ -1,14 +1,39 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from calendar import monthrange
 
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
 
+from .endomondo.endomondo import MobileApi
+
 from . import forms, models
+from ..bikes import models as bike_models
+
+from ..config.secrets import get_secret
 
 
 def test(request):
+
+    endomondo = MobileApi(email=get_secret("ENDOMONDO_USER"), password=get_secret("ENDOMONDO_PASS"))
+    auth_token = endomondo.get_auth_token()    
+
+    workouts = endomondo.get_workouts(maxResults=2)
+
+    bike = bike_models.Bike.objects.get(pk=1)
+    
+    # for w in workouts:
+    #     if w.sport == 2:
+
+    #         models.Data.objects.create(
+    #             bike=bike,
+    #             date=w.start_time,
+    #             distance=w.distance,
+    #             time=timedelta(seconds=w.duration),
+    #             ascent=w.ascent,
+    #             descent=w.descent,
+    #         )
+
     return render(
         request,
         'reports/test.html',
