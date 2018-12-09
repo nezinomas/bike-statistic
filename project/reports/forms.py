@@ -30,41 +30,41 @@ class DataFormSetHelper(FormHelper):
                 layout.Column(
                     layout.Field(
                         'bike',
-                        css_class="form-control-sm"),
+                        css_class='form-control-sm'),
                 ),
                 layout.Column(
                     layout.Field(
                         'date',
-                        css_class="form-control-sm"),
+                        css_class='form-control-sm'),
                 ),
                 layout.Column(
                     layout.Field(
                         'distance',
-                        css_class="form-control-sm"),
+                        css_class='form-control-sm'),
                     css_class='short_int'
                 ),
                 layout.Column(
                     layout.Field(
                         'time',
-                        style="width:auto;",
-                        css_class="form-control-sm"),
+                        style='width:auto;',
+                        css_class='form-control-sm'),
                 ),
                 layout.Column(
                     layout.Field(
                         'temperature',
-                        css_class="form-control-sm"),
+                        css_class='form-control-sm'),
                     css_class='short_int'
                 ),
                 layout.Column(
                     layout.Field(
                         'ascent',
-                        css_class="form-control-sm"),
+                        css_class='form-control-sm'),
                     css_class='short_int'
                 ),
                 layout.Column(
                     layout.Field(
                         'descent',
-                        css_class="form-control-sm"),
+                        css_class='form-control-sm'),
                     css_class='short_int'
                 ),
             )
