@@ -52,7 +52,7 @@ input[id*='descent'] {
 }
 
 .form-actions {
-  margin: 0 .25rem;
+  margin-top: .25rem;
   text-align: right;
 }
 
