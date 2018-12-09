@@ -18,6 +18,14 @@ def test(request):
 
 # @login_required(login_url='/admin/')
 def data_table(request, start_date, end_date):
+    # paspaustas filter mygtukas
+    if 'date_filter' in request.POST:
+        filter_form = forms.DateFilterForm(request.POST)
+        if filter_form.is_valid():
+            data = filter_form.cleaned_data
+            url = reverse_lazy('reports:data_table', kwargs={'start_date': data['start_date'] , 'end_date': data['end_date']})
+            return redirect(url)            
+
     # submit paspaustas pagrindinėje formoje
     if 'submit' in request.POST:
         formset = forms.DataFormset(request.POST)
@@ -31,10 +39,12 @@ def data_table(request, start_date, end_date):
 
     helper = forms.DataFormSetHelper()
 
+    filter_form = forms.DateFilterForm(initial={'start_date': start_date, 'end_date': end_date})
+
     return render(
         request,
         "reports/data_form.html",
-        {"formset": formset, 'helper': helper },
+        {"formset": formset, 'helper': helper, 'filter_form': filter_form },
     )
 
 
@@ -45,7 +55,7 @@ def data_table_empty_date(request):
         reverse(
             'reports:data_table',
             kwargs={
-                'start_date': '{y}-{m}-{d}'.format(y=now.year, m=now.month, d=1),
+                'start_date': '{y}-{m}-{d}'.format(y=now.year, m=now.month, d='01'),
                 'end_date': '{y}-{m}-{d}'.format(y=now.year, m=now.month, d=monthrange(now.year, now.month)[1]),
             }
         )

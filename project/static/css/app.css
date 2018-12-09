@@ -1,4 +1,4 @@
-form>.row {
+form.data>.row {
   width: 100%; 
   margin: 0 auto;
   padding: 0.05rem 0;
@@ -6,9 +6,13 @@ form>.row {
   justify-content: space-around;
 }
 
-form>.row:nth-child(odd) {
+form.data>.row:nth-child(odd) {
   background-color: rgb(221, 235, 247);
   border-radius: .2rem;
+}
+
+form.filter>.row {
+  margin-top: .5rem;
 }
 
 input, select {
@@ -21,6 +25,16 @@ input[id*='temperature'],
 input[id*='ascent'],
 input[id*='descent'] {
   margin-top: .035rem;
+}
+
+.asteriskField {
+  display: none;
+}
+
+.btn_filter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
 }
 
 .formColumn {
@@ -63,5 +77,3 @@ input[id*='descent'] {
   border: #2f75b5 1px solid;
   font-size: .9rem!important;
 }
-
-
