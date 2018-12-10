@@ -95,6 +95,7 @@ INSTALLED_APPS = [
     'bootstrap_datepicker_plus',
     'crispy_forms',
     'bootstrap4',
+    'project.accounts',
     'project.core',
     'project.bikes',
     'project.goals',
