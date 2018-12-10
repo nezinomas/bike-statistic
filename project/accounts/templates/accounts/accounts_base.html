@@ -1,0 +1,15 @@
+{% extends parent_template|default:"accounts/index.html" %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="card">
+                {% block content %}
+
+                {% endblock content %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
