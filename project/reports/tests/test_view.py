@@ -74,6 +74,10 @@ class TestDataTableNoEnd(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_view(self):
-        view = resolve('/data/2000-1-1/')
+        view = resolve('/data/2000-01-01/')
         self.assertEqual(view.func, views.data_table_no_end)
+
+
+class TestInsertData(TestCase):
+    pass
 
