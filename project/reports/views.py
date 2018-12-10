@@ -24,7 +24,7 @@ def data_table(request, start_date, end_date):
         if filter_form.is_valid():
             data = filter_form.cleaned_data
             url = reverse_lazy('reports:data_table', kwargs={'start_date': data['start_date'] , 'end_date': data['end_date']})
-            return redirect(url)            
+            return redirect(url)
 
     # submit paspaustas pagrindinėje formoje
     if 'submit' in request.POST:
