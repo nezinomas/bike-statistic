@@ -8,8 +8,9 @@ def signup(request):
 
         if form.is_valid():
             user = form.save()
-            auth_login(request, user)
-            return redirect('home')
+            # after user creation, automatically login
+            # auth_login(request, user)
+            return redirect('goals:home')
     else:
         form = UserCreationForm()
 
