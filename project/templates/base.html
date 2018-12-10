@@ -40,7 +40,7 @@
           </ul>
           {% else %}
           <form class="form-inline ml-auto">
-            <a href="#" class="btn btn-outline-secondary btn-sm">Log in</a>
+            <a href="{% url 'accounts:login' %}" class="btn btn-outline-secondary btn-sm">Log in</a>
             <a href="{% url 'accounts:signup' %}" class="btn btn-sm btn-primary ml-2">Sign up</a>
           </form>
           {% endif %}
