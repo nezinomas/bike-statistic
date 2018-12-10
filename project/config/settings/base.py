@@ -10,6 +10,8 @@ PROJECT_ROOT = os.path.dirname(SITE_ROOT)  # ..\project_project
 # ================   SITE CONFIGURATION
 LOGOUT_REDIRECT_URL = 'goals:home'
 LOGIN_REDIRECT_URL = 'goals:home'
+LOGIN_URL = 'accounts:login'
+
 
 # ================   MEDIA CONFIGURATION
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media/')
