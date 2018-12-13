@@ -3,7 +3,6 @@ from django.forms.models import modelformset_factory
 
 from crispy_forms import layout
 from crispy_forms.helper import FormHelper
-from crispy_forms.bootstrap import FormActions
 
 from bootstrap_datepicker_plus import DatePickerInput, MonthPickerInput
 
@@ -18,7 +17,9 @@ class DataForm(forms.ModelForm):
             'date': DatePickerInput(format='%Y-%m-%d'),
         }
 
+
 DataFormset = modelformset_factory(models.Data, exclude=(), extra=1, form=DataForm)
+
 
 class DataFormSetHelper(FormHelper):
     def __init__(self, *args, **kwargs):
@@ -95,12 +96,9 @@ class DateFilterForm(forms.Form):
         self.helper.form_class = 'filter'
         self.helper.form_show_labels = False
         self.helper.layout = layout.Layout(
-        layout.Div(
-            layout.Div('start_date', css_class='col'),
-            layout.Div('end_date', css_class='col'),
-            layout.Div(layout.Submit('date_filter', 'Filter'), css_class='col-1 btn_filter'),
-            css_class='row')
+            layout.Div(
+                layout.Div('start_date', css_class='col'),
+                layout.Div('end_date', css_class='col'),
+                layout.Div(layout.Submit('date_filter', 'Filter'), css_class='col-1 btn_filter'),
+                css_class='row')
         )
-
-
-
