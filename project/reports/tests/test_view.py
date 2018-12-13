@@ -76,4 +76,3 @@ class TestDataTableNoEnd(TestCase):
     def test_view(self):
         view = resolve('/data/2000-1-1/')
         self.assertEqual(view.func, views.data_table_no_end)
-
