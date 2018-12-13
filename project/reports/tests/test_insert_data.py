@@ -2,10 +2,11 @@ from mock import patch
 from datetime import datetime, timedelta
 
 from django.test import TestCase
-from django.urls import reverse, resolve
+from django.urls import resolve, reverse
+from mock import patch
 
-from .. import views, models
-
+from .. import models, views
+from ..endomondo import Workout
 from ..factories import DataFactory
 from ..endomondo import Workout
 from ..lib.insert_data import insert_data
