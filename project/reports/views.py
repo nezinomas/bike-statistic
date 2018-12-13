@@ -18,7 +18,7 @@ def test(request):
     )
 
 
-# @login_required(login_url='/admin/')
+@login_required()
 def data_table(request, start_date, end_date):
     # paspaustas filter mygtukas
     if 'date_filter' in request.POST:
@@ -50,7 +50,7 @@ def data_table(request, start_date, end_date):
     )
 
 
-# @login_required(login_url='/admin/')
+@login_required()
 def data_table_empty_date(request):
     now = datetime.now()
     return redirect(
@@ -64,7 +64,7 @@ def data_table_empty_date(request):
     )
 
 
-# @login_required(login_url='/admin/')
+@login_required()
 def data_table_no_end(request, start_date):
     now = datetime.now()
     return redirect(
