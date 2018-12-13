@@ -19,9 +19,11 @@ def test(request):
     auth_token = endomondo.get_auth_token()
 
     workouts = endomondo.get_workouts(maxResults=2)
-
+    print(type(workouts))
     bike = bike_models.Bike.objects.get(pk=1)
 
+    for w in workouts:
+        print(type(w))
     # for w in workouts:
     #     if w.sport == 2:
 
@@ -99,3 +101,7 @@ def data_table_no_end(request, start_date):
             }
         )
     )
+
+
+def get_data(request):
+    return render(request, template_name='reports/get_data.html')
