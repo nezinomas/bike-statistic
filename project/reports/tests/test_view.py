@@ -1,8 +1,9 @@
 from django.test import TestCase
-from django.urls import reverse, resolve, reverse_lazy
+from django.urls import reverse, resolve
 from django.contrib.auth.models import User
 
 from .. import views
+
 
 class TestDataTable(TestCase):
     @classmethod
