@@ -78,5 +78,12 @@ def data_table_no_end(request, start_date):
     )
 
 
-def get_data(request):
-    return render(request, template_name='reports/get_data.html')
+def insert_data(request):
+    try:
+        inserter(10)
+        message = 'ok'
+    except Exception as ex:
+        template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+        message = template.format(type(ex).__name__, ex.args)
+
+    return render(request, template_name='reports/get_data.html', context={'message': message})

@@ -1,1 +1,8 @@
-get data
+{% extends parent_template|default:"reports/index.html" %}
+
+
+{% block content %}
+    <p>{{ message }}</p>
+    <p><a href="{% url 'reports:data_table_empty_date' %}">Data</a></p>
+
+{% endblock content %}
