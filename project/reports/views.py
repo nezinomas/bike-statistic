@@ -58,7 +58,7 @@ def data_table(request, start_date, end_date):
         formset = forms.DataFormset(request.POST)
         if formset.is_valid():
             formset.save()
-            url = reverse_lazy('reports:data_table', kwargs={'start_date': start_date , 'end_date': end_date})
+            url = reverse_lazy('reports:data_table', kwargs={'start_date': start_date, 'end_date': end_date})
             return redirect(url)
     else:
         queryset = models.Data.objects.filter(date__range=(start_date, end_date))
@@ -71,7 +71,7 @@ def data_table(request, start_date, end_date):
     return render(
         request,
         "reports/data_form.html",
-        {"formset": formset, 'helper': helper, 'filter_form': filter_form },
+        {"formset": formset, 'helper': helper, 'filter_form': filter_form},
     )
 
 
