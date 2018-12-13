@@ -113,4 +113,3 @@ class TestDataTableNoEnd(TestCase):
 
 class TestInsertData(TestCase):
     pass
-
