@@ -16,12 +16,12 @@ from ..config.secrets import get_secret
 def test(request):
 
     endomondo = MobileApi(email=get_secret("ENDOMONDO_USER"), password=get_secret("ENDOMONDO_PASS"))
-    auth_token = endomondo.get_auth_token()    
+    auth_token = endomondo.get_auth_token()
 
     workouts = endomondo.get_workouts(maxResults=2)
 
     bike = bike_models.Bike.objects.get(pk=1)
-    
+
     # for w in workouts:
     #     if w.sport == 2:
 
