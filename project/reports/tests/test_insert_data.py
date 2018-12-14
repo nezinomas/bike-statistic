@@ -24,7 +24,7 @@ class GetDataViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_view_func(self):
-        view = resolve('/data/insert')
+        view = resolve('/data/insert/')
         self.assertEqual(view.func, views.insert_data)
 
     def test_insert_data_redirection_if_user_not_logged(self):
