@@ -1,5 +1,7 @@
 from datetime import datetime
-from factory import DjangoModelFactory, SubFactory
+
+from django.contrib.auth.models import User
+from factory import DjangoModelFactory, SubFactory, PostGenerationMethodCall
 
 from ..bikes.models import Bike
 from .models import Data
@@ -19,3 +21,12 @@ class DataFactory(DjangoModelFactory):
         model = Data
 
     bike = SubFactory(BikeFactory)
+
+
+class UserFactory(DjangoModelFactory):
+    class Meta:
+        model = User
+
+    username = 'bob'
+    password = PostGenerationMethodCall('set_password', '123')
+    email = 'bob@d.lt'
