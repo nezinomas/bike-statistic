@@ -10,7 +10,7 @@ class TestDataTable(TestCase):
     def setUpTestData(cls):
         UserFactory()
 
-    def test_view_date_ok_01(self):
+    def test_data_date_ok(self):
         self.client.login(username='bob', password='123')
         url = reverse(
             'reports:data_table',
@@ -24,19 +24,19 @@ class TestDataTable(TestCase):
         self.assertContains(response, '<form  class="data"')
         self.assertContains(response, '<form  class="filter"')
 
-    def test_view_date_not_ok_01(self):
+    def test_data_date_not_ok_01(self):
         response = self.client.get('/data/2000/2001')
         self.assertEqual(response.status_code, 404)
 
-    def test_view_date_not_ok_02(self):
+    def test_data_date_not_ok_02(self):
         response = self.client.get('/data/xxxx-xx-xx/xxxx-xx-xx')
         self.assertEqual(response.status_code, 404)
 
-    def test_view_date_not_ok_03(self):
+    def test_data_date_not_ok_03(self):
         response = self.client.get('/data/2000-99-99/9999-99-99/')
         self.assertEqual(response.status_code, 404)
 
-    def test_view(self):
+    def test_data_view(self):
         view = resolve('/data/2000-01-01/2001-01-01')
         self.assertEqual(view.func, views.data_table)
 
