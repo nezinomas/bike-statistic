@@ -1,9 +1,10 @@
-from django.test import TestCase
-from django.urls import reverse, resolve
 from django.contrib.auth.models import User
+from django.test import TestCase
+from django.urls import resolve, reverse
 
 from .. import views
 from ..factories import UserFactory
+
 
 class TestDataTable(TestCase):
     @classmethod
@@ -12,6 +13,7 @@ class TestDataTable(TestCase):
 
     def test_data_date_ok(self):
         self.client.login(username='bob', password='123')
+
         url = reverse(
             'reports:data_table',
             kwargs={
