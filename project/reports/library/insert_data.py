@@ -38,4 +38,7 @@ def insert_data(maxResults=20):
                 time=timedelta(seconds=w.duration),
                 ascent=w.ascent,
                 descent=w.descent,
+                max_speed=w.speed_max,
+                heart_rate=w.heart_rate_avg,
+                cadence=w.cadence
             )
