@@ -85,3 +85,11 @@ class GetDataMethodTests(TestCase):
 
         self.assertEqual(1, data.count())
         self.assertEqual(10.12, inserted_row.distance)
+
+
+    def test_insert_data_redirection_if_user_not_logged(self):
+            login_url = reverse('accounts:login')
+            url = reverse('reports:insert_data')
+            response = self.client.get(url)
+            self.assertRedirects(response, '{login_url}?next={url}'.format(
+                login_url=login_url, url=url))
