@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from django.contrib.auth.models import User
 from factory import DjangoModelFactory, SubFactory
 
 from ..bikes.models import Bike
@@ -19,3 +21,12 @@ class DataFactory(DjangoModelFactory):
         model = Data
 
     bike = SubFactory(BikeFactory)
+
+
+class UserFactory(DjangoModelFactory):
+    class Meta:
+        model = User
+
+    username = 'bob'
+    password = '123'
+    email = 'bob@bob.com'
