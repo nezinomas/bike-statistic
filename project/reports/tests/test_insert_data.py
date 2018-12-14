@@ -36,7 +36,7 @@ class GetDataMethodTests(TestCase):
             })]
         self.addCleanup(patcher_post.stop)
 
-    def test_data_exists(self):
+    def test_insert_data_exists(self):
         DataFactory(
             date=datetime(2000, 1, 1).date(),
             distance=10.12,
@@ -49,7 +49,7 @@ class GetDataMethodTests(TestCase):
 
         self.assertEqual(1, data.count())
 
-    def test_data_not_exists_1(self):
+    def test_insert_data_not_exists_1(self):
         DataFactory(
             date=datetime(1999, 1, 1).date(),
             distance=10.10,
@@ -62,7 +62,7 @@ class GetDataMethodTests(TestCase):
 
         self.assertEqual(2, data.count())
 
-    def test_data_not_exists_2(self):
+    def test_insert_data_not_exists_2(self):
         DataFactory(
             date=datetime(2000, 1, 1).date(),
             distance=9.12345678,
@@ -75,7 +75,7 @@ class GetDataMethodTests(TestCase):
 
         self.assertEqual(2, data.count())
 
-    def test_data_must_be_rounded(self):
+    def test_insert_data_must_be_rounded(self):
         BikeFactory()
 
         insert_data()
