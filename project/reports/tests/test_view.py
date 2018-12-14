@@ -49,9 +49,9 @@ class TestDataTableEmptyDate(TestCase):
         UserFactory()
 
     def test_view_date_ok_01(self):
-        url = reverse('reports:data_table_empty_date')
         self.client.login(username='bob', password='123')
 
+        url = reverse('reports:data_table_empty_date')
         response = self.client.get(url, follow=True)
 
         self.assertContains(response, '<form  class="data"')
@@ -68,11 +68,12 @@ class TestDataTableNoEnd(TestCase):
         UserFactory()
 
     def test_view_date_ok_01(self):
+        self.client.login(username='bob', password='123')
+
         url = reverse(
             'reports:data_table_no_end',
             kwargs={'start_date': '2000-01-01'}
         )
-        self.client.login(username='bob', password='123')
         response = self.client.get(url, follow=True)
 
         self.assertContains(response, '<form  class="data"')
