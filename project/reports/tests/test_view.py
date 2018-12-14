@@ -3,16 +3,12 @@ from django.urls import reverse, resolve
 from django.contrib.auth.models import User
 
 from .. import views
-
+from ..factories import UserFactory
 
 class TestDataTable(TestCase):
     @classmethod
     def setUpTestData(cls):
-        u = 'bob'
-        p = '123'
-        e = 'bob@bob.com'
-
-        User.objects.create_user(username=u, password=p, email=e)
+        UserFactory()
 
     def test_view_date_ok_01(self):
         self.client.login(username='bob', password='123')
