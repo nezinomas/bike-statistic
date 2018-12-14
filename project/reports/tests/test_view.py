@@ -44,11 +44,7 @@ class TestDataTable(TestCase):
 class TestDataTableEmptyDate(TestCase):
     @classmethod
     def setUpTestData(cls):
-        u = 'bob'
-        p = '123'
-        e = 'bob@bob.com'
-
-        User.objects.create_user(username=u, password=p, email=e)
+        UserFactory()
 
     def test_view_date_ok_01(self):
         url = reverse('reports:data_table_empty_date')
@@ -67,11 +63,7 @@ class TestDataTableEmptyDate(TestCase):
 class TestDataTableNoEnd(TestCase):
     @classmethod
     def setUpTestData(cls):
-        u = 'bob'
-        p = '123'
-        e = 'bob@bob.com'
-
-        User.objects.create_user(username=u, password=p, email=e)
+        UserFactory()
 
     def test_view_date_ok_01(self):
         url = reverse(
