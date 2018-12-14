@@ -78,6 +78,7 @@ def data_table_no_end(request, start_date):
     )
 
 
+@login_required()
 def insert_data(request):
     try:
         inserter(2)
