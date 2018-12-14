@@ -6,8 +6,8 @@ from mock import patch
 
 from .. import models, views
 from ..endomondo import Workout
-from ..factories import DataFactory
-from ..lib.insert_data import insert_data
+from ..factories import BikeFactory, DataFactory
+from ..library.insert_data import insert_data
 
 
 class GetDataViewTests(TestCase):
@@ -23,13 +23,13 @@ class GetDataViewTests(TestCase):
 
 class GetDataMethodTests(TestCase):
     def setUp(self):
-        patcher_post = patch('project.reports.lib.insert_data.__workouts')
+        patcher_post = patch('project.reports.library.insert_data.__workouts')
         self.mock_call = patcher_post.start()
         self.mock_call.return_value = [Workout(
             {
                 'ascent': 9,
                 'descent': 9,
-                'distance': 10,
+                'distance': 10.12345,
                 'duration': 15,
                 'sport': 2,
                 'start_time': '2000-01-01 14:48:05 UTC'
@@ -39,7 +39,7 @@ class GetDataMethodTests(TestCase):
     def test_data_exists(self):
         DataFactory(
             date=datetime(2000, 1, 1).date(),
-            distance=10.0,
+            distance=10.12,
             time=timedelta(seconds=15)
         )
 
@@ -52,25 +52,36 @@ class GetDataMethodTests(TestCase):
     def test_data_not_exists_1(self):
         DataFactory(
             date=datetime(1999, 1, 1).date(),
-            distance=10.0,
+            distance=10.10,
             time=timedelta(seconds=15)
         )
 
         insert_data()
 
-        data = models.Data.objects.all()
+        data = models.Data.objects.order_by('-pk')
 
         self.assertEqual(2, data.count())
 
     def test_data_not_exists_2(self):
         DataFactory(
-            date=datetime(200, 1, 1).date(),
-            distance=10.1,
+            date=datetime(2000, 1, 1).date(),
+            distance=9.12345678,
             time=timedelta(seconds=15)
         )
 
         insert_data()
 
-        data = models.Data.objects.all()
+        data = models.Data.objects.order_by('-pk')
 
         self.assertEqual(2, data.count())
+
+    def test_data_must_be_rounded(self):
+        BikeFactory()
+
+        insert_data()
+
+        data = models.Data.objects.order_by('-pk')
+        inserted_row = data[0]
+
+        self.assertEqual(1, data.count())
+        self.assertEqual(10.12, inserted_row.distance)
