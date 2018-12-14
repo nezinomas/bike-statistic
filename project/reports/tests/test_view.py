@@ -28,17 +28,6 @@ class TestDataTable(TestCase):
         self.assertContains(response, '<form  class="data"')
         self.assertContains(response, '<form  class="filter"')
 
-    # def test_view_date_ok_02(self):
-    #     url = reverse(
-    #         'reports:data_table',
-    #         kwargs={
-    #             'start_date': '2000-1-1',
-    #             'end_date': '2000-1-1'
-    #         }
-    #     )
-    #     response = self.client.get(url)
-    #     self.assertEqual(response.status_code, 200)
-
     def test_view_date_not_ok_01(self):
         response = self.client.get('/data/2000/2001')
         self.assertEqual(response.status_code, 404)
@@ -48,14 +37,6 @@ class TestDataTable(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_view_date_not_ok_03(self):
-        # url = reverse_lazy(
-        #     'reports:data_table',
-        #     kwargs={
-        #         'start_date': '2000-xx-xx',
-        #         'end_date': '2000-01-11'
-        #     }
-        # )
-        # response = self.client.get(url)
         response = self.client.get('/data/2000-99-99/9999-99-99/')
         self.assertEqual(response.status_code, 404)
 
