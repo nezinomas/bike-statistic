@@ -6,7 +6,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
 
 from . import forms, models
-from .lib.insert_data import insert_data as inserter
+from .library.insert_data import insert_data as inserter
 
 
 def test(request):
@@ -80,7 +80,7 @@ def data_table_no_end(request, start_date):
 
 def insert_data(request):
     try:
-        inserter(10)
+        inserter(2)
         message = 'ok'
     except Exception as ex:
         template = "An exception of type {0} occurred. Arguments:\n{1!r}"
