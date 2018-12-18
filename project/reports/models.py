@@ -1,6 +1,7 @@
 import datetime
 
 from django.db import models
+from django_pandas.managers import DataFrameManager
 
 from ..bikes import models as bikeModels
 
@@ -35,6 +36,8 @@ class Data(models.Model):
         null=True,
         blank=True
     )
+    objects = models.Manager()
+    pdobjects = DataFrameManager()  # Pandas-Enabled Manager 
 
     def __str__(self):
         return(str(self.date))
