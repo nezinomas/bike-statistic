@@ -1,9 +1,11 @@
-from datetime import datetime
+import json
 from calendar import monthrange
+from datetime import datetime
 
-from django.shortcuts import render, redirect
-from django.urls import reverse, reverse_lazy
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from django.urls import reverse, reverse_lazy
 
 from . import forms, models
 from .library.insert_data import insert_data as inserter
@@ -88,3 +90,56 @@ def insert_data(request):
         message = template.format(type(ex).__name__, ex.args)
 
     return render(request, template_name='reports/get_data.html', context={'message': message})
+
+
+def get_data(request):
+
+    # backgroundColor: [
+    #     'rgba(255, 99, 132, 0.2)',
+    #     'rgba(54, 162, 235, 0.2)',
+    #     'rgba(255, 206, 86, 0.2)',
+    #     'rgba(75, 192, 192, 0.2)',
+    #     'rgba(153, 102, 255, 0.2)',
+    #     'rgba(255, 159, 64, 0.2)'
+    # ],
+    # borderColor: [
+    #     'rgba(255,99,132,1)',
+    #     'rgba(54, 162, 235, 1)',
+    #     'rgba(255, 206, 86, 1)',
+    #     'rgba(75, 192, 192, 1)',
+    #     'rgba(153, 102, 255, 1)',
+    #     'rgba(255, 159, 64, 1)'
+    # ],
+    chart = {'first': {
+        'xAxis': {'categories': ['Africa', 'America', 'Asia', 'Europe', 'Oceania']},
+        'series': [
+            {
+            'name': 'Year 1800',
+            'data': [107, 31, 635, 203, 2],
+            'color': 'rgba(255, 99, 132, 0.5)',
+            'borderColor': 'rgba(255,99,132,0.5)',
+            'borderWidth:': '0.25',
+
+            },
+            {
+            'name': 'Year 1900',
+            'data': [133, 156, 947, 408, 6],
+            'color': 'rgba(54, 162, 235, 0.5)',
+            'borderColor': 'rgba(54, 162, 235, 0.5)',
+            'borderWidth:': '0.25',
+            },
+            {
+            'name': 'Year 2012',
+            'data': [1052, 954, 4250, 740, 38],
+            'color': 'rgba(255, 206, 86, 0.5)',
+            'borderColor': 'rgba(255, 206, 86, 0.5)',
+            'borderWidth:': '0.25',
+            },
+        ]
+    }}
+
+    return JsonResponse(chart)
+
+
+def charts(request):
+    return render(request, template_name='reports/charts.html', context={'customers': 15})
