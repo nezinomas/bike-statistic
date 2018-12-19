@@ -1,4 +1,7 @@
 import json
+import numpy as np
+import pandas as pd
+
 from calendar import monthrange
 from datetime import datetime
 
@@ -7,7 +10,10 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 
+from django_pandas.io import read_frame
+
 from . import forms, models
+
 from .library.insert_data import insert_data as inserter
 
 
@@ -94,48 +100,62 @@ def insert_data(request):
 
 def get_data(request):
 
-    # backgroundColor: [
-    #     'rgba(255, 99, 132, 0.2)',
-    #     'rgba(54, 162, 235, 0.2)',
-    #     'rgba(255, 206, 86, 0.2)',
-    #     'rgba(75, 192, 192, 0.2)',
-    #     'rgba(153, 102, 255, 0.2)',
-    #     'rgba(255, 159, 64, 0.2)'
-    # ],
-    # borderColor: [
-    #     'rgba(255,99,132,1)',
-    #     'rgba(54, 162, 235, 1)',
-    #     'rgba(255, 206, 86, 1)',
-    #     'rgba(75, 192, 192, 1)',
-    #     'rgba(153, 102, 255, 1)',
-    #     'rgba(255, 159, 64, 1)'
-    # ],
-    chart = {'first': {
-        'xAxis': {'categories': ['Africa', 'America', 'Asia', 'Europe', 'Oceania']},
-        'series': [
-            {
-            'name': 'Year 1800',
-            'data': [107, 31, 635, 203, 2],
-            'color': 'rgba(255, 99, 132, 0.5)',
-            'borderColor': 'rgba(255,99,132,0.5)',
-            'borderWidth:': '0.25',
+    qs = models.Data.objects.values('date', 'distance', 'time', 'bike__date', 'bike__short_name')
 
-            },
-            {
-            'name': 'Year 1900',
-            'data': [133, 156, 947, 408, 6],
-            'color': 'rgba(54, 162, 235, 0.5)',
-            'borderColor': 'rgba(54, 162, 235, 0.5)',
-            'borderWidth:': '0.25',
-            },
-            {
-            'name': 'Year 2012',
-            'data': [1052, 954, 4250, 740, 38],
-            'color': 'rgba(255, 206, 86, 0.5)',
-            'borderColor': 'rgba(255, 206, 86, 0.5)',
-            'borderWidth:': '0.25',
-            },
-        ]
+    df = read_frame(qs)
+    df['date'] = pd.to_datetime(df['date']).dt.year
+
+    pivotTable = pd.pivot_table(
+        df,
+        index=['bike__short_name', 'bike__date'],
+        columns=['date'],
+        values=['distance'],
+        fill_value=0,
+        aggfunc=[np.sum],
+    ).sort_values('bike__date')
+
+    backgroundColor = [
+        'rgba(255, 99, 132, 0.35)',
+        'rgba(54, 162, 235, 0.35)',
+        'rgba(255, 206, 86, 0.35)',
+        'rgba(75, 192, 192, 0.35)',
+        'rgba(153, 102, 255, 0.35)',
+        'rgba(200, 200, 200, 0.35)'
+    ]
+    borderColor = [
+        'rgba(255,99,132, 0.85)',
+        'rgba(54, 162, 235, 0.85)',
+        'rgba(255, 206, 86, 0.85)',
+        'rgba(75, 192, 192, 0.85)',
+        'rgba(153, 102, 255, 0.85)',
+        'rgba(200, 200, 200, 0.85)'
+    ]
+
+
+    series = []
+
+    bikes = [x[0] for x in list(pivotTable.index)]
+
+    for key, bike in enumerate(bikes):
+        item = {}
+        q = pivotTable.query("bike__short_name==['{}']".format(bike)).values.tolist()[0]
+
+        item = {
+                'name': bike,
+                'data': [float(x) for x in q],
+                'color': backgroundColor[key],
+                'borderColor': borderColor[key],
+                'borderWidth:': '0.25',
+            }
+
+        series.append(item)
+
+    categories = [x[-1] for x in list(pivotTable.columns.values)]
+
+
+    chart = {'first': {
+        'xAxis': {'categories': categories},
+        'series': series[::-1]
     }}
 
     return JsonResponse(chart)
