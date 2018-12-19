@@ -22,15 +22,15 @@
                     Highcharts.chart("my-chart", {
                         chart : { type: 'column'},
                         xAxis: data.first.xAxis,
-                        title: data.first.title,
-
+                        title: {
+                            text: ''
+                        },
                         yAxis: {
                             min: 0,
                             title: {
                                 text: 'km, thousants'
                             },
                         },
-
                         legend: {
                             align: 'right',
                             verticalAlign: 'middle',
@@ -39,12 +39,10 @@
                             layout: 'vertical',
                             itemMarginBottom: 10
                         },
-
                         tooltip: {
                             headerFormat: '<b>{point.x}</b><br/>',
                             pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
                         },
-
                         plotOptions: {
                             column: {
                                 stacking: 'normal',
