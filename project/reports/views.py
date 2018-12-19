@@ -152,7 +152,6 @@ def get_data(request):
 
     categories = [x[-1] for x in list(pivotTable.columns.values)]
 
-
     chart = {'first': {
         'xAxis': {'categories': categories},
         'series': series[::-1]
