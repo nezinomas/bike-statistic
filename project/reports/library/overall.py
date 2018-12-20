@@ -6,7 +6,7 @@ from django_pandas.io import read_frame
 from . import chart
 
 
-class Overall:
+class Overall(object):
     def __init__(self, model):
         qs = self.__create_query(model)
         df = self.__create_dataframe(qs)
