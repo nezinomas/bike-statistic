@@ -1,6 +1,4 @@
 import json
-import numpy as np
-import pandas as pd
 
 from calendar import monthrange
 from datetime import datetime
@@ -10,12 +8,10 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 
-from django_pandas.io import read_frame
-
 from . import forms, models
 
 from .library.insert_data import insert_data as inserter
-from .library import chart as ChartLib
+from .library.overall import Overall
 
 
 def test(request):
@@ -101,40 +97,11 @@ def insert_data(request):
 
 def api_overall(request):
 
-    qs = models.Data.objects.values('date', 'distance', 'time', 'bike__date', 'bike__short_name')
-
-    df = read_frame(qs)
-    df['date'] = pd.to_datetime(df['date']).dt.year
-
-    pivotTable = pd.pivot_table(
-        df,
-        index=['bike__short_name', 'bike__date'],
-        columns=['date'],
-        values=['distance'],
-        fill_value=0,
-        aggfunc=[np.sum],
-    ).sort_values('bike__date')
-
-    series = []
-    bikes = [x[0] for x in list(pivotTable.index)]
-    categories = [x[-1] for x in list(pivotTable.columns.values)]
-
-    for key, bike in enumerate(bikes):
-        item = {}
-        q = pivotTable.query("bike__short_name==['{}']".format(bike)).values.tolist()[0]
-
-        item = {
-                'name': bike,
-                'data': [float(x) for x in q],
-                'color': ChartLib.get_color(key, 0.35),
-                'borderColor': ChartLib.get_color(key, 0.85),
-                'borderWidth:': '0.25',
-        }
-        series.append(item)
+    obj = Overall(models.Data)
 
     chart = {'first': {
-        'xAxis': {'categories': categories},
-        'series': series[::-1]
+        'xAxis': {'categories': obj.create_categories()},
+        'series': obj.create_series()[::-1]
     }}
 
     return JsonResponse(chart)
