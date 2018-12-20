@@ -99,7 +99,7 @@ def insert_data(request):
 
 from .library import chart as ChartLib
 
-def get_data(request):
+def api_overall(request):
 
     qs = models.Data.objects.values('date', 'distance', 'time', 'bike__date', 'bike__short_name')
 
@@ -140,5 +140,5 @@ def get_data(request):
     return JsonResponse(chart)
 
 
-def charts(request):
+def overall(request):
     return render(request, template_name='reports/charts.html', context={'customers': 15})
