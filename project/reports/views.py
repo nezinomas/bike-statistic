@@ -1,12 +1,17 @@
-from datetime import datetime
-from calendar import monthrange
+import json
 
-from django.shortcuts import render, redirect
-from django.urls import reverse, reverse_lazy
+from calendar import monthrange
+from datetime import datetime
+
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from django.urls import reverse, reverse_lazy
 
 from . import forms, models
+
 from .library.insert_data import insert_data as inserter
+from .library.overall import Overall
 
 
 def test(request):
@@ -81,10 +86,26 @@ def data_table_no_end(request, start_date):
 @login_required()
 def insert_data(request):
     try:
-        inserter(2)
+        inserter(4)
         message = 'ok'
     except Exception as ex:
         template = "An exception of type {0} occurred. Arguments:\n{1!r}"
         message = template.format(type(ex).__name__, ex.args)
 
     return render(request, template_name='reports/get_data.html', context={'message': message})
+
+
+def api_overall(request):
+
+    obj = Overall(models.Data)
+
+    chart = {'first': {
+        'xAxis': {'categories': obj.create_categories()},
+        'series': obj.create_series()[::-1]
+    }}
+
+    return JsonResponse(chart)
+
+
+def overall(request):
+    return render(request, template_name='reports/overall.html', context={})
