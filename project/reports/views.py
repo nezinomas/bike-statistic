@@ -15,6 +15,7 @@ from django_pandas.io import read_frame
 from . import forms, models
 
 from .library.insert_data import insert_data as inserter
+from .library import chart as ChartLib
 
 
 def test(request):
@@ -97,7 +98,6 @@ def insert_data(request):
 
     return render(request, template_name='reports/get_data.html', context={'message': message})
 
-from .library import chart as ChartLib
 
 def api_overall(request):
 
