@@ -97,6 +97,7 @@ def insert_data(request):
 
     return render(request, template_name='reports/get_data.html', context={'message': message})
 
+from .library import chart as ChartLib
 
 def get_data(request):
 
@@ -114,27 +115,9 @@ def get_data(request):
         aggfunc=[np.sum],
     ).sort_values('bike__date')
 
-    backgroundColor = [
-        'rgba(255, 99, 132, 0.35)',
-        'rgba(54, 162, 235, 0.35)',
-        'rgba(255, 206, 86, 0.35)',
-        'rgba(75, 192, 192, 0.35)',
-        'rgba(153, 102, 255, 0.35)',
-        'rgba(200, 200, 200, 0.35)'
-    ]
-    borderColor = [
-        'rgba(255,99,132, 0.85)',
-        'rgba(54, 162, 235, 0.85)',
-        'rgba(255, 206, 86, 0.85)',
-        'rgba(75, 192, 192, 0.85)',
-        'rgba(153, 102, 255, 0.85)',
-        'rgba(200, 200, 200, 0.85)'
-    ]
-
-
     series = []
-
     bikes = [x[0] for x in list(pivotTable.index)]
+    categories = [x[-1] for x in list(pivotTable.columns.values)]
 
     for key, bike in enumerate(bikes):
         item = {}
@@ -143,14 +126,11 @@ def get_data(request):
         item = {
                 'name': bike,
                 'data': [float(x) for x in q],
-                'color': backgroundColor[key],
-                'borderColor': borderColor[key],
+                'color': ChartLib.get_color(key, 0.35),
+                'borderColor': ChartLib.get_color(key, 0.85),
                 'borderWidth:': '0.25',
-            }
-
+        }
         series.append(item)
-
-    categories = [x[-1] for x in list(pivotTable.columns.values)]
 
     chart = {'first': {
         'xAxis': {'categories': categories},
