@@ -91,8 +91,9 @@ def insert_data(request):
     except Exception as ex:
         template = "An exception of type {0} occurred. Arguments:\n{1!r}"
         message = template.format(type(ex).__name__, ex.args)
+        return render(request, template_name='reports/get_data.html', context={'message': message})
 
-    return render(request, template_name='reports/get_data.html', context={'message': message})
+    return redirect(reverse('reports:data_table_empty_date'))
 
 
 def api_overall(request):

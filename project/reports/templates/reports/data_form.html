@@ -5,16 +5,14 @@
 
     {% crispy filter_form filter_form.helper %}
 
-    <div class="rowHead mx-auto">
-        <div class="containerHead">
-            <div class="colHead" style="width: 5.8rem; ">Bike</div>
-            <div class="colHead" style="width: 12.6rem; ">Date</div>
-            <div class="colHead short_int">Distance</div>
-            <div class="colHead" style="width: 10rem; ">Time</div>
-            <div class="colHead short_int">Temp</div>
-            <div class="colHead short_int">Ascent</div>
-            <div class="colHead" style="width: 4.8rem">Descent</div>
-        </div>
+    <div class="row containerHead rowHead mx-auto">
+            <div class="colHead col-lg-2 pl-3">Bike</div>
+            <div class="colHead col-lg-3 text-center pr-5">Date</div>
+            <div class="colHead col-lg-2 text-center">Distance</div>
+            <div class="colHead col-lg-2 text-center">Time</div>
+            <div class="colHead col-lg-1 text-center">Temp</div>
+            <div class="colHead col-lg-1 text-center">Ascent</div>
+            <div class="colHead col-lg-1 text-center">Descent</div>
     </div>
 
     {% crispy formset helper %}
