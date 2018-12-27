@@ -17,7 +17,7 @@
     {% block body %}
 
     <nav class="navbar navbar-expand navbar-light bg-light">
-      <div class="container r">
+      <div class="container">
         <a href="{% url 'goals:home' %}">Bikes and Stats</a>
         <div class="collapse navbar-collapse" id="mainMenu">
           {% if user.is_authenticated %}
@@ -44,18 +44,18 @@
       </div>
     </nav>
 
-      <div class="container b">
+      <div class="container">
         <div class="row">
           <div class="col-lg-12">
             <div class="row">
 
-              <div class="col-lg-2 g">
+              <div class="col-lg-2">
                 <ul class="sidebar-nav">
                   <li class="nav-item"><a href="{% url 'reports:data_table_empty_date' %}">Data</a></li>
                 </ul>
               </div>
 
-              <div class="col-lg-10 mx-auto px-auto gr">{% block content %}{% endblock content %}
+              <div class="col-lg-10 mx-auto px-auto">{% block content %}{% endblock content %}
               </div>
 
             </div>
