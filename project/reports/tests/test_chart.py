@@ -1,14 +1,16 @@
+from mock import patch
+
 from django.test import TestCase
 
-from ..library.chart import get_color, colors
+from ..library import chart #import get_color, colors
 
 
+@patch('project.reports.library.chart.colors', [(1, 1, 1)])
 class GetColorTests(TestCase):
-    def test_num_bigger(self):
-        last = len(colors)-1
-        expected = 'rgba({r}, {g}, {b}, 5)'.format(
-            r=colors[last][0], g=colors[last][1], b=colors[last][2])
 
-        actual = get_color(100, 5)
+    def test_num_bigger(self):
+        expected = 'rgba(1, 1, 1, 5)'
+
+        actual = chart.get_color(100, 5)
 
         self.assertEqual(actual, expected)
