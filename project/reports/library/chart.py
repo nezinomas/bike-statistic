@@ -10,7 +10,7 @@ colors = [
 
 def get_color(num, alpha=1):
     if num > len(colors):
-        num = len
+        num = len(colors)-1
 
     return 'rgba({r}, {b}, {g}, {alpha})'.format(
         r=colors[num][0], b=colors[num][1], g=colors[num][2], alpha=alpha)
