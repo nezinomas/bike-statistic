@@ -43,16 +43,14 @@ def component_list(request):
 
 
 def component_create(request):
-    if request.method == 'POST':
-        form = ComponentForm(request.POST)
-    else:
-        form = ComponentForm()
-
+    form = ComponentForm(request.POST or None)
     return save_component(request, form, 'bikes/includes/partial_component_create.html')
 
 
 def component_update(request, pk):
     component = get_object_or_404(Component, pk=pk)
+    form = ComponentForm(request.POST or None)
+
     if request.method == 'POST':
         form = ComponentForm(request.POST, instance=component)
     else:
