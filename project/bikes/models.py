@@ -1,3 +1,4 @@
+from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
 from django.utils.text import slugify
 
@@ -48,7 +49,8 @@ class BikeInfo(models.Model):
 class Component(models.Model):
     name = models.CharField(
         max_length=100,
-        unique=True
+        unique=True,
+        validators=[MaxLengthValidator(99), MinLengthValidator(3)]
     )
 
     def __str__(self):
