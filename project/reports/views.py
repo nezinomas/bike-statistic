@@ -62,8 +62,8 @@ def data_table_empty_date(request):
         reverse(
             'reports:data_table',
             kwargs={
-                'start_date': '{y}-{m}-{d}'.format(y=now.year, m=now.month, d='01'),
-                'end_date': '{y}-{m}-{d}'.format(y=now.year, m=now.month, d=monthrange(now.year, now.month)[1]),
+                'start_date': '{y}-{m:02d}-{d}'.format(y=now.year, m=now.month, d='01'),
+                'end_date': '{y}-{m:02d}-{d:02d}'.format(y=now.year, m=now.month, d=monthrange(now.year, now.month)[1]),
             }
         )
     )
@@ -77,7 +77,7 @@ def data_table_no_end(request, start_date):
             'reports:data_table',
             kwargs={
                 'start_date': start_date,
-                'end_date': '{y}-{m}-{d}'.format(y=now.year, m=now.month, d=monthrange(now.year, now.month)[1]),
+                'end_date': '{y}-{m:02d}-{d:02d}'.format(y=now.year, m=now.month, d=monthrange(now.year, now.month)[1]),
             }
         )
     )
