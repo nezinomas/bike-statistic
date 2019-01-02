@@ -1,0 +1,18 @@
+{% for component in components %}
+<tr>
+    <td>{{ component.id }}</td>
+    <td>{{ component.name }}</td>
+    <td>
+        <button type="button" class="btn btn-warning btn-sm js-update" data-url="{% url 'bikes:component_update' component.id %}">
+            <span class="fas fa-pen"></span> Edit
+        </button>
+        <button type="button" class="btn btn-danger btn-sm js-delete" data-url="{% url 'bikes:component_delete' component.id %}">
+            <span class="far fa-trash-alt"></span> Delete
+        </button>
+    </td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="3" class="text-center bg-warning">No components</td>
+</tr>
+{% endfor %}

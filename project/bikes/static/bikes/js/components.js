@@ -27,7 +27,7 @@ $(function () {
             dataType: 'json',
             success: function (data) {
                 if (data.form_is_valid) {
-                    $("#book-table tbody").html(data.html_book_list);
+                    $("#components-table tbody").html(data.html_list);
                     $("#modal-book").modal("hide");
                 }
                 else {
@@ -46,11 +46,11 @@ $(function () {
     $("#modal-book").on("submit", ".js-create-form", saveForm);
 
     // Update book
-    $("#book-table").on("click", ".js-update", loadForm);
+    $("#components-table").on("click", ".js-update", loadForm);
     $("#modal-book").on("submit", ".js-update-form", saveForm);
 
     // Delete book
-    $("#book-table").on("click", ".js-delet", loadForm);
+    $("#components-table").on("click", ".js-delete", loadForm);
     $("#modal-book").on("submit", ".js-delete-form", saveForm);
 
 });
