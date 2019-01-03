@@ -1,12 +1,12 @@
 {% for component in components %}
-<tr>
-    <td>{{ component.id }}</td>
-    <td>{{ component.name }}</td>
-    <td>
-        <button type="button" class="btn btn-warning btn-sm js-update" data-url="{% url 'bikes:component_update' component.id %}">
+<tr id="row_id_{{ component.pk }}">
+    <td class="py-1 align-middle">{{ component.id }}</td>
+    <td class="py-1 align-middle">{{ component.name }}</td>
+    <td class="py-1 align-middle">
+        <button type="button" class="btn btn-warning btn-sm js-update" data-url="{% url 'bikes:component_update' component.id %}" data-pk="{{ component.pk }}">
             <span class="fas fa-pen"></span> Edit
         </button>
-        <button type="button" class="btn btn-danger btn-sm js-delete" data-url="{% url 'bikes:component_delete' component.id %}">
+        <button type="button" class="btn btn-danger btn-sm js-delete" data-url="{% url 'bikes:component_delete' component.id %}" data-pk="{{ component.pk }}">
             <span class="far fa-trash-alt"></span> Delete
         </button>
     </td>
