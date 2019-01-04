@@ -2,12 +2,12 @@ $(function () {
 
     /* Functions */
 
-    var loadFormBtn = function () {
+    var loadFormBtn = function() {
         var btn = $(this);
         loadFormAjax(btn.data("pk"), btn.attr("data-url"));
     };
 
-    var loadFormDblClc = function (pk, url) {
+    var loadFormDblClc = function(pk, url) {
         loadFormAjax(pk, url)
     };
 
@@ -22,7 +22,6 @@ $(function () {
             url: url,
             type: 'get',
             dataType: 'json',
-
             success: function (data) {
                 if (row !== "#component-tbody"){
                     $(row).hide();
@@ -35,7 +34,7 @@ $(function () {
         });
     };
 
-    var saveForm = function () {
+    var saveForm = function() {
         var form = $(this);
         var pk = form.data("pk");
         var row = (pk >= 1) ? `#row_id_${pk}` : "#component-tbody";
@@ -64,7 +63,6 @@ $(function () {
         return false;
     };
 
-
     var closeForm = function () {
         $('#edit-form').remove();
         var form = $(this);
@@ -72,7 +70,6 @@ $(function () {
         var row = (pk >= 1) ? "#row_id_" + pk : "thead";
         $(row).show();
     };
-
 
     $('tr').dblclick(function () {
         loadFormDblClc($(this).data("pk"), $(this).data('url'))
