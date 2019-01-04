@@ -1,5 +1,5 @@
 {% for component in components %}
-<tr id="row_id_{{ component.pk }}">
+<tr id="row_id_{{ component.pk }}" data-pk="{{ component.pk }}" data-url="{% url 'bikes:component_update' component.id %}">
     <td class="py-1 align-middle">{{ component.id }}</td>
     <td class="py-1 align-middle">{{ component.name }}</td>
     <td class="py-1 align-middle">

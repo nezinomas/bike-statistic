@@ -2,15 +2,26 @@ $(function () {
 
     /* Functions */
 
-    var loadForm = function () {
+    var loadFormBtn = function () {
         var btn = $(this);
-        var pk =  btn.data("pk");
+        loadFormAjax(btn.data("pk"), btn.attr("data-url"));
+    };
+
+    var loadFormDblClc = function (pk, url) {
+        loadFormAjax(pk, url)
+    };
+
+    var loadFormAjax = function(pk, url) {
+        if (pk == undefined && url == undefined) {
+            return;
+        }
         var row = (pk >= 1) ? "#row_id_" + pk : "thead";
 
         $.ajax({
-            url: btn.attr("data-url"),
+            url: url,
             type: 'get',
             dataType: 'json',
+
             success: function (data) {
                 $(row).hide()
                 $(row).after(data.html_form)
@@ -43,27 +54,31 @@ $(function () {
 
 
     var closeForm = function () {
+        $('#edit-form').remove();
         var form = $(this);
         var pk = form.data("pk");
         var row = (pk >= 1) ? "#row_id_" + pk : "thead";
-        $('#edit-form').remove();
         $(row).show();
     };
 
 
+    $('tr').dblclick(function () {
+        loadFormDblClc($(this).data("pk"), $(this).data('url'))
+    });
+
     /* Binding */
 
     // Create
-    $(".js-create").click(loadForm);
+    $(".js-create").click(loadFormBtn);
     $("#component-tbody").on("submit", ".js-create-form", saveForm);
 
     // Update
-    $("#component-tbody").on("click", ".js-update", loadForm);
+    $("#component-tbody").on("click", ".js-update", loadFormBtn);
     $("#component-tbody").on("click", ".js-close", closeForm);
     $("#component-tbody").on("submit", ".js-update-form", saveForm);
 
     // Delete
-    $("#component-tbody").on("click", ".js-delete", loadForm);
+    $("#component-tbody").on("click", ".js-delete", loadFormBtn);
     $("#component-tbody").on("submit", ".js-delete-form", saveForm);
 
 });
