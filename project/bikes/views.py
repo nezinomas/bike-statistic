@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import reverse, render, get_object_or_404
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 
@@ -14,7 +14,7 @@ def index(request):
     )
 
 
-def save_component(request, form, template_name):
+def save_component(request, context, form, template_name):
     data = {}
 
     if request.method == 'POST':
@@ -27,7 +27,7 @@ def save_component(request, form, template_name):
         else:
             data['form_is_valid'] = False
 
-    context = {'form': form}
+    context['form'] = form
     data['html_form'] = render_to_string(
         template_name=template_name,
         context=context,
@@ -44,14 +44,15 @@ def component_list(request):
 
 def component_create(request):
     form = ComponentForm(request.POST or None)
-    return save_component(request, form, 'bikes/includes/partial_component_create.html')
+    context = {'url': reverse('bikes:component_create')}
+    return save_component(request, context, form, 'bikes/includes/partial_component_update.html')
 
 
 def component_update(request, pk):
     component = get_object_or_404(Component, pk=pk)
     form = ComponentForm(request.POST or None, instance=component)
-
-    return save_component(request, form, 'bikes/includes/partial_component_update.html')
+    context = {'url': reverse('bikes:component_update', kwargs={'pk': pk})}
+    return save_component(request, context, form, 'bikes/includes/partial_component_update.html')
 
 
 def component_delete(request, pk):
