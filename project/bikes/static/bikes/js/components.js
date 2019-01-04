@@ -17,7 +17,7 @@ $(function () {
         }
 
         var row = (pk !== undefined) ? `#row_id_${pk}` : "#component-tbody";
-
+        $('#edit-form').remove();
         $.ajax({
             url: url,
             type: 'get',
@@ -38,7 +38,6 @@ $(function () {
         var form = $(this);
         var pk = form.data("pk");
         var row = (pk >= 1) ? `#row_id_${pk}` : "#component-tbody";
-
         $.ajax({
             url: form.attr("action"),
             data: form.serialize(),
@@ -46,7 +45,7 @@ $(function () {
             dataType: 'json',
             success: function (data) {
                 if (data.form_is_valid) {
-                    $('#edit-form').remove()
+                    $('#edit-form').remove();
                     $("#components-table tbody").html(data.html_list);
                 }
                 else {
