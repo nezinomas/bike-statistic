@@ -82,7 +82,7 @@ $(function () {
 
     // Create
     $(".js-create").click(loadFormBtn);
-    $("#component-tbody").on("submit", ".js-create-form", saveForm);
+    // $("#component-tbody").on("submit", ".js-create-form", saveForm);
 
     // Update
     $("#component-tbody").on("click", ".js-update", loadFormBtn);
