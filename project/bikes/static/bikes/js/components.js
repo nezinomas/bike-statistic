@@ -15,7 +15,8 @@ $(function () {
         if (pk == undefined && url == undefined) {
             return;
         }
-        var row = (pk >= 1) ? "#row_id_" + pk : "thead";
+
+        var row = (pk !== undefined) ? `#row_id_${pk}` : "#component-tbody";
 
         $.ajax({
             url: url,
@@ -23,8 +24,13 @@ $(function () {
             dataType: 'json',
 
             success: function (data) {
-                $(row).hide()
-                $(row).after(data.html_form)
+                if (row !== "#component-tbody"){
+                    $(row).hide();
+                    $(row).after(data.html_form);
+                }
+                else {
+                    $(row).prepend(data.html_form);
+                }
             }
         });
     };
@@ -32,7 +38,8 @@ $(function () {
     var saveForm = function () {
         var form = $(this);
         var pk = form.data("pk");
-        var row = (pk >= 1) ? "#row_id_" + pk : "thead";
+        var row = (pk >= 1) ? `#row_id_${pk}` : "#component-tbody";
+
         $.ajax({
             url: form.attr("action"),
             data: form.serialize(),
@@ -45,7 +52,12 @@ $(function () {
                 }
                 else {
                     $('#edit-form').remove();
-                    $(row).after(data.html_form);
+                    if (row !== "#component-tbody") {
+                        $(row).after(data.html_form);
+                    }
+                    else {
+                        $(row).prepend(data.html_form);
+                    }
                 }
             }
         });
