@@ -1,7 +1,7 @@
 {% load crispy_forms_tags %}
 
 {% for field in form %}
-<td class="py-1 align-middle">
+<td>
     {{ field|as_crispy_field }}
 </td>
 {% endfor %}
