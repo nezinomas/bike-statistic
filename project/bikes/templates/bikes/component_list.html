@@ -1,0 +1,35 @@
+{% extends parent_template|default:"bikes/main.html" %}
+
+{% load static %}
+
+{% block chart %}
+<script src="{% static 'bikes/js/components.js' %}"></script>
+
+{% endblock chart %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/bikes.css' %}">
+{% endblock stylesheet %}
+
+{% block content %}
+<p class="text-right my-2">
+    <button type="button" class="btn btn-primary js-create" style="width: 19%;" data-url="{% url 'bikes:component_create' %}">
+        <i class="fas fa-plus"></i>
+        New Component
+    </button>
+</p>
+
+<table class="table table-striped table-hover  table-md" id="components-table">
+    <thead class="thead-light">
+        <tr>
+            <th style="width: 10%">#</th>
+            <th>Component</th>
+            <th style="width: 20%"></th>
+        </tr>
+    </thead>
+    <tbody id="component-tbody">
+        {% include "bikes/includes/partial_component_list.html" %}
+    </tbody>
+</table>
+
+{% endblock content %}

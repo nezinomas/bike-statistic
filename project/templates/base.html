@@ -5,7 +5,10 @@
     {% load bootstrap4 %}
     {% bootstrap_css %}
     {% bootstrap_javascript jquery='full' %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+      crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/app_global.css' %}">
+
     {% block stylesheet %}{% endblock stylesheet %}
     {% block head_at_end %}{% endblock %}
     {% block chart %}{% endblock chart %}
@@ -53,6 +56,7 @@
                 <ul class="sidebar-nav">
                   <li class="nav-item"><a href="{% url 'reports:data_table_empty_date' %}">Data</a></li>
                   <li class="nav-item"><a href="{% url 'reports:insert_data' %}">Update Data</a></li>
+                  <li class="nav-item"><a href="{% url 'bikes:component_list' %}">Components</a></li>
                 </ul>
               </div>
 
