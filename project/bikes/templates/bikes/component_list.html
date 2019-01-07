@@ -12,12 +12,10 @@
 {% endblock stylesheet %}
 
 {% block content %}
-<h1 class="page-header">Components</h1>
-
-<p>
-    <button type="button" class="btn btn-primary js-create" data-url="{% url 'bikes:component_create' %}">
+<p class="text-right my-2">
+    <button type="button" class="btn btn-primary js-create" style="width: 19%;" data-url="{% url 'bikes:component_create' %}">
         <i class="fas fa-plus"></i>
-        New book
+        New Component
     </button>
 </p>
 
