@@ -10,4 +10,3 @@ urlpatterns = [
     path('component/update/<int:pk>/', views.component_update, name='component_update'),
     path('component/delete/<int:pk>/', views.component_delete, name='component_delete'),
 ]
-
