@@ -9,4 +9,5 @@ urlpatterns = [
     path('component/create/', views.component_create, name='component_create'),
     path('component/update/<int:pk>/', views.component_update, name='component_update'),
     path('component/delete/<int:pk>/', views.component_delete, name='component_delete'),
+    path('component/<slug:bike>/', views.bike_component_list, name='bike_component_list'),
 ]

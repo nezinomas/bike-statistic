@@ -2,7 +2,7 @@ from django.shortcuts import reverse, render, get_object_or_404
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 
-from .models import Component, ComponentStatistic
+from .models import Bike, Component, ComponentStatistic
 from .forms import ComponentForm
 
 
@@ -69,4 +69,10 @@ def component_delete(request, pk):
         data['html_form'] = render_to_string('bikes/includes/partial_component_delete.html', context=context, request=request)
 
     return JsonResponse(data)
+
+
+def bike_component_list(request, bike):
+    bike_ = get_object_or_404(Bike, slug__iexact=bike)
+
+    return render(request, 'bikes/bike_component_list.html', {'obj': bike_})
 
