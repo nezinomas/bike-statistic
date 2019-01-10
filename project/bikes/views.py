@@ -5,6 +5,8 @@ from django.http import JsonResponse
 from .models import Bike, Component, ComponentStatistic
 from .forms import ComponentForm
 
+from ..reports.models import Data
+
 
 def index(request):
     return render(
@@ -71,8 +73,74 @@ def component_delete(request, pk):
     return JsonResponse(data)
 
 
-def bike_component_list(request, bike):
-    bike_ = get_object_or_404(Bike, slug__iexact=bike)
+import pandas as pd
+import numpy as np
 
-    return render(request, 'bikes/bike_component_list.html', {'obj': bike_})
+from django_pandas.io import read_frame
+from django.db.models import Sum
+import datetime
+
+
+class Filter(object):
+    def __init__(self, qs):
+        self.__df = self.__create_df(qs)
+
+    def __create_df(self, qs):
+        df = read_frame(qs)
+        df['date'] = pd.to_datetime(df['date'])
+        return df
+
+    def total_distance(self, start_date = None, end_date = None):
+        if start_date:
+            df = self.__df[(self.__df['date'] > start_date) & (self.__df['date'] <= end_date)]
+        else:
+            df = self.__df
+
+        return df['distance'].sum()
+
+
+
+def bike_component_list(request, bike):
+    qs = Data.objects.filter(bike__slug=bike).values('date', 'distance')
+
+    obj = Filter(qs)
+
+
+
+    components = Component.objects.prefetch_related('components').all()
+
+    components_ = []
+    for component in components:
+        km = []
+        item = {}
+        item['pk'] = component.pk
+        item['name'] = component.name
+
+        tmp = []
+        for t_ in component.components.all():
+            if not t_.end_date:
+                t_.end_date = datetime.date.today()
+
+            k = obj.total_distance(t_.start_date, t_.end_date)
+            km.append(float(k))
+            tmp.append(
+                {
+                    'start_date': t_.start_date,
+                    'end_date': t_.end_date,
+                    'brand': t_.brand,
+                    'price': t_.price,
+                    'km': k,
+                }
+            )
+
+        item['components'] = tmp
+
+        stats = []
+        stats.append({'label': 'avg', 'value': np.average(km)})
+        stats.append({'label': 'median', 'value': np.median(km)})
+        item['stats'] = stats
+
+        components_.append(item)
+
+    return render(request, 'bikes/bike_component_list.html', {'components': components_, 'total': obj.total_distance()})
 
