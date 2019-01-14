@@ -34,3 +34,11 @@ def button_edit(*args, **kwargs):
         'url': kwargs['url'],
         'tbl': kwargs['tbl']
     }
+
+
+@register.inclusion_tag('bikes/includes/button_create.html')
+def button_create(*args, **kwargs):
+    return {
+        'url': kwargs['url'],
+        'label': kwargs['label'],
+    }
