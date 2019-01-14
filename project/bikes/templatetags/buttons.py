@@ -4,9 +4,12 @@ register = template.Library()
 
 
 @register.inclusion_tag('bikes/includes/button_delete.html')
-def button_delete(pk, *args, **kwargs):
+def button_delete(*args, **kwargs):
     return {
-        'pk': pk
+        'pk': kwargs['pk'] if 'pk' in kwargs else '',
+        'url': kwargs['url'] if 'url' in kwargs else '',
+        'tbl': kwargs['tbl'] if 'tbl' in kwargs else '',
+        'type': kwargs['type']
     }
 
 
@@ -21,4 +24,13 @@ def button_update(pk, *args, **kwargs):
 def button_close(pk, *args, **kwargs):
     return {
         'pk': pk
+    }
+
+
+@register.inclusion_tag('bikes/includes/button_edit.html')
+def button_edit(*args, **kwargs):
+    return {
+        'pk': kwargs['pk'],
+        'url': kwargs['url'],
+        'tbl': kwargs['tbl']
     }

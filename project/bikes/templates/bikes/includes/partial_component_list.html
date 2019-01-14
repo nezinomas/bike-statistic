@@ -1,3 +1,4 @@
+{% load buttons %}
 <thead class="thead-light">
     <tr>
         <th style="width: 10%">#</th>
@@ -7,16 +8,14 @@
 </thead>
 <tbody id="component-tbody">
     {% for component in components %}
-    <tr id="row_id_{{ component.pk }}" data-pk="{{ component.pk }}" data-url="{% url 'bikes:component_update' component.id %}" data-tbl="0">
+    {% url 'bikes:component_update' component.id as url_update %}
+    {% url 'bikes:component_delete' component.id as url_delete %}
+    <tr id="row_id_{{ component.pk }}" data-pk="{{ component.pk }}" data-url="{{ url_update }}" data-tbl="0">
         <td class="py-1 align-middle">{{ component.id }}</td>
         <td class="py-1 align-middle">{{ component.name }}</td>
         <td class="py-1 align-middle">
-            <button type="button" class="btn btn-warning btn-sm btn js-update" data-url="{% url 'bikes:component_update' component.id %}" data-pk="{{ component.pk }}" data-tbl="0">
-                <span class="fas fa-pen"></span> Edit
-            </button>
-            <button type="button" class="btn btn-danger btn-sm btn js-delete" data-url="{% url 'bikes:component_delete' component.id %}" data-pk="{{ component.pk }}" data-tbl="0">
-                <span class="far fa-trash-alt"></span> Delete
-            </button>
+            {% button_edit pk=component.id url=url_update tbl=0 %}
+            {% button_delete type='button' pk=component.id url=url_delete tbl='0' %}
         </td>
     </tr>
     {% empty %}
