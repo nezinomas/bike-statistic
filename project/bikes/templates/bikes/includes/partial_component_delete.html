@@ -1,7 +1,7 @@
 {% load buttons %}
 <tr id="edit-form">
     <td colspan="3" class="mx-0 px-0 py-0 my-0">
-        <form method="post" action="{% url 'bikes:component_delete' component.id %}" class="js-delete-form" data-pk="{{ component.pk }}" novalidate>
+        <form method="post" action="{% url 'bikes:component_delete' component.id %}" class="js-delete-form" data-pk="{{ component.pk }}" data-tbl="0" novalidate>
             {% csrf_token %}
             <table style="width: 100%" class="table table-borderless inner">
                 <tr class="table-danger">
@@ -13,7 +13,8 @@
                     </td>
 
                     <td style="width: 20%">
-                        {% button_delete component.pk %}
+                        {% button_close component.pk %}
+                        {% button_delete type='submit' %}
                     </td>
                 </tr>
             </table>

@@ -22,7 +22,7 @@ def insert_data(maxResults=20):
     bike = Bike.objects.order_by('pk')[0]
 
     for w in workouts:
-        if 'cycling' in w.name.lower():
+        if w.name is not None and 'cycling' in w.name.lower():
 
             distance = round(w.distance, 2)
 

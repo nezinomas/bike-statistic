@@ -86,7 +86,7 @@ def data_table_no_end(request, start_date):
 @login_required()
 def insert_data(request):
     try:
-        inserter(4)
+        inserter(10)
         message = 'ok'
     except Exception as ex:
         template = "An exception of type {0} occurred. Arguments:\n{1!r}"
