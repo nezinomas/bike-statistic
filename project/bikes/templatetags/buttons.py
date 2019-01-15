@@ -6,9 +6,9 @@ register = template.Library()
 @register.inclusion_tag('bikes/includes/button_delete.html')
 def button_delete(*args, **kwargs):
     return {
-        'pk': kwargs['pk'] if 'pk' in kwargs else '',
-        'url': kwargs['url'] if 'url' in kwargs else '',
-        'tbl': kwargs['tbl'] if 'tbl' in kwargs else '',
+        'pk': kwargs['pk'] if 'pk' in kwargs else None,
+        'url': kwargs['url'] if 'url' in kwargs else None,
+        'tbl': kwargs['tbl'] if 'tbl' in kwargs else None,
         'type': kwargs['type']
     }
 
