@@ -31,7 +31,7 @@ def save_component(request, context, form, template_name):
 
     context['form'] = form
     data['html_form'] = render_to_string(
-        template_name=template_name,
+        template_name='bikes/includes/partial_component_update.html',
         context=context,
         request=request
     )
@@ -47,14 +47,14 @@ def component_list(request):
 def component_create(request):
     form = ComponentForm(request.POST or None)
     context = {'url': reverse('bikes:component_create')}
-    return save_component(request, context, form, 'bikes/includes/partial_component_update.html')
+    return save_component(request, context, form)
 
 
 def component_update(request, pk):
     component = get_object_or_404(Component, pk=pk)
     form = ComponentForm(request.POST or None, instance=component)
     context = {'url': reverse('bikes:component_update', kwargs={'pk': pk})}
-    return save_component(request, context, form, 'bikes/includes/partial_component_update.html')
+    return save_component(request, context, form)
 
 
 def component_delete(request, pk):
