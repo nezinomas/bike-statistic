@@ -14,8 +14,8 @@
         <td class="py-1 align-middle">{{ component.id }}</td>
         <td class="py-1 align-middle">{{ component.name }}</td>
         <td class="py-1 align-middle">
-            {% button_edit pk=component.id url=url_update tbl=0 %}
-            {% button_delete type='button' pk=component.id url=url_delete tbl='0' %}
+            {% button_edit label=True pk=component.id url=url_update tbl=0 %}
+            {% button_delete type='button' label=True pk=component.id url=url_delete tbl='0' %}
         </td>
     </tr>
     {% empty %}

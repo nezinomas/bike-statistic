@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-warning btn-sm btn js-update" data-url="{{ url }}"
+<button type="button" class="btn btn-warning btn-sm js-update my-0" data-url="{{ url }}"
     data-pk="{{ pk }}" data-tbl="{{ tbl }}">
-    <span class="fas fa-pen"></span> Edit
+    <span class="fas fa-pen"></span>{% if label%} Edit{% endif %}
 </button>
