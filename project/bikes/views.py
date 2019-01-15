@@ -100,7 +100,7 @@ class Filter(object):
 
 
 
-def bike_component_list(request, bike):
+def component_stats_list(request, bike):
     qs = Data.objects.filter(bike__slug=bike).values('date', 'distance')
 
     obj = Filter(qs)
@@ -142,5 +142,10 @@ def bike_component_list(request, bike):
 
         components_.append(item)
 
-    return render(request, 'bikes/bike_component_list.html', {'components': components_, 'total': obj.total_distance()})
+    return render(request, 'bikes/component_stats_list.html', {'components': components_, 'total': obj.total_distance()})
 
+
+def component_stats_create(request):
+    form = ComponentForm(request.POST or None)
+    context = {'url': reverse('bikes:bike_component_create')}
+    return save_component(request, context, form, 'bikes/includes/partial_component_update.html')

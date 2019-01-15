@@ -9,5 +9,6 @@ urlpatterns = [
     path('component/create/', views.component_create, name='component_create'),
     path('component/update/<int:pk>/', views.component_update, name='component_update'),
     path('component/delete/<int:pk>/', views.component_delete, name='component_delete'),
-    path('component/<slug:bike>/', views.bike_component_list, name='bike_component_list'),
+    path('component/<slug:bike>/', views.component_stats_list, name='component_stats_list'),
+    path('component/<slug:bike>/create', views.component_stats_create, name='component_stats_create'),
 ]
