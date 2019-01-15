@@ -142,7 +142,7 @@ def component_stats_list(request, bike):
 
         components_.append(item)
 
-    return render(request, 'bikes/component_stats_list.html', {'components': components_, 'total': obj.total_distance()})
+    return render(request, 'bikes/component_stats_list.html', {'components': components_, 'total': obj.total_distance(), 'bike': bike})
 
 
 def component_stats_create(request):
