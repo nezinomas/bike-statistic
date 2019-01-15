@@ -41,4 +41,6 @@ def button_create(*args, **kwargs):
     return {
         'url': kwargs['url'],
         'label': kwargs['label'],
+        'tbl': kwargs['tbl'],
+        'width': kwargs['width'] if 'width' in kwargs else None
     }
