@@ -4,9 +4,9 @@
 }
 
 .btn {
-  width: 45%;
+  /* width: 45%;
   margin-left: 0px;
-  padding-left: 2px;
+  padding-left: 2px; */
 }
 
 .inner {
@@ -18,4 +18,29 @@
   padding-top: .25rem;
   padding-bottom: .25rem;
   vertical-align: middle;
+}
+
+.km {
+  border-left: orangered dotted 1px!important;
+}
+
+table td {
+  font-size: .9rem!important;
+}
+
+table td {
+  vertical-align: middle!important;
+  padding-top: .15rem!important;
+  padding-bottom: .15rem!important;
+}
+
+table thead th {
+  vertical-align: middle!important;
+  padding-top: .35rem!important;
+  padding-bottom: .35rem!important;
+}
+
+table tfoot td {
+  padding-top: .35rem!important;
+  padding-bottom: .35rem!important;
 }
