@@ -1,0 +1,22 @@
+{% extends parent_template|default:"bikes/main.html" %}
+
+
+{% load static %}{% load humanize %}
+
+
+{% block chart %}
+<script src="{% static 'bikes/js/components.js' %}"></script>
+{% endblock chart %}
+
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/bikes.css' %}">
+{% endblock stylesheet %}
+
+
+{% block content %}
+
+<p>{{ bike|title }} total: {{ total|floatformat:0|intcomma }}km</p>
+    {% include 'bikes/includes/partial_stats_list.html' %}
+
+{% endblock content %}

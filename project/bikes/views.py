@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 from django.http import JsonResponse
 
 from .models import Bike, Component, ComponentStatistic
-from .forms import ComponentForm
+from .forms import ComponentForm, ComponentStatisticForm
 
 from ..reports.models import Data
 
@@ -16,7 +16,7 @@ def index(request):
     )
 
 
-def save_component(request, context, form, template_name):
+def save_component(request, context, form):
     data = {}
 
     if request.method == 'POST':
@@ -32,6 +32,29 @@ def save_component(request, context, form, template_name):
     context['form'] = form
     data['html_form'] = render_to_string(
         template_name='bikes/includes/partial_component_update.html',
+        context=context,
+        request=request
+    )
+
+    return JsonResponse(data)
+
+
+def save_component1(request, context, form, components):
+    data = {}
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            data['form_is_valid'] = True
+            # components = Component.objects.all()
+            data['html_list'] = render_to_string(
+                'bikes/includes/partial_stats_list.html', {'components': components})
+        else:
+            data['form_is_valid'] = False
+
+    context['form'] = form
+    data['html_form'] = render_to_string(
+        template_name='bikes/includes/partial_stats_update.html',
         context=context,
         request=request
     )
@@ -99,15 +122,10 @@ class Filter(object):
         return df['distance'].sum()
 
 
-
-def component_stats_list(request, bike):
+def component_stats_object(bike, components):
     qs = Data.objects.filter(bike__slug=bike).values('date', 'distance')
 
     obj = Filter(qs)
-
-
-
-    components = Component.objects.prefetch_related('components').all()
 
     components_ = []
     for component in components:
@@ -142,10 +160,37 @@ def component_stats_list(request, bike):
 
         components_.append(item)
 
-    return render(request, 'bikes/component_stats_list.html', {'components': components_, 'total': obj.total_distance(), 'bike': bike})
+    return {'components': components_, 'total': obj.total_distance()}
 
 
-def component_stats_create(request):
-    form = ComponentForm(request.POST or None)
-    context = {'url': reverse('bikes:bike_component_create')}
-    return save_component(request, context, form, 'bikes/includes/partial_component_update.html')
+def stats_list(request, bike):
+    components = Component.objects.prefetch_related('components').all()
+    o = component_stats_object(bike, components)
+    return render(
+        request,
+        'bikes/stats_list.html', {
+            'components': o['components'],
+            'total': o['total'],
+            'bike': bike
+        })
+
+
+def stats_create(request, bike, pk):
+    bike_ = get_object_or_404(Bike, slug=bike)
+    component_ = get_object_or_404(Component, pk=pk)
+    c = Component.objects.prefetch_related('components').filter(pk=pk)
+    o = component_stats_object(
+        bike, c)
+
+    form = ComponentStatisticForm(request.POST or None, initial={
+                         'bike': bike_, 'component': component_})
+    context = {'url': reverse('bikes:stats_create', kwargs={'bike': bike, 'pk': pk}), 'tbl': pk}
+    return save_component1(request, context, form, o['components'])
+
+
+def stats_update(request, bike, pk):
+    pass
+
+
+def stats_delete(request, bike, pk):
+    pass
