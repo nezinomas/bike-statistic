@@ -12,5 +12,5 @@ urlpatterns = [
     path('component/<slug:bike>/', views.stats_list, name='stats_list'),
     path('component/<slug:bike>/<int:pk>/create', views.stats_create, name='stats_create'),
     path('component/<slug:bike>/<int:pk>/update', views.stats_update, name='stats_update'),
-    path('component/<slug:bike>/<int:pk>/deleta', views.stats_delete, name='stats_delete'),
+    path('component/<slug:bike>/<int:pk>/delete', views.stats_delete, name='stats_delete'),
 ]
