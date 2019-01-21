@@ -23,8 +23,8 @@
     </thead>
     <tbody>
         {% for item in items %}
-        {% url 'bikes:component_update' component.id as url_update %}
-        {% url 'bikes:component_delete' component.id as url_delete %}
+        {% url 'bikes:stats_update' bike item.pk as url_update %}
+        {% url 'bikes:stats_delete' bike item.pk as url_delete %}
         <tr id="row_id_{{ item.pk }}" data-pk="{{ item.pk }}" data-url="{{ url_update }}">
             <td>
                 {{ item.start_date|date:"Y-m-d" }}
@@ -39,8 +39,8 @@
                 {{ item.brand }}
             </td>
             <td class="text-right">
-                {% button_edit pk=component.id url=url_update tbl=0 %}
-                {% button_delete type='button' pk=component.id url=url_delete tbl='0' %}
+                {% button_edit pk=item.pk url=url_update tbl=0 %}
+                {% button_delete type='button' pk=item.pk url=url_delete tbl='0' %}
             </td>
             <td class="km pr-1 text-right">
                 {{ item.km|floatformat:0|intcomma }}

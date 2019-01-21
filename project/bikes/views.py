@@ -148,6 +148,7 @@ def component_stats_object(bike, components):
                     'brand': t_.brand,
                     'price': t_.price,
                     'km': k,
+                    'pk': t_.pk,
                 }
             )
 
