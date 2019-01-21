@@ -67,8 +67,9 @@ class ComponentStatistic(models.Model):
         null=True,
         blank=True
     )
-    brand = models.TextField(
-        blank=True
+    brand = models.CharField(
+        blank=True,
+        max_length=254
     )
     bike = models.ForeignKey(
         Bike,
