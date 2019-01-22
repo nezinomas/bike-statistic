@@ -49,10 +49,10 @@ def save_component1(request, context, form, bike, pk):
             form.save()
             data['form_is_valid'] = True
 
-            o = Filter(bike, pk).component_stats_object()
+            o = Filter(bike_slug, pk)
             data['html_list'] = render_to_string(
                 'bikes/includes/partial_stats_list.html',
-                {'components': o['components'], 'total': o['total']}
+                {'components': o.components(), 'total': o.total_distance(), 'bike_slug': bike_slug}
             )
         else:
             data['form_is_valid'] = False
@@ -104,14 +104,14 @@ def component_delete(request, pk):
 
 
 def stats_list(request, bike):
-    o = Filter(bike, 'all').component_stats_object()
+    o = Filter(bike, 'all')
 
     return render(
         request,
         'bikes/stats_list.html', {
-            'components': o['components'],
-            'total': o['total'],
-            'bike': bike
+            'components': o.components(),
+            'total': o.total_distance(),
+            'bike_slug': bike
         })
 
 

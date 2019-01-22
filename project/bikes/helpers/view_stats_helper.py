@@ -14,7 +14,7 @@ class Filter(object):
     def __init__(self, bike_slug, component_filter):
         qs = self.__create_qs(bike_slug)
         self.__df = self.__create_df(qs)
-        self.__components = self.__create_component_list(component_filter)
+        self.__components = self.__get_objects(component_filter)
 
     def __create_qs(self, bike_slug):
         return Data.objects.filter(bike__slug=bike_slug).values('date', 'distance')
@@ -24,13 +24,43 @@ class Filter(object):
         df['date'] = pd.to_datetime(df['date'])
         return df
 
-    def __create_component_list(self, component_filter):
+    def __get_objects(self, component_filter):
         if component_filter == 'all':
             r = Component.objects.prefetch_related('components').all()
         else:
             r = Component.objects.prefetch_related('components').filter(pk=component_filter)
 
         return r
+
+    def __totals(self):
+        retVal = []
+        retVal.append({'label': 'avg', 'value': np.average(
+            self.__km) if self.__km else 0})
+        retVal.append({'label': 'median', 'value': np.median(
+            self.__km) if self.__km else 0})
+        return retVal
+
+    def __format_dictionary(self, items):
+        retVal = []
+
+        for item in items:
+            if not item.end_date:
+                item.end_date = datetime.date.today()
+
+            km = self.total_distance(item.start_date, item.end_date)
+            retVal.append(
+                {
+                    'start_date': item.start_date,
+                    'end_date': item.end_date,
+                    'brand': item.brand,
+                    'price': item.price,
+                    'km': km,
+                    'pk': item.pk,
+                }
+            )
+            self.__km.append(float(km))
+
+        return retVal
 
     def total_distance(self, start_date=None, end_date=None):
         if start_date:
@@ -41,40 +71,16 @@ class Filter(object):
 
         return df['distance'].sum()
 
-
-    def component_stats_object(self):
-        components_ = []
+    def components(self):
+        retVal = []
         for component in self.__components:
-            km = []
+            self.__km = []
             item = {}
             item['pk'] = component.pk
             item['name'] = component.name
+            item['components'] = self.__format_dictionary(component.components.all())
+            item['stats'] = self.__totals()
 
-            tmp = []
-            for t_ in component.components.all():
-                if not t_.end_date:
-                    t_.end_date = datetime.date.today()
+            retVal.append(item)
 
-                k = self.total_distance(t_.start_date, t_.end_date)
-                km.append(float(k))
-                tmp.append(
-                    {
-                        'start_date': t_.start_date,
-                        'end_date': t_.end_date,
-                        'brand': t_.brand,
-                        'price': t_.price,
-                        'km': k,
-                        'pk': t_.pk,
-                    }
-                )
-
-            item['components'] = tmp
-
-            stats = []
-            stats.append({'label': 'avg', 'value': np.average(km) if km else 0})
-            stats.append({'label': 'median', 'value': np.median(km) if km else 0})
-            item['stats'] = stats
-
-            components_.append(item)
-
-        return {'components': components_, 'total': self.total_distance()}
+        return retVal
