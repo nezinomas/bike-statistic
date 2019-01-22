@@ -17,8 +17,6 @@
     {% button_create url=url_create label='New Component' tbl='0' width='19%' %}
 </p>
 
-<table class="table table-striped table-hover table-md tbl-js" id="tbl-0">
-        {% include "bikes/includes/partial_component_list.html" %}
-</table>
+{% include "bikes/includes/partial_component_list.html" %}
 
 {% endblock content %}

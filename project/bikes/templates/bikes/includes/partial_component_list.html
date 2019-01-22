@@ -1,26 +1,28 @@
 {% load buttons %}
-<thead class="thead-light">
-    <tr>
-        <th style="width: 10%">#</th>
-        <th>Component</th>
-        <th style="width: 20%"></th>
-    </tr>
-</thead>
-<tbody id="component-tbody">
-    {% for component in components %}
-    {% url 'bikes:component_update' component.id as url_update %}
-    {% url 'bikes:component_delete' component.id as url_delete %}
-    <tr id="row_id_{{ component.pk }}" data-pk="{{ component.pk }}" data-url="{{ url_update }}" data-tbl="0">
-        <td class="py-1 align-middle">{{ component.id }}</td>
-        <td class="py-1 align-middle">{{ component.name }}</td>
-        <td class="py-1 align-middle">
-            {% button_edit label=True pk=component.id url=url_update tbl=0 %}
-            {% button_delete type='button' label=True pk=component.id url=url_delete tbl='0' %}
-        </td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="3" class="text-center bg-warning">No components</td>
-    </tr>
-    {% endfor %}
-</tbody>
+<table class="table table-striped table-hover table-md tbl-js" id="tbl-0">
+    <thead class="thead-light">
+        <tr>
+            <th style="width: 10%">#</th>
+            <th>Component</th>
+            <th style="width: 20%"></th>
+        </tr>
+    </thead>
+    <tbody id="component-tbody">
+        {% for component in components %}
+        {% url 'bikes:component_update' component.id as url_update %}
+        {% url 'bikes:component_delete' component.id as url_delete %}
+        <tr id="row_id_{{ component.pk }}" data-pk="{{ component.pk }}" data-url="{{ url_update }}" data-tbl="0">
+            <td class="py-1 align-middle">{{ component.id }}</td>
+            <td class="py-1 align-middle">{{ component.name }}</td>
+            <td class="py-1 align-middle">
+                {% button_edit label=True pk=component.id url=url_update tbl=0 %}
+                {% button_delete type='button' label=True pk=component.id url=url_delete tbl='0' %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3" class="text-center bg-warning">No components</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
