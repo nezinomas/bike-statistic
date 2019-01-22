@@ -47,7 +47,8 @@ $(function () {
             success: function (data) {
                 if (data.form_is_valid) {
                     $('#edit-form').remove();
-                    $(`#tbl-${tbl}`).html(data.html_list);
+                    $(`#tbl-${tbl} tbody`).html($(data.html_list).find(`tbody`).html());
+                    $(`#tbl-${tbl} tfoot`).html($(data.html_list).find(`tfoot`).html());
                 }
                 else {
                     $('#edit-form').remove();
