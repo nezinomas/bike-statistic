@@ -19,6 +19,7 @@ def button_update(*args, **kwargs):
     return {
         'pk': kwargs['pk'],
         'tbl': kwargs['tbl'],
+        'label': kwargs['label'] if 'label' in kwargs else None,
     }
 
 
@@ -27,6 +28,7 @@ def button_close(*args, **kwargs):
     return {
         'pk': kwargs['pk'],
         'tbl': kwargs['tbl'],
+        'label': kwargs['label'] if 'label' in kwargs else None,
     }
 
 
