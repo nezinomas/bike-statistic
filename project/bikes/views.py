@@ -41,7 +41,7 @@ def save_component(request, context, form):
     return JsonResponse(data)
 
 
-def save_component1(request, context, form, bike, pk):
+def save_component1(request, context, form, bike_slug, pk):
     data = {}
 
     if request.method == 'POST':
@@ -101,8 +101,6 @@ def component_delete(request, pk):
     return JsonResponse(data)
 
 
-
-
 def stats_list(request, bike):
     o = Filter(bike, 'all')
 
@@ -135,4 +133,21 @@ def stats_update(request, bike, pk):
 
 
 def stats_delete(request, bike, pk):
-    pass
+    component_ = get_object_or_404(ComponentStatistic, pk=pk)
+    data = {}
+    if request.method == 'POST':
+        component_.delete()
+        data['form_is_valid'] = True
+
+        o = Filter(bike, component_.component.pk)
+        data['html_list'] = render_to_string(
+            'bikes/includes/partial_stats_list.html',
+            {'components': o.components(), 'total': o.total_distance(), 'bike_slug': bike}
+        )
+
+    else:
+        context = {'component': component_, 'bike_slug': bike}
+        data['html_form'] = render_to_string(
+            'bikes/includes/partial_stats_delete.html', context=context, request=request)
+
+    return JsonResponse(data)

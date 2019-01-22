@@ -1,3 +1,4 @@
+</script>
 {% load buttons %}{% load humanize %}
 {% for component in components %}
 {% with component.components as items %}
@@ -8,7 +9,7 @@
                 {{ component.name }} #{{ component.pk }}
             </th>
             <th colspan="2" class="text-right">
-                {% url 'bikes:stats_create' bike component.pk as url_create %}
+                {% url 'bikes:stats_create' bike_slug component.pk as url_create %}
                 {% button_create url=url_create label='New Component' tbl=component.pk %}
             </th>
         </tr>
@@ -23,8 +24,8 @@
     </thead>
     <tbody>
         {% for item in items %}
-        {% url 'bikes:stats_update' bike item.pk as url_update %}
-        {% url 'bikes:stats_delete' bike item.pk as url_delete %}
+        {% url 'bikes:stats_update' bike_slug item.pk as url_update %}
+        {% url 'bikes:stats_delete' bike_slug item.pk as url_delete %}
         <tr id="row_id_{{ item.pk }}" data-pk="{{ item.pk }}" data-url="{{ url_update }}">
             <td>
                 {{ item.start_date|date:"Y-m-d" }}
@@ -39,8 +40,8 @@
                 {{ item.brand }}
             </td>
             <td class="text-right">
-                {% button_edit pk=item.pk url=url_update tbl=0 %}
-                {% button_delete type='button' pk=item.pk url=url_delete tbl='0' %}
+                {% button_edit pk=item.pk url=url_update tbl=component.pk %}
+                {% button_delete type='button' pk=item.pk url=url_delete tbl=component.pk %}
             </td>
             <td class="km pr-1 text-right">
                 {{ item.km|floatformat:0|intcomma }}
