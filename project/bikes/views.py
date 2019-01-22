@@ -115,7 +115,7 @@ def stats_list(request, bike):
 
 def stats_create(request, bike, pk):
     bike_ = get_object_or_404(Bike, slug=bike)
-    component_ = get_object_or_404(Component, pk=pk)
+    obj = get_object_or_404(Component, pk=pk)
 
     form = ComponentStatisticForm(
         request.POST or None,
@@ -129,24 +129,30 @@ def stats_create(request, bike, pk):
 
 
 def stats_update(request, bike, pk):
-    pass
+    obj = get_object_or_404(ComponentStatistic, pk=pk)
+    form = ComponentStatisticForm(request.POST or None, instance=obj)
+    context = {
+        'url': reverse('bikes:stats_update', kwargs={'bike': bike, 'pk': pk}),
+        'tbl': obj.component.pk
+    }
+    return save_component1(request, context, form, bike, obj.component.pk)
 
 
 def stats_delete(request, bike, pk):
-    component_ = get_object_or_404(ComponentStatistic, pk=pk)
+    obj = get_object_or_404(ComponentStatistic, pk=pk)
     data = {}
     if request.method == 'POST':
-        component_.delete()
+        obj.delete()
         data['form_is_valid'] = True
 
-        o = Filter(bike, component_.component.pk)
+        o = Filter(bike, obj.component.pk)
         data['html_list'] = render_to_string(
             'bikes/includes/partial_stats_list.html',
             {'components': o.components(), 'total': o.total_distance(), 'bike_slug': bike}
         )
 
     else:
-        context = {'component': component_, 'bike_slug': bike}
+        context = {'component': obj, 'bike_slug': bike}
         data['html_form'] = render_to_string(
             'bikes/includes/partial_stats_delete.html', context=context, request=request)
 
