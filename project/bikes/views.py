@@ -5,8 +5,6 @@ from django.http import JsonResponse
 from .models import Bike, Component, ComponentStatistic
 from .forms import ComponentForm, ComponentStatisticForm
 
-from ..reports.models import Data
-
 from .helpers.view_stats_helper import Filter
 
 
@@ -95,7 +93,7 @@ def component_delete(request, pk):
         components = Component.objects.all()
         data['html_list'] = render_to_string('bikes/includes/partial_component_list.html', {'components': components})
     else:
-        context = {'component':component}
+        context = {'component': component}
         data['html_form'] = render_to_string('bikes/includes/partial_component_delete.html', context=context, request=request)
 
     return JsonResponse(data)
