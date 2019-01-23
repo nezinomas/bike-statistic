@@ -119,7 +119,7 @@ def stats_create(request, bike, pk):
 
     form = ComponentStatisticForm(
         request.POST or None,
-        initial={'bike': bike_, 'component': component_}
+        initial={'bike': bike_, 'component': obj}
     )
     context = {
         'url': reverse('bikes:stats_create', kwargs={'bike': bike, 'pk': pk}),
