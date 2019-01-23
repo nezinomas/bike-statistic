@@ -1,12 +1,26 @@
+table td {
+  font-size: .9rem!important;
+  vertical-align: middle!important;
+  padding-top: .15rem!important;
+  padding-bottom: .15rem!important;
+  padding-left: .50rem!important;
+}
+
+table thead th {
+  vertical-align: middle!important;
+  padding-top: .35rem!important;
+  padding-bottom: .35rem!important;
+  padding-left: .50rem!important;
+}
+
+table tfoot td {
+  padding-top: .35rem!important;
+  padding-bottom: .35rem!important;
+}
+
 .form-group {
   margin: 0;
   padding: 0;
-}
-
-.btn {
-  /* width: 45%;
-  margin-left: 0px;
-  padding-left: 2px; */
 }
 
 .inner {
@@ -15,32 +29,16 @@
 }
 
 .inner td {
-  padding-top: .25rem;
-  padding-bottom: .25rem;
+  padding-top: .25rem!important;
+  padding-bottom: .25rem!important;
   vertical-align: middle;
+  padding-left: 4px!important;
+}
+
+.inner td input {
+  padding-left: .25rem!important;
 }
 
 .km {
   border-left: orangered dotted 1px!important;
-}
-
-table td {
-  font-size: .9rem!important;
-}
-
-table td {
-  vertical-align: middle!important;
-  padding-top: .15rem!important;
-  padding-bottom: .15rem!important;
-}
-
-table thead th {
-  vertical-align: middle!important;
-  padding-top: .35rem!important;
-  padding-bottom: .35rem!important;
-}
-
-table tfoot td {
-  padding-top: .35rem!important;
-  padding-bottom: .35rem!important;
 }
