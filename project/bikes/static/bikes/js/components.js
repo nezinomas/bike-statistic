@@ -4,26 +4,26 @@ $(function () {
 
     var loadFormBtn = function() {
         var btn = $(this);
-        loadFormAjax(btn.data("pk"), btn.attr("data-url"));
+        loadFormAjax(btn.data("tbl"), btn.data("pk"), btn.attr("data-url"));
     };
 
-    var loadFormDblClc = function(pk, url) {
-        loadFormAjax(pk, url)
+    var loadFormDblClc = function(tbl, pk, url) {
+        loadFormAjax(tbl, pk, url)
     };
 
-    var loadFormAjax = function(pk, url) {
+    var loadFormAjax = function(tbl, pk, url) {
         if (pk == undefined && url == undefined) {
             return;
         }
 
-        var row = (pk !== undefined) ? `#row_id_${pk}` : "#component-tbody";
+        var row = (pk !== undefined) ? `#row_id_${pk}` : `#tbl-${tbl}`;
         $('#edit-form').remove();
         $.ajax({
             url: url,
             type: 'get',
             dataType: 'json',
             success: function (data) {
-                if (row !== "#component-tbody"){
+                if (row !== `#tbl-${tbl}`){
                     $(row).hide();
                     $(row).after(data.html_form);
                 }
@@ -37,7 +37,8 @@ $(function () {
     var saveForm = function() {
         var form = $(this);
         var pk = form.data("pk");
-        var row = (pk >= 1) ? `#row_id_${pk}` : "#component-tbody";
+        var tbl = form.data("tbl")
+        var row = (pk >= 1) ? `#row_id_${pk}` : `#tbl-${tbl}`;
         $.ajax({
             url: form.attr("action"),
             data: form.serialize(),
@@ -46,11 +47,12 @@ $(function () {
             success: function (data) {
                 if (data.form_is_valid) {
                     $('#edit-form').remove();
-                    $("#components-table tbody").html(data.html_list);
+                    $(`#tbl-${tbl} tbody`).html($(data.html_list).find(`tbody`).html());
+                    $(`#tbl-${tbl} tfoot`).html($(data.html_list).find(`tfoot`).html());
                 }
                 else {
                     $('#edit-form').remove();
-                    if (row !== "#component-tbody") {
+                    if (row !== `#tbl-${tbl}`) {
                         $(row).after(data.html_form);
                     }
                     else {
@@ -71,22 +73,22 @@ $(function () {
     };
 
     $('tr').dblclick(function () {
-        loadFormDblClc($(this).data("pk"), $(this).data('url'))
+        loadFormDblClc($(this).data("tbl"), $(this).data("pk"), $(this).data('url'))
     });
 
     /* Binding */
 
     // Create
     $(".js-create").click(loadFormBtn);
-    // $("#component-tbody").on("submit", ".js-create-form", saveForm);
+    // $(`#tbl-${tbl}`).on("submit", ".js-create-form", saveForm);
 
     // Update
-    $("#component-tbody").on("click", ".js-update", loadFormBtn);
-    $("#component-tbody").on("click", ".js-close", closeForm);
-    $("#component-tbody").on("submit", ".js-update-form", saveForm);
+    $(".tbl-js").on("click", ".js-update", loadFormBtn);
+    $(".tbl-js").on("click", ".js-close", closeForm);
+    $(".tbl-js").on("submit", ".js-update-form", saveForm);
 
     // Delete
-    $("#component-tbody").on("click", ".js-delete", loadFormBtn);
-    $("#component-tbody").on("submit", ".js-delete-form", saveForm);
+    $(".tbl-js").on("click", ".js-delete", loadFormBtn);
+    $(".tbl-js").on("submit", ".js-delete-form", saveForm);
 
 });

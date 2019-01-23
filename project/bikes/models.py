@@ -67,19 +67,23 @@ class ComponentStatistic(models.Model):
         null=True,
         blank=True
     )
-    brand = models.TextField(
-        blank=True
+    brand = models.CharField(
+        blank=True,
+        max_length=254
     )
     bike = models.ForeignKey(
         Bike,
         on_delete=models.CASCADE,
-        related_name='bike'
+        related_name='bikes'
     )
     component = models.ForeignKey(
         Component,
         on_delete=models.CASCADE,
-        related_name='component'
+        related_name='components'
     )
+
+    class Meta:
+        ordering = ['-start_date']
 
     def __str__(self):
         return '{bike} / {component} / {start} ... {end}'.format(bike=self.bike, component=self.component, start=self.start_date, end=self.end_date)
