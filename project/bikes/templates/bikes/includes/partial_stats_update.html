@@ -6,14 +6,17 @@
             {% csrf_token %}
             <table style="width: 100%" class="table table-borderless inner">
                 <tr class="table-warning">
-                    {% for field in form %}
-                    <td>
-                        {{ field|as_crispy_field }}
-                    </td>{% endfor %}
-
-                    <td style="width: 20%">
+                    <td width="20%">{{ form.start_date|as_crispy_field }}</td>
+                    <td width="20%">{{ form.end_date|as_crispy_field }}</td>
+                    <td width="15%">{{ form.price|as_crispy_field }}</td>
+                    <td>{{ form.brand|as_crispy_field }}
+                        {{ form.bike }}
+                        {{ form.component }}
+                    </td>
+                    <td class="text-right" width="10%">
                         {% button_close pk=form.instance.pk tbl=tbl %}{% button_update pk=form.instance.pk tbl=tbl %}
                     </td>
+                    <td class="km pr-1 text-right" width="15%"> </td>
                 </tr>
             </table>
         </form>
