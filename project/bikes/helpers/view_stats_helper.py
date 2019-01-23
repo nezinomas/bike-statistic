@@ -3,10 +3,10 @@ import datetime
 import numpy as np
 import pandas as pd
 
-from django.db.models import Sum
+from django.db.models import Prefetch
 from django_pandas.io import read_frame
 
-from ..models import Component
+from ..models import Component, ComponentStatistic
 from ...reports.models import Data
 
 
@@ -14,7 +14,7 @@ class Filter(object):
     def __init__(self, bike_slug, component_filter):
         qs = self.__create_qs(bike_slug)
         self.__df = self.__create_df(qs)
-        self.__components = self.__get_objects(component_filter)
+        self.__components = self.__get_objects(bike_slug, component_filter)
 
     def __create_qs(self, bike_slug):
         return Data.objects.filter(bike__slug=bike_slug).values('date', 'distance')
@@ -24,20 +24,21 @@ class Filter(object):
         df['date'] = pd.to_datetime(df['date'])
         return df
 
-    def __get_objects(self, component_filter):
+    def __get_objects(self, bike_slug, component_filter):
+        filter_bike = ComponentStatistic.objects.filter(bike__slug=bike_slug)
+        prefetch = Prefetch('components', queryset=filter_bike)
+
         if component_filter == 'all':
-            r = Component.objects.prefetch_related('components').all()
+            r = Component.objects.prefetch_related(prefetch).all()
         else:
-            r = Component.objects.prefetch_related('components').filter(pk=component_filter)
+            r = Component.objects.prefetch_related(prefetch).filter(pk=component_filter)
 
         return r
 
     def __totals(self):
         retVal = []
-        retVal.append({'label': 'avg', 'value': np.average(
-            self.__km) if self.__km else 0})
-        retVal.append({'label': 'median', 'value': np.median(
-            self.__km) if self.__km else 0})
+        retVal.append({'label': 'avg', 'value': np.average(self.__km) if self.__km else 0})
+        retVal.append({'label': 'median', 'value': np.median(self.__km) if self.__km else 0})
         return retVal
 
     def __format_dictionary(self, items):
@@ -64,8 +65,7 @@ class Filter(object):
 
     def total_distance(self, start_date=None, end_date=None):
         if start_date:
-            df = self.__df[(self.__df['date'] > start_date) &
-                           (self.__df['date'] <= end_date)]
+            df = self.__df[(self.__df['date'] > start_date) & (self.__df['date'] <= end_date)]
         else:
             df = self.__df
 
