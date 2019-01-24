@@ -3,7 +3,7 @@ from django import template
 register = template.Library()
 
 
-@register.inclusion_tag('bikes/includes/button_delete.html')
+@register.inclusion_tag('core/includes/button_delete.html')
 def button_delete(*args, **kwargs):
     return {
         'pk': kwargs['pk'] if 'pk' in kwargs else None,
@@ -14,7 +14,7 @@ def button_delete(*args, **kwargs):
     }
 
 
-@register.inclusion_tag('bikes/includes/button_update.html')
+@register.inclusion_tag('core/includes/button_update.html')
 def button_update(*args, **kwargs):
     return {
         'pk': kwargs['pk'],
@@ -23,7 +23,7 @@ def button_update(*args, **kwargs):
     }
 
 
-@register.inclusion_tag('bikes/includes/button_close.html')
+@register.inclusion_tag('core/includes/button_close.html')
 def button_close(*args, **kwargs):
     return {
         'pk': kwargs['pk'],
@@ -32,7 +32,7 @@ def button_close(*args, **kwargs):
     }
 
 
-@register.inclusion_tag('bikes/includes/button_edit.html')
+@register.inclusion_tag('core/includes/button_edit.html')
 def button_edit(*args, **kwargs):
     return {
         'pk': kwargs['pk'],
@@ -42,7 +42,7 @@ def button_edit(*args, **kwargs):
     }
 
 
-@register.inclusion_tag('bikes/includes/button_create.html')
+@register.inclusion_tag('core/includes/button_create.html')
 def button_create(*args, **kwargs):
     return {
         'url': kwargs['url'],
