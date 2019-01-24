@@ -4,6 +4,7 @@ table td {
   padding-top: .15rem!important;
   padding-bottom: .15rem!important;
   padding-left: .50rem!important;
+  padding-right: .50rem!important;
 }
 
 table thead th {
@@ -11,6 +12,7 @@ table thead th {
   padding-top: .35rem!important;
   padding-bottom: .35rem!important;
   padding-left: .50rem!important;
+  padding-right: .50rem!important;
 }
 
 table tfoot td {
@@ -33,10 +35,12 @@ table tfoot td {
   padding-bottom: .25rem!important;
   vertical-align: middle;
   padding-left: 4px!important;
+  padding-right: 4px!important;
 }
 
 .inner td input {
   padding-left: .25rem!important;
+  padding-right: .25rem!important;
 }
 
 .km {
