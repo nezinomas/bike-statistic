@@ -10,7 +10,7 @@ class Data(models.Model):
     bike = models.ForeignKey(
         bikeModels.Bike,
         on_delete=models.CASCADE,
-        related_name='data'
+        related_name='bike_set'
     )
     date = models.DateField(default=datetime.date.today())
     distance = models.FloatField()
