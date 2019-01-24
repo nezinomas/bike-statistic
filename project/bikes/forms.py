@@ -3,13 +3,7 @@ from crispy_forms.helper import FormHelper
 from django import forms
 
 from .models import Component, ComponentStatistic
-
-
-def set_field_properties(self, helper):
-    for field_name in self.fields:
-        self.fields[field_name].widget.attrs['class'] = 'form-control-sm'
-
-    helper.form_show_labels = False
+from ..core.helpers.form_helpers import set_field_properties
 
 
 class ComponentForm(forms.ModelForm):
