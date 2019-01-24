@@ -4,14 +4,10 @@
 {% load static %}{% load humanize %}
 
 
-{% block chart %}
-<script src="{% static 'bikes/js/components.js' %}"></script>
-{% endblock chart %}
-
-
-{% block stylesheet %}
-<link rel="stylesheet" href="{% static 'css/bikes.css' %}">
-{% endblock stylesheet %}
+{% block head %}
+    <script src="{% static 'js/ajax.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/bikes.css' %}">
+{% endblock head %}
 
 
 {% block content %}
