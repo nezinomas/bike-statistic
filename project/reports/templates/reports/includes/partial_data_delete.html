@@ -1,0 +1,24 @@
+{% load buttons %}
+<tr id="edit-form">
+    <td colspan="11" class="mx-0 px-0 py-0 my-0">
+        <form method="post" action="{% url 'reports:data_delete' start_date end_date object.pk %}" class="js-delete-form"
+            data-pk="{{ object.pk }}" data-tbl="0" novalidate>
+            {% csrf_token %}
+            <table class="table table-md table-borderless inner">
+                <tr class="table-danger">
+                    <td width="150rem" class="v-middle">
+                        <em>{{ object.pk }}</em>
+                    </td>
+                    <td class=" v-middle">
+                        Are you sure you want to delete record <strong>{{ object }}</strong>?
+                    </td>
+
+                    <td class="text-right last">
+                        {% button_close pk=object.pk tbl='0' %}
+                        {% button_delete type='submit' %}
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </td>
+</tr>
