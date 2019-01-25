@@ -31,7 +31,7 @@ class DataFormNew(forms.ModelForm):
 
         self.helper = FormHelper()
         set_field_properties(self, self.helper)
-        self.helper.render_required_fields = True
+
 
 DataFormset = modelformset_factory(models.Data, exclude=(), extra=1, form=DataForm)
 
