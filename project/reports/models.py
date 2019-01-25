@@ -37,7 +37,6 @@ class Data(models.Model):
         blank=True
     )
     objects = models.Manager()
-    pdobjects = DataFrameManager()  # Pandas-Enabled Manager 
 
     def __str__(self):
         return(str(self.date))
