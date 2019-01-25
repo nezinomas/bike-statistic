@@ -1,0 +1,21 @@
+{% extends parent_template|default:"reports/index.html" %}
+
+{% load static %}{% load buttons %}{% load crispy_forms_tags %}
+
+{% block head %}
+    <script src="{% static 'js/ajax.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/bikes.css' %}">
+{% endblock head %}
+
+{% block content %}
+
+{% crispy filter_form filter_form.helper %}
+
+<p class="text-right my-2">
+    {% url 'reports:data_create' start_date end_date as url_create %}
+    {% button_create url=url_create label='New row' tbl='0' width='19%' %}
+</p>
+
+{% include "reports/includes/partial_data_list.html" %}
+
+{% endblock content %}
