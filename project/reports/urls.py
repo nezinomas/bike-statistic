@@ -21,8 +21,7 @@ urlpatterns = [
     path('data1/', views.data_empty, name='data_empty'),
     path('data1/<date:start_date>/', views.data_partial, name='data_partial'),
     path('data1/<date:start_date>/<date:end_date>', views.data_list, name='data_list'),
-    path('api/data/<date:start_date>/<date:end_date>/create/',
-         views.data_create, name='data_create'),
-    path('api/data/<date:start_date>/<date:end_date>/update/<int:pk>',
-         views.data_update, name='data_update'),
+    path('api/data/<date:start_date>/<date:end_date>/create/', views.data_create, name='data_create'),
+    path('api/data/<date:start_date>/<date:end_date>/update/<int:pk>', views.data_update, name='data_update'),
+    path('api/data/<date:start_date>/<date:end_date>/delete/<int:pk>', views.data_delete, name='data_delete'),
 ]
