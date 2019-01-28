@@ -24,8 +24,13 @@ def format_date(day=1):
 
 def form_valid(data, start_date, end_date):
     data['form_is_valid'] = True
-    objects = models.Data.objects.prefetch_related('bike').filter(date__range=(start_date, end_date))
-    data['html_list'] = render_to_string('reports/includes/partial_data_list.html', {'objects': objects, 'start_date': start_date, 'end_date': end_date})
+    objects = models.Data.objects\
+        .prefetch_related('bike')\
+        .filter(date__range=(start_date, end_date))
+    data['html_list'] = render_to_string(
+        'reports/includes/partial_data_list.html',
+        {'objects': objects, 'start_date': start_date, 'end_date': end_date}
+    )
 
 
 def save_data(request, context, form, start_date, end_date):
@@ -87,26 +92,27 @@ def data_list(request, start_date, end_date):
             url = reverse_lazy('reports:data_list', kwargs=kwargs)
             return redirect(url)
 
-    objects = models.Data.objects.prefetch_related('bike').filter(date__range=(start_date, end_date))
+    objects = models.Data.objects\
+        .prefetch_related('bike')\
+        .filter(date__range=(start_date, end_date))
     filter_form = forms.DateFilterForm(initial={'start_date': start_date, 'end_date': end_date})
-
-    return render(
-        request,
-        'reports/data_list.html',
-        {
-            'objects': objects,
-            'filter_form': filter_form,
-            'start_date': start_date,
-            'end_date': end_date
-        })
+    context = {
+        'objects': objects,
+        'filter_form': filter_form,
+        'start_date': start_date,
+        'end_date': end_date
+    }
+    return render(request, 'reports/data_list.html', context)
 
 
 @login_required()
 def data_create(request, start_date, end_date):
     form = forms.DataFormNew(request.POST or None)
-    context = {
-        'url': reverse('reports:data_create', kwargs={'start_date': start_date, 'end_date': end_date})
-    }
+    url = reverse(
+        'reports:data_create',
+        kwargs={'start_date': start_date, 'end_date': end_date}
+    )
+    context = {'url': url}
     return save_data(request, context, form, start_date, end_date)
 
 
@@ -138,7 +144,7 @@ def data_update(request, start_date, end_date, pk):
             'pk': pk
         }
     )
-    context = {'url': url }
+    context = {'url': url}
     return save_data(request, context, form, start_date, end_date)
 
 
@@ -150,20 +156,22 @@ def insert_data(request):
     except Exception as ex:
         template = "An exception of type {0} occurred. Arguments:\n{1!r}"
         message = template.format(type(ex).__name__, ex.args)
-        return render(request, template_name='reports/get_data.html', context={'message': message})
-
+        return render(
+            request,
+            template_name='reports/get_data.html',
+            context={'message': message}
+        )
     return redirect(reverse('reports:data_empty'))
 
 
 def api_overall(request):
-
     obj = Overall(models.Data)
-
-    chart = {'first': {
-        'xAxis': {'categories': obj.create_categories()},
-        'series': obj.create_series()[::-1]
-    }}
-
+    chart = {
+        'first': {
+            'xAxis': {'categories': obj.create_categories()},
+            'series': obj.create_series()[::-1]
+        }
+    }
     return JsonResponse(chart)
 
 
