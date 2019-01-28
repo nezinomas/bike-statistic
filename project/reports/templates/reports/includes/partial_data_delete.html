@@ -9,11 +9,11 @@
                     <td width="150rem" class="v-middle">
                         <em>{{ object.pk }}</em>
                     </td>
-                    <td class=" v-middle">
-                        Are you sure you want to delete record <strong>{{ object }}</strong>?
+                    <td class=" v-middle text-center">
+                        Are you sure you want to delete record: <strong>{{ object }}</strong> / <strong>{{ object.bike }}</strong>?
                     </td>
 
-                    <td class="text-right last">
+                    <td class="text-right last" width="100rem">
                         {% button_close pk=object.pk tbl='0' %}
                         {% button_delete type='submit' %}
                     </td>

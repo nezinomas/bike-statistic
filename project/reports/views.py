@@ -21,13 +21,9 @@ def save_data(request, context, form, start_date, end_date):
     if request.method == 'POST':
         if form.is_valid():
 
-            """
             f = form.save(commit=False)
-            f.distance = 999
+            f.checked = 'y'
             f.save()
-            """
-            form.save()
-            #"""
 
             data['form_is_valid'] = True
             objects = models.Data.objects.prefetch_related(
@@ -215,7 +211,7 @@ def insert_data(request):
         message = template.format(type(ex).__name__, ex.args)
         return render(request, template_name='reports/get_data.html', context={'message': message})
 
-    return redirect(reverse('reports:data_table_empty_date'))
+    return redirect(reverse('reports:data_empty'))
 
 
 def api_overall(request):
