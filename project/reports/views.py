@@ -13,6 +13,15 @@ from .library.insert_data import insert_data as inserter
 from .library.overall import Overall
 
 
+def format_date(day=1):
+    now = datetime.now()
+    year = now.year
+    month = now.month
+    day = day if day == 1 else monthrange(year, month)[1]
+
+    return '{y}-{m:02d}-{d:02d}'.format(y=year, m=month, d=day)
+
+
 def form_valid(data, start_date, end_date):
     data['form_is_valid'] = True
     objects = models.Data.objects.prefetch_related('bike').filter(date__range=(start_date, end_date))
@@ -42,13 +51,12 @@ def save_data(request, context, form, start_date, end_date):
 
 @login_required()
 def data_empty(request):
-    now = datetime.now()
     return redirect(
         reverse(
             'reports:data_list',
             kwargs={
-                'start_date': '{y}-{m:02d}-{d}'.format(y=now.year, m=now.month, d='01'),
-                'end_date': '{y}-{m:02d}-{d:02d}'.format(y=now.year, m=now.month, d=monthrange(now.year, now.month)[1]),
+                'start_date': format_date(),
+                'end_date': format_date('last'),
             }
         )
     )
@@ -56,13 +64,12 @@ def data_empty(request):
 
 @login_required()
 def data_partial(request, start_date):
-    now = datetime.now()
     return redirect(
         reverse(
             'reports:data_list',
             kwargs={
                 'start_date': start_date,
-                'end_date': '{y}-{m:02d}-{d:02d}'.format(y=now.year, m=now.month, d=monthrange(now.year, now.month)[1]),
+                'end_date': format_date('last'),
             }
         )
     )
