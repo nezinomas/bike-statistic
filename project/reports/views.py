@@ -73,20 +73,21 @@ def data_list(request, start_date, end_date):
     # paspaustas filter mygtukas
     if 'date_filter' in request.POST:
         filter_form = forms.DateFilterForm(request.POST)
+
         if filter_form.is_valid():
             data = filter_form.cleaned_data
-            url = reverse_lazy('reports:data_list', kwargs={
-                               'start_date': data['start_date'], 'end_date': data['end_date']})
+            kwargs = {'start_date': data['start_date'], 'end_date': data['end_date']}
+            url = reverse_lazy('reports:data_list', kwargs=kwargs)
             return redirect(url)
 
-    qs = models.Data.objects.prefetch_related('bike').filter(date__range=(start_date, end_date))
-    filter_form = forms.DateFilterForm(
-        initial={'start_date': start_date, 'end_date': end_date})
+    objects = models.Data.objects.prefetch_related('bike').filter(date__range=(start_date, end_date))
+    filter_form = forms.DateFilterForm(initial={'start_date': start_date, 'end_date': end_date})
+
     return render(
         request,
         'reports/data_list.html',
         {
-            'objects': qs,
+            'objects': objects,
             'filter_form': filter_form,
             'start_date': start_date,
             'end_date': end_date
@@ -122,9 +123,15 @@ def data_delete(request, start_date, end_date, pk):
 def data_update(request, start_date, end_date, pk):
     object = get_object_or_404(models.Data, pk=pk)
     form = forms.DataFormNew(request.POST or None, instance=object)
-    context = {
-        'url': reverse('reports:data_update', kwargs={'start_date': start_date, 'end_date': end_date, 'pk': pk})
-    }
+    url = reverse(
+        'reports:data_update',
+        kwargs={
+            'start_date': start_date,
+            'end_date': end_date,
+            'pk': pk
+        }
+    )
+    context = {'url': url }
     return save_data(request, context, form, start_date, end_date)
 
 
