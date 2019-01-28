@@ -7,7 +7,7 @@ from crispy_forms.helper import FormHelper
 from bootstrap_datepicker_plus import DatePickerInput, MonthPickerInput
 
 from . import models
-
+from ..core.helpers.form_helpers import set_field_properties
 
 class DataForm(forms.ModelForm):
     class Meta:
@@ -16,6 +16,22 @@ class DataForm(forms.ModelForm):
         widgets = {
             'date': DatePickerInput(format='%Y-%m-%d'),
         }
+
+
+class DataFormNew(forms.ModelForm):
+    class Meta:
+        model = models.Data
+        fields = '__all__'
+        widgets = {
+            'date': DatePickerInput(format='%Y-%m-%d'),
+            'checked': forms.HiddenInput(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        set_field_properties(self, self.helper)
 
 
 DataFormset = modelformset_factory(models.Data, exclude=(), extra=1, form=DataForm)

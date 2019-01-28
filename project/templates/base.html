@@ -8,12 +8,9 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
       crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/app_global.css' %}">
+    {% block head %}{% endblock head %}
 
-    {% block stylesheet %}{% endblock stylesheet %}
-    {% block head_at_end %}{% endblock %}
-    {% block chart %}{% endblock chart %}
-
-    <title>Uh</title>
+    <title>Bike statistic</title>
   </head>
 
   <body>
@@ -26,8 +23,7 @@
           {% if user.is_authenticated %}
           <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ user.username }}
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
@@ -47,33 +43,28 @@
       </div>
     </nav>
 
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="row">
+    <div class="container-fluid px-5">
+      <div class="row">
+        <div class="col-lg-2">
+          <ul class="sidebar-nav">
+            <li class="nav-item"><a href="{% url 'reports:data_table_empty_date' %}">Data</a></li>
+            <li class="nav-item"><a href="{% url 'reports:data_empty' %}">Data (New)</a></li>
+            <li class="nav-item"><a href="{% url 'reports:insert_data' %}">Update Data</a></li>
+            <li class="nav-item"><a href="{% url 'bikes:component_list' %}">Components</a></li>
+          </ul>
+          <p>Component wear</p>
+          <ul class="sidebar-nav">
+            {% for bike in bike_list %}
+            <li class="nav-item"><a href="{% url 'bikes:stats_list' bike=bike.slug %}">{{ bike.short_name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
 
-              <div class="col-lg-2">
-                <ul class="sidebar-nav">
-                  <li class="nav-item"><a href="{% url 'reports:data_table_empty_date' %}">Data</a></li>
-                  <li class="nav-item"><a href="{% url 'reports:insert_data' %}">Update Data</a></li>
-                  <li class="nav-item"><a href="{% url 'bikes:component_list' %}">Components</a></li>
-                </ul>
-                <p>Component wear</p>
-                <ul class="sidebar-nav">
-                  {% for bike in bike_list %}
-                  <li class="nav-item"><a href="{% url 'bikes:stats_list' bike=bike.slug %}">{{ bike.short_name }}</a></li>
-                  {% endfor %}
-                </ul>
-              </div>
-
-              <div class="col-lg-10 mx-auto px-auto">{% block content %}{% endblock content %}
-              </div>
-
-            </div>
-          </div>
+        <div class="col-lg-10 mx-auto px-auto">
+          {% block content %}{% endblock content %}
         </div>
       </div>
-
+    </div>
 
     {% endblock body %}
   </body>

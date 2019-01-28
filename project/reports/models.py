@@ -7,10 +7,15 @@ from ..bikes import models as bikeModels
 
 
 class Data(models.Model):
+    # choices
+    yes = 'y'
+    no = 'n'
+    checked_choices = ((yes, 'Yes'), (no, 'No'))
+
     bike = models.ForeignKey(
         bikeModels.Bike,
         on_delete=models.CASCADE,
-        related_name='data'
+        related_name='bike_set'
     )
     date = models.DateField(default=datetime.date.today())
     distance = models.FloatField()
@@ -36,9 +41,11 @@ class Data(models.Model):
         null=True,
         blank=True
     )
-    objects = models.Manager()
-    pdobjects = DataFrameManager()  # Pandas-Enabled Manager 
-
+    checked = models.CharField(
+        max_length=1,
+        choices=checked_choices,
+        default=no,
+    )
     def __str__(self):
         return(str(self.date))
 

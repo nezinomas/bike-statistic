@@ -15,7 +15,8 @@
                     </td>{% endfor %}
 
                     <td style="width: 20%">
-                        {% button_close pk=form.instance.pk tbl='0' %}{% button_update pk=form.instance.pk tbl='0' %}
+                        {% button_close pk=form.instance.pk tbl='0' label='true' %}
+                        {% button_update pk=form.instance.pk tbl='0' label='true' %}
                     </td>
                 </tr>
             </table>

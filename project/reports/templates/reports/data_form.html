@@ -1,6 +1,12 @@
 {% extends parent_template|default:"reports/index.html" %}
 {% load crispy_forms_tags %}
 
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/reports.css' %}">
+{% endblock head %}
+
 {% block content %}
 
     {% crispy filter_form filter_form.helper %}
