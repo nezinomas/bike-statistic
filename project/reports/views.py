@@ -88,7 +88,15 @@ def data_create(request, start_date, end_date):
 
     if request.method == 'POST':
         if form.is_valid():
+
+            """
+            f = form.save(commit=False)
+            f.distance = 999
+            f.save()
+            """
             form.save()
+            #"""
+
             data['form_is_valid'] = True
             objects = models.Data.objects.prefetch_related(
                 'bike').filter(date__range=(start_date, end_date))
