@@ -137,7 +137,12 @@ def data_delete(request, start_date, end_date, pk):
 
 @login_required()
 def data_update(request, start_date, end_date, pk):
-    pass
+    object = get_object_or_404(models.Data, pk=pk)
+    form = forms.DataFormNew(request.POST or None, instance=object)
+    context = {
+        'url': reverse('reports:data_update', kwargs={'start_date': start_date, 'end_date': end_date, 'pk': pk})
+    }
+    return save_data(request, context, form, start_date, end_date)
 
 
 @login_required()
