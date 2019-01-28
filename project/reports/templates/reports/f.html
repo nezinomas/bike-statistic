@@ -1,9 +1,0 @@
-
-{% block extrahead %}
-{{ form.media }}
-{% endblock %}
-
-<form method="post">{% csrf_token %}
-    {% bootstrap_form form %}
-    <input type="submit" value="Save">
-</form>
