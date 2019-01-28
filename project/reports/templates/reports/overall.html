@@ -1,11 +1,10 @@
 {% extends parent_template|default:"reports/index.html" %}
 {% load static %}
 
-{% block chart %}
+{% block head %}
 <script src="https://code.highcharts.com/highcharts.src.js"></script>
 <!-- <script src="{% static 'js/grid-light.js' %}"></script> -->
-
-{% endblock chart %}
+{% endblock head %}
 
 {% block content %}
 
