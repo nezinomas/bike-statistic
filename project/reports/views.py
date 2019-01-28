@@ -40,15 +40,6 @@ def save_data(request, context, form, start_date, end_date):
     return JsonResponse(data)
 
 
-def test(request):
-
-    return render(
-        request,
-        'reports/test.html',
-        context={'var': 'kintamasis is view', 'var1': '? ar tikrai?'}
-    )
-
-
 @login_required()
 def data_empty(request):
     now = datetime.now()
