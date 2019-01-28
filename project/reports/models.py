@@ -7,6 +7,11 @@ from ..bikes import models as bikeModels
 
 
 class Data(models.Model):
+    # choices
+    yes = 'y'
+    no = 'n'
+    checked_choices = ((yes, 'Yes'), (no, 'No'))
+
     bike = models.ForeignKey(
         bikeModels.Bike,
         on_delete=models.CASCADE,
@@ -36,8 +41,11 @@ class Data(models.Model):
         null=True,
         blank=True
     )
-    objects = models.Manager()
-
+    checked = models.CharField(
+        max_length=1,
+        choices=checked_choices,
+        default=no,
+    )
     def __str__(self):
         return(str(self.date))
 

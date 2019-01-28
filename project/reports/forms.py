@@ -24,6 +24,7 @@ class DataFormNew(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'date': DatePickerInput(format='%Y-%m-%d'),
+            'checked': forms.HiddenInput(),
         }
 
     def __init__(self, *args, **kwargs):
