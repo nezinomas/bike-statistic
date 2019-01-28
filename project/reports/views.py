@@ -15,6 +15,35 @@ from .library.insert_data import insert_data as inserter
 from .library.overall import Overall
 
 
+def save_data(request, context, form, start_date, end_date):
+    data = {}
+
+    if request.method == 'POST':
+        if form.is_valid():
+
+            """
+            f = form.save(commit=False)
+            f.distance = 999
+            f.save()
+            """
+            form.save()
+            #"""
+
+            data['form_is_valid'] = True
+            objects = models.Data.objects.prefetch_related(
+                'bike').filter(date__range=(start_date, end_date))
+            data['html_list'] = render_to_string(
+                'reports/includes/partial_data_list.html', {'objects': objects, 'start_date': start_date, 'end_date': end_date})
+        else:
+            data['form_is_valid'] = False
+
+    context['form'] = form
+    data['html_form'] = render_to_string(
+        'reports/includes/partial_data_update.html', context, request)
+
+    return JsonResponse(data)
+
+
 def test(request):
 
     return render(
@@ -83,33 +112,7 @@ def data_create(request, start_date, end_date):
     context = {
         'url': reverse('reports:data_create', kwargs={'start_date': start_date, 'end_date': end_date})
     }
-
-    data = {}
-
-    if request.method == 'POST':
-        if form.is_valid():
-
-            """
-            f = form.save(commit=False)
-            f.distance = 999
-            f.save()
-            """
-            form.save()
-            #"""
-
-            data['form_is_valid'] = True
-            objects = models.Data.objects.prefetch_related(
-                'bike').filter(date__range=(start_date, end_date))
-            data['html_list'] = render_to_string(
-                'reports/includes/partial_data_list.html', {'objects': objects, 'start_date': start_date, 'end_date': end_date})
-        else:
-            data['form_is_valid'] = False
-
-    context['form'] = form
-    data['html_form'] = render_to_string(
-        'reports/includes/partial_data_update.html', context, request)
-
-    return JsonResponse(data)
+    return save_data(request, context, form, start_date, end_date)
 
 
 @login_required
@@ -130,6 +133,7 @@ def data_delete(request, start_date, end_date, pk):
             'reports/includes/partial_data_delete.html', context, request)
 
     return JsonResponse(data)
+
 
 @login_required()
 def data_update(request, start_date, end_date, pk):
