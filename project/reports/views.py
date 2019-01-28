@@ -52,7 +52,9 @@ def data_list(request, start_date, end_date):
     objects = models.Data.objects\
         .prefetch_related('bike')\
         .filter(date__range=(start_date, end_date))
-    filter_form = forms.DateFilterForm(initial={'start_date': start_date, 'end_date': end_date})
+    filter_form = forms.DateFilterForm(
+        initial={'start_date': start_date, 'end_date': end_date}
+    )
     context = {
         'objects': objects,
         'filter_form': filter_form,
