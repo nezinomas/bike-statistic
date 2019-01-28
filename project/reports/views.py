@@ -150,7 +150,8 @@ def data_table(request, start_date, end_date):
             url = reverse_lazy('reports:data_table', kwargs={'start_date': start_date, 'end_date': end_date})
             return redirect(url)
     else:
-        queryset = models.Data.objects.filter(date__range=(start_date, end_date))
+        queryset = models.Data.objects.prefetch_related(
+            'bike').filter(date__range=(start_date, end_date))
         formset = forms.DataFormset(queryset=queryset)
 
     helper = forms.DataFormSetHelper()
