@@ -1,4 +1,3 @@
-import json
 from calendar import monthrange
 from datetime import datetime
 
@@ -9,10 +8,15 @@ from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 
 from . import forms, models
-from ..bikes.models import Bike
 
 from .library.insert_data import insert_data as inserter
 from .library.overall import Overall
+
+
+def form_valid(data, start_date, end_date):
+    data['form_is_valid'] = True
+    objects = models.Data.objects.prefetch_related('bike').filter(date__range=(start_date, end_date))
+    data['html_list'] = render_to_string('reports/includes/partial_data_list.html', {'objects': objects, 'start_date': start_date, 'end_date': end_date})
 
 
 def save_data(request, context, form, start_date, end_date):
@@ -25,11 +29,7 @@ def save_data(request, context, form, start_date, end_date):
             f.checked = 'y'
             f.save()
 
-            data['form_is_valid'] = True
-            objects = models.Data.objects.prefetch_related(
-                'bike').filter(date__range=(start_date, end_date))
-            data['html_list'] = render_to_string(
-                'reports/includes/partial_data_list.html', {'objects': objects, 'start_date': start_date, 'end_date': end_date})
+            form_valid(data, start_date, end_date)
         else:
             data['form_is_valid'] = False
 
@@ -109,11 +109,7 @@ def data_delete(request, start_date, end_date, pk):
 
     if request.method == 'POST':
         object.delete()
-        data['form_is_valid'] = True
-        objects = models.Data.objects.prefetch_related(
-            'bike').filter(date__range=(start_date, end_date))
-        data['html_list'] = render_to_string(
-            'reports/includes/partial_data_list.html', {'objects': objects, 'start_date': start_date, 'end_date': end_date})
+        form_valid(data, start_date, end_date)
     else:
         context = {'object': object, 'start_date': start_date, 'end_date': end_date}
         data['html_form'] = render_to_string(
