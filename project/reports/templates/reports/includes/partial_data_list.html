@@ -19,7 +19,7 @@
         {% for obj in objects %}
         {% url 'reports:data_update' start_date end_date obj.id as url_update %}
         {% url 'reports:data_delete' start_date end_date obj.id as url_delete %}
-        <tr id="row_id_{{ obj.pk }}" data-pk="{{ obj.pk }}" data-url="{{ url_update }}" data-tbl="0" class="{% if obj.checked == 'n' %}not-checked{% endif %}">
+        <tr id="row_id_{{ obj.pk }}" data-pk="{{ obj.pk }}" data-url="{{ url_update }}" data-tbl="0" class="{% if obj.checked == 'n' %}table-info{% endif %}">
             <td class="text-left">{{ obj.bike }}</td>
             <td class="text-center">{{ obj.date|date:'Y-m-d' }}<span class="date-align">&nbsp;</span></td>
             <td class="text-center">{{ obj.distance }}</td>

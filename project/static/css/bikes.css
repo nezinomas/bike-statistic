@@ -73,10 +73,6 @@ table tfoot td {
   display:block;
 }
 
-.not-checked {
-  background-color:#fee4ea!important;
-}
-
 tr:nth-child(odd) {
   background-color: #fdefd5;
 }
