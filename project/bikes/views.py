@@ -91,10 +91,17 @@ def component_delete(request, pk):
         component.delete()
         data['form_is_valid'] = True
         components = Component.objects.all()
-        data['html_list'] = render_to_string('bikes/includes/partial_component_list.html', {'components': components})
+        data['html_list'] = render_to_string(
+            'bikes/includes/partial_component_list.html',
+            {'components': components}
+        )
     else:
         context = {'component': component}
-        data['html_form'] = render_to_string('bikes/includes/partial_component_delete.html', context=context, request=request)
+        data['html_form'] = render_to_string(
+            'bikes/includes/partial_component_delete.html',
+            context=context,
+            request=request
+        )
 
     return JsonResponse(data)
 
