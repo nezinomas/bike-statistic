@@ -117,7 +117,7 @@ def insert_data(request):
         message = template.format(type(ex).__name__, ex.args)
         return render(
             request,
-            template_name='reports/get_data.html',
+            template_name='reports/data_insert.html',
             context={'message': message}
         )
     return redirect(reverse('reports:data_empty'))
