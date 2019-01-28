@@ -67,8 +67,16 @@ table tfoot td {
   font-size: .8rem!important;
 }
 
-.cc {
+.date-align {
   width: 2.7rem;
   float: right;
   display:block;
+}
+
+.not-checked {
+  background-color:#fee4ea!important;
+}
+
+tr:nth-child(odd) {
+  background-color: #fdefd5;
 }

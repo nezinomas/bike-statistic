@@ -5,18 +5,20 @@
             {% csrf_token %}
             {{ form.media }}
             <table class="table table-md table-borderless inner">
-                <!-- <tr class="table-warning"> -->
-                <tr>
-                    <td width="150rem" class="text-left" style="background-color:papayawhip;">{{ form.bike|as_crispy_field }}</td>
-                    <td width="200rem" class="text-center" style="background-color:peachpuff;">{{ form.date|as_crispy_field }}</td>
-                    <td class="text-center" style="background-color:pink;">{{ form.distance|as_crispy_field }}</td>
-                    <td class="text-center" style="background-color:lavender;">{{ form.time|as_crispy_field }}</td>
+                <tr class="table-warning">
+                    <td width="150rem" class="text-left">{{ form.bike|as_crispy_field }}</td>
+                    <td width="200rem" class="text-center">{{ form.date|as_crispy_field }}</td>
+                    <td class="text-center">{{ form.distance|as_crispy_field }}</td>
+                    <td class="text-center">{{ form.time|as_crispy_field }}</td>
                     <td class="text-center">{{ form.temperature|as_crispy_field }}</td>
-                    <td class="text-center" style="background-color:lightcyan;">{{ form.ascent|as_crispy_field }}</td>
-                    <td class="text-center"  style="background-color:lightsteelblue;">{{ form.descent|as_crispy_field }}</td>
-                    <td class="text-center" style="background-color:silver">{{ form.max_speed|as_crispy_field }}</td>
-                    <td class="text-center" style="background-color:wheat">{{ form.heart_rate|as_crispy_field }}</td>
-                    <td class="text-center" style="background-color:violet">{{ form.cadence|as_crispy_field }}</td>
+                    <td class="text-center">{{ form.ascent|as_crispy_field }}</td>
+                    <td class="text-center">{{ form.descent|as_crispy_field }}</td>
+                    <td class="text-center">{{ form.max_speed|as_crispy_field }}</td>
+                    <td class="text-center">{{ form.heart_rate|as_crispy_field }}</td>
+                    <td class="text-center">
+                        {{ form.cadence|as_crispy_field }}
+                        {{ form.checked }}
+                    </td>
                     <td class="text-right">
                         {% button_close pk=form.instance.pk tbl='0' %}
                         {% button_update pk=form.instance.pk tbl='0' %}
