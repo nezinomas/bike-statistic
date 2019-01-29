@@ -1,7 +1,6 @@
 import datetime
 
 from django.db import models
-from django_pandas.managers import DataFrameManager
 from django.utils.timezone import now
 
 from ..bikes import models as bikeModels
