@@ -1,4 +1,5 @@
 from django.shortcuts import reverse, render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 
@@ -6,14 +7,6 @@ from .models import Bike, Component, ComponentStatistic
 from .forms import ComponentForm, ComponentStatisticForm
 
 from .helpers.view_stats_helper import Filter
-
-
-def index(request):
-    return render(
-        request,
-        'bikes/index.html',
-        context={'var': 'kintamasis is view', 'var1': '? ar tikrai?'}
-    )
 
 
 def save_component(request, context, form):
@@ -65,17 +58,20 @@ def save_component1(request, context, form, bike_slug, pk):
     return JsonResponse(data)
 
 
+@login_required()
 def component_list(request):
     components = Component.objects.all()
     return render(request, 'bikes/component_list.html', {'components': components})
 
 
+@login_required()
 def component_create(request):
     form = ComponentForm(request.POST or None)
     context = {'url': reverse('bikes:component_create')}
     return save_component(request, context, form)
 
 
+@login_required()
 def component_update(request, pk):
     component = get_object_or_404(Component, pk=pk)
     form = ComponentForm(request.POST or None, instance=component)
@@ -83,6 +79,7 @@ def component_update(request, pk):
     return save_component(request, context, form)
 
 
+@login_required()
 def component_delete(request, pk):
     component = get_object_or_404(Component, pk=pk)
     data = {}
@@ -106,6 +103,7 @@ def component_delete(request, pk):
     return JsonResponse(data)
 
 
+@login_required()
 def stats_list(request, bike):
     o = Filter(bike, 'all')
 
@@ -118,6 +116,7 @@ def stats_list(request, bike):
         })
 
 
+@login_required()
 def stats_create(request, bike, pk):
     bike_ = get_object_or_404(Bike, slug=bike)
     obj = get_object_or_404(Component, pk=pk)
@@ -133,6 +132,7 @@ def stats_create(request, bike, pk):
     return save_component1(request, context, form, bike, pk)
 
 
+@login_required()
 def stats_update(request, bike, pk):
     obj = get_object_or_404(ComponentStatistic, pk=pk)
     form = ComponentStatisticForm(request.POST or None, instance=obj)
@@ -143,6 +143,7 @@ def stats_update(request, bike, pk):
     return save_component1(request, context, form, bike, obj.component.pk)
 
 
+@login_required()
 def stats_delete(request, bike, pk):
     obj = get_object_or_404(ComponentStatistic, pk=pk)
     data = {}
