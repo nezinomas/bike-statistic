@@ -21,6 +21,10 @@ table tfoot td {
   padding-bottom: .35rem!important;
 }
 
+table.tbl-js>tbody>tr:nth-child(odd) {
+  background-color: #fdefd5;
+}
+
 .form-group {
   margin: 0!important;
   padding: 0!important;
@@ -71,8 +75,4 @@ table tfoot td {
   width: 2.7rem;
   float: right;
   display:block;
-}
-
-table.tbl-js>tbody>tr:nth-child(odd) {
-  background-color: #fdefd5;
 }
