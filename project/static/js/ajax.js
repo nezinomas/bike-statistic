@@ -7,8 +7,8 @@ $(function () {
         loadFormAjax(btn.data("tbl"), btn.data("pk"), btn.attr("data-url"));
     };
 
-    var loadFormDblClc = function(tbl, pk, url) {
-        loadFormAjax(tbl, pk, url)
+    var loadFormDblClc = function () {
+        loadFormAjax($(this).data("tbl"), $(this).data("pk"), $(this).data('url'))
     };
 
     var loadFormAjax = function(tbl, pk, url) {
@@ -72,11 +72,10 @@ $(function () {
         $(row).show();
     };
 
-    $('tr').dblclick(function () {
-        loadFormDblClc($(this).data("tbl"), $(this).data("pk"), $(this).data('url'))
-    });
 
     /* Binding */
+    // Double click
+    $('table').on('dblclick', 'tr', loadFormDblClc);
 
     // Create
     $(".js-create").click(loadFormBtn);
