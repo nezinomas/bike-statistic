@@ -1,5 +1,3 @@
-import datetime
-
 from django.db import models
 from django.utils.timezone import now
 
@@ -46,6 +44,7 @@ class Data(models.Model):
         choices=checked_choices,
         default=no,
     )
+
     def __str__(self):
         return(str(self.date))
 
