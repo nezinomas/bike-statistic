@@ -5,16 +5,23 @@
 {% block head %}
     <script src="{% static 'js/ajax.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/bikes.css' %}">
+    {{ filter_form.media }}
 {% endblock head %}
 
 {% block content %}
 
-{% crispy filter_form filter_form.helper %}
-
-<p class="text-right my-2">
-    {% url 'reports:data_create' start_date end_date as url_create %}
-    {% button_create url=url_create label='New row' tbl='0' width='19%' %}
-</p>
+<form class="filter" method="post">
+    {% csrf_token %}
+    <div class="row my-3">
+        <div class="col-sm-3 pr-0 mr-0">{{ filter_form.start_date|as_crispy_field }}</div>
+        <div class="col-sm-3 pr-0 mr-0">{{ filter_form.end_date|as_crispy_field }}</div>
+        <div class="col-sm-1 pr-0 mr-0"><input type="submit" name="date_filter" value="Filter" class="btn btn-secondary btn-sm" id="submit-id-date_filter"></div>
+        <div class="col text-right">
+            {% url 'reports:data_create' start_date end_date as url_create %}
+            {% button_create url=url_create label='New row' tbl='0' width="35%" %}
+        </div>
+    </div>
+</form>
 
 {% include "reports/includes/partial_data_list.html" %}
 
