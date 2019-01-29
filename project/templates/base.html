@@ -17,7 +17,7 @@
     {% block body %}
 
     <nav class="navbar navbar-expand navbar-light bg-light">
-      <div class="container">
+      <div class="container-fluid px-5">
         <a href="{% url 'goals:home' %}">Bikes and Stats</a>
         <div class="collapse navbar-collapse" id="mainMenu">
           {% if user.is_authenticated %}
