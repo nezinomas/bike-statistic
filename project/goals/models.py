@@ -10,7 +10,7 @@ class Goal(models.Model):
     )
 
     def __str__(self):
-        return str(self.title)
+        return str(self.year)
 
     class Meta:
         ordering = ['-year']
