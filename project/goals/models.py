@@ -4,6 +4,7 @@ from django.core.validators import MaxLengthValidator, MinLengthValidator
 
 class Goal(models.Model):
     year = models.IntegerField(
+        unique=True,
         validators=[MaxLengthValidator(2050), MinLengthValidator(2000)]
     )
     distance = models.IntegerField(
