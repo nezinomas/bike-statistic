@@ -18,7 +18,7 @@
 
     <nav class="navbar navbar-expand navbar-light bg-light">
       <div class="container-fluid px-5">
-        <a href="{% url 'goals:home' %}">Bikes and Stats</a>
+        <a href="{% url 'reports:data_empty' %}">Bikes and Stats</a>
         <div class="collapse navbar-collapse" id="mainMenu">
           {% if user.is_authenticated %}
           <ul class="navbar-nav ml-auto">
