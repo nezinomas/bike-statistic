@@ -7,5 +7,8 @@ from . import views
 app_name = 'goals'
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('goals/', views.goals_list, name='goals_list'),
+    path('api/goals/create/', views.goals_create, name='goals_create'),
+    path('api/goals/update/<int:pk>/', views.goals_update, name='goals_update'),
+    path('api/goals/delete/<int:pk>/', views.goals_delete, name='goals_delete'),
 ]
