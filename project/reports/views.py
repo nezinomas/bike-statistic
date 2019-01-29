@@ -66,7 +66,7 @@ def data_list(request, start_date, end_date):
 
 @login_required()
 def data_create(request, start_date, end_date):
-    form = forms.DataFormNew(request.POST or None)
+    form = forms.DataForm(request.POST or None)
     url = reverse(
         'reports:data_create',
         kwargs={'start_date': start_date, 'end_date': end_date}
@@ -94,7 +94,7 @@ def data_delete(request, start_date, end_date, pk):
 @login_required()
 def data_update(request, start_date, end_date, pk):
     object = get_object_or_404(models.Data, pk=pk)
-    form = forms.DataFormNew(request.POST or None, instance=object)
+    form = forms.DataForm(request.POST or None, instance=object)
     url = reverse(
         'reports:data_update',
         kwargs={
