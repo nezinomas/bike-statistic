@@ -73,6 +73,6 @@ table tfoot td {
   display:block;
 }
 
-tr:nth-child(odd) {
+table.tbl-js>tbody>tr:nth-child(odd) {
   background-color: #fdefd5;
 }
