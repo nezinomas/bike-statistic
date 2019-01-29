@@ -1,14 +1,14 @@
 from django.db import models
-from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Goal(models.Model):
     year = models.IntegerField(
         unique=True,
-        validators=[MaxLengthValidator(2050), MinLengthValidator(2000)]
+        validators=[MinValueValidator(2000), MaxValueValidator(2050)]
     )
     distance = models.IntegerField(
-        validators=[MaxLengthValidator(100), MinLengthValidator(20000)]
+        validators=[MinValueValidator(100), MaxValueValidator(20000)]
     )
 
     def __str__(self):
