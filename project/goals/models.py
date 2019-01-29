@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
-
+from django.core.validators import MaxLengthValidator, MinLengthValidator
 
 class Goal(models.Model):
     title = models.CharField(
@@ -8,8 +8,12 @@ class Goal(models.Model):
         unique=True
     )
     slug = models.SlugField(editable=False)
-    start_date = models.DateField()
-    end_date = models.DateField()
+    year = models.IntegerField(
+        validators=[MaxLengthValidator(2050), MinLengthValidator(2000)]
+    )
+    distance = models.IntegerField(
+        validators=[MaxLengthValidator(100), MinLengthValidator(20000)]
+    )
 
     def __str__(self):
         return str(self.title)
@@ -20,4 +24,4 @@ class Goal(models.Model):
         super().save(*args, **kwargs)
 
     class Meta:
-        ordering = ['-end_date']
+        ordering = ['-year']
