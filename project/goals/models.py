@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 
+
 class Goal(models.Model):
     year = models.IntegerField(
         validators=[MaxLengthValidator(2050), MinLengthValidator(2000)]
