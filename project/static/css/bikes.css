@@ -21,8 +21,20 @@ table tfoot td {
   padding-bottom: .35rem!important;
 }
 
-table.tbl-js>tbody>tr:nth-child(odd) {
-  background-color: #fdefd5;
+.table-striped>tbody>tr:nth-child(odd) {
+   background-color: #fdefd5;
+ }
+
+.table-hover tbody tr:hover {
+    background: lightgray;
+}
+
+.table-hover tbody tr:hover td.table-danger {
+    background: #eab0b7;
+}
+
+.table-hover tbody tr:hover td.table-success {
+    background: #b7debb;
 }
 
 .form-group {
@@ -53,9 +65,16 @@ table.tbl-js>tbody>tr:nth-child(odd) {
 }
 
 .inner td input {
-  text-align: center;
   padding-left: .25rem!important;
   padding-right: .25rem!important;
+}
+
+.inner td.text-left input {
+  text-align: left;
+}
+
+.inner td.text-center input {
+  text-align: center;
 }
 
 .btn-sm {

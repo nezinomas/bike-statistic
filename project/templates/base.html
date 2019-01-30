@@ -18,7 +18,7 @@
 
     <nav class="navbar navbar-expand navbar-light bg-light">
       <div class="container-fluid px-5">
-        <a href="{% url 'goals:home' %}">Bikes and Stats</a>
+        <a href="{% url 'reports:data_empty' %}">Bikes and Stats</a>
         <div class="collapse navbar-collapse" id="mainMenu">
           {% if user.is_authenticated %}
           <ul class="navbar-nav ml-auto">
@@ -50,6 +50,7 @@
             <li class="nav-item"><a href="{% url 'reports:data_empty' %}">Data</a></li>
             <li class="nav-item"><a href="{% url 'reports:insert_data' %}">Update Data</a></li>
           </ul>
+
           <p>Component wear</p>
           <ul class="sidebar-nav">
             {% for bike in bike_list %}
@@ -57,9 +58,15 @@
             {% endfor %}
             <li class="nav-item"><a href="{% url 'bikes:component_list' %}">Components</a></li>
           </ul>
+
           <p>Reports</p>
           <ul class="sidebar-nav">
             <li class="nav-item"><a href="{% url 'reports:overall' %}">Overall</a></li>
+          </ul>
+
+          <p>Goals</p>
+          <ul class="sidebar-nav">
+            <li class="nav-item"><a href="{% url 'goals:goals_list' %}">Goals</a></li>
           </ul>
         </div>
 

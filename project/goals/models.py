@@ -1,23 +1,18 @@
 from django.db import models
-from django.utils.text import slugify
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Goal(models.Model):
-    title = models.CharField(
-        max_length=254,
-        unique=True
+    year = models.IntegerField(
+        unique=True,
+        validators=[MinValueValidator(2000), MaxValueValidator(2050)]
     )
-    slug = models.SlugField(editable=False)
-    start_date = models.DateField()
-    end_date = models.DateField()
+    goal = models.IntegerField(
+        validators=[MinValueValidator(100), MaxValueValidator(20000)]
+    )
 
     def __str__(self):
-        return str(self.title)
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
-
-        super().save(*args, **kwargs)
+        return str(self.year)
 
     class Meta:
-        ordering = ['-end_date']
+        ordering = ['-year']

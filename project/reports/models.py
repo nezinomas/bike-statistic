@@ -1,7 +1,5 @@
-import datetime
-
 from django.db import models
-from django_pandas.managers import DataFrameManager
+from django.utils.timezone import now
 
 from ..bikes import models as bikeModels
 
@@ -17,7 +15,7 @@ class Data(models.Model):
         on_delete=models.CASCADE,
         related_name='bike_set'
     )
-    date = models.DateField(default=datetime.date.today())
+    date = models.DateField(default=now)
     distance = models.FloatField()
     time = models.DurationField()
     temperature = models.IntegerField(
@@ -46,6 +44,7 @@ class Data(models.Model):
         choices=checked_choices,
         default=no,
     )
+
     def __str__(self):
         return(str(self.date))
 
