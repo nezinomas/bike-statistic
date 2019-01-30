@@ -7,7 +7,7 @@ class Goal(models.Model):
         unique=True,
         validators=[MinValueValidator(2000), MaxValueValidator(2050)]
     )
-    distance = models.IntegerField(
+    goal = models.IntegerField(
         validators=[MinValueValidator(100), MaxValueValidator(20000)]
     )
 
