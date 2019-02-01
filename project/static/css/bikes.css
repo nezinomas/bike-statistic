@@ -86,6 +86,10 @@ table tfoot td {
   border-left: orangered dotted 1px!important;
 }
 
+.b-left {
+  border-left: orangered dotted 1px!important;
+}
+
 .form-control-sm {
   font-size: .8rem!important;
 }
@@ -95,3 +99,8 @@ table tfoot td {
   float: right;
   display:block;
 }
+
+ .row-spacer {
+   height: 1rem;
+   background-color: lightyellow;
+ }
