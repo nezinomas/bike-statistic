@@ -62,7 +62,7 @@ class Statistic(object):
 
     def objects(self):
         retVal = []
-        for year in self.__years:
+        for year in self.__goals:
             item = {}
             item['id'] = year.id
             item['pk'] = year.pk
