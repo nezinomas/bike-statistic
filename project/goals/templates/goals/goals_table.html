@@ -1,0 +1,69 @@
+{% extends parent_template|default:"goals/index.html" %}
+
+{% load static %}{% load humanize %}{% load filters %}{% load dictionary_row %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/bikes.css' %}">
+{% endblock head %}
+
+
+{% block content %}
+
+<table class="table table-hover table-striped mt-2">
+    <thead class="thead-light">
+        <tr>
+            <th colspan="3"> </th>
+            <th colspan="3" class="text-center b-left">Workout Stats</th>
+            <th colspan="4" class="text-center b-left">Month Stats</th>
+            <th colspan="4" class="text-center b-left">Season Stats</th>
+            <th colspan="3" class="text-center b-left">Goals</th>
+        </tr>
+        <tr>
+            <th>Bike</th>
+            <th class="text-center">Date</th>
+            <th class="text-right">T</th>
+            <th class="text-center b-left">Dist</th>
+            <th class="text-center">Time</th>
+            <th class="text-center">Speed</th>
+            <th class="text-center b-left">Dist</th>
+            <th class="text-center">Time</th>
+            <th class="text-center">Speed</th>
+            <th class="text-center">Per day</th>
+            <th class="text-center b-left">Dist</th>
+            <th class="text-center">Time</th>
+            <th class="text-center">Speed</th>
+            <th class="text-center">Per day</th>
+            <th class="text-center b-left">Km goal</th>
+            <th class="text-center">%</th>
+            <th class="text-center">Delta</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for key, value in objects.items  %}
+        {% if not value.match %}<tr>
+            <td colspan="17" class="row-spacer"></td>
+        </tr>{% endif %}
+        <tr>
+            <td> {{ value.bike }}</td>
+            <td class="text-center">{{ value.date|date:'Y-m-d' }}</td>
+            <td class="text-right">{{ value.temperature|floatformat:0 }}</td>
+            <td class="text-center b-left">{{ value.distance|floatformat:2 }}</td>
+            <td class="text-center">{{ value.sec_workout|duration }}</td>
+            <td class="text-center">{{ value.speed_workout|floatformat:2 }}</td>
+            <td class="text-center b-left">{% get_row month value.year_month 'distance' as result %}{{ result|floatformat:0 }}</td>
+            <td class="text-center">{% get_row month value.year_month 'sec_workout' as result %}{{ result|duration }}</td>
+            <td class="text-center">{% get_row month value.year_month 'speed_month' as result %}{{ result|floatformat:2 }}</td>
+            <td class="text-center">{% get_row month value.year_month 'per_day_month' as result %}{{ result|floatformat:1 }}</td>
+            <td class="text-center b-left">{{ value.distance_season|floatformat:0|intcomma }}</td>
+            <td class="text-center">{{ value.sec_season|duration }}</td>
+            <td class="text-center">{{ value.speed_season|floatformat:2 }}</td>
+            <td class="text-center">{{ value.per_day_season|floatformat:1 }}</td>
+            <td class="text-center b-left">{{ value.day_goal|floatformat:0|intcomma }}</td>
+            <td class="text-center">{{ value.percent|floatformat:1 }}</td>
+            <td class="text-center">{{ value.km_delta|floatformat:0|intcomma }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}
