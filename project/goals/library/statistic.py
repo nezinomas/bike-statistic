@@ -26,7 +26,7 @@ class Statistic(object):
         if year == 'all':
             obj = Goal.objects.all()
         else:
-            obj = Goal.objects.filter(year=year)
+            obj = get_object_or_404(Goal, year=year)
 
         return obj
 
