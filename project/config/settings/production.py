@@ -12,4 +12,5 @@ ALLOWED_HOSTS = ['*']
 
 # ================   APP CONFIGURATION
 INSTALLED_APPS += [
+    'django_crontab',
 ]
