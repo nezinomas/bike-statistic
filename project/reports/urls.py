@@ -9,6 +9,7 @@ app_name = 'reports'
 register_converter(converters.DateConverter, 'date')
 
 urlpatterns = [
+    path('', views.index, name='index'),
     path('data/', views.data_empty, name='data_empty'),
     path('data/insert/', views.insert_data, name='insert_data'),
     path('data/<date:start_date>/', views.data_partial, name='data_partial'),
