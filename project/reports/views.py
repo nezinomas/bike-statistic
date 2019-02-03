@@ -12,6 +12,11 @@ from .helpers import view_data_helper as helper
 
 
 @login_required()
+def index(request):
+    return redirect(reverse('reports:data_empty'))
+
+
+@login_required()
 def data_empty(request):
     return redirect(
         reverse(
