@@ -15,14 +15,18 @@
 
   <body>
     {% block body %}
-
+    <!-- top navidation bar -->
+    <div class="container-fluid">
     <nav class="navbar navbar-expand navbar-light bg-light">
-      <div class="container-fluid px-5">
-        <a href="{% url 'reports:data_empty' %}">Bikes and Stats</a>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'reports:data_empty' %}">Home</a>
+            </li>
+        </ul>
         <div class="collapse navbar-collapse" id="mainMenu">
           {% if user.is_authenticated %}
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item dropdown">
+            <li class="list-group-item list-group-item-action dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ user.username }}
               </a>
@@ -40,43 +44,50 @@
           </form>
           {% endif %}
         </div>
-      </div>
-    </nav>
-
-    <div class="container-fluid px-5">
-      <div class="row">
-        <div class="col-lg-2">
-          <ul class="sidebar-nav">
-            <li class="nav-item"><a href="{% url 'reports:data_empty' %}">Data</a></li>
-            <li class="nav-item"><a href="{% url 'reports:insert_data' %}">Update Data</a></li>
-          </ul>
-
-          <p>Component wear</p>
-          <ul class="sidebar-nav">
-            {% for bike in bike_list %}
-            <li class="nav-item"><a href="{% url 'bikes:stats_list' bike=bike.slug %}">{{ bike.short_name }}</a></li>
-            {% endfor %}
-            <li class="nav-item"><a href="{% url 'bikes:component_list' %}">Components</a></li>
-          </ul>
-
-          <p>Reports</p>
-          <ul class="sidebar-nav">
-            <li class="nav-item"><a href="{% url 'reports:overall' %}">Overall</a></li>
-          </ul>
-
-          <p>Goals</p>
-          <ul class="sidebar-nav">
-            <li class="nav-item"><a href="{% url 'goals:goals_list' %}">Goals</a></li>
-            <li class="nav-item"><a href="{% url 'goals:goals_table' 2019 %}">2019</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-10 mx-auto px-auto">
-          {% block content %}{% endblock content %}
-        </div>
-      </div>
+      </nav>
     </div>
 
+    <div class="container-fluid">
+      <div class="row content">
+        <!-- side bar -->
+        <div class="col- pr-3">
+          <h6 class="side-bar">Data</h6>
+          <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action" href="{% url 'reports:data_empty' %}">Data</a></li>
+            <a class="list-group-item list-group-item-action" href="{% url 'reports:insert_data' %}">Update Data</a></li>
+          </div>
+
+          <h6 class="side-bar">Charts</h6>
+          <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action" href="{% url 'reports:overall' %}">Overall</a></li>
+          </div>
+
+          <h6 class="side-bar">Goals</h6>
+          <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action" href="{% url 'goals:goals_table' 2019 %}">2019</a></li>
+          </div>
+          
+          <h6 class="side-bar">Component wear</h6>
+          <div class="list-group list-group-flush">
+            {% for bike in bike_list %}
+            <a class="list-group-item list-group-item-action" href="{% url 'bikes:stats_list' bike=bike.slug %}">{{ bike.short_name }}</a></li>
+            {% endfor %}
+          </div>
+          
+          <h6 class="side-bar">Settings</h6>
+          <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action" href="{% url 'goals:goals_list' %}">Goals</a></li>
+            <a class="list-group-item list-group-item-action" href="{% url 'bikes:component_list' %}">Components</a></li>
+          </div>
+
+
+        </div>
+        <!-- content -->
+        <div class="col p-0">
+            {% block content %}{% endblock content %}
+          </div>
+      </div>
+    </div>
     {% endblock body %}
   </body>
 </html>
