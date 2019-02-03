@@ -56,13 +56,19 @@ class Statistic(object):
         item = {}
         df = self.__filter_dataframe(start_date, end_date)
 
-        row = df.loc[df['temperature'].idxmax()]
-        item['max_temp_date'] = row.date
-        item['max_temp_value'] = row.temperature
+        try:
+            row = df.loc[df['temperature'].idxmax()]
+            item['max_temp_date'] = row.date
+            item['max_temp_value'] = row.temperature
+        except:
+            pass
 
-        row = df.loc[df['temperature'].idxmin()]
-        item['min_temp_date'] = row.date
-        item['min_temp_value'] = row.temperature
+        try:
+            row = df.loc[df['temperature'].idxmin()]
+            item['min_temp_date'] = row.date
+            item['min_temp_value'] = row.temperature
+        except:
+            pass
 
         return item
 
