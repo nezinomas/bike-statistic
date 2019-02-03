@@ -15,7 +15,7 @@
 
   <body>
     {% block body %}
-
+    <!-- top navidation bar -->
     <nav class="navbar navbar-expand navbar-light bg-light">
       <div class="container-fluid px-5">
         <a href="{% url 'reports:data_empty' %}">Bikes and Stats</a>
@@ -45,6 +45,11 @@
 
     <div class="container-fluid px-5">
       <div class="row">
+        <!-- content -->
+        <div class="col-lg-10 mx-auto px-auto">
+          {% block content %}{% endblock content %}
+        </div>
+        <!-- side bar -->
         <div class="col-lg-2">
           <ul class="sidebar-nav">
             <li class="nav-item"><a href="{% url 'reports:data_empty' %}">Data</a></li>
@@ -70,13 +75,8 @@
             <li class="nav-item"><a href="{% url 'goals:goals_table' 2019 %}">2019</a></li>
           </ul>
         </div>
-
-        <div class="col-lg-10 mx-auto px-auto">
-          {% block content %}{% endblock content %}
-        </div>
       </div>
     </div>
-
     {% endblock body %}
   </body>
 </html>
