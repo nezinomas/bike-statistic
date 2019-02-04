@@ -11,6 +11,7 @@ from ..helpers.view_stats_helper import Filter
 
 def form_valid(data, bike_slug, pk):
     obj = Filter(bike_slug, pk)
+    data['form_is_valid'] = True
     data['html_list'] = render_to_string(
         'bikes/includes/partial_stats_list.html',
         {
@@ -27,8 +28,6 @@ def save_data(request, context, form, bike_slug, pk):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            data['form_is_valid'] = True
-
             form_valid(data, bike_slug, pk)
         else:
             data['form_is_valid'] = False
@@ -52,17 +51,18 @@ def stats_list(request, bike):
             'components': o.components(),
             'total': o.total_distance(),
             'bike_slug': bike
-        })
+        }
+    )
 
 
 @login_required()
 def stats_create(request, bike, pk):
-    bike_ = get_object_or_404(Bike, slug=bike)
-    obj = get_object_or_404(Component, pk=pk)
+    bike_object = get_object_or_404(Bike, slug=bike)
+    component_object = get_object_or_404(Component, pk=pk)
 
     form = ComponentStatisticForm(
         request.POST or None,
-        initial={'bike': bike_, 'component': obj}
+        initial={'bike': bike_object, 'component': component_object}
     )
     context = {
         'url': reverse('bikes:stats_create', kwargs={'bike': bike, 'pk': pk}),
@@ -88,12 +88,12 @@ def stats_delete(request, bike, pk):
     data = {}
     if request.method == 'POST':
         obj.delete()
-        data['form_is_valid'] = True
-
         form_valid(data, bike, obj.component.pk)
     else:
         context = {'component': obj, 'bike_slug': bike}
         data['html_form'] = render_to_string(
-            'bikes/includes/partial_stats_delete.html', context=context, request=request)
-
+            'bikes/includes/partial_stats_delete.html',
+            context,
+            request
+        )
     return JsonResponse(data)
