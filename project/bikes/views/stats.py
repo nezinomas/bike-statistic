@@ -9,6 +9,18 @@ from ..forms import ComponentForm, ComponentStatisticForm
 from ..helpers.view_stats_helper import Filter
 
 
+def form_valid(data, bike_slug, pk):
+    obj = Filter(bike_slug, pk)
+    data['html_list'] = render_to_string(
+        'bikes/includes/partial_stats_list.html',
+        {
+            'components': obj.components(),
+            'total': obj.total_distance(),
+            'bike_slug': bike_slug
+        }
+    )
+
+
 def save_data(request, context, form, bike_slug, pk):
     data = {}
 
@@ -17,15 +29,7 @@ def save_data(request, context, form, bike_slug, pk):
             form.save()
             data['form_is_valid'] = True
 
-            o = Filter(bike_slug, pk)
-            data['html_list'] = render_to_string(
-                'bikes/includes/partial_stats_list.html',
-                {
-                    'components': o.components(),
-                    'total': o.total_distance(),
-                    'bike_slug': bike_slug
-                }
-            )
+            form_valid(data, bike_slug, pk)
         else:
             data['form_is_valid'] = False
 
@@ -35,7 +39,6 @@ def save_data(request, context, form, bike_slug, pk):
         context=context,
         request=request
     )
-
     return JsonResponse(data)
 
 
@@ -87,13 +90,7 @@ def stats_delete(request, bike, pk):
         obj.delete()
         data['form_is_valid'] = True
 
-        o = Filter(bike, obj.component.pk)
-        data['html_list'] = render_to_string(
-            'bikes/includes/partial_stats_list.html',
-            {'components': o.components(), 'total': o.total_distance(),
-             'bike_slug': bike}
-        )
-
+        form_valid(data, bike, obj.component.pk)
     else:
         context = {'component': obj, 'bike_slug': bike}
         data['html_form'] = render_to_string(
