@@ -9,7 +9,7 @@ from .forms import GoalForm
 from .library.statistic import Statistic
 
 
-def save_goal(request, context, form):
+def save_data(request, context, form):
     data = {}
 
     if request.method == 'POST':
@@ -49,7 +49,7 @@ def goals_list(request):
 def goals_create(request):
     form = GoalForm(request.POST or None)
     context = {'url': reverse('goals:goals_create')}
-    return save_goal(request, context, form)
+    return save_data(request, context, form)
 
 
 @login_required()
@@ -58,7 +58,7 @@ def goals_update(request, year):
     form = GoalForm(request.POST or None, instance=object)
     url = reverse('goals:goals_update', kwargs={'year': year})
     context = {'url': url}
-    return save_goal(request, context, form)
+    return save_data(request, context, form)
 
 
 @login_required()
