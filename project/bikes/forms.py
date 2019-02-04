@@ -3,7 +3,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from bootstrap_datepicker_plus import DatePickerInput
 
-from .models import Bike, Component, ComponentStatistic
+from .models import Bike, Component, ComponentStatistic, BikeInfo
 from ..core.helpers.form_helpers import set_field_properties
 
 
@@ -41,6 +41,21 @@ class BikeForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'date': DatePickerInput(format='%Y-%m-%d'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        set_field_properties(self, self.helper)
+
+
+class BikeInfoForm(forms.ModelForm):
+    class Meta:
+        model = BikeInfo
+        fields = '__all__'
+        widgets = {
+            'bike': forms.HiddenInput(),
         }
 
     def __init__(self, *args, **kwargs):
