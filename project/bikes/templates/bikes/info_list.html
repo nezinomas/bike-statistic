@@ -10,7 +10,7 @@
 {% block content %}
 
 {% for bike in bike_list %}
-<a href="{% url 'bikes:info_list' bike_slug=bike.slug %}">{{ bike.short_name }}</a> | 
+<a href="{% url 'bikes:info_list' bike_slug=bike.slug %}" class="{% if bike.slug == bike_slug %}active{% endif %}">{% if bike.slug == bike_slug %}[{% endif %}{{ bike.short_name }}{% if bike.slug == bike_slug %}]{% endif %}</a> | 
 {% endfor %}
 
 <p class="text-right my-2">

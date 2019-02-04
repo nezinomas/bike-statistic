@@ -6,6 +6,7 @@
 <!-- <script src="{% static 'js/grid-light.js' %}"></script> -->
 {% endblock head %}
 
+{% block breadcrumb %} {{ block.super }}<span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="#">Owerall</a>{% endblock breadcrumb %}
 {% block content %}
 
 <div class='row'>

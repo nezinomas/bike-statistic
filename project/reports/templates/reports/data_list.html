@@ -2,6 +2,10 @@
 
 {% load static %}{% load buttons %}{% load crispy_forms_tags %}
 
+
+{% block breadcrumb %}{{ block.super }}<span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="#">Data</a>{% endblock breadcrumb %}
+
+
 {% block head %}
     <script src="{% static 'js/ajax.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/bikes.css' %}">

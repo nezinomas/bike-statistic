@@ -2,6 +2,10 @@
 
 {% load static %}{% load buttons %}
 
+
+{% block breadcrumb %}{{ block.super }}dddd<span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="#">2019</a>{% endblock breadcrumb %}
+
+
 {% block head %}
     <script src="{% static 'js/ajax.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/bikes.css' %}">

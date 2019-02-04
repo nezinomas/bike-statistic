@@ -18,11 +18,11 @@
     <!-- top navidation bar -->
     <div class="container-fluid">
     <nav class="navbar navbar-expand navbar-light bg-light">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'reports:data_empty' %}">Home</a>
-            </li>
-        </ul>
+        <nav class="nav">
+            {% block breadcrumb %}
+              <a class="nav-link" href="{% url 'reports:data_empty' %}">Home</a>                 
+            {% endblock breadcrumb %}
+          </nav>
         <div class="collapse navbar-collapse" id="mainMenu">
           {% if user.is_authenticated %}
           <ul class="navbar-nav ml-auto">
