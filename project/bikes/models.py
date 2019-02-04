@@ -45,6 +45,9 @@ class BikeInfo(models.Model):
     def __str__(self):
         return '{bike}: {component}'.format(self.bike, self.component)
 
+    class Meta:
+        ordering = ['component']
+
 
 class Component(models.Model):
     name = models.CharField(
