@@ -9,7 +9,7 @@ from ..forms import ComponentForm, ComponentStatisticForm
 from ..helpers.view_stats_helper import Filter
 
 
-def save_stats(request, context, form, bike_slug, pk):
+def save_data(request, context, form, bike_slug, pk):
     data = {}
 
     if request.method == 'POST':
@@ -65,7 +65,7 @@ def stats_create(request, bike, pk):
         'url': reverse('bikes:stats_create', kwargs={'bike': bike, 'pk': pk}),
         'tbl': pk
     }
-    return save_stats(request, context, form, bike, pk)
+    return save_data(request, context, form, bike, pk)
 
 
 @login_required()
@@ -76,7 +76,7 @@ def stats_update(request, bike, pk):
         'url': reverse('bikes:stats_update', kwargs={'bike': bike, 'pk': pk}),
         'tbl': obj.component.pk
     }
-    return save_stats(request, context, form, bike, obj.component.pk)
+    return save_data(request, context, form, bike, obj.component.pk)
 
 
 @login_required()
