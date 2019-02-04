@@ -31,20 +31,20 @@ def save_component(request, context, form):
 
 
 @login_required()
-def component_list(request):
+def lists(request):
     components = Component.objects.all()
     return render(request, 'bikes/component_list.html', {'components': components})
 
 
 @login_required()
-def component_create(request):
+def create(request):
     form = ComponentForm(request.POST or None)
     context = {'url': reverse('bikes:component_create')}
     return save_component(request, context, form)
 
 
 @login_required()
-def component_update(request, pk):
+def update(request, pk):
     component = get_object_or_404(Component, pk=pk)
     form = ComponentForm(request.POST or None, instance=component)
     context = {'url': reverse('bikes:component_update', kwargs={'pk': pk})}
@@ -52,7 +52,7 @@ def component_update(request, pk):
 
 
 @login_required()
-def component_delete(request, pk):
+def delete(request, pk):
     component = get_object_or_404(Component, pk=pk)
     data = {}
 

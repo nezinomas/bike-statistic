@@ -42,7 +42,7 @@ def save_data(request, context, form, bike_slug, pk):
 
 
 @login_required()
-def stats_list(request, bike):
+def lists(request, bike):
     o = Filter(bike, 'all')
 
     return render(
@@ -56,7 +56,7 @@ def stats_list(request, bike):
 
 
 @login_required()
-def stats_create(request, bike, pk):
+def create(request, bike, pk):
     bike_object = get_object_or_404(Bike, slug=bike)
     component_object = get_object_or_404(Component, pk=pk)
 
@@ -72,7 +72,7 @@ def stats_create(request, bike, pk):
 
 
 @login_required()
-def stats_update(request, bike, pk):
+def update(request, bike, pk):
     obj = get_object_or_404(ComponentStatistic, pk=pk)
     form = ComponentStatisticForm(request.POST or None, instance=obj)
     context = {
@@ -83,7 +83,7 @@ def stats_update(request, bike, pk):
 
 
 @login_required()
-def stats_delete(request, bike, pk):
+def delete(request, bike, pk):
     obj = get_object_or_404(ComponentStatistic, pk=pk)
     data = {}
     if request.method == 'POST':
