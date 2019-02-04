@@ -34,7 +34,6 @@ def save_data(request, context, form):
         context=context,
         request=request
     )
-
     return JsonResponse(data)
 
 
@@ -76,7 +75,6 @@ def goals_delete(request, year):
             context,
             request
         )
-
     return JsonResponse(data)
 
 
