@@ -9,6 +9,7 @@
 
 
 {% block content %}
+
 <p class="text-right my-2">
     {% url 'goals:goals_create' as url_create %}
     {% button_create url=url_create label='New Goal' tbl='0' width='19%' %}
