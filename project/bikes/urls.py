@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import component, stats
+from .views import component, stats, bike
 
 app_name = 'bikes'
 
@@ -13,4 +13,8 @@ urlpatterns = [
     path('component/<slug:bike>/<int:pk>/create', stats.create, name='stats_create'),
     path('component/<slug:bike>/<int:pk>/update', stats.update, name='stats_update'),
     path('component/<slug:bike>/<int:pk>/delete', stats.delete, name='stats_delete'),
+    path('bike/', bike.lists, name='bike_list'),
+    path('bike/create/', bike.create, name='bike_create'),
+    path('bike/update/<int:pk>/', bike.update, name='bike_update'),
+    path('bike/delete/<int:pk>/', bike.delete, name='bike_delete'),
 ]
