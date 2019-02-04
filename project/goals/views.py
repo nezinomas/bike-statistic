@@ -10,8 +10,8 @@ from .library.statistic import Statistic
 
 
 def form_valid(data):
-    data['form_is_valid'] = True
     objects = Statistic().objects()
+    data['form_is_valid'] = True
     data['html_list'] = render_to_string(
         'goals/includes/partial_goals_list.html',
         {'objects': objects}
