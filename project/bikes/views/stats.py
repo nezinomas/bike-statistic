@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from django.http import JsonResponse
 
 from ..models import Bike, Component, ComponentStatistic
-from ..forms import ComponentForm, ComponentStatisticForm
+from ..forms import ComponentStatisticForm
 
 from ..helpers.view_stats_helper import Filter
 

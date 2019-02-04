@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 
-from ..models import Bike, Component, ComponentStatistic
-from ..forms import ComponentForm, ComponentStatisticForm
+from ..models import Component
+from ..forms import ComponentForm
 
 
 def save_component(request, context, form):
