@@ -49,14 +49,14 @@
             <td class="text-right">{{ value.temperature|floatformat:0 }}</td>
             <td class="text-center b-left">{{ value.distance|floatformat:2 }}</td>
             <td class="text-center">{{ value.sec_workout|duration }}</td>
-            <td class="text-center">{{ value.speed_workout|floatformat:2 }}</td>
+            <td class="text-center">{{ value.speed_workout|floatformat:1 }}</td>
             <td class="text-center b-left">{% get_row month value.year_month 'distance' as result %}{{ result|floatformat:0 }}</td>
             <td class="text-center">{% get_row month value.year_month 'sec_workout' as result %}{{ result|duration }}</td>
-            <td class="text-center">{% get_row month value.year_month 'speed_month' as result %}{{ result|floatformat:2 }}</td>
+            <td class="text-center">{% get_row month value.year_month 'speed_month' as result %}{{ result|floatformat:1 }}</td>
             <td class="text-center">{% get_row month value.year_month 'per_day_month' as result %}{{ result|floatformat:1 }}</td>
             <td class="text-center b-left">{{ value.distance_season|floatformat:0|intcomma }}</td>
             <td class="text-center">{{ value.sec_season|duration }}</td>
-            <td class="text-center">{{ value.speed_season|floatformat:2 }}</td>
+            <td class="text-center">{{ value.speed_season|floatformat:1 }}</td>
             <td class="text-center">{{ value.per_day_season|floatformat:1 }}</td>
             <td class="text-center b-left">{{ value.day_goal|floatformat:0|intcomma }}</td>
             <td class="text-center">{{ value.percent|floatformat:1 }}</td>
