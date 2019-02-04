@@ -29,3 +29,7 @@ h6.side-bar:first-child {
 .container-fluid>.content {
   padding: 0 1rem;
 }
+
+.invalid-feedback {
+  display: block;
+}

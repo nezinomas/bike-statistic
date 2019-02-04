@@ -1,20 +1,20 @@
-{% extends parent_template|default:"goals/index.html" %}
+{% extends parent_template|default:"bikes/main.html" %}
 
 {% load static %}{% load buttons %}
 
 {% block head %}
     <script src="{% static 'js/ajax.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/bikes.css' %}">
+    {{ form_media }}
 {% endblock head %}
-
 
 {% block content %}
 
 <p class="text-right my-2">
-    {% url 'goals:goals_create' as url_create %}
-    {% button_create url=url_create label='New Goal' tbl='0' width='19%' %}
+    {% url 'bikes:bike_create' as url_create %}
+    {% button_create url=url_create label='New Bike' tbl='0' width='19%' %}
 </p>
 
-{% include 'goals/includes/partial_goals_list.html' %}
+{% include "bikes/includes/partial_bike_list.html" %}
 
 {% endblock content %}

@@ -1,11 +1,12 @@
 from datetime import timedelta
 
-from ..endomondo.endomondo import MobileApi
+import requests
+from lxml import html
 
-from ..models import Data
 from ...bikes.models import Bike
-
 from ...config.secrets import get_secret
+from ..endomondo.endomondo import MobileApi
+from ..models import Data
 
 
 def __workouts(maxResults):
@@ -16,10 +17,23 @@ def __workouts(maxResults):
     return endomondo.get_workouts(maxResults=maxResults)
 
 
+def get_temperature():
+    page = requests.get('http://www.meteo.lt/lt/miestas?placeCode=Vilnius')
+    tree = html.fromstring(page.content)
+
+    try:
+        t = tree.xpath('//span[contains(@class, "big")]/span[@class="temperature"]/text()')[0]
+    except:
+        t = None
+    return t
+
+
 def insert_data(maxResults=20):
     workouts = __workouts(maxResults=maxResults)
 
     bike = Bike.objects.order_by('pk')[0]
+
+    t = get_temperature()
 
     for w in workouts:
         if w.name is not None and 'cycling' in w.name.lower():
@@ -40,5 +54,6 @@ def insert_data(maxResults=20):
                 descent=w.descent,
                 max_speed=w.speed_max,
                 heart_rate=w.heart_rate_avg,
-                cadence=w.cadence
+                cadence=w.cadence,
+                temperature=t
             )

@@ -66,21 +66,21 @@
           <div class="list-group list-group-flush">
             <a class="list-group-item list-group-item-action" href="{% url 'goals:goals_table' 2019 %}">2019</a></li>
           </div>
-          
+
           <h6 class="side-bar">Component wear</h6>
           <div class="list-group list-group-flush">
             {% for bike in bike_list %}
             <a class="list-group-item list-group-item-action" href="{% url 'bikes:stats_list' bike=bike.slug %}">{{ bike.short_name }}</a></li>
             {% endfor %}
           </div>
-          
+
           <h6 class="side-bar">Settings</h6>
           <div class="list-group list-group-flush">
             <a class="list-group-item list-group-item-action" href="{% url 'goals:goals_list' %}">Goals</a></li>
             <a class="list-group-item list-group-item-action" href="{% url 'bikes:component_list' %}">Components</a></li>
+            <a class="list-group-item list-group-item-action" href="{% url 'bikes:bike_list' %}">Bikes</a></li>
+            <a class="list-group-item list-group-item-action" href="{% url 'bikes:info_index' %}">Bike Info</a></li>
           </div>
-
-
         </div>
         <!-- content -->
         <div class="col p-0">
