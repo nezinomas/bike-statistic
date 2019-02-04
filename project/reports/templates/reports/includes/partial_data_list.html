@@ -1,4 +1,4 @@
-{% load buttons %}
+{% load buttons %}{% load humanize %}
 <table class="table table-striped table-hover table-md tbl-js" style="table-layout:fixed!important;" id="tbl-0">
     <thead class="thead-light">
         <tr>
@@ -25,9 +25,9 @@
             <td class="text-center">{{ obj.distance }}</td>
             <td class="text-center">{{ obj.time }}</td>
             <td class="text-center">{{ obj.temperature }}</td>
-            <td class="text-center">{{ obj.ascent }}</td>
-            <td class="text-center">{{ obj.descent }}</td>
-            <td class="text-center">{{ obj.max_speed }}</td>
+            <td class="text-center">{{ obj.ascent|floatformat:0|intcomma }}</td>
+            <td class="text-center">{{ obj.descent|floatformat:0|intcomma }}</td>
+            <td class="text-center">{{ obj.max_speed|floatformat:1 }}</td>
             <td class="text-center">{{ obj.heart_rate }}</td>
             <td class="text-center">{{ obj.cadence }}</td>
             <td class="text-right">
