@@ -44,8 +44,8 @@ class Statistic(object):
     def __filter_dataframe(self, start_date, end_date):
         if start_date:
             df = self.__df[
-                (self.__df['date'] >= start_date)
-                & (self.__df['date'] <= end_date)
+                (self.__df['date'] >= pd.to_datetime(start_date))
+                & (self.__df['date'] <= pd.to_datetime(end_date))
             ].copy()
         else:
             df = self.__df
