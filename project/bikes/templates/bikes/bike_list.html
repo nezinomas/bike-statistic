@@ -1,12 +1,11 @@
-{% extends parent_template|default:"bikes/main.html" %}
+{% extends parent_template|default:"category_settings.html" %}
+{% load buttons %}
 
-{% load static %}{% load buttons %}
 
-{% block head %}
-    <script src="{% static 'js/ajax.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'css/bikes.css' %}">
-    {{ form_media }}
-{% endblock head %}
+{% block breadcrumb %}{{ block.super }}
+    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="#">Bikes</a>
+{% endblock %}
+
 
 {% block content %}
 
@@ -14,7 +13,6 @@
     {% url 'bikes:bike_create' as url_create %}
     {% button_create url=url_create label='New Bike' tbl='0' width='19%' %}
 </p>
-
 {% include "bikes/includes/partial_bike_list.html" %}
 
 {% endblock content %}

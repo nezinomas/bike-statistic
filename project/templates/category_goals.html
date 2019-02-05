@@ -1,0 +1,12 @@
+{% extends parent_template|default:"base.html" %}
+{% load static %}
+
+
+{% block breadcrumb %}{{ block.super }}
+    <span class="navbar-text">&raquo;</span><a class="nav-link" href="#">Goals</a>
+{% endblock breadcrumb %}
+
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/bikes.css' %}">
+{% endblock head %}

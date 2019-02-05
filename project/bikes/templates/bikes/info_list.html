@@ -1,11 +1,11 @@
-{% extends parent_template|default:"bikes/main.html" %}
+{% extends parent_template|default:"category_settings.html" %}
+{% load buttons %}
 
-{% load static %}{% load buttons %}
 
-{% block head %}
-    <script src="{% static 'js/ajax.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'css/bikes.css' %}">
-{% endblock head %}
+{% block breadcrumb %}{{ block.super }}
+    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="#">Bike Info</a>
+{% endblock %}
+
 
 {% block content %}
 
@@ -17,7 +17,6 @@
     {% url 'bikes:info_create' bike_slug  as url_create %}
     {% button_create url=url_create label='New Record' tbl='0' width='19%' %}
 </p>
-
 {% include "bikes/includes/partial_info_list.html" %}
 
 {% endblock content %}

@@ -1,12 +1,11 @@
-{% extends parent_template|default:"reports/index.html" %}
-{% load static %}
+{% extends parent_template|default:"category_charts.html" %}
 
-{% block head %}
-<script src="https://code.highcharts.com/highcharts.src.js"></script>
-<!-- <script src="{% static 'js/grid-light.js' %}"></script> -->
-{% endblock head %}
 
-{% block breadcrumb %} {{ block.super }}<span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="#">Owerall</a>{% endblock breadcrumb %}
+{% block breadcrumb %}{{ block.super }}
+    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="#">Owerall</a>
+{% endblock breadcrumb %}
+
+
 {% block content %}
 
 <div class='row'>

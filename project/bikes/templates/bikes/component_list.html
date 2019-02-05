@@ -1,18 +1,17 @@
-{% extends parent_template|default:"bikes/main.html" %}
+{% extends parent_template|default:"category_settings.html" %}
+{% load buttons %}
 
-{% load static %}{% load buttons %}
 
-{% block head %}
-    <script src="{% static 'js/ajax.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'css/bikes.css' %}">
-{% endblock head %}
+{% block breadcrumb %}{{ block.super }}
+    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="#">Components</a>
+{% endblock %}
+
 
 {% block content %}
 <p class="text-right my-2">
     {% url 'bikes:component_create' as url_create %}
     {% button_create url=url_create label='New Component' tbl='0' width='19%' %}
 </p>
-
 {% include "bikes/includes/partial_component_list.html" %}
 
 {% endblock content %}
