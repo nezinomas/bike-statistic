@@ -3,11 +3,10 @@
 
 
 {% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="#">{{ bike_slug|title }}</a>
+    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="{% url 'bikes:stats_list' bike_slug %}">{{ bike_slug|title }}</a> <span class="navbar-text">[ {{ total|floatformat:0|intcomma }}km ]</span>
 {% endblock %}
 
 
 {% block content %}
-    <p>{{ bike_slug|title }} total: {{ total|floatformat:0|intcomma }}km</p>
     {% include 'bikes/includes/partial_stats_list.html' %}
 {% endblock content %}

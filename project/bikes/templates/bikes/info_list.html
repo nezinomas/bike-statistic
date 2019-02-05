@@ -3,20 +3,29 @@
 
 
 {% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="#">Bike Info</a>
+    <span class="navbar-text">&raquo;</span>
+    <a class="nav-link" href="{% url 'bikes:info_index' %}">Bike Info</a>
+    <span class="navbar-text">&raquo;</span>
+    <a class="nav-link disabled" href="{% url 'bikes:info_list' bike_slug %}">{{ bike_slug|title }}</a>
 {% endblock %}
 
 
 {% block content %}
 
-{% for bike in bike_list %}
-<a href="{% url 'bikes:info_list' bike_slug=bike.slug %}" class="{% if bike.slug == bike_slug %}active{% endif %}">{% if bike.slug == bike_slug %}[{% endif %}{{ bike.short_name }}{% if bike.slug == bike_slug %}]{% endif %}</a> | 
-{% endfor %}
+<div class="row my-2">
+    <div class="col text-left">
+        <nav class="nav">
+            {% for bike in bike_list %}
+            <a href="{% url 'bikes:info_list' bike_slug=bike.slug %}" class="nav-link {% if bike.slug == bike_slug %}active disabled{% endif %}">{{ bike.short_name }}</a>{% if not forloop.last %}<span class="navbar-text">|</span>{% endif %}
+            {% endfor %}
+        </nav>
+    </div>
+    <div class="col text-right">
+        {% url 'bikes:info_create' bike_slug as url_create %}
+        {% button_create url=url_create label='New Record' tbl='0' width='38%' %}
+    </div>
+</div>
 
-<p class="text-right my-2">
-    {% url 'bikes:info_create' bike_slug  as url_create %}
-    {% button_create url=url_create label='New Record' tbl='0' width='19%' %}
-</p>
 {% include "bikes/includes/partial_info_list.html" %}
 
 {% endblock content %}

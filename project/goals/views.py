@@ -85,4 +85,8 @@ def goals_table(request, year):
     objects = stats.table()
     month = stats.month_table()
 
-    return render(request, 'goals/goals_table.html', {'objects': objects, 'month': month})
+    return render(
+        request,
+        'goals/goals_table.html',
+        {'objects': objects, 'month': month, 'year': year}
+    )
