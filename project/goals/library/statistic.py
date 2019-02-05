@@ -101,7 +101,7 @@ class Statistic(object):
         s_date = pd.to_datetime(datetime.date(self.__year, 1, 1))
         e_date = pd.to_datetime(datetime.date(self.__year, 12, 31))
         df = self.__filter_dataframe(s_date, e_date)
-
+        
         # metu diena, int
         first = pd.to_datetime(datetime.date(self.__year, 1, 1))
         days = 366 if calendar.isleap(self.__year) else 365
