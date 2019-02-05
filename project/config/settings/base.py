@@ -71,6 +71,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'project.bikes.context.bike_list',
+                'project.bikes.context.goal_list',
                 # 'project.products.context.show_tags',
             ],
         },

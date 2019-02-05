@@ -18,14 +18,18 @@ def __workouts(maxResults):
 
 
 def get_temperature():
-    page = requests.get('http://www.meteo.lt/lt/miestas?placeCode=Vilnius')
+    page = requests.get('https://orai.15min.lt/prognoze/vilnius')
     tree = html.fromstring(page.content)
 
-    try:
-        t = tree.xpath('//span[contains(@class, "big")]/span[@class="temperature"]/text()')[0]
-    except:
-        t = None
-    return t
+    tmp = tree.xpath('//div[@class="current-table"]/div[contains(@class, "temperature")]/text()')
+    t = ''.join(tmp)
+
+    replace = {'\n': '', '\t': '', '°': ''}
+
+    for key, val in replace.items():
+        t = t.replace(key, val)
+
+    return int(t)
 
 
 def insert_data(maxResults=20):
@@ -33,14 +37,22 @@ def insert_data(maxResults=20):
 
     bike = Bike.objects.order_by('pk')[0]
 
-    t = get_temperature()
+    try:
+        t = get_temperature()
+    except:
+        t = None
 
     for w in workouts:
         if w.name is not None and 'cycling' in w.name.lower():
 
             distance = round(w.distance, 2)
 
-            row_exists = Data.objects.filter(date=w.start_time, distance=distance, time=timedelta(seconds=w.duration))
+            row_exists = Data.objects.\
+                filter(
+                    date=w.start_time,
+                    distance=distance,
+                    time=timedelta(seconds=w.duration)
+                )
 
             if row_exists:
                 continue

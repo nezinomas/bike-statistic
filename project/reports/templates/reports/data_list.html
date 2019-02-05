@@ -1,12 +1,11 @@
-{% extends parent_template|default:"reports/index.html" %}
-
+{% extends parent_template|default:"category_data.html" %}
 {% load static %}{% load buttons %}{% load crispy_forms_tags %}
 
-{% block head %}
-    <script src="{% static 'js/ajax.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'css/bikes.css' %}">
-    {{ filter_form.media }}
-{% endblock head %}
+
+{% block breadcrumb %}{{ block.super }}
+    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="{% url 'reports:data_empty' %}">View</a>
+{% endblock breadcrumb %}
+
 
 {% block content %}
 
