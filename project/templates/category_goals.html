@@ -3,7 +3,7 @@
 
 
 {% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span><a class="nav-link" href="#">Goals</a>
+    <span class="navbar-text">&raquo;</span><a class="nav-link" href="{% url 'goals:goals_table' goal_list.0.year %}">Goals</a>
 {% endblock breadcrumb %}
 
 
