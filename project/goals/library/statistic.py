@@ -126,7 +126,7 @@ class Statistic(object):
         df.loc[:, 'match'] = df.year_month.eq(df.year_month.shift())
         df.loc[df.index[0], 'match'] = True # pirma eilute visada yra False; pakeiciu
 
-        return df.to_dict('index')
+        return df.to_dict(orient='records')
 
     def month_table(self):
         s_date = pd.to_datetime(datetime.date(self.__year, 1, 1))
