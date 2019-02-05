@@ -46,7 +46,7 @@ class Statistic(object):
             df = self.__df[
                 (self.__df['date'] >= start_date)
                 & (self.__df['date'] <= end_date)
-            ]
+            ].copy()
         else:
             df = self.__df
 
@@ -101,7 +101,7 @@ class Statistic(object):
         s_date = pd.to_datetime(datetime.date(self.__year, 1, 1))
         e_date = pd.to_datetime(datetime.date(self.__year, 12, 31))
         df = self.__filter_dataframe(s_date, e_date)
-
+        
         # metu diena, int
         first = pd.to_datetime(datetime.date(self.__year, 1, 1))
         days = 366 if calendar.isleap(self.__year) else 365
@@ -126,7 +126,7 @@ class Statistic(object):
         df.loc[:, 'match'] = df.year_month.eq(df.year_month.shift())
         df.loc[df.index[0], 'match'] = True # pirma eilute visada yra False; pakeiciu
 
-        return df.to_dict('index')
+        return df.to_dict(orient='records')
 
     def month_table(self):
         s_date = pd.to_datetime(datetime.date(self.__year, 1, 1))
