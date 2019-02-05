@@ -31,7 +31,7 @@ h6.side-bar:first-child {
 }
 
 .nav>.nav-link.active {
-  background-color:blueviolet;
+  font-weight: bold;
 }
 
 .container-fluid>.content {
