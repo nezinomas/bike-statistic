@@ -46,7 +46,7 @@ class Statistic(object):
             df = self.__df[
                 (self.__df['date'] >= start_date)
                 & (self.__df['date'] <= end_date)
-            ]
+            ].copy()
         else:
             df = self.__df
 
