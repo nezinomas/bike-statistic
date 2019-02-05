@@ -39,7 +39,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for key, value in objects.items  %}
+        {% for value in objects  %}
         {% if not value.match %}<tr>
             <td colspan="17" class="row-spacer"></td>
         </tr>{% endif %}
