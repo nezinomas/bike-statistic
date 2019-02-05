@@ -18,11 +18,11 @@
     <!-- top navidation bar -->
     <div class="container-fluid">
     <nav class="navbar navbar-expand navbar-light bg-light">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'reports:data_empty' %}">Home</a>
-            </li>
-        </ul>
+        <nav class="nav">
+            {% block breadcrumb %}
+              <a class="nav-link" href="{% url 'reports:data_empty' %}">Home</a>
+            {% endblock breadcrumb %}
+          </nav>
         <div class="collapse navbar-collapse" id="mainMenu">
           {% if user.is_authenticated %}
           <ul class="navbar-nav ml-auto">
@@ -53,8 +53,8 @@
         <div class="col- pr-3">
           <h6 class="side-bar">Data</h6>
           <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action" href="{% url 'reports:data_empty' %}">Data</a></li>
-            <a class="list-group-item list-group-item-action" href="{% url 'reports:insert_data' %}">Update Data</a></li>
+            <a class="list-group-item list-group-item-action" href="{% url 'reports:data_empty' %}">View</a></li>
+            <a class="list-group-item list-group-item-action" href="{% url 'reports:insert_data' %}">Update</a></li>
           </div>
 
           <h6 class="side-bar">Charts</h6>
@@ -64,7 +64,9 @@
 
           <h6 class="side-bar">Goals</h6>
           <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action" href="{% url 'goals:goals_table' 2019 %}">2019</a></li>
+            {% for item in goal_list  %}
+            <a class="list-group-item list-group-item-action" href="{% url 'goals:goals_table' item.year %}">{{ item.year }}</a></li>
+            {% endfor %}
           </div>
 
           <h6 class="side-bar">Component wear</h6>

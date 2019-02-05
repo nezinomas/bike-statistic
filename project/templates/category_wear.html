@@ -1,0 +1,13 @@
+{% extends parent_template|default:"base.html" %}
+{% load static %}
+
+
+{% block breadcrumb %}{{ block.super }}
+    <span class="navbar-text">&raquo;</span><a class="nav-link" href="{% url 'bikes:stats_list' bike_list.0.slug %}">Component Wear</a>
+{% endblock breadcrumb %}
+
+
+{% block head %}
+    <script src="{% static 'js/ajax.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/bikes.css' %}">
+{% endblock head %}
