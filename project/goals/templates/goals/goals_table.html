@@ -46,7 +46,7 @@
         <tr>
             <td>{{ value.bike }}</td>
             <td class="text-center">{{ value.date|date:'Y-m-d' }}</td>
-            <td class="text-right">{{ value.temperature|floatformat:0 }}</td>
+            <td class="text-right">{% with value.temperature|floatformat:0 as r %}{% if r != 'nan' %}{{ r }}{% else %}-{% endif %}{% endwith %}</td>
             <td class="text-center b-left">{{ value.distance|floatformat:2 }}</td>
             <td class="text-center">{{ value.sec_workout|duration }}</td>
             <td class="text-center">{{ value.speed_workout|floatformat:1 }}</td>

@@ -108,7 +108,7 @@ class Statistic(object):
 
         df.loc[:, 'day_num'] = (df['date'] - first).dt.days + 1
         df.loc[:, 'year_month'] = df['date'].dt.to_period('M').astype(str)
-        df.loc[:, 'temperature'] = df['temperature'].replace({pd.np.nan: None})
+        # df.loc[:, 'temperature'] = df['temperature'].replace({pd.np.nan: None})
 
         df.loc[:, 'speed_workout'] = df['distance'] / (df['sec_workout'] / 3600)
 
@@ -124,7 +124,7 @@ class Statistic(object):
         # False kada keičiasi mėnuo
         df.loc[:, 'match'] = df.year_month.eq(df.year_month.shift())
         df.loc[df.index[0], 'match'] = True  # pirma eilute visada yra False; pakeiciu
-
+        print(df)
         return df.to_dict(orient='records')
 
     def month_table(self):
