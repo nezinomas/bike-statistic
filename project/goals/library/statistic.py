@@ -1,12 +1,12 @@
-import datetime
 import calendar
+import datetime
 import pandas as pd
 
-from django_pandas.io import read_frame
 from django.shortcuts import get_object_or_404
+from django_pandas.io import read_frame
 
-from ..models import Goal
 from ...reports.models import Data
+from ..models import Goal
 
 
 class Statistic(object):
