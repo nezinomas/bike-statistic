@@ -50,7 +50,7 @@
             <td class="text-center b-left">{{ value.distance|floatformat:2 }}</td>
             <td class="text-center">{{ value.sec_workout|duration }}</td>
             <td class="text-center">{{ value.speed_workout|floatformat:1 }}</td>
-            {% get_row month value.year_month as row %}
+            {% ifchanged value.year_month %}{% get_row month value.year_month as row %}{% endifchanged %}
             <td class="text-center b-left">{{ row.distance|floatformat:0 }}</td>
             <td class="text-center">{{ row.sec_workout|duration }}</td>
             <td class="text-center">{{ row.speed_month|floatformat:1 }}</td>
