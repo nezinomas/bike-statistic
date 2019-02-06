@@ -136,7 +136,7 @@ class Workout(object):
 	burgers_burned	= 0
 
 	steps			= 0
-	cadence			= 0
+	cadence			= None
 	cadence_max		= 0
 
 	device			= {
