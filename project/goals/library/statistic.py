@@ -124,7 +124,7 @@ class Statistic(object):
         # False kada keičiasi mėnuo
         df.loc[:, 'match'] = df.year_month.eq(df.year_month.shift())
         df.loc[df.index[0], 'match'] = True  # pirma eilute visada yra False; pakeiciu
-        print(df)
+
         return df.to_dict(orient='records')
 
     def month_table(self):
