@@ -26,25 +26,15 @@
         {% url 'bikes:stats_update' bike_slug item.pk as url_update %}
         {% url 'bikes:stats_delete' bike_slug item.pk as url_delete %}
         <tr id="row_id_{{ item.pk }}" data-pk="{{ item.pk }}" data-url="{{ url_update }}">
-            <td>
-                {{ item.start_date|date:"Y-m-d" }}
-            </td>
-            <td >
-                {{ item.end_date|date:"Y-m-d" }}
-            </td>
-            <td >
-                {{ item.price|default_if_none:'#' }}
-            </td>
-            <td >
-                {{ item.brand }}
-            </td>
+            <td>{{ item.start_date|date:"Y-m-d" }}</td>
+            <td>{{ item.end_date|date:"Y-m-d" }}</td>
+            <td>{{ item.price|default_if_none:'-' }}</td>
+            <td>{{ item.brand }}</td>
             <td class="text-right">
                 {% button_edit pk=item.pk url=url_update tbl=component.pk %}
                 {% button_delete type='button' pk=item.pk url=url_delete tbl=component.pk %}
             </td>
-            <td class="km pr-1 text-right">
-                {{ item.km|floatformat:0|intcomma }}
-            </td>
+            <td class="km pr-1 text-right">{{ item.km|floatformat:0|intcomma }}</td>
         </tr>
         {% endfor %}
     </tbody>
@@ -53,6 +43,7 @@
             <td colspan="6">
                 {% for stat in component.stats %}
                 <span class="mr-4">{{ stat.label|title }}: {{ stat.value|floatformat:0|intcomma }} km</span>{% endfor %}
+            </td>
         </tr>
     </tfoot>
 </table>
