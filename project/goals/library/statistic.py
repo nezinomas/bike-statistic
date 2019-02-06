@@ -97,8 +97,8 @@ class Statistic(object):
         return retVal
 
     def table(self):
-        s_date = pd.to_datetime(datetime.date(self.__year, 1, 1))
-        e_date = pd.to_datetime(datetime.date(self.__year, 12, 31))
+        s_date = datetime.date(self.__year, 1, 1)
+        e_date = datetime.date(self.__year, 12, 31)
         df = self.__filter_dataframe(s_date, e_date)
 
         # metu diena, int
@@ -128,8 +128,8 @@ class Statistic(object):
         return df.to_dict(orient='records')
 
     def month_table(self):
-        s_date = pd.to_datetime(datetime.date(self.__year, 1, 1))
-        e_date = pd.to_datetime(datetime.date(self.__year, 12, 31))
+        s_date = datetime.date(self.__year, 1, 1)
+        e_date = datetime.date(self.__year, 12, 31)
         df = self.__filter_dataframe(s_date, e_date)
 
         df.index = df['date']
