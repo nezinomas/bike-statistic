@@ -91,7 +91,6 @@ class Statistic(object):
                 datetime.date(year.year, 1, 1),
                 datetime.date(year.year, 12, 31)
             )
-
             retVal.append(item)
 
         return retVal
