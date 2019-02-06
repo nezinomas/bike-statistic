@@ -1,6 +1,5 @@
 import datetime
 import calendar
-import numpy as np
 import pandas as pd
 
 from django_pandas.io import read_frame
@@ -8,6 +7,7 @@ from django.shortcuts import get_object_or_404
 
 from ..models import Goal
 from ...reports.models import Data
+
 
 class Statistic(object):
     def __init__(self, year='all'):
@@ -40,12 +40,11 @@ class Statistic(object):
 
         return obj
 
-
     def __filter_dataframe(self, start_date, end_date):
         if start_date:
             df = self.__df[
-                (self.__df['date'] >= start_date)
-                & (self.__df['date'] <= end_date)
+                (self.__df['date'] >= pd.to_datetime(start_date))
+                & (self.__df['date'] <= pd.to_datetime(end_date))
             ].copy()
         else:
             df = self.__df
@@ -101,30 +100,30 @@ class Statistic(object):
         s_date = pd.to_datetime(datetime.date(self.__year, 1, 1))
         e_date = pd.to_datetime(datetime.date(self.__year, 12, 31))
         df = self.__filter_dataframe(s_date, e_date)
-        
+
         # metu diena, int
         first = pd.to_datetime(datetime.date(self.__year, 1, 1))
         days = 366 if calendar.isleap(self.__year) else 365
-        per_day = self.__goals.goal/days
+        per_day = self.__goals.goal / days
 
         df.loc[:, 'day_num'] = (df['date'] - first).dt.days + 1
         df.loc[:, 'year_month'] = df['date'].dt.to_period('M').astype(str)
         df.loc[:, 'temperature'] = df['temperature'].replace({pd.np.nan: None})
 
-        df.loc[:, 'speed_workout'] = df['distance']/(df['sec_workout']/3600)
+        df.loc[:, 'speed_workout'] = df['distance'] / (df['sec_workout'] / 3600)
 
         df.loc[:, 'distance_season'] = df['distance'].cumsum()
         df.loc[:, 'sec_season'] = df['sec_workout'].cumsum()
-        df.loc[:, 'speed_season'] = df['distance_season']/(df['sec_season']/3600)
-        df.loc[:, 'per_day_season'] = df['distance_season']/df['day_num']
+        df.loc[:, 'speed_season'] = df['distance_season'] / (df['sec_season'] / 3600)
+        df.loc[:, 'per_day_season'] = df['distance_season'] / df['day_num']
 
-        df.loc[:, 'day_goal'] = df['day_num']*per_day
-        df.loc[:, 'percent'] = (df['distance_season']*100)/df['day_goal']
-        df.loc[:, 'km_delta'] = df['distance_season']-df['day_goal']
+        df.loc[:, 'day_goal'] = df['day_num'] * per_day
+        df.loc[:, 'percent'] = (df['distance_season'] * 100) / df['day_goal']
+        df.loc[:, 'km_delta'] = df['distance_season'] - df['day_goal']
 
         # False kada keičiasi mėnuo
         df.loc[:, 'match'] = df.year_month.eq(df.year_month.shift())
-        df.loc[df.index[0], 'match'] = True # pirma eilute visada yra False; pakeiciu
+        df.loc[df.index[0], 'match'] = True  # pirma eilute visada yra False; pakeiciu
 
         return df.to_dict(orient='records')
 
@@ -136,11 +135,11 @@ class Statistic(object):
         df.index = df['date']
         df = df.resample('M').sum()
 
-        df.loc[:, 'speed_month'] = df['distance'] / (df['sec_workout']/3600)
+        df.loc[:, 'speed_month'] = df['distance'] / (df['sec_workout'] / 3600)
         df.loc[:, 'year_month'] = pd.to_datetime(df.index.values).to_period('M')
         df.loc[:, 'days_in_month'] = pd.to_datetime(df.index.values).day
-        df.loc[:, 'per_day_month'] = df['distance']/df['days_in_month']
-        df.loc[:, 'speed_month'] = df['distance']/(df['sec_workout']/3600)
+        df.loc[:, 'per_day_month'] = df['distance'] / df['days_in_month']
+        df.loc[:, 'speed_month'] = df['distance'] / (df['sec_workout'] / 3600)
 
         df.reset_index()
         df.index = df['year_month']

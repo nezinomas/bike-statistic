@@ -26,7 +26,6 @@ def save_component(request, context, form):
         context=context,
         request=request
     )
-
     return JsonResponse(data)
 
 
@@ -71,5 +70,4 @@ def delete(request, pk):
             context=context,
             request=request
         )
-
     return JsonResponse(data)

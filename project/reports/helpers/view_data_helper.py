@@ -46,4 +46,3 @@ def save_data(request, context, form, start_date, end_date):
         'reports/includes/partial_data_update.html', context, request)
 
     return JsonResponse(data)
-

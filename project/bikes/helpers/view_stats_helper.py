@@ -65,7 +65,10 @@ class Filter(object):
 
     def total_distance(self, start_date=None, end_date=None):
         if start_date:
-            df = self.__df[(self.__df['date'] > start_date) & (self.__df['date'] <= end_date)]
+            df = self.__df[
+                (self.__df['date'] > pd.to_datetime(start_date))
+                & (self.__df['date'] <= pd.to_datetime(end_date))
+            ]
         else:
             df = self.__df
 
