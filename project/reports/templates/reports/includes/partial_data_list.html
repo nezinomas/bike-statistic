@@ -6,7 +6,7 @@
             <th width="200rem" class="text-center">Date <span class="date-align">&nbsp;</span></th>
             <th class="text-center">Distance</th>
             <th class="text-center">Time</th>
-            <th class="text-center">Temp</th>
+            <th class="text-center">&#8451;</th>
             <th class="text-center">Ascent</th>
             <th class="text-center">Descent</th>
             <th class="text-center">Max Speed</th>
@@ -24,12 +24,12 @@
             <td class="text-center">{{ obj.date|date:'Y-m-d' }}<span class="date-align">&nbsp;</span></td>
             <td class="text-center">{{ obj.distance }}</td>
             <td class="text-center">{{ obj.time }}</td>
-            <td class="text-center">{{ obj.temperature }}</td>
+            <td class="text-center">{{ obj.temperature|default_if_none:'-' }}</td>
             <td class="text-center">{{ obj.ascent|floatformat:0|intcomma }}</td>
             <td class="text-center">{{ obj.descent|floatformat:0|intcomma }}</td>
             <td class="text-center">{{ obj.max_speed|floatformat:1 }}</td>
-            <td class="text-center">{{ obj.heart_rate }}</td>
-            <td class="text-center">{{ obj.cadence }}</td>
+            <td class="text-center">{{ obj.heart_rate|default_if_none:'-' }}</td>
+            <td class="text-center">{{ obj.cadence|default_if_none:'-' }}</td>
             <td class="text-right">
                 {% button_edit pk=obj.id url=url_update tbl='0' %}
                 {% button_delete type='button' pk=obj.id url=url_delete tbl='0' %}
