@@ -1,4 +1,4 @@
-from django.shortcuts import reverse, render, get_object_or_404
+from django.shortcuts import reverse, render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.http import JsonResponse
@@ -39,6 +39,13 @@ def save_data(request, context, form, bike_slug, pk):
         request=request
     )
     return JsonResponse(data)
+
+
+@login_required()
+def index(request, bike):
+    qs = Component.objects.all().first()
+    # component = get_object_or_404(qs)
+    return redirect(reverse('bikes:stats_list', kwargs={'bike': bike, 'pk': qs.pk}))
 
 
 @login_required()
