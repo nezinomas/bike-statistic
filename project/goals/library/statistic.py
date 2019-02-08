@@ -19,7 +19,7 @@ class Statistic(object):
     def __create_qs(self):
         return Data.objects.\
             prefetch_related('bike').\
-            values('id', 'date', 'bike', 'distance', 'temperature', 'time').\
+            values('id', 'date', 'bike', 'distance', 'temperature', 'time', 'ascent').\
             order_by('date')
 
     def __create_df(self, qs):
@@ -27,6 +27,7 @@ class Statistic(object):
 
         df['date'] = pd.to_datetime(df['date'])
         df['distance'] = df['distance'].astype(float)
+        df['ascent'] = df['ascent'].astype(int)
         df['time'] = pd.to_timedelta(df['time'], unit='s')
         df['sec_workout'] = df['time'].dt.total_seconds()
 
@@ -113,6 +114,7 @@ class Statistic(object):
 
         df.loc[:, 'distance_season'] = df['distance'].cumsum()
         df.loc[:, 'sec_season'] = df['sec_workout'].cumsum()
+        df.loc[:, 'ascent_season'] = df['ascent'].cumsum()
         df.loc[:, 'speed_season'] = df['distance_season'] / (df['sec_season'] / 3600)
         df.loc[:, 'per_day_season'] = df['distance_season'] / df['day_num']
 

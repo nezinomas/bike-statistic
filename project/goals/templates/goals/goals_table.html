@@ -14,8 +14,8 @@
         <tr>
             <th colspan="3"> </th>
             <th colspan="3" class="text-center b-left">Workout Stats</th>
-            <th colspan="4" class="text-center b-left">Month Stats</th>
-            <th colspan="4" class="text-center b-left">Season Stats</th>
+            <th colspan="5" class="text-center b-left">Month Stats</th>
+            <th colspan="5" class="text-center b-left">Season Stats</th>
             <th colspan="3" class="text-center b-left">Goals</th>
         </tr>
         <tr>
@@ -29,10 +29,12 @@
             <th class="text-center">Time</th>
             <th class="text-center">Speed</th>
             <th class="text-center">Per day</th>
+            <th class="text-center">Ascent</th>
             <th class="text-center b-left">Dist</th>
             <th class="text-center">Time</th>
             <th class="text-center">Speed</th>
             <th class="text-center">Per day</th>
+            <th class="text-center">Ascent</th>
             <th class="text-center b-left">Goal</th>
             <th class="text-center">%</th>
             <th class="text-center">Delta</th>
@@ -41,7 +43,7 @@
     <tbody>
         {% for row in objects  %}
         {% if not row.match %}<tr>
-            <td colspan="17" class="row-spacer"></td>
+            <td colspan="19" class="row-spacer"></td>
         </tr>{% endif %}
         <tr>
             <td>{{ row.bike }}</td>
@@ -55,10 +57,12 @@
             <td class="text-center">{{ m_row.sec_workout|duration }}</td>
             <td class="text-center">{{ m_row.speed_month|floatformat:1 }}</td>
             <td class="text-center">{{ m_row.per_day_month|floatformat:1 }}</td>
+            <td class="text-center">{{ m_row.ascent|floatformat:0|intcomma }}</td>
             <td class="text-center b-left">{{ row.distance_season|floatformat:0|intcomma }}</td>
             <td class="text-center">{{ row.sec_season|duration }}</td>
             <td class="text-center">{{ row.speed_season|floatformat:1 }}</td>
             <td class="text-center">{{ row.per_day_season|floatformat:1 }}</td>
+            <td class="text-center">{{ row.ascent_season|floatformat:0|intcomma }}</td>
             <td class="text-center b-left">{{ row.day_goal|floatformat:0|intcomma }}</td>
             <td class="text-center">{{ row.percent|floatformat:1 }}</td>
             <td class="text-center">{{ row.km_delta|floatformat:0|intcomma }}</td>
