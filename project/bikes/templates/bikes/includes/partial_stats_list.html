@@ -31,9 +31,12 @@
     </tbody>
     <tfoot>
         <tr class="text-white" style="background-color: #1e4e79">
-            <td colspan="6">
+            <td colspan="4">
                 {% for stat in component.stats %}
                 <span class="mr-4">{{ stat.label|title }}: {{ stat.value|floatformat:0|intcomma }} km</span>{% endfor %}
+            </td>
+            <td colspan="2" class="text-right">
+                Total <b>{{ bike_slug|title }}</b>: {{ total|floatformat:0|intcomma }}km
             </td>
         </tr>
     </tfoot>
