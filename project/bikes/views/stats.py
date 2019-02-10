@@ -51,14 +51,16 @@ def index(request, bike_slug):
 @login_required()
 def lists(request, bike_slug, component_pk):
     o = Filter(bike_slug, component_pk)
-
+    components = o.components()
+    stats_id = components[0]['pk']
     return render(
         request,
         'bikes/stats_list.html', {
-            'components': o.components(),
+            'components': components,
             'total': o.total_distance(),
             'bike_slug': bike_slug,
             'component_pk': component_pk,
+            'stats_id': stats_id
         }
     )
 

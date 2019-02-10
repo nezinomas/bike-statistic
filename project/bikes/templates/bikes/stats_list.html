@@ -3,7 +3,9 @@
 
 
 {% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="{% url 'bikes:stats_list' bike_slug component_pk %}">{{ bike_slug|title }}</a> <span class="navbar-text">[ {{ total|floatformat:0|intcomma }}km ]</span>
+    <span class="navbar-text">&raquo;</span>
+    <a class="nav-link disabled" href="{% url 'bikes:stats_list' bike_slug component_pk %}">{{ bike_slug|title }}</a>
+    <span class="navbar-text">[ {{ total|floatformat:0|intcomma }}km ]</span>
 {% endblock %}
 
 
@@ -11,9 +13,10 @@
     <div class="row my-2">
         <div class="col text-left">
             <nav class="nav">
+                {{ stats_id }}
                 {% for item in component_list %}
-                <a href="{% url 'bikes:stats_list' bike_slug item.id %}" class="nav-link">{{ item.name }}</a>{% if not forloop.last %}<span class="navbar-text">|</span>{% endif %}
-                {% endfor %}
+                <a href="{% url 'bikes:stats_list' bike_slug item.id %}" class="nav-link {% if item.id == stats_id %}active disabled{% endif %}">{{ item.name }}</a>
+                {% if not forloop.last %}<span class="navbar-text">|</span>{% endif %}{% endfor %}
             </nav>
         </div>
         <div class="col-sm-2 text-right">
