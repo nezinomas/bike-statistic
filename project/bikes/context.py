@@ -1,6 +1,5 @@
 import pickle
 
-from ..goals.models import Goal
 from .models import Bike
 
 
@@ -13,8 +12,3 @@ def bike_list(context):
     return {
         'bike_list': bikes
     }
-
-
-def goal_list(context):
-    qs = Goal.objects.all()[:3]
-    return {'goal_list': qs}
