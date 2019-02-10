@@ -45,7 +45,9 @@ def index(request):
 
 @login_required()
 def lists(request, bike_slug):
-    obj = BikeInfo.objects.prefetch_related('bike').filter(bike__slug=bike_slug)
+    obj = BikeInfo.objects.\
+        prefetch_related('bike').\
+        filter(bike__slug=bike_slug)
     rendered = render(
         request,
         'bikes/info_list.html',
