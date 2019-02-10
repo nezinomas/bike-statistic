@@ -3,8 +3,6 @@ import pickle
 
 from django.conf import settings
 
-from .models import Bike
-
 
 def bike_list(context):
     try:
@@ -13,9 +11,7 @@ def bike_list(context):
     except:
         bikes = []
 
-    return {
-        'bike_list': bikes
-    }
+    return {'bike_list': bikes}
 
 
 def component_list(context):
@@ -25,6 +21,4 @@ def component_list(context):
     except:
         components = []
 
-    return {
-        'component_list': components
-    }    
+    return {'component_list': components}

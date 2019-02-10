@@ -16,7 +16,6 @@ def cash_bikes(sender, instance, *args, **kwargs):
     pickle.dump(obj, open(path, "wb"))
 
 
-
 @receiver(post_save, sender=Component)
 @receiver(post_delete, sender=Component)
 def cash_components(sender, instance, *args, **kwargs):

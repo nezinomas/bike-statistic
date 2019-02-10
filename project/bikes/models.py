@@ -92,4 +92,10 @@ class ComponentStatistic(models.Model):
         ordering = ['-start_date']
 
     def __str__(self):
-        return '{bike} / {component} / {start} ... {end}'.format(bike=self.bike, component=self.component, start=self.start_date, end=self.end_date)
+        return '{bike} / {component} / {start} ... {end}'.\
+            format(
+                bike=self.bike,
+                component=self.component,
+                start=self.start_date,
+                end=self.end_date
+            )
