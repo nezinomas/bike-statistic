@@ -1,11 +1,15 @@
+import os
 import pickle
+
+from django.conf import settings
 
 from .models import Bike
 
 
 def bike_list(context):
     try:
-        bikes = pickle.load(open("project/bikes/cash/bikes.p", "rb"))
+        f = os.path.join(settings.CASH_ROOT, 'bikes.p')
+        bikes = pickle.load(open(f, "rb"))
     except:
         bikes = []
 
@@ -16,7 +20,8 @@ def bike_list(context):
 
 def component_list(context):
     try:
-        components = pickle.load(open("project/bikes/cash/components.p", "rb"))
+        f = os.path.join(settings.CASH_ROOT, 'components.p')
+        components = pickle.load(open(f, "rb"))
     except:
         components = []
 

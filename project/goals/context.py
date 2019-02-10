@@ -1,11 +1,15 @@
+import os
 import pickle
+
+from django.conf import settings
 
 from .models import Goal
 
 
 def goal_list(context):
     try:
-        goals = pickle.load(open("project/goals/cash/goals.p", "rb"))
+        f = os.path.join(settings.CASH_ROOT, 'goals.p')
+        goals = pickle.load(open(f, "rb"))
     except:
         goals = []
 
