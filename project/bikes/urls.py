@@ -10,11 +10,11 @@ urlpatterns = [
     path('component/update/<int:pk>/', component.update, name='component_update'),
     path('component/delete/<int:pk>/', component.delete, name='component_delete'),
 
-    path('component/<slug:bike>/', stats.index, name='stats_index'),
-    path('component/<slug:bike>/<int:pk>', stats.lists, name='stats_list'),
-    path('component/<slug:bike>/<int:pk>/create', stats.create, name='stats_create'),
-    path('component/<slug:bike>/<int:pk>/update', stats.update, name='stats_update'),
-    path('component/<slug:bike>/<int:pk>/delete', stats.delete, name='stats_delete'),
+    path('component/<slug:bike_slug>/', stats.index, name='stats_index'),
+    path('component/<slug:bike_slug>/<int:component_pk>', stats.lists, name='stats_list'),
+    path('component/<slug:bike_slug>/<int:component_pk>/create', stats.create, name='stats_create'),
+    path('component/<slug:bike_slug>/<int:stats_pk>/update', stats.update, name='stats_update'),
+    path('component/<slug:bike_slug>/<int:stats_pk>/delete', stats.delete, name='stats_delete'),
 
     path('bike/', bike.lists, name='bike_list'),
     path('bike/create/', bike.create, name='bike_create'),
