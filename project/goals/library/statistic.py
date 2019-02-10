@@ -1,12 +1,12 @@
-import datetime
 import calendar
+import datetime
 import pandas as pd
 
-from django_pandas.io import read_frame
 from django.shortcuts import get_object_or_404
+from django_pandas.io import read_frame
 
-from ..models import Goal
 from ...reports.models import Data
+from ..models import Goal
 
 
 class Statistic(object):
@@ -19,7 +19,7 @@ class Statistic(object):
     def __create_qs(self):
         return Data.objects.\
             prefetch_related('bike').\
-            values('id', 'date', 'bike', 'distance', 'temperature', 'time').\
+            values('id', 'date', 'bike', 'distance', 'temperature', 'time', 'ascent').\
             order_by('date')
 
     def __create_df(self, qs):
@@ -27,6 +27,7 @@ class Statistic(object):
 
         df['date'] = pd.to_datetime(df['date'])
         df['distance'] = df['distance'].astype(float)
+        df['ascent'] = df['ascent'].astype(int)
         df['time'] = pd.to_timedelta(df['time'], unit='s')
         df['sec_workout'] = df['time'].dt.total_seconds()
 
@@ -91,14 +92,13 @@ class Statistic(object):
                 datetime.date(year.year, 1, 1),
                 datetime.date(year.year, 12, 31)
             )
-
             retVal.append(item)
 
         return retVal
 
     def table(self):
-        s_date = pd.to_datetime(datetime.date(self.__year, 1, 1))
-        e_date = pd.to_datetime(datetime.date(self.__year, 12, 31))
+        s_date = datetime.date(self.__year, 1, 1)
+        e_date = datetime.date(self.__year, 12, 31)
         df = self.__filter_dataframe(s_date, e_date)
 
         # metu diena, int
@@ -114,6 +114,7 @@ class Statistic(object):
 
         df.loc[:, 'distance_season'] = df['distance'].cumsum()
         df.loc[:, 'sec_season'] = df['sec_workout'].cumsum()
+        df.loc[:, 'ascent_season'] = df['ascent'].cumsum()
         df.loc[:, 'speed_season'] = df['distance_season'] / (df['sec_season'] / 3600)
         df.loc[:, 'per_day_season'] = df['distance_season'] / df['day_num']
 
@@ -128,8 +129,8 @@ class Statistic(object):
         return df.to_dict(orient='records')
 
     def month_table(self):
-        s_date = pd.to_datetime(datetime.date(self.__year, 1, 1))
-        e_date = pd.to_datetime(datetime.date(self.__year, 12, 31))
+        s_date = datetime.date(self.__year, 1, 1)
+        e_date = datetime.date(self.__year, 12, 31)
         df = self.__filter_dataframe(s_date, e_date)
 
         df.index = df['date']

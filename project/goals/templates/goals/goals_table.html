@@ -14,8 +14,8 @@
         <tr>
             <th colspan="3"> </th>
             <th colspan="3" class="text-center b-left">Workout Stats</th>
-            <th colspan="4" class="text-center b-left">Month Stats</th>
-            <th colspan="4" class="text-center b-left">Season Stats</th>
+            <th colspan="5" class="text-center b-left">Month Stats</th>
+            <th colspan="5" class="text-center b-left">Season Stats</th>
             <th colspan="3" class="text-center b-left">Goals</th>
         </tr>
         <tr>
@@ -29,39 +29,43 @@
             <th class="text-center">Time</th>
             <th class="text-center">Speed</th>
             <th class="text-center">Per day</th>
+            <th class="text-center">Ascent</th>
             <th class="text-center b-left">Dist</th>
             <th class="text-center">Time</th>
             <th class="text-center">Speed</th>
             <th class="text-center">Per day</th>
+            <th class="text-center">Ascent</th>
             <th class="text-center b-left">Goal</th>
             <th class="text-center">%</th>
             <th class="text-center">Delta</th>
         </tr>
     </thead>
     <tbody>
-        {% for value in objects  %}
-        {% if not value.match %}<tr>
-            <td colspan="17" class="row-spacer"></td>
+        {% for row in objects  %}
+        {% if not row.match %}<tr>
+            <td colspan="19" class="row-spacer"></td>
         </tr>{% endif %}
         <tr>
-            <td>{{ value.bike }}</td>
-            <td class="text-center">{{ value.date|date:'Y-m-d' }}</td>
-            <td class="text-right">{% with value.temperature|floatformat:0 as r %}{% if r != 'nan' %}{{ r }}{% else %}-{% endif %}{% endwith %}</td>
-            <td class="text-center b-left">{{ value.distance|floatformat:2 }}</td>
-            <td class="text-center">{{ value.sec_workout|duration }}</td>
-            <td class="text-center">{{ value.speed_workout|floatformat:1 }}</td>
-            {% ifchanged value.year_month %}{% get_row month value.year_month as row %}{% endifchanged %}
-            <td class="text-center b-left">{{ row.distance|floatformat:0 }}</td>
+            <td>{{ row.bike }}</td>
+            <td class="text-center">{{ row.date|date:'Y-m-d' }}</td>
+            <td class="text-right">{% with row.temperature|floatformat:0 as r %}{% if r != 'nan' %}{{ r }}{% else %}-{% endif %}{% endwith %}</td>
+            <td class="text-center b-left">{{ row.distance|floatformat:2 }}</td>
             <td class="text-center">{{ row.sec_workout|duration }}</td>
-            <td class="text-center">{{ row.speed_month|floatformat:1 }}</td>
-            <td class="text-center">{{ row.per_day_month|floatformat:1 }}</td>
-            <td class="text-center b-left">{{ value.distance_season|floatformat:0|intcomma }}</td>
-            <td class="text-center">{{ value.sec_season|duration }}</td>
-            <td class="text-center">{{ value.speed_season|floatformat:1 }}</td>
-            <td class="text-center">{{ value.per_day_season|floatformat:1 }}</td>
-            <td class="text-center b-left">{{ value.day_goal|floatformat:0|intcomma }}</td>
-            <td class="text-center">{{ value.percent|floatformat:1 }}</td>
-            <td class="text-center">{{ value.km_delta|floatformat:0|intcomma }}</td>
+            <td class="text-center">{{ row.speed_workout|floatformat:1 }}</td>
+            {% ifchanged row.year_month %}{% get_row month row.year_month as m_row %}{% endifchanged %}
+            <td class="text-center b-left">{{ m_row.distance|floatformat:0 }}</td>
+            <td class="text-center">{{ m_row.sec_workout|duration }}</td>
+            <td class="text-center">{{ m_row.speed_month|floatformat:1 }}</td>
+            <td class="text-center">{{ m_row.per_day_month|floatformat:1 }}</td>
+            <td class="text-center">{{ m_row.ascent|floatformat:0|intcomma }}</td>
+            <td class="text-center b-left">{{ row.distance_season|floatformat:0|intcomma }}</td>
+            <td class="text-center">{{ row.sec_season|duration }}</td>
+            <td class="text-center">{{ row.speed_season|floatformat:1 }}</td>
+            <td class="text-center">{{ row.per_day_season|floatformat:1 }}</td>
+            <td class="text-center">{{ row.ascent_season|floatformat:0|intcomma }}</td>
+            <td class="text-center b-left">{{ row.day_goal|floatformat:0|intcomma }}</td>
+            <td class="text-center">{{ row.percent|floatformat:1 }}</td>
+            <td class="text-center">{{ row.km_delta|floatformat:0|intcomma }}</td>
         </tr>
         {% endfor %}
     </tbody>

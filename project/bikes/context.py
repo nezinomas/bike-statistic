@@ -1,12 +1,25 @@
+import pickle
+
 from .models import Bike
-from ..goals.models import Goal
 
 
 def bike_list(context):
-    q = Bike.objects.all()
-    return {'bike_list': q}
+    try:
+        bikes = pickle.load(open("project/bikes/cash/bikes.p", "rb"))
+    except:
+        bikes = []
+
+    return {
+        'bike_list': bikes
+    }
 
 
-def goal_list(context):
-    qs = Goal.objects.all()[:3]
-    return {'goal_list': qs}
+def component_list(context):
+    try:
+        components = pickle.load(open("project/bikes/cash/components.p", "rb"))
+    except:
+        components = []
+
+    return {
+        'component_list': components
+    }    

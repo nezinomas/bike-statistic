@@ -1,4 +1,4 @@
-from django.shortcuts import reverse, render, get_object_or_404
+from django.shortcuts import reverse, render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.http import JsonResponse
@@ -42,55 +42,70 @@ def save_data(request, context, form, bike_slug, pk):
 
 
 @login_required()
-def lists(request, bike):
-    o = Filter(bike, 'all')
+def index(request, bike_slug):
+    qs = Component.objects.all().first()
+    url = reverse(
+        'bikes:stats_list',
+        kwargs={'bike_slug': bike_slug, 'component_pk': qs.pk}
+    )
+    return redirect(url)
 
+
+@login_required()
+def lists(request, bike_slug, component_pk):
+    o = Filter(bike_slug, component_pk)
+    components = o.components()
     return render(
         request,
         'bikes/stats_list.html', {
-            'components': o.components(),
+            'components': components,
             'total': o.total_distance(),
-            'bike_slug': bike
+            'bike_slug': bike_slug,
+            'component_pk': component_pk,
+            'stats_id': components[0]['pk'],
+            'component_name': components[0]['name']
         }
     )
 
 
 @login_required()
-def create(request, bike, pk):
-    bike_object = get_object_or_404(Bike, slug=bike)
-    component_object = get_object_or_404(Component, pk=pk)
+def create(request, bike_slug, component_pk):
+    bike_object = get_object_or_404(Bike, slug=bike_slug)
+    component_object = get_object_or_404(Component, pk=component_pk)
 
     form = ComponentStatisticForm(
         request.POST or None,
         initial={'bike': bike_object, 'component': component_object}
     )
-    context = {
-        'url': reverse('bikes:stats_create', kwargs={'bike': bike, 'pk': pk}),
-        'tbl': pk
-    }
-    return save_data(request, context, form, bike, pk)
+    url = reverse(
+        'bikes:stats_create',
+        kwargs={'bike_slug': bike_slug, 'component_pk': component_pk}
+    )
+    context = {'url': url }
+    return save_data(request, context, form, bike_slug, component_pk)
 
 
 @login_required()
-def update(request, bike, pk):
-    obj = get_object_or_404(ComponentStatistic, pk=pk)
+def update(request, bike_slug, stats_pk):
+    obj = get_object_or_404(ComponentStatistic, pk=stats_pk)
     form = ComponentStatisticForm(request.POST or None, instance=obj)
-    context = {
-        'url': reverse('bikes:stats_update', kwargs={'bike': bike, 'pk': pk}),
-        'tbl': obj.component.pk
-    }
-    return save_data(request, context, form, bike, obj.component.pk)
+    url = reverse(
+        'bikes:stats_update',
+        kwargs={'bike_slug': bike_slug, 'stats_pk': stats_pk}
+    )
+    context = {'url': url }
+    return save_data(request, context, form, bike_slug, obj.component.pk)
 
 
 @login_required()
-def delete(request, bike, pk):
-    obj = get_object_or_404(ComponentStatistic, pk=pk)
+def delete(request, bike_slug, stats_pk):
+    obj = get_object_or_404(ComponentStatistic, pk=stats_pk)
     data = {}
     if request.method == 'POST':
         obj.delete()
-        form_valid(data, bike, obj.component.pk)
+        form_valid(data, bike_slug, obj.component.pk)
     else:
-        context = {'component': obj, 'bike_slug': bike}
+        context = {'component': obj, 'bike_slug': bike_slug}
         data['html_form'] = render_to_string(
             'bikes/includes/partial_stats_delete.html',
             context,
