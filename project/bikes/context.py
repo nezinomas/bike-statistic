@@ -12,3 +12,14 @@ def bike_list(context):
     return {
         'bike_list': bikes
     }
+
+
+def component_list(context):
+    try:
+        components = pickle.load(open("project/bikes/cash/components.p", "rb"))
+    except:
+        components = []
+
+    return {
+        'component_list': components
+    }    

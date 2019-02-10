@@ -5,4 +5,4 @@ class bikesConfig(AppConfig):
     name = 'project.bikes'
 
     def ready(self):
-        from .signals import cash_bikes
+        from .signals import cash_bikes, cash_components
