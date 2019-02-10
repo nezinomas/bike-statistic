@@ -1,10 +1,18 @@
-from .models import Bike
+import pickle
+
 from ..goals.models import Goal
+from .models import Bike
 
 
 def bike_list(context):
-    q = Bike.objects.all()
-    return {'bike_list': q}
+    try:
+        bikes = pickle.load(open("project/bikes/cash/bikes.p", "rb"))
+    except:
+        bikes = []
+
+    return {
+        'bike_list': bikes
+    }
 
 
 def goal_list(context):
