@@ -14,7 +14,7 @@ LOGIN_URL = 'accounts:login'
 
 
 # ================   CASH CONFIGURATION
-CASH_ROOT = os.path.join(PROJECT_ROOT, 'cash/')
+CASH_ROOT = os.path.join(PROJECT_ROOT, 'cash')
 
 
 # ================   MEDIA CONFIGURATION
