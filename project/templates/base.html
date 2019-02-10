@@ -65,7 +65,9 @@
           <h6 class="side-bar">Goals</h6>
           <div class="list-group list-group-flush">
             {% for item in goal_list  %}
+            {% if forloop.counter < 4 %}
             <a class="list-group-item list-group-item-action" href="{% url 'goals:goals_table' item.year %}">{{ item.year }}</a></li>
+            {% endif %}
             {% endfor %}
           </div>
 
