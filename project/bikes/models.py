@@ -59,6 +59,9 @@ class Component(models.Model):
     def __str__(self):
         return str(self.name)
 
+    class Meta:
+        ordering = ['name']
+
 
 class ComponentStatistic(models.Model):
     start_date = models.DateField()

@@ -17,7 +17,9 @@ class Filter(object):
         self.__components = self.__get_objects(bike_slug, component_filter)
 
     def __create_qs(self, bike_slug):
-        return Data.objects.filter(bike__slug=bike_slug).values('date', 'distance')
+        return Data.objects.\
+            filter(bike__slug=bike_slug).\
+            values('date', 'distance')
 
     def __create_df(self, qs):
         df = read_frame(qs)
@@ -29,9 +31,13 @@ class Filter(object):
         prefetch = Prefetch('components', queryset=filter_bike)
 
         if component_filter == 'all':
-            r = Component.objects.prefetch_related(prefetch).all()
+            r = Component.objects.\
+                prefetch_related(prefetch).\
+                all()
         else:
-            r = Component.objects.prefetch_related(prefetch).filter(pk=component_filter)
+            r = Component.objects.\
+                prefetch_related(prefetch).\
+                filter(pk=component_filter)
 
         return r
 

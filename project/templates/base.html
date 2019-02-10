@@ -62,17 +62,19 @@
             <a class="list-group-item list-group-item-action" href="{% url 'reports:overall' %}">Overall</a></li>
           </div>
 
-          <h6 class="side-bar">Goals</h6>
+          <h6 class="side-bar">Stats & Goals</h6>
           <div class="list-group list-group-flush">
             {% for item in goal_list  %}
+            {% if forloop.counter < 4 %}
             <a class="list-group-item list-group-item-action" href="{% url 'goals:goals_table' item.year %}">{{ item.year }}</a></li>
+            {% endif %}
             {% endfor %}
           </div>
 
           <h6 class="side-bar">Component wear</h6>
           <div class="list-group list-group-flush">
             {% for bike in bike_list %}
-            <a class="list-group-item list-group-item-action" href="{% url 'bikes:stats_list' bike=bike.slug %}">{{ bike.short_name }}</a></li>
+            <a class="list-group-item list-group-item-action" href="{% url 'bikes:stats_index' bike.slug %}">{{ bike.short_name }}</a></li>
             {% endfor %}
           </div>
 

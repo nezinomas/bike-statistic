@@ -1,17 +1,8 @@
 {% load buttons %}{% load humanize %}
 {% for component in components %}
 {% with component.components as items %}
-<table class="table table-striped table-hover table-sm mb-5 tbl-js" id="tbl-{{ component.pk }}">
+<table class="table table-striped table-hover table-sm mb-5 tbl-js" id="tbl-0">
     <thead>
-        <tr style="background-color: #deebf6">
-            <th colspan="4">
-                {{ component.name }} #{{ component.pk }}
-            </th>
-            <th colspan="2" class="text-right">
-                {% url 'bikes:stats_create' bike_slug component.pk as url_create %}
-                {% button_create url=url_create label='New Component' tbl=component.pk %}
-            </th>
-        </tr>
         <tr class="thead-light">
             <th width="20%">Start date</th>
             <th width="20%">End date</th>
@@ -40,9 +31,12 @@
     </tbody>
     <tfoot>
         <tr class="text-white" style="background-color: #1e4e79">
-            <td colspan="6">
+            <td colspan="4">
                 {% for stat in component.stats %}
                 <span class="mr-4">{{ stat.label|title }}: {{ stat.value|floatformat:0|intcomma }} km</span>{% endfor %}
+            </td>
+            <td colspan="2" class="text-right">
+                Total <b>{{ bike_slug|title }}</b>: {{ total|floatformat:0|intcomma }}km
             </td>
         </tr>
     </tfoot>
