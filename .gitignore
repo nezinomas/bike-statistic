@@ -8,6 +8,7 @@ media/
 _config_db.cnf
 _config_secrets.json
 project.pyproj*
+*.p
 
 # Distribution / packaging
 .Python
