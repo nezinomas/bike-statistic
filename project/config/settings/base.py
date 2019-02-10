@@ -13,6 +13,10 @@ LOGIN_REDIRECT_URL = 'goals:home'
 LOGIN_URL = 'accounts:login'
 
 
+# ================   CASH CONFIGURATION
+CASH_ROOT = os.path.join(PROJECT_ROOT, 'cash')
+
+
 # ================   MEDIA CONFIGURATION
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media/')
 MEDIA_URL = "/media/"
