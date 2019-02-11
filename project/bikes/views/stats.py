@@ -81,7 +81,7 @@ def create(request, bike_slug, component_pk):
         'bikes:stats_create',
         kwargs={'bike_slug': bike_slug, 'component_pk': component_pk}
     )
-    context = {'url': url }
+    context = {'url': url}
     return save_data(request, context, form, bike_slug, component_pk)
 
 
@@ -93,7 +93,7 @@ def update(request, bike_slug, stats_pk):
         'bikes:stats_update',
         kwargs={'bike_slug': bike_slug, 'stats_pk': stats_pk}
     )
-    context = {'url': url }
+    context = {'url': url}
     return save_data(request, context, form, bike_slug, obj.component.pk)
 
 

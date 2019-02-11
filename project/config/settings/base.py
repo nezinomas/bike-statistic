@@ -2,9 +2,12 @@ import os
 from ..secrets import get_secret
 
 # ================   PATH CONFIGURATION
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # ..\project_project\project\confi
-SITE_ROOT = os.path.dirname(BASE_DIR)  # ..\project_project\project
-PROJECT_ROOT = os.path.dirname(SITE_ROOT)  # ..\project_project
+# ..\project_project\project\config
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# ..\project_project\project
+SITE_ROOT = os.path.dirname(BASE_DIR)
+# ..\project_project
+PROJECT_ROOT = os.path.dirname(SITE_ROOT)
 
 
 # ================   SITE CONFIGURATION
