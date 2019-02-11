@@ -52,25 +52,57 @@ class Statistic(object):
 
         return df
 
-    def stats(self, start_date=None, end_date=None):
+    def __marginal_values(self, df, column, function):
+        """
+        df - pandas dataframe
+        column - pandas dataframe column label
+        function - max or min
+        """
+
         item = {}
-        df = self.__filter_dataframe(start_date, end_date)
-
         try:
-            row = df.loc[df['temperature'].idxmax()]
-            item['max_temp_date'] = row.date
-            item['max_temp_value'] = row.temperature
+            choices = {
+                'max': df.loc[df[column].idxmax()],
+                'min': df.loc[df[column].idxmin()]
+            }
+            row = choices.get(function, None)
         except:
-            pass
+            return item
 
-        try:
-            row = df.loc[df['temperature'].idxmin()]
-            item['min_temp_date'] = row.date
-            item['min_temp_value'] = row.temperature
-        except:
-            pass
+        if row is not None:
+            date_column = '{}_{}_date'.format(function, column)
+            value_column = '{}_{}_value'.format(function, column)
+
+            item[date_column] = row.date
+            item[value_column] = row[column]
 
         return item
+
+    def __average_speed(self, df):
+        d = df.copy()
+        d.loc[:, 'distance_season'] = d['distance'].cumsum()
+        d.loc[:, 'sec_season'] = d['sec_workout'].cumsum()
+        d.loc[:, 'sec_season'] = d['sec_workout'].cumsum()
+        d.loc[:, 'speed'] = d['distance_season'] / \
+            (d['sec_season'] / 3600)
+
+        row = d.loc[d['speed'].idxmax()]
+
+        return {
+            'max_speed_date': row.date,
+            'max_speed_value': row.speed
+        }
+
+    def stats(self, start_date=None, end_date=None):
+        df = self.__filter_dataframe(start_date, end_date)
+
+        max_temp = self.__marginal_values(df, 'temperature', 'max')
+        min_temp = self.__marginal_values(df, 'temperature', 'min')
+        max_ascent = self.__marginal_values(df, 'ascent', 'max')
+        max_dist = self.__marginal_values(df, 'distance', 'max')
+        speed = self.__average_speed(df)
+
+        return dict(**max_temp, **min_temp, **max_ascent, **speed, **max_dist)
 
     def total_distance(self, start_date=None, end_date=None):
         df = self.__filter_dataframe(start_date, end_date)

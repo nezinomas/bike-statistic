@@ -2,14 +2,17 @@ import os
 from ..secrets import get_secret
 
 # ================   PATH CONFIGURATION
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # ..\project_project\project\confi
-SITE_ROOT = os.path.dirname(BASE_DIR)  # ..\project_project\project
-PROJECT_ROOT = os.path.dirname(SITE_ROOT)  # ..\project_project
+# ..\project_project\project\config
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# ..\project_project\project
+SITE_ROOT = os.path.dirname(BASE_DIR)
+# ..\project_project
+PROJECT_ROOT = os.path.dirname(SITE_ROOT)
 
 
 # ================   SITE CONFIGURATION
-LOGOUT_REDIRECT_URL = 'goals:home'
-LOGIN_REDIRECT_URL = 'goals:home'
+LOGOUT_REDIRECT_URL = 'reports:index'
+LOGIN_REDIRECT_URL = 'reports:index'
 LOGIN_URL = 'accounts:login'
 
 
@@ -115,8 +118,6 @@ INSTALLED_APPS = [
     'project.reports'
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
 
 # ================   URL CONFIGURATION
 ROOT_URLCONF = 'project.config.urls'
@@ -143,15 +144,5 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# ================   TEMPLATE THUMBNAILS CONFIGURATION
-THUMBNAIL_ALIASES = {
-    '': {
-        'cover': {'size': (100, 100), },
-        'cover_big': {'size': (300, 300), },
-        'drawing': {'size': (900, 400), },
-    },
-}
-
-
-# ================   TEMPLATE THUMBNAILS CONFIGURATION
-TAGGIT_CASE_INSENSITIVE = True
+# ================   CRISPY FORMS
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

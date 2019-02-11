@@ -3,8 +3,6 @@ import pickle
 
 from django.conf import settings
 
-from .models import Goal
-
 
 def goal_list(context):
     try:
@@ -13,6 +11,4 @@ def goal_list(context):
     except:
         goals = []
 
-    return {
-        'goal_list': goals
-    }
+    return {'goal_list': goals}

@@ -1,12 +1,11 @@
-from django.shortcuts import reverse, render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.template.loader import render_to_string
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render, reverse
+from django.template.loader import render_to_string
 
-from ..models import Bike, Component, ComponentStatistic
 from ..forms import ComponentStatisticForm
-
 from ..helpers.view_stats_helper import Filter
+from ..models import Bike, Component, ComponentStatistic
 
 
 def form_valid(data, bike_slug, pk):
@@ -81,7 +80,7 @@ def create(request, bike_slug, component_pk):
         'bikes:stats_create',
         kwargs={'bike_slug': bike_slug, 'component_pk': component_pk}
     )
-    context = {'url': url }
+    context = {'url': url}
     return save_data(request, context, form, bike_slug, component_pk)
 
 
@@ -93,7 +92,7 @@ def update(request, bike_slug, stats_pk):
         'bikes:stats_update',
         kwargs={'bike_slug': bike_slug, 'stats_pk': stats_pk}
     )
-    context = {'url': url }
+    context = {'url': url}
     return save_data(request, context, form, bike_slug, obj.component.pk)
 
 

@@ -7,6 +7,7 @@ from django.dispatch import receiver
 
 from .models import Goal
 
+
 @receiver(post_save, sender=Goal)
 @receiver(post_delete, sender=Goal)
 def cash_goals(sender, instance, *args, **kwargs):
