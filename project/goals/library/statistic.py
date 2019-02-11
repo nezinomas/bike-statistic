@@ -81,10 +81,11 @@ class Statistic(object):
     def stats(self, start_date=None, end_date=None):
         df = self.__filter_dataframe(start_date, end_date)
 
-        max_ = self.__marginal_values(df, 'temperature', 'max')
-        min_ = self.__marginal_values(df, 'temperature', 'min')
+        max_temp = self.__marginal_values(df, 'temperature', 'max')
+        min_temp = self.__marginal_values(df, 'temperature', 'min')
+        max_ascent = self.__marginal_values(df, 'ascent', 'max')
 
-        return dict(**max_, **min_)
+        return dict(**max_temp, **min_temp, **max_ascent)
 
     def total_distance(self, start_date=None, end_date=None):
         df = self.__filter_dataframe(start_date, end_date)
