@@ -89,8 +89,14 @@ def goals_table(request, year):
 
     start = datetime.date(year, 1, 1)
     end = datetime.date(year, 12, 31)
+
     return render(
         request,
         'goals/goals_table.html',
-        {'objects': objects, 'month': month, 'year': year, 'stats': stats.stats(start, end)}
+        {
+            'objects': objects,
+            'month': month,
+            'year': year,
+            'stats': stats.stats(start, end)
+        }
     )
