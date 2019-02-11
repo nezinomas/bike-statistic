@@ -82,11 +82,7 @@ def goals_delete(request, year):
 
 @login_required()
 def goals_table(request, year):
-
-    stats = Statistic(year)
-    objects = stats.table()
-    month = stats.month_table()
-
+    objStats = Statistic(year)
     start = datetime.date(year, 1, 1)
     end = datetime.date(year, 12, 31)
 
@@ -94,9 +90,9 @@ def goals_table(request, year):
         request,
         'goals/goals_table.html',
         {
-            'objects': objects,
-            'month': month,
+            'objects': objStats.table(),
+            'month': objStats.month_table(),
             'year': year,
-            'stats': stats.stats(start, end)
+            'stats': objStats.stats(start, end)
         }
     )
