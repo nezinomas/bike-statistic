@@ -1,3 +1,5 @@
+import datetime
+
 from django.shortcuts import reverse, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
@@ -85,8 +87,10 @@ def goals_table(request, year):
     objects = stats.table()
     month = stats.month_table()
 
+    start = datetime.date(year, 1, 1)
+    end = datetime.date(year, 12, 31)
     return render(
         request,
         'goals/goals_table.html',
-        {'objects': objects, 'month': month, 'year': year}
+        {'objects': objects, 'month': month, 'year': year, 'stats': stats.stats(start, end)}
     )
