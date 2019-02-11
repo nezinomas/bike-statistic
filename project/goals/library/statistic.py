@@ -99,8 +99,10 @@ class Statistic(object):
         max_temp = self.__marginal_values(df, 'temperature', 'max')
         min_temp = self.__marginal_values(df, 'temperature', 'min')
         max_ascent = self.__marginal_values(df, 'ascent', 'max')
+        max_dist = self.__marginal_values(df, 'distance', 'max')
         speed = self.__average_speed(df)
-        return dict(**max_temp, **min_temp, **max_ascent, **speed)
+
+        return dict(**max_temp, **min_temp, **max_ascent, **speed, **max_dist)
 
     def total_distance(self, start_date=None, end_date=None):
         df = self.__filter_dataframe(start_date, end_date)

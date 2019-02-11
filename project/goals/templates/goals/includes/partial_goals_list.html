@@ -8,12 +8,15 @@
             <th colspan="2" class="text-center b-left">Min Temp</th>
             <th colspan="2" class="text-center b-left">Max Ascent</th>
             <th colspan="2" class="text-center b-left">Max Speed</th>
+            <th colspan="2" class="text-center b-left">Max Distance</th>
         </tr>
         <tr>
             <th width="120rem">Year</th>
             <th width="120rem">Goal, km</th>
             <th class="text-right" width="100rem">Actions</th>
             <th class="text-right pr-2 b-left" width="120rem">Distance</th>
+            <th class="text-center b-left">Date</th>
+            <th class="text-center">Value</th>
             <th class="text-center b-left">Date</th>
             <th class="text-center">Value</th>
             <th class="text-center b-left">Date</th>
@@ -44,6 +47,8 @@
             <td class="text-center">{{ item.stats.max_ascent_value|floatformat:0 }}</td>
             <td class="text-center b-left">{{ item.stats.max_speed_date|date:"Y-m-d" }}</td>
             <td class="text-center">{{ item.stats.max_speed_value|floatformat:1 }}</td>
+            <td class="text-center b-left">{{ item.stats.max_distance_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ item.stats.max_distance_value|floatformat:1 }}</td>
         </tr>
         {% endfor %}
     </tbody>
