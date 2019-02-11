@@ -74,7 +74,7 @@ class Statistic(object):
             value_column = '{}_{}_value'.format(function, column)
 
             item[date_column] = row.date
-            item[value_column] = row.temperature
+            item[value_column] = row[column]
 
         return item
 
