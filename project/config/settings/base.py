@@ -118,8 +118,6 @@ INSTALLED_APPS = [
     'project.reports'
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
 
 # ================   URL CONFIGURATION
 ROOT_URLCONF = 'project.config.urls'
@@ -144,3 +142,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+# ================   CRISPY FORMS
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
