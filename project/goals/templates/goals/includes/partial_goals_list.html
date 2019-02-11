@@ -15,16 +15,10 @@
             <th width="100rem">Goal, km</th>
             <th class="text-right" width="80rem">Actions</th>
             <th class="text-right pr-2 b-left" width="90rem">Distance</th>
+            {% for i in i|rjust:5 %}
             <th class="text-center b-left">Date</th>
             <th class="text-center">Value</th>
-            <th class="text-center b-left">Date</th>
-            <th class="text-center">Value</th>
-            <th class="text-center b-left">Date</th>
-            <th class="text-center">Value</th>
-            <th class="text-center b-left">Date</th>
-            <th class="text-center">Value</th>
-            <th class="text-center b-left">Date</th>
-            <th class="text-center">Value</th>
+            {% endfor %}
         </tr>
     </thead>
     <tbody>

@@ -80,11 +80,8 @@ class Statistic(object):
 
     def __average_speed(self, df):
         d = df.copy()
-        d.loc[:, 'distance_season'] = d['distance'].cumsum()
-        d.loc[:, 'sec_season'] = d['sec_workout'].cumsum()
-        d.loc[:, 'sec_season'] = d['sec_workout'].cumsum()
-        d.loc[:, 'speed'] = d['distance_season'] / \
-            (d['sec_season'] / 3600)
+        d.loc[:, 'speed'] = d['distance'] / \
+            (d['sec_workout'] / 3600)
 
         row = d.loc[d['speed'].idxmax()]
 
