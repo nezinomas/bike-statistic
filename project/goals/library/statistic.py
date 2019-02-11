@@ -78,14 +78,29 @@ class Statistic(object):
 
         return item
 
+    def __average_speed(self, df):
+        d = df.copy()
+        d.loc[:, 'distance_season'] = d['distance'].cumsum()
+        d.loc[:, 'sec_season'] = d['sec_workout'].cumsum()
+        d.loc[:, 'sec_season'] = d['sec_workout'].cumsum()
+        d.loc[:, 'speed'] = d['distance_season'] / \
+            (d['sec_season'] / 3600)
+
+        row = d.loc[d['speed'].idxmax()]
+
+        return {
+            'max_speed_date': row.date,
+            'max_speed_value': row.speed
+        }
+
     def stats(self, start_date=None, end_date=None):
         df = self.__filter_dataframe(start_date, end_date)
 
         max_temp = self.__marginal_values(df, 'temperature', 'max')
         min_temp = self.__marginal_values(df, 'temperature', 'min')
         max_ascent = self.__marginal_values(df, 'ascent', 'max')
-
-        return dict(**max_temp, **min_temp, **max_ascent)
+        speed = self.__average_speed(df)
+        return dict(**max_temp, **min_temp, **max_ascent, **speed)
 
     def total_distance(self, start_date=None, end_date=None):
         df = self.__filter_dataframe(start_date, end_date)
