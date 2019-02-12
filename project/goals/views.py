@@ -42,7 +42,11 @@ def save_data(request, context, form):
 @login_required()
 def goals_list(request):
     objects = Statistic().objects()
-    rendered = render(request, 'goals/goals_list.html', {'objects': objects})
+    rendered = render(
+        request,
+        'goals/goals_list.html',
+        {'objects': objects}
+    )
     return rendered
 
 
