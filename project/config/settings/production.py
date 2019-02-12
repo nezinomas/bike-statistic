@@ -14,3 +14,9 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS += [
     'django_crontab',
 ]
+
+
+# ================   CRONJOBS
+CRONJOBS = [
+    ('2,30 * * * *', 'project.reports.cron.insert_from_endomondo', '> /dev/null 2>&1'),
+]
