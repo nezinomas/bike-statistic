@@ -1,7 +1,8 @@
 from datetime import timedelta
 
-import requests
-from lxml import html
+from urllib.request import urlopen
+from urllib.error import HTTPError, URLError
+from bs4 import BeautifulSoup
 
 from ...bikes.models import Bike
 from ...config.secrets import get_secret
@@ -17,19 +18,25 @@ def __workouts(maxResults):
     return endomondo.get_workouts(maxResults=maxResults)
 
 
+def _get_page_content(page):
+        try:
+            html = urlopen(page)
+            return html
+        except (HTTPError, URLError):
+            return
+
+
 def get_temperature():
-    page = requests.get('https://orai.15min.lt/prognoze/vilnius')
-    tree = html.fromstring(page.content)
+    url = 'https://www.gismeteo.lt/weather-vilnius-4230/now/'
+    page = _get_page_content(url)
+    soup = BeautifulSoup(page, 'html.parser')
 
-    tmp = tree.xpath('//div[@class="current-table"]/div[contains(@class, "temperature")]/text()')
-    t = ''.join(tmp)
+    element = soup.find('span', {'class': 'nowvalue__text_l'})
 
-    replace = {'\n': '', '\t': '', '°': ''}
+    t = element.text
+    t = t.replace(',', '.')
 
-    for key, val in replace.items():
-        t = t.replace(key, val)
-
-    return int(t)
+    return float(t)
 
 
 def insert_data(maxResults=20):
