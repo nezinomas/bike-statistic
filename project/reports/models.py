@@ -18,7 +18,7 @@ class Data(models.Model):
     date = models.DateField(default=now)
     distance = models.FloatField()
     time = models.DurationField()
-    temperature = models.IntegerField(
+    temperature = models.FloatField(
         null=True,
         blank=True
     )
