@@ -1,0 +1,12 @@
+{% extends parent_template|default:"base.html" %}
+{% load static %}
+
+
+{% block breadcrumb %}{{ block.super }}
+    <span class="navbar-text">&raquo;</span><a class="nav-link" href="{% url 'reports:overall' %}">Charts</a>
+{% endblock breadcrumb %}
+
+
+{% block head %}
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+{% endblock head %}

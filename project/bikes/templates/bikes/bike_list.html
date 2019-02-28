@@ -1,0 +1,18 @@
+{% extends parent_template|default:"category_settings.html" %}
+{% load buttons %}
+
+
+{% block breadcrumb %}{{ block.super }}
+    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="#">Bikes</a>
+{% endblock %}
+
+
+{% block content %}
+
+<p class="text-right my-2">
+    {% url 'bikes:bike_create' as url_create %}
+    {% button_create url=url_create label='New Bike' tbl='0' width='19%' %}
+</p>
+{% include "bikes/includes/partial_bike_list.html" %}
+
+{% endblock content %}

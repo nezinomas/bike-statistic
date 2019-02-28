@@ -9,6 +9,5 @@ class DateConverter:
         # return date
         return value
 
-
     def to_url(self, date):
         return date

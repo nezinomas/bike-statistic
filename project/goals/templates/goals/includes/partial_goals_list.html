@@ -1,0 +1,49 @@
+{% load buttons %}{% load humanize %}
+<table class="table table-striped table-hover table-md tbl-js" id="tbl-0">
+    <thead class="thead-light">
+        <tr>
+            <th colspan="3"></th>
+            <th class="b-left"></th>
+            <th colspan="2" class="text-center b-left">Max T, &#8451;</th>
+            <th colspan="2" class="text-center b-left">Min T, &#8451;</th>
+            <th colspan="2" class="text-center b-left">Max Ascent, m</th>
+            <th colspan="2" class="text-center b-left">Max Speed, km/h</th>
+            <th colspan="2" class="text-center b-left">Max Distance, km</th>
+        </tr>
+        <tr>
+            <th width="100rem">Year</th>
+            <th width="100rem">Goal, km</th>
+            <th class="text-right" width="80rem">Actions</th>
+            <th class="text-right pr-2 b-left" width="90rem">Distance</th>
+            {% for i in i|rjust:5 %}
+            <th class="text-center b-left">Date</th>
+            <th class="text-center">Value</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in objects %}
+        {% url 'goals:goals_update' item.year as url_update %}
+        {% url 'goals:goals_delete' item.year as url_delete %}
+        <tr id="row_id_{{ item.id }}" data-pk="{{ item.id }}" data-url="{{ url_update }}" data-tbl="0">
+            <td>{{ item.year }}</td>
+            <td>{{ item.goal|intcomma }}</td>
+            <td class="text-right last">
+                {% button_edit pk=item.id url=url_update tbl=0 %}
+                {% button_delete type='button' pk=item.id url=url_delete tbl='0' %}
+            </td>
+            <td class="pr-2 text-right b-left {% if item.distance >= item.goal %}table-success{% else %}table-danger{% endif %}" width="120rem">{{ item.distance|floatformat:0|intcomma }}</td>
+            <td class="text-center b-left">{{ item.stats.max_temperature_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ item.stats.max_temperature_value|floatformat:0 }}</td>
+            <td class="text-center b-left">{{ item.stats.min_temperature_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ item.stats.min_temperature_value|floatformat:0 }}</td>
+            <td class="text-center b-left">{{ item.stats.max_ascent_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ item.stats.max_ascent_value|floatformat:0 }}</td>
+            <td class="text-center b-left">{{ item.stats.max_speed_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ item.stats.max_speed_value|floatformat:1 }}</td>
+            <td class="text-center b-left">{{ item.stats.max_distance_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ item.stats.max_distance_value|floatformat:1 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

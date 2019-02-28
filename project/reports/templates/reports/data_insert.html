@@ -1,0 +1,7 @@
+{% extends parent_template|default:"data_list.html" %}
+
+
+{% block content %}
+    <p>{{ message }}</p>
+    <p><a href="{% url 'reports:data_empty' %}">Data</a></p>
+{% endblock content %}

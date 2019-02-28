@@ -1,22 +1,24 @@
-import datetime
-
 from django.db import models
-from django.utils.text import slugify
-
+from django.utils.timezone import now
 
 from ..bikes import models as bikeModels
 
 
 class Data(models.Model):
+    # choices
+    yes = 'y'
+    no = 'n'
+    checked_choices = ((yes, 'Yes'), (no, 'No'))
+
     bike = models.ForeignKey(
         bikeModels.Bike,
         on_delete=models.CASCADE,
-        related_name='data'
+        related_name='bike_set'
     )
-    date = models.DateField(default=datetime.date.today())
+    date = models.DateField(default=now)
     distance = models.FloatField()
     time = models.DurationField()
-    temperature = models.IntegerField(
+    temperature = models.FloatField(
         null=True,
         blank=True
     )
@@ -36,6 +38,11 @@ class Data(models.Model):
     heart_rate = models.IntegerField(
         null=True,
         blank=True
+    )
+    checked = models.CharField(
+        max_length=1,
+        choices=checked_choices,
+        default=no,
     )
 
     def __str__(self):

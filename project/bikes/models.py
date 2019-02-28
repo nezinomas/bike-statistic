@@ -1,3 +1,4 @@
+from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
 from django.utils.text import slugify
 
@@ -44,15 +45,22 @@ class BikeInfo(models.Model):
     def __str__(self):
         return '{bike}: {component}'.format(self.bike, self.component)
 
+    class Meta:
+        ordering = ['component']
+
 
 class Component(models.Model):
     name = models.CharField(
         max_length=100,
-        unique=True
+        unique=True,
+        validators=[MaxLengthValidator(99), MinLengthValidator(3)]
     )
 
     def __str__(self):
         return str(self.name)
+
+    class Meta:
+        ordering = ['name']
 
 
 class ComponentStatistic(models.Model):
@@ -65,19 +73,29 @@ class ComponentStatistic(models.Model):
         null=True,
         blank=True
     )
-    brand = models.TextField(
-        blank=True
+    brand = models.CharField(
+        blank=True,
+        max_length=254
     )
     bike = models.ForeignKey(
         Bike,
         on_delete=models.CASCADE,
-        related_name='bike'
+        related_name='bikes'
     )
     component = models.ForeignKey(
         Component,
         on_delete=models.CASCADE,
-        related_name='component'
+        related_name='components'
     )
 
+    class Meta:
+        ordering = ['-start_date']
+
     def __str__(self):
-        return '{bike} / {component} / {start} ... {end}'.format(bike=self.bike, component=self.component, start=self.start_date, end=self.end_date)
+        return '{bike} / {component} / {start} ... {end}'.\
+            format(
+                bike=self.bike,
+                component=self.component,
+                start=self.start_date,
+                end=self.end_date
+            )

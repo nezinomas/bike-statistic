@@ -1,0 +1,60 @@
+{% extends parent_template|default:"category_charts.html" %}
+
+
+{% block breadcrumb %}{{ block.super }}
+    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="{% url 'reports:overall' %}">Owerall</a>
+{% endblock breadcrumb %}
+
+
+{% block content %}
+
+<div class='row'>
+    <div class='col'>
+        <div id="my-chart" data-url="{% url 'reports:api-overall' %}"></div>
+
+        <script>
+            $.ajax({
+                url: $("#my-chart").attr("data-url"),
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data)
+                    Highcharts.chart("my-chart", {
+                        chart : { type: 'column'},
+                        xAxis: data.first.xAxis,
+                        margin: 0,
+                        title: {
+                            text: ''
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: 'km, thousants'
+                            },
+                        },
+                        legend: {
+                            align: 'right',
+                            verticalAlign: 'middle',
+                            shadow: false,
+                            reversed: true,
+                            layout: 'vertical',
+                            itemMarginBottom: 10
+                        },
+                        tooltip: {
+                            headerFormat: '<b>{point.x}</b><br/>',
+                            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                        },
+                        plotOptions: {
+                            column: {
+                                stacking: 'normal',
+                            }
+                        },
+                        series: data.first.series,
+                    });
+                }
+            });
+        </script>
+
+
+    </div>
+</div>
+{% endblock content %}

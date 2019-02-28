@@ -2,9 +2,22 @@ import os
 from ..secrets import get_secret
 
 # ================   PATH CONFIGURATION
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # ..\project_project\project\confi
-SITE_ROOT = os.path.dirname(BASE_DIR)  # ..\project_project\project
-PROJECT_ROOT = os.path.dirname(SITE_ROOT)  # ..\project_project
+# ..\project_project\project\config
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# ..\project_project\project
+SITE_ROOT = os.path.dirname(BASE_DIR)
+# ..\project_project
+PROJECT_ROOT = os.path.dirname(SITE_ROOT)
+
+
+# ================   SITE CONFIGURATION
+LOGOUT_REDIRECT_URL = 'reports:index'
+LOGIN_REDIRECT_URL = 'reports:index'
+LOGIN_URL = 'accounts:login'
+
+
+# ================   CASH CONFIGURATION
+CASH_ROOT = os.path.join(PROJECT_ROOT, 'cash')
 
 
 # ================   MEDIA CONFIGURATION
@@ -64,8 +77,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'project.products.context.show_categories',
-                # 'project.products.context.show_tags',
+                'project.bikes.context.bike_list',
+                'project.bikes.context.component_list',
+                'project.goals.context.goal_list',
             ],
         },
     },
@@ -92,16 +106,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'bootstrap_datepicker_plus',
     'crispy_forms',
     'bootstrap4',
+    'widget_tweaks',
+    'project.accounts',
     'project.core',
     'project.bikes',
     'project.goals',
     'project.reports'
 ]
-
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # ================   URL CONFIGURATION
@@ -129,15 +144,5 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# ================   TEMPLATE THUMBNAILS CONFIGURATION
-THUMBNAIL_ALIASES = {
-    '': {
-        'cover': {'size': (100, 100), },
-        'cover_big': {'size': (300, 300), },
-        'drawing': {'size': (900, 400), },
-    },
-}
-
-
-# ================   TEMPLATE THUMBNAILS CONFIGURATION
-TAGGIT_CASE_INSENSITIVE = True
+# ================   CRISPY FORMS
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

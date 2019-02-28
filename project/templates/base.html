@@ -5,20 +5,93 @@
     {% load bootstrap4 %}
     {% bootstrap_css %}
     {% bootstrap_javascript jquery='full' %}
-    <link rel="stylesheet" href="{% static 'css/app.css' %}" >
-    {% block head_at_end %}{% endblock %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+      crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/app_global.css' %}">
+    {% block head %}{% endblock head %}
 
-    <title>Uh</title>
+    <title>Bike statistic</title>
   </head>
 
   <body>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-12-lg">
-          {% block content %}
-          {% endblock %}
+    {% block body %}
+    <!-- top navidation bar -->
+    <div class="container-fluid">
+    <nav class="navbar navbar-expand navbar-light bg-light">
+        <nav class="nav">
+            {% block breadcrumb %}
+              <a class="nav-link" href="{% url 'reports:data_empty' %}">Home</a>
+            {% endblock breadcrumb %}
+          </nav>
+        <div class="collapse navbar-collapse" id="mainMenu">
+          {% if user.is_authenticated %}
+          <ul class="navbar-nav ml-auto">
+            <li class="list-group-item list-group-item-action dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ user.username }}
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                <a class="dropdown-item" href="#">My account</a>
+                <a class="dropdown-item" href="#">Change password</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'accounts:logout' %}">Log out</a>
+              </div>
+            </li>
+          </ul>
+          {% else %}
+          <form class="form-inline ml-auto">
+            <a href="{% url 'accounts:login' %}" class="btn btn-outline-secondary btn-sm">Log in</a>
+          </form>
+          {% endif %}
         </div>
+      </nav>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row content">
+        <!-- side bar -->
+        <div class="col- pr-3">
+          <h6 class="side-bar">Data</h6>
+          <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action" href="{% url 'reports:data_empty' %}">View</a></li>
+            <a class="list-group-item list-group-item-action" href="{% url 'reports:insert_data' %}">Update</a></li>
+          </div>
+
+          <h6 class="side-bar">Charts</h6>
+          <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action" href="{% url 'reports:overall' %}">Overall</a></li>
+          </div>
+
+          <h6 class="side-bar">Stats & Goals</h6>
+          <div class="list-group list-group-flush">
+            {% for item in goal_list  %}
+            {% if forloop.counter < 4 %}
+            <a class="list-group-item list-group-item-action" href="{% url 'goals:goals_table' item.year %}">{{ item.year }}</a></li>
+            {% endif %}
+            {% endfor %}
+          </div>
+
+          <h6 class="side-bar">Component wear</h6>
+          <div class="list-group list-group-flush">
+            {% for bike in bike_list %}
+            <a class="list-group-item list-group-item-action" href="{% url 'bikes:stats_index' bike.slug %}">{{ bike.short_name }}</a></li>
+            {% endfor %}
+          </div>
+
+          <h6 class="side-bar">Settings</h6>
+          <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action" href="{% url 'goals:goals_list' %}">Goals</a></li>
+            <a class="list-group-item list-group-item-action" href="{% url 'bikes:component_list' %}">Components</a></li>
+            <a class="list-group-item list-group-item-action" href="{% url 'bikes:bike_list' %}">Bikes</a></li>
+            <a class="list-group-item list-group-item-action" href="{% url 'bikes:info_index' %}">Bike Info</a></li>
+          </div>
+        </div>
+        <!-- content -->
+        <div class="col p-0">
+            {% block content %}{% endblock content %}
+          </div>
       </div>
     </div>
+    {% endblock body %}
   </body>
 </html>
