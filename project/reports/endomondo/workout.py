@@ -137,6 +137,7 @@ class Workout(object):
 
 	steps			= 0
 	cadence			= None
+	cadence_avg 	= None
 	cadence_max		= 0
 
 	device			= {
