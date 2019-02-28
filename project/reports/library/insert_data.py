@@ -19,11 +19,11 @@ def __workouts(maxResults):
 
 
 def _get_page_content(page):
-        try:
-            html = urlopen(page)
-            return html
-        except (HTTPError, URLError):
-            return
+    try:
+        html = urlopen(page)
+        return html
+    except (HTTPError, URLError):
+        return
 
 
 def get_temperature():
