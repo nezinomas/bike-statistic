@@ -66,6 +66,6 @@ def insert_data(maxResults=20):
                 descent=w.descent,
                 max_speed=w.speed_max,
                 heart_rate=w.heart_rate_avg,
-                cadence=w.cadence,
+                cadence=w.cadence_avg,
                 temperature=t
             )
