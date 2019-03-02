@@ -35,6 +35,7 @@ def get_temperature():
 
     t = element.text
     t = t.replace(',', '.')
+    t = t.replace('−', '-')
 
     return float(t)
 
