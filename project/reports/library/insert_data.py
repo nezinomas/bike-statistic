@@ -33,11 +33,11 @@ def get_temperature():
 
     element = soup.find('span', {'class': 'nowvalue__text_l'})
 
-    t = element.text
-    t = t.replace(',', '.')
-    t = t.replace('−', '-')
+    temperature = element.text
+    temperature = temperature.replace(',', '.')
+    temperature = temperature.replace('−', '-')
 
-    return float(t)
+    return float(temperature)
 
 
 def insert_data(maxResults=20):
@@ -46,20 +46,20 @@ def insert_data(maxResults=20):
     bike = Bike.objects.order_by('pk')[0]
 
     try:
-        t = get_temperature()
+        temperature = get_temperature()
     except:
-        t = None
+        temperature = None
 
-    for w in workouts:
-        if w.name is not None and 'cycling' in w.name.lower():
+    for workout in workouts:
+        if workout.name is not None and 'cycling' in workout.name.lower():
 
-            distance = round(w.distance, 2)
+            distance = round(workout.distance, 2)
 
             row_exists = Data.objects.\
                 filter(
-                    date=w.start_time,
+                    date=workout.start_time,
                     distance=distance,
-                    time=timedelta(seconds=w.duration)
+                    time=timedelta(seconds=workout.duration)
                 )
 
             if row_exists:
@@ -67,13 +67,13 @@ def insert_data(maxResults=20):
 
             Data.objects.create(
                 bike=bike,
-                date=w.start_time,
+                date=workout.start_time,
                 distance=distance,
-                time=timedelta(seconds=w.duration),
-                ascent=w.ascent,
-                descent=w.descent,
-                max_speed=w.speed_max,
-                heart_rate=w.heart_rate_avg,
-                cadence=w.cadence_avg,
-                temperature=t
+                time=timedelta(seconds=workout.duration),
+                ascent=workout.ascent,
+                descent=workout.descent,
+                max_speed=workout.speed_max,
+                heart_rate=workout.heart_rate_avg,
+                cadence=workout.cadence_avg,
+                temperature=temperature
             )
