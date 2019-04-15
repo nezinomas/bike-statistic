@@ -19,6 +19,7 @@
         {% for obj in objects %}
         {% url 'reports:data_update' start_date end_date obj.id as url_update %}
         {% url 'reports:data_delete' start_date end_date obj.id as url_delete %}
+        {% url 'reports:data_quick_update' start_date end_date obj.id as url_quick_update %}
         <tr id="row_id_{{ obj.pk }}" data-pk="{{ obj.pk }}" data-url="{{ url_update }}" data-tbl="0" class="{% if obj.checked == 'n' %}table-info{% endif %}">
             <td class="text-left">{{ obj.bike }}</td>
             <td class="text-center">{{ obj.date|date:'Y-m-d' }}<span class="date-align">&nbsp;</span></td>
@@ -31,6 +32,9 @@
             <td class="text-center">{{ obj.heart_rate|default_if_none:'-' }}</td>
             <td class="text-center">{{ obj.cadence|default_if_none:'-' }}</td>
             <td class="text-right">
+                {% if obj.checked == 'n' %}
+                    {% button_quick_update url=url_quick_update pk=obj.pk tbl='0' %}
+                {% endif %}
                 {% button_edit pk=obj.id url=url_update tbl='0' %}
                 {% button_delete type='button' pk=obj.id url=url_delete tbl='0' %}
             </td>

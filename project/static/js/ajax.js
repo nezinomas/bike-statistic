@@ -64,6 +64,21 @@ $(function () {
         return false;
     };
 
+    var quickUpdate = function () {
+        var btn = $(this);
+        var tbl = btn.data("tbl");
+        var url = btn.attr("data-url");
+        $.ajax({
+            url: url,
+            type: 'get',
+            dataType: 'json',
+            success: function (data) {
+                $(`#tbl-${tbl} tbody`).html($(data.html_list).find(`tbody`).html());
+            }
+        });
+        return false;
+    };
+
     var closeForm = function () {
         $('#edit-form').remove();
         var form = $(this);
@@ -85,6 +100,7 @@ $(function () {
     $(".tbl-js").on("click", ".js-update", loadFormBtn);
     $(".tbl-js").on("click", ".js-close", closeForm);
     $(".tbl-js").on("submit", ".js-update-form", saveForm);
+    $(".tbl-js").on("click", ".js-quick-update", quickUpdate);
 
     // Delete
     $(".tbl-js").on("click", ".js-delete", loadFormBtn);
