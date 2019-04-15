@@ -113,6 +113,31 @@ def data_update(request, start_date, end_date, pk):
 
 
 @login_required()
+def data_quick_update(request, start_date, end_date, pk):
+    object = get_object_or_404(models.Data, pk=pk)
+    object.checked = 'y'
+    object.save()
+
+    objects = models.Data.objects\
+        .prefetch_related('bike')\
+        .filter(date__range=(start_date, end_date))
+
+    context = {
+        'objects': objects,
+        'start_date': start_date,
+        'end_date': end_date
+    }
+
+    data = {
+        'html_list': render_to_string(
+            'reports/includes/partial_data_list.html',
+            context=context,
+            request=request,
+        )
+    }
+    return JsonResponse(data)
+
+@login_required()
 def insert_data(request):
     try:
         inserter(10)
