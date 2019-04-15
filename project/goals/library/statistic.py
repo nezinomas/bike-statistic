@@ -20,7 +20,7 @@ class Statistic(object):
         return Data.objects.\
             prefetch_related('bike').\
             values('id', 'date', 'bike', 'distance', 'temperature', 'time', 'ascent').\
-            order_by('date')
+            order_by('-date')
 
     def __create_df(self, qs):
         df = read_frame(qs)
