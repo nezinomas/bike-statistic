@@ -1,5 +1,6 @@
 import pytest
 from django.urls import resolve, reverse
+from freezegun import freeze_time
 
 from .. import views
 from ..factories import UserFactory
@@ -13,7 +14,7 @@ def login(client):
     client.login(username='bob', password='123')
 
 
-def test_valid_date(client):
+def test_data_list_valid_date(client):
     url = reverse(
         'reports:data_list',
         kwargs={
@@ -26,3 +27,54 @@ def test_valid_date(client):
     assert '<form class="filter"' in str(response.content)
     assert 'bob' in str(response.content)
 
+
+def test_data_list_not_valid_date_01(client):
+        response = client.get('/data/2000/2001/')
+        assert 404 == response.status_code
+
+
+def test_data_list_not_valid_date_02(client):
+    response = client.get('/data/xxxx-xx-xx/xxxx-xx-xx/')
+    assert 404 == response.status_code
+
+
+@freeze_time("1999-01-15")
+def test_data_partial_redirection(client):
+    response = client.get('/data/1999-01-01/', follow=True)
+
+    assert 200 == response.status_code
+    assert 'data_list' == response.resolver_match.url_name
+
+
+@freeze_time("1999-01-15")
+def test_data_partial_func(client):
+    view = resolve('/data/1999-01-01/')
+    assert views.data_partial == view.func
+
+
+@freeze_time("1999-01-15")
+def test_data_empty_redirection(client):
+    response = client.get('/data/', follow=True)
+
+    assert 200 == response.status_code
+    assert 'data_list' == response.resolver_match.url_name
+
+
+@freeze_time("1999-01-15")
+def test_data_empty_func(client):
+    view = resolve('/data/')
+    assert views.data_empty == view.func
+
+
+@freeze_time("1999-01-15")
+def test_index_redirection(client):
+    response = client.get('/', follow=True)
+
+    assert 200 == response.status_code
+    assert 'data_list' == response.resolver_match.url_name
+
+
+@freeze_time("1999-01-15")
+def test_index_func(client):
+    view = resolve('/')
+    assert views.index == view.func
