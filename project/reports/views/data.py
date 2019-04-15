@@ -4,11 +4,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 
-from . import forms, models
+from .. import forms, models
 
-from .library.insert_data import insert_data as inserter
-from .library.overall import Overall
-from .helpers import view_data_helper as helper
+from ..library.insert_data import insert_data as inserter
+from ..helpers import view_data_helper as helper
 
 
 @login_required()
@@ -137,6 +136,7 @@ def data_quick_update(request, start_date, end_date, pk):
     }
     return JsonResponse(data)
 
+
 @login_required()
 def insert_data(request):
     try:
@@ -151,18 +151,3 @@ def insert_data(request):
             context={'message': message}
         )
     return redirect(reverse('reports:data_empty'))
-
-
-def api_overall(request):
-    obj = Overall(models.Data)
-    chart = {
-        'first': {
-            'xAxis': {'categories': obj.create_categories()},
-            'series': obj.create_series()[::-1]
-        }
-    }
-    return JsonResponse(chart)
-
-
-def overall(request):
-    return render(request, template_name='reports/overall.html', context={})
