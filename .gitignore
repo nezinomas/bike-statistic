@@ -47,6 +47,7 @@ coverage_reports/
 nosetests.xml
 coverage.xml
 *,cover
+htmlcov/
 
 # Translations
 *.mo
