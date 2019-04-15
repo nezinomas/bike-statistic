@@ -92,6 +92,8 @@ class Statistic(object):
 
     def stats(self, start_date=None, end_date=None):
         df = self.__filter_dataframe(start_date, end_date)
+        if df.empty:
+            return None
 
         max_temp = self.__marginal_values(df, 'temperature', 'max')
         min_temp = self.__marginal_values(df, 'temperature', 'min')
@@ -129,6 +131,9 @@ class Statistic(object):
         s_date = datetime.date(self.__year, 1, 1)
         e_date = datetime.date(self.__year, 12, 31)
         df = self.__filter_dataframe(s_date, e_date)
+
+        if df.empty:
+            return None
 
         # metu diena, int
         first = pd.to_datetime(datetime.date(self.__year, 1, 1))
