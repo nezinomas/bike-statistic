@@ -2,11 +2,12 @@ import pytest
 from django.urls import resolve, reverse
 from freezegun import freeze_time
 
-from .. import views
+from ..views import data
 from ..factories import UserFactory
 
 
 pytestmark = pytest.mark.django_db
+
 
 @pytest.fixture(autouse=True)
 def login(client):
@@ -49,7 +50,7 @@ def test_data_partial_redirection(client):
 @freeze_time("1999-01-15")
 def test_data_partial_func(client):
     view = resolve('/data/1999-01-01/')
-    assert views.data_partial == view.func
+    assert data.data_partial == view.func
 
 
 @freeze_time("1999-01-15")
@@ -63,7 +64,7 @@ def test_data_empty_redirection(client):
 @freeze_time("1999-01-15")
 def test_data_empty_func(client):
     view = resolve('/data/')
-    assert views.data_empty == view.func
+    assert data.data_empty == view.func
 
 
 @freeze_time("1999-01-15")
@@ -77,4 +78,4 @@ def test_index_redirection(client):
 @freeze_time("1999-01-15")
 def test_index_func(client):
     view = resolve('/')
-    assert views.index == view.func
+    assert data.index == view.func
