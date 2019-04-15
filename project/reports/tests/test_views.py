@@ -13,7 +13,7 @@ def login(client):
     client.login(username='bob', password='123')
 
 
-def test_data_list_valid_date(client):
+def test_valid_date(client):
     url = reverse(
         'reports:data_list',
         kwargs={
