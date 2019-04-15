@@ -50,3 +50,13 @@ def button_create(*args, **kwargs):
         'tbl': kwargs['tbl'],
         'width': kwargs['width'] if 'width' in kwargs else None
     }
+
+
+@register.inclusion_tag('core/includes/button_quick_update.html')
+def button_quick_update(*args, **kwargs):
+    return {
+        'pk': kwargs['pk'],
+        'url': kwargs['url'],
+        'tbl': kwargs['tbl'],
+        'label': kwargs['label'] if 'label' in kwargs else None,
+    }
