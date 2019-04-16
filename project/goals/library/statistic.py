@@ -1,8 +1,8 @@
 import calendar
 import datetime
-import pandas as pd
 
-from django.shortcuts import get_object_or_404
+import pandas as pd
+from django.http import Http404
 from django_pandas.io import read_frame
 
 from ...reports.models import Data
@@ -37,7 +37,10 @@ class Statistic(object):
         if year == 'all':
             obj = Goal.objects.all()
         else:
-            obj = get_object_or_404(Goal, year=year)
+            try:
+                obj = Goal.objects.get(year=year)
+            except:
+                raise Http404
 
         return obj
 
