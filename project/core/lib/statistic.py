@@ -6,7 +6,7 @@ from django.http import Http404
 from django_pandas.io import read_frame
 
 from ...reports.models import Data
-from ..models import Goal
+from ...goals.models import Goal
 
 
 class Statistic(object):
