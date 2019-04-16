@@ -9,7 +9,7 @@ from ...reports.models import Data
 from ...goals.models import Goal
 
 
-class Statistic(object):
+class StatsGoals(object):
     def __init__(self, year='all'):
         qs = self.__create_qs()
         self.__year = year

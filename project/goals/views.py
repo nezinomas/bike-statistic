@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from .models import Goal
 from .forms import GoalForm
 
-from ..core.lib.stats_goals import Statistic
+from ..core.lib.stats_goals import StatsGoals
 
 
 def form_valid(data):
