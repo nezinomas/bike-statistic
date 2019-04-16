@@ -17,7 +17,7 @@ urlpatterns = [
         name='data_partial'
     ),
     path(
-        'data/<date:start_date>/<date:end_date>',
+        'data/<date:start_date>/<date:end_date>/',
         views.data_list,
         name='data_list'
     ),
@@ -27,17 +27,17 @@ urlpatterns = [
         name='data_create'
     ),
     path(
-        'api/data/<date:start_date>/<date:end_date>/update/<int:pk>',
+        'api/data/<date:start_date>/<date:end_date>/update/<int:pk>/',
         views.data_update,
         name='data_update'
     ),
     path(
-        'api/data/<date:start_date>/<date:end_date>/quick_update/<int:pk>',
+        'api/data/<date:start_date>/<date:end_date>/quick_update/<int:pk>/',
         views.data_quick_update,
         name='data_quick_update'
     ),
     path(
-        'api/data/<date:start_date>/<date:end_date>/delete/<int:pk>',
+        'api/data/<date:start_date>/<date:end_date>/delete/<int:pk>/',
         views.data_delete,
         name='data_delete'
     ),
