@@ -156,10 +156,6 @@ class Statistic(object):
         df.loc[:, 'percent'] = (df['distance_season'] * 100) / df['day_goal']
         df.loc[:, 'km_delta'] = df['distance_season'] - df['day_goal']
 
-        # False kada keičiasi mėnuo
-        df.loc[:, 'match'] = df.year_month.eq(df.year_month.shift())
-        df.loc[df.index[0], 'match'] = True  # pirma eilute visada yra False; pakeiciu
-
         return df.to_dict(orient='records')
 
     def month_table(self):

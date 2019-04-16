@@ -88,9 +88,11 @@
     </thead>
     <tbody>
         {% for row in objects  %}
-        {% if not row.match %}<tr>
+        {% ifchanged row.year_month %}<tr>
+            {% if not forloop.first %}
             <td colspan="20" class="row-spacer"></td>
-        </tr>{% endif %}
+            {% endif %}
+        </tr>{% endifchanged %}
         <tr>
             <td>{{ row.bike }}</td>
             <td class="text-center">{{ row.date|date:'Y-m-d' }}</td>
@@ -114,6 +116,7 @@
             <td class="text-center">{{ row.percent|floatformat:1 }}</td>
             <td class="text-center">{{ row.km_delta|floatformat:0|intcomma }}</td>
         </tr>
+
         {% endfor %}
     </tbody>
 </table>
