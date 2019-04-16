@@ -3,7 +3,7 @@ import datetime
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from ...core.lib.statistic import Statistic
+from ...core.lib.stats_goals import Statistic
 
 
 @login_required()
