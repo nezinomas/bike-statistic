@@ -1,7 +1,6 @@
 from django.urls import path, register_converter
 
 from ..core import converters
-
 from . import views
 
 app_name = 'reports'
@@ -45,4 +44,5 @@ urlpatterns = [
 
     path('api/reports/overall/', views.api_overall, name='api-overall'),
     path('reports/overall/', views.overall, name='overall'),
+    path('reports/<int:year>/', views.table, name='reports_table'),
 ]
