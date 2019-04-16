@@ -82,21 +82,3 @@ def goals_delete(request, year):
             request
         )
     return JsonResponse(data)
-
-
-@login_required()
-def goals_table(request, year):
-    objStats = Statistic(year)
-    start = datetime.date(year, 1, 1)
-    end = datetime.date(year, 12, 31)
-
-    return render(
-        request,
-        'goals/goals_table.html',
-        {
-            'objects': objStats.table(),
-            'month': objStats.month_table(),
-            'year': year,
-            'stats': objStats.stats(start, end)
-        }
-    )

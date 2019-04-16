@@ -3,7 +3,7 @@
 
 
 {% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="{% url 'goals:goals_table' year %}">{{ year }}</a>
+    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="{% url 'reports:reports_table' year %}">{{ year }}</a>
 {% endblock breadcrumb %}
 
 
