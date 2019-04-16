@@ -16,4 +16,4 @@ def api_overall(request):
 
 
 def overall(request):
-    return render(request, template_name='reports/overall.html', context={''})
+    return render(request, template_name='reports/overall.html', context={})
