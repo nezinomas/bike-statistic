@@ -145,9 +145,9 @@ class Statistic(object):
 
         df.loc[:, 'speed_workout'] = df['distance'] / (df['sec_workout'] / 3600)
 
-        df.loc[:, 'distance_season'] = df['distance'].cumsum()
-        df.loc[:, 'sec_season'] = df['sec_workout'].cumsum()
-        df.loc[:, 'ascent_season'] = df['ascent'].cumsum()
+        df.loc[:, 'distance_season'] = df['distance'][::-1].cumsum()
+        df.loc[:, 'sec_season'] = df['sec_workout'][::-1].cumsum()
+        df.loc[:, 'ascent_season'] = df['ascent'][::-1].cumsum()
         df.loc[:, 'speed_season'] = df['distance_season'] / (df['sec_season'] / 3600)
         df.loc[:, 'per_day_season'] = df['distance_season'] / df['day_num']
 
