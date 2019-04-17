@@ -13,15 +13,19 @@ class StatsGoals(object):
     def __init__(self, year=1970):
         self.__year = year
         self.__df = self.__create_df()
-        self.__goals = self.__get_goals(year)
+        self.__goals = self.__get_goals()
 
     def __create_df(self):
         qs = (
             Data.objects.
             prefetch_related('bike').
             values('id', 'date', 'bike', 'distance', 'temperature', 'time', 'ascent').
-            order_by('-date')
+            order_by('-date').
+            filter(date__year__gte=1970)
         )
+        if self.__year != 1970:
+            qs = qs.filter(date__year=self.__year)
+
         df = read_frame(qs)
 
         df['date'] = pd.to_datetime(df['date'])
@@ -32,10 +36,10 @@ class StatsGoals(object):
 
         return df
 
-    def __get_goals(self, year):
+    def __get_goals(self):
         obj = Goal.objects.filter(year__gte=1970)
-        if year != 1970:
-            obj = obj.filter(year=year)
+        if self.__year != 1970:
+            obj = obj.filter(year=self.__year)
 
         if not obj:
             raise Http404
@@ -85,7 +89,7 @@ class StatsGoals(object):
             (df['sec_workout'] / 3600)
         )
 
-    def stats(self, start_date=None, end_date=None):
+    def stats(self):
         df = self.__df.copy()
 
         if df.empty:
