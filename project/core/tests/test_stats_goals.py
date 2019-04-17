@@ -126,6 +126,13 @@ class TestStatsGoals():
             temperature=20,
             ascent=200
         )
+        DataFactory(
+            date=datetime(2001, 1, 31).date(),
+            distance=200.0,
+            time=timedelta(seconds=20000),
+            temperature=200,
+            ascent=2000
+        )
 
     def test_stats(self):
         actual = T(2000).stats()
