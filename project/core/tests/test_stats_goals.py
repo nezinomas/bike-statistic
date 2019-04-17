@@ -1,3 +1,8 @@
+from datetime import datetime, timedelta
+
+import numpy as np
+import pandas as pd
+import pandas.api.types as ptypes
 import pytest
 from django.http import Http404
 
@@ -37,3 +42,20 @@ class TestGetDf():
         actual = T()._StatsGoals__df
 
         assert 0 == len(actual)
+
+    def test_df_not_empty(self):
+        DataFactory(
+            date=datetime(2017, 1, 1).date(),
+            distance=10.0,
+            time=timedelta(seconds=15)
+        )
+        actual = T()._StatsGoals__df
+
+        assert 1 == len(actual)
+
+        assert ptypes.is_datetime64_dtype(actual['date'])
+        assert ptypes.is_float_dtype(actual['distance'])
+        assert ptypes.is_integer_dtype(actual['ascent'])
+        assert ptypes.is_timedelta64_dtype(actual['time'])
+
+        assert round(actual.loc[0, 'sec_workout'], 1) == 15.0
