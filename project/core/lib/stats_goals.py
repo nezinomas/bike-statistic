@@ -10,11 +10,11 @@ from ...goals.models import Goal
 
 
 class StatsGoals(object):
-    def __init__(self, year='all'):
+    def __init__(self, year=1970):
         qs = self.__create_qs()
         self.__year = year
         self.__df = self.__create_df(qs)
-        self.__goals = self.__create_objects(year)
+        self.__goals = self.__get_goals(year)
 
     def __create_qs(self):
         return Data.objects.\
@@ -33,16 +33,12 @@ class StatsGoals(object):
 
         return df
 
-    def __create_objects(self, year='all'):
-        if year == 'all':
-            obj = Goal.objects.all()
-        else:
-            try:
-                obj = Goal.objects.get(year=year)
-            except:
-                raise Http404
+    def __get_goals(self, year):
+        obj = Goal.objects.filter(year__gte=1970)
+        if year != 1970:
+            obj = obj.filter(year=year)
 
-        return obj
+        return list(obj)
 
     def __filter_dataframe(self, start_date, end_date):
         if start_date:
@@ -112,7 +108,7 @@ class StatsGoals(object):
 
     def objects(self):
         retVal = []
-        for year in self.__goals:
+        for year in self.__goals.year:
             item = {}
             item['id'] = year.id
             item['pk'] = year.pk
@@ -141,7 +137,7 @@ class StatsGoals(object):
         # metu diena, int
         first = pd.to_datetime(datetime.date(self.__year, 1, 1))
         days = 366 if calendar.isleap(self.__year) else 365
-        per_day = self.__goals.goal / days
+        per_day = self.__goals[0].goal / days
 
         df.loc[:, 'day_num'] = (df['date'] - first).dt.days + 1
         df.loc[:, 'year_month'] = df['date'].dt.to_period('M').astype(str)
