@@ -10,6 +10,7 @@ from .models import Data
 class BikeFactory(DjangoModelFactory):
     class Meta:
         model = Bike
+        django_get_or_create = ('full_name', 'short_name', 'date')
 
     full_name = 'xbike'
     short_name = 'xbike'
