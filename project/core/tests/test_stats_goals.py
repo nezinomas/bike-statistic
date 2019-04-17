@@ -1,13 +1,12 @@
 from datetime import datetime, timedelta
 
-import numpy as np
 import pandas as pd
 import pandas.api.types as ptypes
 import pytest
 from django.http import Http404
 
 from ...goals.factories import GoalFactory
-from ...reports.factories import BikeFactory, DataFactory
+from ...reports.factories import DataFactory
 from ..lib.stats_goals import StatsGoals as T
 
 pytestmark = pytest.mark.django_db
@@ -31,10 +30,9 @@ class TestGetGoals():
 
         assert 1 == len(actual)
 
-
     @pytest.mark.xfail(raises=Http404)
     def test_get_goals_raise_execption_01(self):
-        actual = T(3000)._StatsGoals__get_goals
+        T(3000)._StatsGoals__get_goals
 
 
 @pytest.mark.django_db
@@ -108,6 +106,7 @@ class TestMarginalValues():
         assert 10 == actual['min_col_value']
         assert datetime(2000, 1, 1) == actual['min_col_date']
 
+
 @pytest.mark.django_db
 class TestStatsGoals():
     @pytest.fixture(autouse=True)
@@ -151,7 +150,7 @@ class TestStatsGoals():
         assert 20 == actual['max_distance_value']
         assert datetime(2000, 1, 31) == actual['max_distance_date']
 
-        assert 36.00 == round(actual['max_speed_value'] , 2)
+        assert 36.00 == round(actual['max_speed_value'], 2)
         assert datetime(2000, 1, 31) == actual['max_speed_date']
 
     def test_all_goals_stats(self):
