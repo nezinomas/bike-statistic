@@ -26,7 +26,7 @@ class StatsGoals(object):
         if self.__year != 1970:
             qs = qs.filter(date__year=self.__year)
 
-        return qs        
+        return qs
 
     def __create_df(self):
         qs = self.__create_qs()
