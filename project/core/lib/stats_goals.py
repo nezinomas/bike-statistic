@@ -84,10 +84,10 @@ class StatsGoals(object):
 
         return item
 
-    def __calc_speed(self, df):
-        df.loc[:, 'speed'] = (
-            df['distance'] /
-            (df['sec_workout'] / 3600)
+    def __calc_speed(self, df, column_speed, column_distance, column_seconds):
+        df.loc[:, column_speed] = (
+            df[column_distance] /
+            (df[column_seconds] / 3600)
         )
 
     def year_stats(self, year=None):
@@ -96,7 +96,7 @@ class StatsGoals(object):
         if df.empty:
             return None
 
-        self.__calc_speed(df)
+        self.__calc_speed(df, 'speed', 'distance', 'sec_workout')
 
         max_temp = self.__marginal_values(df, 'temperature', 'max')
         min_temp = self.__marginal_values(df, 'temperature', 'min')
