@@ -153,9 +153,7 @@ class StatsGoals(object):
         return df.to_dict(orient='records')
 
     def month_table(self):
-        s_date = datetime.date(self.__year, 1, 1)
-        e_date = datetime.date(self.__year, 12, 31)
-        df = self.__filter_dataframe(s_date, e_date)
+        df = self.__filter_dataframe(self.__year)
 
         df.index = df['date']
         df = df.resample('M').sum()
