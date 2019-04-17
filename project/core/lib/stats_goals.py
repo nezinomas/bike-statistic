@@ -46,11 +46,12 @@ class StatsGoals(object):
 
         return list(obj)
 
-    def __filter_dataframe(self, start_date, end_date):
-        if start_date:
+    def __filter_dataframe(self, year=None):
+        if year:
+            start = pd.to_datetime(datetime.date(year, 1, 1))
+            end = pd.to_datetime(datetime.date(year, 12, 31))
             df = self.__df[
-                (self.__df['date'] >= pd.to_datetime(start_date))
-                & (self.__df['date'] <= pd.to_datetime(end_date))
+                (self.__df['date'] >= start) & (self.__df['date'] <= end)
             ].copy()
         else:
             df = self.__df
@@ -89,8 +90,8 @@ class StatsGoals(object):
             (df['sec_workout'] / 3600)
         )
 
-    def stats(self):
-        df = self.__df.copy()
+    def stats(self, year=None):
+        df = self.__filter_dataframe(year)
 
         if df.empty:
             return None
@@ -105,8 +106,8 @@ class StatsGoals(object):
 
         return dict(**max_temp, **min_temp, **max_ascent, **speed, **max_dist)
 
-    def total_distance(self, start_date=None, end_date=None):
-        df = self.__filter_dataframe(start_date, end_date)
+    def total_distance(self, year=None):
+        df = self.__filter_dataframe(year)
         return df['distance'].sum()
 
     def objects(self):
@@ -114,25 +115,17 @@ class StatsGoals(object):
         for goal in self.__goals:
             item = {}
             item['id'] = goal.id
-            item['pk'] = goal.pk
             item['year'] = goal.year
             item['goal'] = goal.goal
-            item['distance'] = self.total_distance(
-                datetime.date(goal.year, 1, 1),
-                datetime.date(goal.year, 12, 31)
-            )
-            item['stats'] = self.stats(
-                datetime.date(goal.year, 1, 1),
-                datetime.date(goal.year, 12, 31)
-            )
+            item['distance'] = self.total_distance(goal.year)
+            item['stats'] = self.stats(goal.year)
+
             retVal.append(item)
 
         return retVal
 
     def table(self):
-        s_date = datetime.date(self.__year, 1, 1)
-        e_date = datetime.date(self.__year, 12, 31)
-        df = self.__filter_dataframe(s_date, e_date)
+        df = self.__filter_dataframe(self.__year)
 
         if df.empty:
             return None
