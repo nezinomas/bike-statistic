@@ -9,8 +9,6 @@ from ...core.lib.stats_goals import StatsGoals
 @login_required()
 def table(request, year):
     objStats = StatsGoals(year)
-    start = datetime.date(year, 1, 1)
-    end = datetime.date(year, 12, 31)
 
     return render(
         request,
@@ -19,6 +17,6 @@ def table(request, year):
             'objects': objStats.table(),
             'month': objStats.month_table(),
             'year': year,
-            'stats': objStats.stats(start, end)
+            'stats': objStats.year_stats()
         }
     )

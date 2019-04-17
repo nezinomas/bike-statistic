@@ -90,7 +90,7 @@ class StatsGoals(object):
             (df['sec_workout'] / 3600)
         )
 
-    def stats(self, year=None):
+    def year_stats(self, year=None):
         df = self.__filter_dataframe(year)
 
         if df.empty:
@@ -118,7 +118,7 @@ class StatsGoals(object):
             item['year'] = goal.year
             item['goal'] = goal.goal
             item['distance'] = self.total_distance(goal.year)
-            item['stats'] = self.stats(goal.year)
+            item['stats'] = self.year_stats(goal.year)
 
             retVal.append(item)
 

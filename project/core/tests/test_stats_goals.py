@@ -50,7 +50,7 @@ class TestGetDf():
         assert actual is None
 
     def test_stats_df_empty(self):
-        actual = T().stats()
+        actual = T().year_stats()
 
         assert actual is None
 
@@ -134,8 +134,8 @@ class TestStatsGoals():
             ascent=2000
         )
 
-    def test_stats(self):
-        actual = T(2000).stats()
+    def test_year_stats(self):
+        actual = T(2000).year_stats()
 
         assert 10 == len(actual)
 
@@ -153,3 +153,7 @@ class TestStatsGoals():
 
         assert 36.00 == round(actual['max_speed_value'] , 2)
         assert datetime(2000, 1, 31) == actual['max_speed_date']
+
+    def test_object(self):
+        actual = T().objects()
+        
