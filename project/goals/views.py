@@ -12,7 +12,7 @@ from ..core.lib.stats_goals import StatsGoals
 
 
 def form_valid(data):
-    objects = Statistic().objects()
+    objects = StatsGoals().objects()
     data['form_is_valid'] = True
     data['html_list'] = render_to_string(
         'goals/includes/partial_goals_list.html',
@@ -41,7 +41,7 @@ def save_data(request, context, form):
 
 @login_required()
 def goals_list(request):
-    objects = Statistic().objects()
+    objects = StatsGoals().objects()
     rendered = render(
         request,
         'goals/goals_list.html',
