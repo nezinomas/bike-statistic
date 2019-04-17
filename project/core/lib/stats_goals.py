@@ -125,7 +125,7 @@ class StatsGoals(object):
         return retVal
 
     def year_progress(self):
-        df = self.__filter_dataframe(self.__year)
+        df = self.__df.copy()
 
         if df.empty:
             return None
