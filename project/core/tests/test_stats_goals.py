@@ -31,9 +31,10 @@ class TestGetGoals():
 
         assert 1 == len(actual)
 
+
+    @pytest.mark.xfail(raises=Http404)
     def test_get_goals_raise_execption_01(self):
-        with pytest.raises(Http404):
-            actual = T(3000)._StatsGoals__get_goals
+        actual = T(3000)._StatsGoals__get_goals
 
 
 @pytest.mark.django_db
