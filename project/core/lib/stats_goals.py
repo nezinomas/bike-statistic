@@ -15,7 +15,7 @@ class StatsGoals(object):
         self.__df = self.__create_df()
         self.__goals = self.__get_goals()
 
-    def __create_df(self):
+    def __create_qs(self):
         qs = (
             Data.objects.
             prefetch_related('bike').
@@ -26,6 +26,10 @@ class StatsGoals(object):
         if self.__year != 1970:
             qs = qs.filter(date__year=self.__year)
 
+        return qs        
+
+    def __create_df(self):
+        qs = self.__create_qs()
         df = read_frame(qs)
 
         df['date'] = pd.to_datetime(df['date'])
