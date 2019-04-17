@@ -153,17 +153,18 @@ class StatsGoals(object):
         return df.to_dict(orient='records')
 
     def month_stats(self):
-        df = self.__filter_dataframe(self.__year)
+        df = self.__df.copy()
 
         df.index = df['date']
         df = df.resample('M').sum()
 
-        df.loc[:, 'speed_month'] = df['distance'] / (df['sec_workout'] / 3600)
         df.loc[:, 'year_month'] = pd.to_datetime(df.index.values).to_period('M')
         df.loc[:, 'days_in_month'] = pd.to_datetime(df.index.values).day
         df.loc[:, 'per_day_month'] = df['distance'] / df['days_in_month']
-        df.loc[:, 'speed_month'] = df['distance'] / (df['sec_workout'] / 3600)
 
+        self.__calc_speed(df, 'speed_month', 'distance', 'sec_workout')
+
+        # make df index year_month
         df.reset_index()
         df.index = df['year_month']
         df.index = df.index.astype(str)
