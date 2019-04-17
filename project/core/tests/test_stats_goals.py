@@ -261,3 +261,9 @@ class TestStatsGoals():
 
         assert 36.0 == round(actual[0]['speed_workout'], 1)
         assert 36.0 == round(actual[1]['speed_workout'], 1)
+
+    def test_year_progress_day_num(self):
+        actual = T(2000).year_progress()
+
+        assert 31 == actual[0]['day_num']
+        assert 1 == actual[1]['day_num']
