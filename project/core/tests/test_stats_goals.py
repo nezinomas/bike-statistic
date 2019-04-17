@@ -156,4 +156,11 @@ class TestStatsGoals():
 
     def test_object(self):
         actual = T().objects()
-        
+
+        assert 2 == len(actual)
+
+        assert 2001 == actual[0]['year']
+        assert 200.0 == actual[0]['distance']
+
+        assert 2000 == actual[1]['year']
+        assert 30.0 == actual[1]['distance']
