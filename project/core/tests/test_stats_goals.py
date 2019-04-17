@@ -45,7 +45,7 @@ class TestGetDf():
         assert 0 == len(actual)
 
     def test_table_df_empty(self):
-        actual = T().table()
+        actual = T().year_progress()
 
         assert actual is None
 
