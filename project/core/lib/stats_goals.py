@@ -111,19 +111,19 @@ class StatsGoals(object):
 
     def objects(self):
         retVal = []
-        for year in self.__goals.year:
+        for goal in self.__goals:
             item = {}
-            item['id'] = year.id
-            item['pk'] = year.pk
-            item['year'] = year.year
-            item['goal'] = year.goal
+            item['id'] = goal.id
+            item['pk'] = goal.pk
+            item['year'] = goal.year
+            item['goal'] = goal.goal
             item['distance'] = self.total_distance(
-                datetime.date(year.year, 1, 1),
-                datetime.date(year.year, 12, 31)
+                datetime.date(goal.year, 1, 1),
+                datetime.date(goal.year, 12, 31)
             )
             item['stats'] = self.stats(
-                datetime.date(year.year, 1, 1),
-                datetime.date(year.year, 12, 31)
+                datetime.date(goal.year, 1, 1),
+                datetime.date(goal.year, 12, 31)
             )
             retVal.append(item)
 
