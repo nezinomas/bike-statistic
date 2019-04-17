@@ -14,24 +14,26 @@ def create_goal():
     GoalFactory(year=2001, goal=2000)
 
 
-def test_get_goals_all():
-    actual = T()._StatsGoals__goals
+@pytest.mark.django_db
+class TestGetGoals():
+    def test_get_goals_all(self):
+        actual = T()._StatsGoals__goals
 
-    assert 2 == len(actual)
+        assert 2 == len(actual)
+
+    def test_get_goals_one(self):
+        actual = T(2000)._StatsGoals__goals
+
+        assert 1 == len(actual)
+
+    def test_get_goals_raise_execption_01(self):
+        with pytest.raises(Http404):
+            actual = T(3000)._StatsGoals__get_goals
 
 
-def test_get_goals_one():
-    actual = T(2000)._StatsGoals__goals
+@pytest.mark.django_db
+class TestGetDf():
+    def test_df_empty(self):
+        actual = T()._StatsGoals__df
 
-    assert 1 == len(actual)
-
-
-def test_get_goals_raise_execption_01():
-    with pytest.raises(Http404):
-        actual = T(3000)._StatsGoals__get_goals
-
-
-def test_df_empty():
-    actual = T()._StatsGoals__df
-
-    assert 0 == len(actual)
+        assert 0 == len(actual)
