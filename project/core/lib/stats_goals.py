@@ -11,18 +11,17 @@ from ...goals.models import Goal
 
 class StatsGoals(object):
     def __init__(self, year=1970):
-        qs = self.__create_qs()
         self.__year = year
-        self.__df = self.__create_df(qs)
+        self.__df = self.__create_df()
         self.__goals = self.__get_goals(year)
 
-    def __create_qs(self):
-        return Data.objects.\
-            prefetch_related('bike').\
-            values('id', 'date', 'bike', 'distance', 'temperature', 'time', 'ascent').\
+    def __create_df(self):
+        qs = (
+            Data.objects.
+            prefetch_related('bike').
+            values('id', 'date', 'bike', 'distance', 'temperature', 'time', 'ascent').
             order_by('-date')
-
-    def __create_df(self, qs):
+        )
         df = read_frame(qs)
 
         df['date'] = pd.to_datetime(df['date'])
