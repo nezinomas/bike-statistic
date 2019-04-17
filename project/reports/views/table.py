@@ -8,7 +8,7 @@ from ...core.lib.stats_goals import StatsGoals
 
 @login_required()
 def table(request, year):
-    objStats = Statistic(year)
+    objStats = StatsGoals(year)
     start = datetime.date(year, 1, 1)
     end = datetime.date(year, 12, 31)
 
