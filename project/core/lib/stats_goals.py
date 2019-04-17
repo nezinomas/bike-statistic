@@ -86,7 +86,8 @@ class StatsGoals(object):
         )
 
     def stats(self, start_date=None, end_date=None):
-        df = self.__filter_dataframe(start_date, end_date)
+        df = self.__df.copy()
+
         if df.empty:
             return None
 
