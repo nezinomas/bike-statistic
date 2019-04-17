@@ -72,6 +72,42 @@ class TestGetDf():
         assert round(actual.loc[0, 'sec_workout'], 1) == 15.0
 
 
+class TestMarginalValues():
+    @pytest.fixture(scope='class')
+    def df(self, request):
+        return pd.DataFrame(
+            [
+                [datetime(2000, 1, 1), 10],
+                [datetime(2000, 1, 15), 15],
+                [datetime(2000, 1, 20), 20]
+            ],
+            columns=['date', 'col']
+        )
+
+    def test_marginal_values_df_empty(self):
+        actual = T()._StatsGoals__marginal_values(pd.DataFrame(), 'col', 'max')
+        assert not actual
+
+    def test_marginal_values_col_not_exists(self):
+        actual = T()._StatsGoals__marginal_values(pd.DataFrame(), 'col1', 'max')
+        assert not actual
+
+    def test_marginal_values_function_not_exists(self):
+        actual = T()._StatsGoals__marginal_values(pd.DataFrame(), 'col', 'maxx')
+        assert not actual
+
+    def test_marginal_values_max(self, df):
+        actual = T()._StatsGoals__marginal_values(df, 'col', 'max')
+
+        assert 20 == actual['max_col_value']
+        assert datetime(2000, 1, 20) == actual['max_col_date']
+
+    def test_marginal_values_min(self, df):
+        actual = T()._StatsGoals__marginal_values(df, 'col', 'min')
+
+        assert 10 == actual['min_col_value']
+        assert datetime(2000, 1, 1) == actual['min_col_date']
+
 @pytest.mark.django_db
 class TestStatsGoals():
     @pytest.fixture(autouse=True)
