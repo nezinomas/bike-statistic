@@ -178,3 +178,86 @@ class TestStatsGoals():
         assert 36.0 == round(actual['speed_month'], 1)
         assert 31 == actual['days_in_month']
         assert 0.9677 == round(actual['per_day_month'], 4)
+
+    def test_year_progres_keys(self):
+        actual = T(2000).year_progress()
+
+        assert 'id' in actual[0]
+        assert 'date' in actual[0]
+        assert 'bike' in actual[0]
+        assert 'distance' in actual[0]
+        assert 'temperature' in actual[0]
+        assert 'time' in actual[0]
+        assert 'ascent' in actual[0]
+        assert 'sec_workout' in actual[0]
+        assert 'day_num' in actual[0]
+        assert 'year_month' in actual[0]
+        assert 'speed_workout' in actual[0]
+        assert 'distance_season' in actual[0]
+        assert 'sec_season' in actual[0]
+        assert 'ascent_season' in actual[0]
+        assert 'speed_season' in actual[0]
+        assert 'per_day_season' in actual[0]
+        assert 'day_goal' in actual[0]
+        assert 'percent' in actual[0]
+        assert 'km_delta' in actual[0]
+
+    def test_year_progress_sorting(self):
+        actual = T(2000).year_progress()
+
+        assert datetime(2000, 1, 31) == actual[0]['date']
+        assert datetime(2000, 1, 1) == actual[1]['date']
+
+    def test_year_progress_distance_cumulative_sum(self):
+        actual = T(2000).year_progress()
+
+        assert 30.0 == actual[0]['distance_season']
+        assert 10.0 == actual[1]['distance_season']
+
+    def test_year_progress_seconds_cumulative_sum(self):
+        actual = T(2000).year_progress()
+
+        assert 3000.0 == round(actual[0]['sec_season'], 1)
+        assert 1000.0 == round(actual[1]['sec_season'], 1)
+
+    def test_year_progress_speed_season(self):
+        actual = T(2000).year_progress()
+
+        assert 36.0 == round(actual[0]['speed_season'], 1)
+        assert 36.0 == round(actual[1]['speed_season'], 1)
+
+    def test_year_progress_goal_percents(self):
+        actual = T(2000).year_progress()
+
+        assert 35.4 == round(actual[0]['percent'], 1)
+        assert 366.0 == round(actual[1]['percent'], 1)
+
+    def test_year_progress_day_goal(self):
+        actual = T(2000).year_progress()
+
+        assert 84.699 == round(actual[0]['day_goal'], 3)
+        assert 2.732 == round(actual[1]['day_goal'], 3)
+
+    def test_year_progress_km_delta(self):
+        actual = T(2000).year_progress()
+
+        assert -54.699 == round(actual[0]['km_delta'], 3)
+        assert 7.268 == round(actual[1]['km_delta'], 3)
+
+    def test_year_progress_per_day_season(self):
+        actual = T(2000).year_progress()
+
+        assert 0.968 == round(actual[0]['per_day_season'], 3)
+        assert 10.0 == round(actual[1]['per_day_season'], 3)
+
+    def test_year_progress_ascent_cumulative_sum(self):
+        actual = T(2000).year_progress()
+
+        assert 300 == actual[0]['ascent_season']
+        assert 100 == actual[1]['ascent_season']
+
+    def test_year_progress_workout_speed(self):
+        actual = T(2000).year_progress()
+
+        assert 36.0 == round(actual[0]['speed_workout'], 1)
+        assert 36.0 == round(actual[1]['speed_workout'], 1)
