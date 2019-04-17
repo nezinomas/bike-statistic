@@ -15,7 +15,7 @@ def table(request, year):
         'reports/table.html',
         {
             'objects': objStats.table(),
-            'month': objStats.month_table(),
+            'month': objStats.month_stats(),
             'year': year,
             'stats': objStats.year_stats()
         }

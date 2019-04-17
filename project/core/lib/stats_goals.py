@@ -152,7 +152,7 @@ class StatsGoals(object):
 
         return df.to_dict(orient='records')
 
-    def month_table(self):
+    def month_stats(self):
         df = self.__filter_dataframe(self.__year)
 
         df.index = df['date']
