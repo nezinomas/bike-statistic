@@ -15,7 +15,7 @@ class TestDataTable(TestCase):
         self.client.login(username='bob', password='123')
 
         url = reverse(
-            'reports:data_table',
+            'reports:data_list',
             kwargs={
                 'start_date': '2000-01-01',
                 'end_date': '2000-01-31'
@@ -23,8 +23,7 @@ class TestDataTable(TestCase):
         )
         response = self.client.get(url)
 
-        self.assertContains(response, '<form  class="data"')
-        self.assertContains(response, '<form  class="filter"')
+        self.assertContains(response, '<form class="filter"')
 
     def test_data_date_not_ok_01(self):
         response = self.client.get('/data/2000/2001/')
@@ -40,7 +39,7 @@ class TestDataTable(TestCase):
 
     def test_data_view(self):
         view = resolve('/data/2000-01-01/2001-01-01/')
-        self.assertEqual(view.func, views.data_table)
+        self.assertEqual(view.func, views.data_list)
 
 
 class TestDataTableEmptyDate(TestCase):
@@ -51,15 +50,14 @@ class TestDataTableEmptyDate(TestCase):
     def test_view_date_ok_01(self):
         self.client.login(username='bob', password='123')
 
-        url = reverse('reports:data_table_empty_date')
+        url = reverse('reports:data_empty')
         response = self.client.get(url, follow=True)
 
-        self.assertContains(response, '<form  class="data"')
-        self.assertContains(response, '<form  class="filter"')
+        self.assertContains(response, '<form class="filter"')
 
     def test_view(self):
         view = resolve('/data/')
-        self.assertEqual(view.func, views.data_table_empty_date)
+        self.assertEqual(view.func, views.data_empty)
 
 
 class TestDataTableNoEnd(TestCase):
@@ -71,14 +69,13 @@ class TestDataTableNoEnd(TestCase):
         self.client.login(username='bob', password='123')
 
         url = reverse(
-            'reports:data_table_no_end',
+            'reports:data_partial',
             kwargs={'start_date': '2000-01-01'}
         )
         response = self.client.get(url, follow=True)
 
-        self.assertContains(response, '<form  class="data"')
-        self.assertContains(response, '<form  class="filter"')
+        self.assertContains(response, '<form class="filter"')
 
     def test_view(self):
         view = resolve('/data/2000-01-01/')
-        self.assertEqual(view.func, views.data_table_no_end)
+        self.assertEqual(view.func, views.data_partial)

@@ -8,11 +8,11 @@ from django.http import JsonResponse
 from .models import Goal
 from .forms import GoalForm
 
-from .library.statistic import Statistic
+from ..core.lib.stats_goals import StatsGoals
 
 
 def form_valid(data):
-    objects = Statistic().objects()
+    objects = StatsGoals().objects()
     data['form_is_valid'] = True
     data['html_list'] = render_to_string(
         'goals/includes/partial_goals_list.html',
@@ -41,7 +41,7 @@ def save_data(request, context, form):
 
 @login_required()
 def goals_list(request):
-    objects = Statistic().objects()
+    objects = StatsGoals().all_goals_stats()
     rendered = render(
         request,
         'goals/goals_list.html',
@@ -82,21 +82,3 @@ def goals_delete(request, year):
             request
         )
     return JsonResponse(data)
-
-
-@login_required()
-def goals_table(request, year):
-    objStats = Statistic(year)
-    start = datetime.date(year, 1, 1)
-    end = datetime.date(year, 12, 31)
-
-    return render(
-        request,
-        'goals/goals_table.html',
-        {
-            'objects': objStats.table(),
-            'month': objStats.month_table(),
-            'year': year,
-            'stats': objStats.stats(start, end)
-        }
-    )

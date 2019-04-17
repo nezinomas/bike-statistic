@@ -1,9 +1,9 @@
-{% extends parent_template|default:"base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 
 {% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span><a class="nav-link" href="{% url 'goals:goals_table' goal_list.0.year %}">Goals</a>
+    <span class="navbar-text">&raquo;</span><a class="nav-link" href="{% url 'reports:reports_table' goal_list.0.year %}">Goals</a>
 {% endblock breadcrumb %}
 
 

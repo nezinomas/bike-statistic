@@ -1,9 +1,9 @@
-{% extends parent_template|default:"category_goals.html" %}
+{% extends "category_goals.html" %}
 {% load static %}{% load humanize %}{% load filters %}{% load dictionary_row %}
 
 
 {% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="{% url 'goals:goals_table' year %}">{{ year }}</a>
+    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="{% url 'reports:reports_table' year %}">{{ year }}</a>
 {% endblock breadcrumb %}
 
 
@@ -88,9 +88,11 @@
     </thead>
     <tbody>
         {% for row in objects  %}
-        {% if not row.match %}<tr>
+        {% ifchanged row.year_month %}<tr>
+            {% if not forloop.first %}
             <td colspan="20" class="row-spacer"></td>
-        </tr>{% endif %}
+            {% endif %}
+        </tr>{% endifchanged %}
         <tr>
             <td>{{ row.bike }}</td>
             <td class="text-center">{{ row.date|date:'Y-m-d' }}</td>
@@ -114,6 +116,7 @@
             <td class="text-center">{{ row.percent|floatformat:1 }}</td>
             <td class="text-center">{{ row.km_delta|floatformat:0|intcomma }}</td>
         </tr>
+
         {% endfor %}
     </tbody>
 </table>
