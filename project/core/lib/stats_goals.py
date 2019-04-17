@@ -38,6 +38,9 @@ class StatsGoals(object):
         if year != 1970:
             obj = obj.filter(year=year)
 
+        if not obj:
+            raise Http404
+
         return list(obj)
 
     def __filter_dataframe(self, start_date, end_date):
