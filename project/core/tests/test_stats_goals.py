@@ -164,3 +164,17 @@ class TestStatsGoals():
 
         assert 2000 == actual[1]['year']
         assert 30.0 == actual[1]['distance']
+
+    def test_month_stats(self):
+        actual = T(2000).month_stats()
+
+        assert 1 == len(actual)
+
+        actual = actual['2000-01']
+
+        assert 30.0 == actual['distance']
+        assert 300 == actual['ascent']
+        assert 3000.0 == round(actual['sec_workout'], 1)
+        assert 36.0 == round(actual['speed_month'], 1)
+        assert 31 == actual['days_in_month']
+        assert 0.9677 == round(actual['per_day_month'], 4)
