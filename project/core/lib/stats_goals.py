@@ -110,7 +110,7 @@ class StatsGoals(object):
         df = self.__filter_dataframe(year)
         return df['distance'].sum()
 
-    def objects(self):
+    def all_goals_stats(self):
         retVal = []
         for goal in self.__goals:
             item = {}

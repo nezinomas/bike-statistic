@@ -41,7 +41,7 @@ def save_data(request, context, form):
 
 @login_required()
 def goals_list(request):
-    objects = StatsGoals().objects()
+    objects = StatsGoals().all_goals_stats()
     rendered = render(
         request,
         'goals/goals_list.html',

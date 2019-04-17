@@ -155,7 +155,7 @@ class TestStatsGoals():
         assert datetime(2000, 1, 31) == actual['max_speed_date']
 
     def test_object(self):
-        actual = T().objects()
+        actual = T().all_goals_stats()
 
         assert 2 == len(actual)
 
