@@ -17,6 +17,28 @@ class BikeFactory(DjangoModelFactory):
     date = datetime(1970, 1, 1).date()
 
 
+class ComponentFactory(DjangoModelFactory):
+    class Meta:
+        model = Component
+        django_get_or_create = '__all__'
+
+    name = 'Component'
+
+
+class ComponentStatisticFactory(DjangoModelFactory):
+    class Meta:
+        model = ComponentStatistic
+        django_get_or_create = '__all__'
+
+    bike = SubFactory(BikeFactory)
+    component = SubFactory(ComponentFactory)
+
+    start_date = datetime(2000, 1, 1)
+    end_date = datetime(2000, 12, 31)
+    price = 10.00
+    brand = 'unknown'
+
+
 class DataFactory(DjangoModelFactory):
     class Meta:
         model = Data
