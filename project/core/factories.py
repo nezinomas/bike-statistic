@@ -3,8 +3,8 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from factory import DjangoModelFactory, SubFactory, PostGenerationMethodCall
 
-from ..bikes.models import Bike
-from .models import Data
+from ..bikes.models import Bike, Component, ComponentStatistic
+from ..reports.models import Data
 
 
 class BikeFactory(DjangoModelFactory):
