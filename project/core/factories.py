@@ -20,7 +20,7 @@ class BikeFactory(DjangoModelFactory):
 class ComponentFactory(DjangoModelFactory):
     class Meta:
         model = Component
-        django_get_or_create = '__all__'
+        django_get_or_create = ('name')
 
     name = 'Component'
 
@@ -28,7 +28,7 @@ class ComponentFactory(DjangoModelFactory):
 class ComponentStatisticFactory(DjangoModelFactory):
     class Meta:
         model = ComponentStatistic
-        django_get_or_create = '__all__'
+        django_get_or_create = ('start_date', 'end_date', 'price', 'brand', 'bike', 'component')
 
     bike = SubFactory(BikeFactory)
     component = SubFactory(ComponentFactory)
