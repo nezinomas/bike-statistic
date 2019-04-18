@@ -6,7 +6,7 @@ from mock import patch
 
 from .. import models, views
 from ..endomondo import Workout
-from ..factories import BikeFactory, DataFactory, UserFactory
+from ...core.factories import BikeFactory, DataFactory, UserFactory
 from ..library.insert_data import insert_data
 
 

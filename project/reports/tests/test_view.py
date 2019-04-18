@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import resolve, reverse
 
 from .. import views
-from ..factories import UserFactory
+from ...core.factories import UserFactory
 
 
 class TestDataTable(TestCase):
