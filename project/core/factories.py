@@ -20,7 +20,7 @@ class BikeFactory(DjangoModelFactory):
 class ComponentFactory(DjangoModelFactory):
     class Meta:
         model = Component
-        django_get_or_create = ('name')
+        django_get_or_create = ('name',)
 
     name = 'Component'
 
