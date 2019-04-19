@@ -47,14 +47,14 @@ def test_get_df():
 
 
 def test_get_components():
-    actual = [*T('bike', 1)._Filter__components]
+    actual = [*T('bike', 1).component]
 
     assert 1 == len(actual)
     assert 'Component' == actual[0].name
 
 
 def test_get_components_foreign_key_object():
-    obj = T('bike', 1)._Filter__components
+    obj = T('bike', 1).component
     actual = obj[0].components.all()
 
     assert 1 == len(actual)
