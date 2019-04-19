@@ -26,7 +26,7 @@ def components_statistic(django_db_setup, django_db_blocker):
 @pytest.fixture(scope='module', autouse=True)
 def data(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
-        d1 = DataFactory()
+        d1 = DataFactory(date=datetime(2000, 1, 1).date())
         d2 = DataFactory(date=datetime(2000, 1, 31).date())
     yield
     with django_db_blocker.unblock():
@@ -59,3 +59,16 @@ def test_get_components_foreign_key_object():
 
     assert 1 == len(actual)
     assert 'bike / Component / 2000-01-01 ... 2000-12-31' == str(actual[0])
+
+
+def test_total_distance_one_month():
+    actual = T('bike', 1).total_distance()
+
+    assert 30 == actual
+
+
+def test_total_distance_one_day():
+    actual = T('bike', 1).total_distance('2000-01-01', '2000-01-01')
+
+    assert 10 == actual
+
