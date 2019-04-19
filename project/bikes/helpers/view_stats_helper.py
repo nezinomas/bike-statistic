@@ -15,8 +15,11 @@ class Filter(object):
         self.__bike_slug = bike_slug
         self.__component_pk = component_filter
 
-        self.__df = self.__create_df()
-        self.__components = self.__get_components()
+        self.__df = None
+        self.__components = None
+
+        self.__create_df()
+        self.__get_components()
 
     def __create_qs(self):
         return Data.objects.\
@@ -25,17 +28,15 @@ class Filter(object):
 
     def __create_df(self):
         qs = self.__create_qs()
-        df = read_frame(qs)
 
-        df['date'] = pd.to_datetime(df['date'])
-
-        return df
+        self.__df = read_frame(qs)
+        self.__df['date'] = pd.to_datetime(self.__df['date'])
 
     def __get_components(self):
         filter_bike = ComponentStatistic.objects.filter(bike__slug=self.__bike_slug)
         prefetch = Prefetch('components', queryset=filter_bike)
 
-        return (
+        self.__components = (
             Component.objects.
             prefetch_related(prefetch).
             filter(pk=self.__component_pk)
