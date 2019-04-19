@@ -1,6 +1,5 @@
 {% load buttons %}{% load humanize %}
-{% for component in components %}
-{% with component.components as items %}
+
 <table class="table table-striped table-hover table-sm mb-5 tbl-js" id="tbl-0">
     <thead>
         <tr class="thead-light">
@@ -13,7 +12,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for item in items %}
+        {% for item in components_list %}
         {% url 'bikes:stats_update' bike_slug item.pk as url_update %}
         {% url 'bikes:stats_delete' bike_slug item.pk as url_delete %}
         <tr id="row_id_{{ item.pk }}" data-pk="{{ item.pk }}" data-url="{{ url_update }}">
@@ -32,8 +31,8 @@
     <tfoot>
         <tr class="text-white" style="background-color: #1e4e79">
             <td colspan="4">
-                {% for stat in component.stats %}
-                <span class="mr-4">{{ stat.label|title }}: {{ stat.value|floatformat:0|intcomma }} km</span>{% endfor %}
+                {% for key, value in components_stats.items %}
+                <span class="mr-4">{{ key|title }}: {{ value|floatformat:0|intcomma }} km</span>{% endfor %}
             </td>
             <td colspan="2" class="text-right">
                 Total <b>{{ bike_slug|title }}</b>: {{ total|floatformat:0|intcomma }}km
@@ -41,5 +40,3 @@
         </tr>
     </tfoot>
 </table>
-{% endwith %}
-{% endfor %}
