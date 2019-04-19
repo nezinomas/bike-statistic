@@ -1,23 +1,24 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
+import factory
 from django.contrib.auth.models import User
-from factory import DjangoModelFactory, SubFactory, PostGenerationMethodCall
 
 from ..bikes.models import Bike, Component, ComponentStatistic
 from ..reports.models import Data
 
 
-class BikeFactory(DjangoModelFactory):
+class BikeFactory(factory.DjangoModelFactory):
     class Meta:
         model = Bike
         django_get_or_create = ('full_name', 'short_name', 'date')
 
-    full_name = 'xbike'
-    short_name = 'xbike'
+    full_name = 'bike'
+    short_name = 'bike'
+    slug = 'bike'
     date = datetime(1970, 1, 1).date()
 
 
-class ComponentFactory(DjangoModelFactory):
+class ComponentFactory(factory.DjangoModelFactory):
     class Meta:
         model = Component
         django_get_or_create = ('name',)
@@ -25,13 +26,13 @@ class ComponentFactory(DjangoModelFactory):
     name = 'Component'
 
 
-class ComponentStatisticFactory(DjangoModelFactory):
+class ComponentStatisticFactory(factory.DjangoModelFactory):
     class Meta:
         model = ComponentStatistic
-        django_get_or_create = ('start_date', 'end_date', 'price', 'brand', 'bike', 'component')
+        # django_get_or_create = ('start_date', 'end_date', 'price', 'brand', 'bike', 'component')
 
-    bike = SubFactory(BikeFactory)
-    component = SubFactory(ComponentFactory)
+    bike = factory.SubFactory(BikeFactory)
+    component = factory.SubFactory(ComponentFactory)
 
     start_date = datetime(2000, 1, 1)
     end_date = datetime(2000, 12, 31)
@@ -39,17 +40,47 @@ class ComponentStatisticFactory(DjangoModelFactory):
     brand = 'unknown'
 
 
-class DataFactory(DjangoModelFactory):
+class DataFactory(factory.DjangoModelFactory):
     class Meta:
         model = Data
 
-    bike = SubFactory(BikeFactory)
+    bike = factory.SubFactory(BikeFactory)
+
+    date = datetime(2000, 1, 1)
+
+    @factory.sequence
+    def distance(n):
+        return 10 * n
+
+    @factory.sequence
+    def time(n):
+        return timedelta(seconds=(1000 * n))
+
+    @factory.sequence
+    def ascent(n):
+        return 100 * n
+
+    @factory.sequence
+    def max_speed(n):
+        return 15 * n
+
+    @factory.sequence
+    def cadence(n):
+        return 85 + n
+
+    @factory.sequence
+    def heart_rate(n):
+        return 140 + n
+
+    @factory.sequence
+    def temperature(n):
+        return 10 * n
 
 
-class UserFactory(DjangoModelFactory):
+class UserFactory(factory.DjangoModelFactory):
     class Meta:
         model = User
 
     username = 'bob'
-    password = PostGenerationMethodCall('set_password', '123')
+    password = factory.PostGenerationMethodCall('set_password', '123')
     email = 'bob@d.lt'
