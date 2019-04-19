@@ -12,16 +12,19 @@ from ...reports.models import Data
 
 class Filter(object):
     def __init__(self, bike_slug, component_filter):
-        qs = self.__create_qs(bike_slug)
-        self.__df = self.__create_df(qs)
+        self.__bike_slug = bike_slug
+        self.__component_id = component_filter
+
+        self.__df = self.__create_df()
         self.__components = self.__get_objects(bike_slug, component_filter)
 
-    def __create_qs(self, bike_slug):
+    def __create_qs(self):
         return Data.objects.\
-            filter(bike__slug=bike_slug).\
+            filter(bike__slug=self.__bike_slug).\
             values('date', 'distance')
 
-    def __create_df(self, qs):
+    def __create_df(self):
+        qs = self.__create_qs()
         df = read_frame(qs)
         df['date'] = pd.to_datetime(df['date'])
         return df
