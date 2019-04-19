@@ -17,13 +17,26 @@ class Filter(object):
 
         self.__df = None
         self.__component = None
+        self.__components_list = []
+        self.__components_stats = {}
+        self.__distances = []
 
         self.__create_df()
         self.__get_component()
+        self.__get_components_list()
+        self.__calc_components_stats()
 
     @property
     def component(self):
-        return [*self.__component][0]
+        return self.__component
+
+    @property
+    def components_list(self):
+        return self.__components_list
+
+    @property
+    def components_stats(self):
+        return self.__components_stats
 
     def __create_qs(self):
         return Data.objects.\
@@ -40,27 +53,20 @@ class Filter(object):
         filter_bike = ComponentStatistic.objects.filter(bike__slug=self.__bike_slug)
         prefetch = Prefetch('components', queryset=filter_bike)
 
-        self.__component = (
+        component = (
             Component.objects.
             prefetch_related(prefetch).
             filter(pk=self.__component_pk)
         )
+        self.__component = [*component][0]
 
-    def __totals(self):
-        retVal = []
-        retVal.append({'label': 'avg', 'value': np.average(self.__km) if self.__km else 0})
-        retVal.append({'label': 'median', 'value': np.median(self.__km) if self.__km else 0})
-        return retVal
-
-    def __format_dictionary(self, items):
-        retVal = []
-
-        for item in items:
+    def __get_components_list(self):
+        for item in self.__component.components.all():
             if not item.end_date:
                 item.end_date = datetime.date.today()
 
             km = self.total_distance(item.start_date, item.end_date)
-            retVal.append(
+            self.__components_list.append(
                 {
                     'start_date': item.start_date,
                     'end_date': item.end_date,
@@ -70,9 +76,13 @@ class Filter(object):
                     'pk': item.pk,
                 }
             )
-            self.__km.append(float(km))
+            self.__distances.append(float(km))
 
-        return retVal
+    def __calc_components_stats(self):
+        self.__components_stats = {
+            'avg': np.average(self.__distances) if self.__distances else 0,
+            'median': np.median(self.__distances) if self.__distances else 0
+        }
 
     def total_distance(self, start_date=None, end_date=None):
         if start_date:
@@ -84,17 +94,3 @@ class Filter(object):
             df = self.__df
 
         return df['distance'].sum()
-
-    def components(self):
-        retVal = []
-        for component in self.__component:
-            self.__km = []
-            item = {}
-            item['pk'] = component.pk
-            item['name'] = component.name
-            item['components'] = self.__format_dictionary(component.components.all())
-            item['stats'] = self.__totals()
-
-            retVal.append(item)
-
-        return retVal
