@@ -46,35 +46,37 @@ class DataFactory(factory.DjangoModelFactory):
 
     bike = factory.SubFactory(BikeFactory)
 
-    date = datetime(2000, 1, 1)
+    @factory.sequence
+    def date(n):
+        return datetime(2000, 1, 1)
 
     @factory.sequence
     def distance(n):
-        return 10 * n
+        return 10 * (n + 1)
 
     @factory.sequence
     def time(n):
-        return timedelta(seconds=(1000 * n))
+        return timedelta(seconds=(1000 * (n + 1)))
 
     @factory.sequence
     def ascent(n):
-        return 100 * n
+        return 100 * (n + 1)
 
     @factory.sequence
     def max_speed(n):
-        return 15 * n
+        return 15 * (n + 1)
 
     @factory.sequence
     def cadence(n):
-        return 85 + n
+        return 85 + (n + 1)
 
     @factory.sequence
     def heart_rate(n):
-        return 140 + n
+        return 140 + (n + 1)
 
     @factory.sequence
     def temperature(n):
-        return 10 * n
+        return 10 * (n + 1)
 
 
 class UserFactory(factory.DjangoModelFactory):
