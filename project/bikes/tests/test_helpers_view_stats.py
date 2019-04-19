@@ -71,3 +71,21 @@ def test_total_distance_one_day():
 
     assert 10 == actual
 
+
+def test_components_list():
+    actual = T('bike', 1).components_list
+
+    actual = actual[0]
+
+    assert datetime(2000, 1, 1).date() == actual['start_date']
+    assert datetime(2000, 12, 31).date() == actual['end_date']
+    assert 'unknown' == actual['brand']
+    assert 10 == actual['price']
+    assert 30 == actual['km']
+
+
+def test_components_stats():
+    actual = T('bike', 1).components_stats
+
+    assert 30 == actual['avg']
+    assert 30 == actual['median']
