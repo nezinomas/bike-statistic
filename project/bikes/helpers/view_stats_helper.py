@@ -13,10 +13,10 @@ from ...reports.models import Data
 class Filter(object):
     def __init__(self, bike_slug, component_filter):
         self.__bike_slug = bike_slug
-        self.__component_id = component_filter
+        self.__component_pk = component_filter
 
         self.__df = self.__create_df()
-        self.__components = self.__get_objects(bike_slug, component_filter)
+        self.__components = self.__get_objects()
 
     def __create_qs(self):
         return Data.objects.\
@@ -31,14 +31,14 @@ class Filter(object):
 
         return df
 
-    def __get_objects(self, bike_slug, component_filter):
-        filter_bike = ComponentStatistic.objects.filter(bike__slug=bike_slug)
+    def __get_objects(self):
+        filter_bike = ComponentStatistic.objects.filter(bike__slug=self.__bike_slug)
         prefetch = Prefetch('components', queryset=filter_bike)
 
         return (
             Component.objects.
             prefetch_related(prefetch).
-            filter(pk=component_filter)
+            filter(pk=self.__component_pk)
         )
 
     def __totals(self):
