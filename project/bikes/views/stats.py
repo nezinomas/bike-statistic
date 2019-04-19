@@ -61,8 +61,7 @@ def lists(request, bike_slug, component_pk):
             'total': o.total_distance(),
             'bike_slug': bike_slug,
             'component_pk': component_pk,
-            'stats_id': components[0]['pk'],
-            'component_name': components[0]['name']
+            'component_name': o.component.name
         }
     )
 
