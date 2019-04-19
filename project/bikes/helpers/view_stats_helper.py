@@ -11,9 +11,9 @@ from ...reports.models import Data
 
 
 class Filter(object):
-    def __init__(self, bike_slug, component_filter):
+    def __init__(self, bike_slug, component_pk):
         self.__bike_slug = bike_slug
-        self.__component_pk = component_filter
+        self.__component_pk = component_pk
 
         self.__df = None
         self.__component = None
