@@ -6,7 +6,7 @@ import pytest
 from django.http import Http404
 
 from ...goals.factories import GoalFactory
-from ...reports.factories import DataFactory
+from ...core.factories import DataFactory
 from ..lib.stats_goals import StatsGoals as T
 
 pytestmark = pytest.mark.django_db

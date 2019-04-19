@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from django.test import TestCase
 
 from ..models import Data
-from ..factories import BikeFactory, DataFactory
+from ...core.factories import BikeFactory, DataFactory
 from ..library.overall import Overall
 
 

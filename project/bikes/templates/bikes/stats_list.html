@@ -15,7 +15,7 @@
         <div class="col text-left">
             <nav class="nav">
                 {% for item in component_list %}
-                <a href="{% url 'bikes:stats_list' bike_slug item.id %}" class="nav-link {% if item.id == stats_id %}active disabled{% endif %}">{{ item.name }}</a>
+                <a href="{% url 'bikes:stats_list' bike_slug item.id %}" class="nav-link {% if item.id == component_pk %}active disabled{% endif %}">{{ item.name }}</a>
                 {% if not forloop.last %}<span class="navbar-text">|</span>{% endif %}{% endfor %}
             </nav>
         </div>

@@ -3,7 +3,7 @@ from django.urls import resolve, reverse
 from freezegun import freeze_time
 
 from ..views import data
-from ..factories import UserFactory
+from ...core.factories import UserFactory
 
 
 pytestmark = pytest.mark.django_db
