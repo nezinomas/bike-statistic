@@ -15,31 +15,38 @@ pytestmark = pytest.mark.django_db
 @pytest.fixture(scope='module', autouse=True)
 def components(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
-        ComponentFactory()
+        c1 = ComponentFactory()
+    yield
+    with django_db_blocker.unblock():
+        c1.delete()
 
 
 @pytest.fixture(scope='module', autouse=True)
 def components_statistic(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
-        ComponentStatisticFactory()
-        ComponentStatisticFactory(
+        c1 = ComponentStatisticFactory()
+        c2 = ComponentStatisticFactory(
             start_date=datetime(2100, 1, 1).date(),
             end_date=None,
             price=100,
             brand='whatewer'
         )
-
+    yield
+    with django_db_blocker.unblock():
+        c1.delete()
+        c2.delete()
 
 @pytest.fixture(scope='module', autouse=True)
 def data(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         d1 = DataFactory(date=datetime(2000, 1, 1).date())
         d2 = DataFactory(date=datetime(2000, 1, 31).date())
-        d2 = DataFactory(date=datetime(2100, 1, 31).date())
+        d3 = DataFactory(date=datetime(2100, 1, 31).date())
     yield
     with django_db_blocker.unblock():
         d1.delete()
         d2.delete()
+        d3.delete()
 
 
 def test_get_df():
