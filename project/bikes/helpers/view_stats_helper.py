@@ -21,6 +21,10 @@ class Filter(object):
         self.__create_df()
         self.__get_component()
 
+    @property
+    def component(self):
+        return [*self.__component][0]
+
     def __create_qs(self):
         return Data.objects.\
             filter(bike__slug=self.__bike_slug).\
