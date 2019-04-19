@@ -28,6 +28,7 @@ def data(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         d1 = DataFactory(date=datetime(2000, 1, 1).date())
         d2 = DataFactory(date=datetime(2000, 1, 31).date())
+        d2 = DataFactory(date=datetime(2100, 1, 31).date())
     yield
     with django_db_blocker.unblock():
         d1.delete()
@@ -37,7 +38,7 @@ def data(django_db_setup, django_db_blocker):
 def test_get_df():
     actual = T('bike', 1)._Filter__df
 
-    assert 2 == len(actual)
+    assert 3 == len(actual)
 
     assert 'date' in actual.columns
     assert 'distance' in actual.columns
@@ -60,10 +61,10 @@ def test_get_components_foreign_key_object():
     assert 'bike / Component / 2000-01-01 ... 2000-12-31' == str(actual[0])
 
 
-def test_total_distance_one_month():
+def test_total_distance_full_for_bike():
     actual = T('bike', 1).total_distance()
 
-    assert 30 == actual
+    assert 60 == actual
 
 
 def test_total_distance_one_day():
