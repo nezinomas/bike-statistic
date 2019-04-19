@@ -26,7 +26,9 @@ class Filter(object):
     def __create_df(self):
         qs = self.__create_qs()
         df = read_frame(qs)
+
         df['date'] = pd.to_datetime(df['date'])
+
         return df
 
     def __get_objects(self, bike_slug, component_filter):
