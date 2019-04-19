@@ -18,22 +18,16 @@ def components(django_db_setup, django_db_blocker):
 
 
 @pytest.fixture(scope='module', autouse=True)
+def components_statistic(django_db_setup, django_db_blocker):
+    with django_db_blocker.unblock():
+        ComponentStatisticFactory()
+
+
+@pytest.fixture(scope='module', autouse=True)
 def data(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
-        d1 = DataFactory(
-            date=datetime(2000, 1, 1).date(),
-            distance=10.0,
-            time=timedelta(seconds=1000),
-            temperature=10,
-            ascent=100
-        )
-        d2 = DataFactory(
-            date=datetime(2000, 1, 31).date(),
-            distance=20.0,
-            time=timedelta(seconds=2000),
-            temperature=20,
-            ascent=200
-        )
+        d1 = DataFactory()
+        d2 = DataFactory(date=datetime(2000, 1, 31).date())
     yield
     with django_db_blocker.unblock():
         d1.delete()
@@ -41,7 +35,7 @@ def data(django_db_setup, django_db_blocker):
 
 
 def test_get_df():
-    actual = T('xbike', 1)._Filter__df
+    actual = T('bike', 1)._Filter__df
 
     assert 2 == len(actual)
 
@@ -50,3 +44,18 @@ def test_get_df():
 
     assert ptypes.is_datetime64_dtype(actual['date'])
     assert ptypes.is_float_dtype(actual['distance'])
+
+
+def test_get_components():
+    actual = [*T('bike', 1)._Filter__components]
+
+    assert 1 == len(actual)
+    assert 'Component' == actual[0].name
+
+
+def test_get_components_foreign_key_object():
+    obj = T('bike', 1)._Filter__components
+    actual = obj[0].components.all()
+
+    assert 1 == len(actual)
+    assert 'bike / Component / 2000-01-01 ... 2000-12-31' == str(actual[0])
