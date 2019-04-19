@@ -16,7 +16,7 @@ class Filter(object):
         self.__component_pk = component_filter
 
         self.__df = self.__create_df()
-        self.__components = self.__get_objects()
+        self.__components = self.__get_components()
 
     def __create_qs(self):
         return Data.objects.\
@@ -31,7 +31,7 @@ class Filter(object):
 
         return df
 
-    def __get_objects(self):
+    def __get_components(self):
         filter_bike = ComponentStatistic.objects.filter(bike__slug=self.__bike_slug)
         prefetch = Prefetch('components', queryset=filter_bike)
 
