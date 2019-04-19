@@ -40,7 +40,6 @@ def data(django_db_setup, django_db_blocker):
         d2.delete()
 
 
-
 def test_get_df():
     actual = T('xbike', 1)._Filter__df
 
