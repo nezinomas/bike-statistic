@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 import pandas.api.types as ptypes
 import pytest
+from freezegun import freeze_time
 
 from ...core.factories import (ComponentFactory, ComponentStatisticFactory,
                                DataFactory)
@@ -21,6 +22,12 @@ def components(django_db_setup, django_db_blocker):
 def components_statistic(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         ComponentStatisticFactory()
+        ComponentStatisticFactory(
+            start_date=datetime(2100, 1, 1).date(),
+            end_date=None,
+            price=100,
+            brand='whatewer'
+        )
 
 
 @pytest.fixture(scope='module', autouse=True)
@@ -53,12 +60,14 @@ def test_get_components():
     assert 'Component' == actual.name
 
 
+@freeze_time('2100-02-28')
 def test_get_components_foreign_key_object():
     obj = T('bike', 1).component
     actual = obj.components.all()
 
-    assert 1 == len(actual)
-    assert 'bike / Component / 2000-01-01 ... 2000-12-31' == str(actual[0])
+    assert 2 == len(actual)
+    assert 'bike / Component / 2100-01-01 ... 2100-02-28' == str(actual[0])
+    assert 'bike / Component / 2000-01-01 ... 2000-12-31' == str(actual[1])
 
 
 def test_total_distance_full_for_bike():
@@ -73,10 +82,23 @@ def test_total_distance_one_day():
     assert 10 == actual
 
 
-def test_components_list():
+@freeze_time('2100-02-28')
+def test_components_list_first_component():
     actual = T('bike', 1).components_list
 
     actual = actual[0]
+
+    assert datetime(2100, 1, 1).date() == actual['start_date']
+    assert datetime(2100, 2, 28).date() == actual['end_date']
+    assert 'whatewer' == actual['brand']
+    assert 100 == actual['price']
+    assert 30 == actual['km']
+
+
+def test_components_list_last_component():
+    actual = T('bike', 1).components_list
+
+    actual = actual[1]
 
     assert datetime(2000, 1, 1).date() == actual['start_date']
     assert datetime(2000, 12, 31).date() == actual['end_date']
@@ -88,5 +110,5 @@ def test_components_list():
 def test_components_stats():
     actual = T('bike', 1).components_stats
 
-    assert 30 == actual['avg']
-    assert 30 == actual['median']
+    assert 15 == actual['avg']
+    assert 15 == actual['median']
