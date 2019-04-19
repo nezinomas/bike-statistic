@@ -35,16 +35,11 @@ class Filter(object):
         filter_bike = ComponentStatistic.objects.filter(bike__slug=bike_slug)
         prefetch = Prefetch('components', queryset=filter_bike)
 
-        if component_filter == 'all':
-            r = Component.objects.\
-                prefetch_related(prefetch).\
-                all()
-        else:
-            r = Component.objects.\
-                prefetch_related(prefetch).\
-                filter(pk=component_filter)
-
-        return r
+        return (
+            Component.objects.
+            prefetch_related(prefetch).
+            filter(pk=component_filter)
+        )
 
     def __totals(self):
         retVal = []
