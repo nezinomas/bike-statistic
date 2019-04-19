@@ -1,6 +1,5 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
-import pandas as pd
 import pandas.api.types as ptypes
 import pytest
 from freezegun import freeze_time
@@ -35,6 +34,7 @@ def components_statistic(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         c1.delete()
         c2.delete()
+
 
 @pytest.fixture(scope='module', autouse=True)
 def data(django_db_setup, django_db_blocker):
