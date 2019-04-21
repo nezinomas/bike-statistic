@@ -48,9 +48,9 @@
     </div>
 
     <div class="container-fluid">
-      <div class="row content">
+      <div class="row mx-0">
         <!-- side bar -->
-        <div class="col- pr-3">
+        <div class="fixed-column">
           <h6 class="side-bar">Data</h6>
           <div class="list-group list-group-flush">
             <a class="list-group-item list-group-item-action" href="{% url 'reports:data_empty' %}">View</a></li>
@@ -87,9 +87,9 @@
           </div>
         </div>
         <!-- content -->
-        <div class="col p-0">
-            {% block content %}{% endblock content %}
-          </div>
+        <div class="fluid-column">
+          {% block content %}{% endblock content %}
+        </div>
       </div>
     </div>
     {% endblock body %}
