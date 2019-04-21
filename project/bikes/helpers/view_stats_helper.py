@@ -58,6 +58,7 @@ class Filter(object):
             prefetch_related(prefetch).
             filter(pk=self.__component_pk)
         )
+
         if not component:
             raise Http404
 
