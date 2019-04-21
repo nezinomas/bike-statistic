@@ -15,7 +15,7 @@
         <tr id="row_id_{{ item.id }}" data-pk="{{ item.id }}" data-url="{{ url_update }}" data-tbl="0">
             <td>{{ item.date|date:'Y-m-d' }}</td>
             <td>{{ item.full_name }}</td>
-            <td>{{ item.short_name }}</td>
+            <td><a href="{% url 'bikes:info_list' item.slug %}">{{ item.short_name }}</a></td>
             <td class="text-right last">
                 {% button_edit pk=item.id url=url_update tbl='0' label='True' %}
                 {% button_delete type='button' pk=item.id url=url_delete tbl='0' label='True' %}
