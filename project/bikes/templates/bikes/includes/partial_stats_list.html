@@ -1,5 +1,16 @@
 {% load buttons %}{% load humanize %}
 
+<div class="row text-white mb-2 mr-0 p-1" style="background-color: #1e4e79">
+    <div class="col-1-sm ml-3">{{ component_name }}:</div>
+    <div class="col">
+        {% for key, value in components_stats.items %}
+        <span class="mr-4">{{ key }}: {{ value|floatformat:0|intcomma }} km</span>{% endfor %}
+    </div>
+    <div class="col text-right">
+        Total <b>{{ bike_slug|title }}</b>: {{ total|floatformat:0|intcomma }}km
+    </div>
+</div>
+
 <table class="table table-striped table-hover table-sm mb-5 tbl-js" id="tbl-0">
     <thead>
         <tr class="thead-light">
@@ -28,15 +39,4 @@
         </tr>
         {% endfor %}
     </tbody>
-    <tfoot>
-        <tr class="text-white" style="background-color: #1e4e79">
-            <td colspan="4">
-                {% for key, value in components_stats.items %}
-                <span class="mr-4">{{ key|title }}: {{ value|floatformat:0|intcomma }} km</span>{% endfor %}
-            </td>
-            <td colspan="2" class="text-right">
-                Total <b>{{ bike_slug|title }}</b>: {{ total|floatformat:0|intcomma }}km
-            </td>
-        </tr>
-    </tfoot>
 </table>
