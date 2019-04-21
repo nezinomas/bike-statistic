@@ -8,7 +8,7 @@
 
 
 {% block head %}{{ block.super }}
-    <script src="{% static 'js/lrStickyHeader.js' %}"></script>
+<script src="https://unpkg.com/sticky-table-headers"></script>
     <style>
         .lr-sticky-header {
             transition: all 0.6s;
@@ -53,8 +53,7 @@
     </tbody>
 </table>
 
-
-<table class="table table-hover table-striped mt-3">
+<table class="table table-hover table-striped mt-3 sticky-table">
     <thead class="thead-light">
         <tr>
             <th colspan="3"> </th>
@@ -121,7 +120,8 @@
     </tbody>
 </table>
 <script>
-    var tables = document.getElementsByTagName('table');
-    lrStickyHeader(tables[1]);
-</script>
+ 
+    $('.sticky-table').stickyTableHeaders();
+ 
+  </script>
 {% endblock content %}

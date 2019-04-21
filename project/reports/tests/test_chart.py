@@ -2,7 +2,7 @@ from mock import patch
 
 from django.test import TestCase
 
-from ..library import chart #import get_color, colors
+from ..library import chart
 
 
 @patch('project.reports.library.chart.colors', [(1, 1, 1)])

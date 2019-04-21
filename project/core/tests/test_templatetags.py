@@ -7,6 +7,7 @@ from ..templatetags import form_tags
 class ExampleForm(forms.Form):
     name = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput())
+
     class Meta:
         fields = ['name', 'password']
 
@@ -20,7 +21,7 @@ class FieldTypeTests(TestCase):
 
 class InputClassTests(TestCase):
     def test_unbound_field_initial_state(self):
-        form = ExampleForm() #unbound form
+        form = ExampleForm()  # unbound form
         self.assertEqual('form-control ', form_tags.input_class(form['name']))
 
     def test_valid_bound_field(self):
@@ -33,4 +34,3 @@ class InputClassTests(TestCase):
     def test_invalid_bound_fields(self):
         form = ExampleForm({'name': '', 'password': '123'})
         self.assertEqual('form-control is-invalid', form_tags.input_class(form['name']))
-

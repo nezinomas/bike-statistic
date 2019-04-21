@@ -43,3 +43,11 @@ h6.side-bar:first-child {
 .invalid-feedback {
   display: block;
 }
+
+.fixed-column {
+  width:150px;
+}
+
+.fluid-column {
+  width:calc(100% - 155px);
+}

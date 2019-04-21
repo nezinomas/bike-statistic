@@ -14,7 +14,8 @@ def form_valid(data, bike_slug, pk):
     data['html_list'] = render_to_string(
         'bikes/includes/partial_stats_list.html',
         {
-            'components': obj.components(),
+            'components_list': obj.components_list,
+            'components_stats': obj.components_stats,
             'total': obj.total_distance(),
             'bike_slug': bike_slug
         }
@@ -53,16 +54,16 @@ def index(request, bike_slug):
 @login_required()
 def lists(request, bike_slug, component_pk):
     o = Filter(bike_slug, component_pk)
-    components = o.components()
+
     return render(
         request,
         'bikes/stats_list.html', {
-            'components': components,
+            'components_list': o.components_list,
+            'components_stats': o.components_stats,
             'total': o.total_distance(),
             'bike_slug': bike_slug,
             'component_pk': component_pk,
-            'stats_id': components[0]['pk'],
-            'component_name': components[0]['name']
+            'component_name': o.component.name
         }
     )
 
