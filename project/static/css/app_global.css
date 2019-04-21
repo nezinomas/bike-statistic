@@ -1,3 +1,7 @@
+body {
+  font-size: .85rem!important;
+}
+
 .list-group-item {
   padding: .25rem 0 .25rem .5rem;
   font-size: .8rem;
