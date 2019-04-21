@@ -8,7 +8,6 @@ table td {
 }
 
 table thead th {
-  font-size: .85rem!important;
   vertical-align: middle!important;
   padding-top: .35rem!important;
   padding-bottom: .35rem!important;
@@ -103,4 +102,10 @@ table tfoot td {
  .row-spacer {
    height: 1rem;
    background-color: lightyellow;
+ }
+
+ div.wear-stats {
+   /* background-color: #e1f5fe; */
+   border-top: 1px solid #dee2e6;
+   border-bottom: 1px solid #dee2e6;
  }
