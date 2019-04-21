@@ -11,21 +11,7 @@ ALLOWED_HOSTS = ['*']
 
 # ================   APP CONFIGURATION
 INSTALLED_APPS += [
-    'debug_toolbar',
-    'django_nose',
-]
-
-
-# ================   TESTS CONFIGURATION
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = [
-    '--with-spec',
-    '--spec-color',
-    '--nocapture',
-    # '--with-coverage',
-    # '--cover-html',
-    #  '--cover-package=.',
-    #  '--cover-html-dir=reports/cover'
+    'debug_toolbar'
 ]
 
 
