@@ -2,6 +2,7 @@ from datetime import datetime
 
 import pandas.api.types as ptypes
 import pytest
+from django.http import Http404
 from freezegun import freeze_time
 
 from ...core.factories import (ComponentFactory, ComponentStatisticFactory,
@@ -119,3 +120,8 @@ def test_components_stats():
 
     assert 15 == actual['avg']
     assert 15 == actual['median']
+
+
+@pytest.mark.xfail(raises=Http404)
+def test_component_not_exists():
+    actual = T('bike', 10).component
