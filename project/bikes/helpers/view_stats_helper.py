@@ -2,12 +2,12 @@ import datetime
 
 import numpy as np
 import pandas as pd
-
 from django.db.models import Prefetch
+from django.http import Http404
 from django_pandas.io import read_frame
 
-from ..models import Component, ComponentStatistic
 from ...reports.models import Data
+from ..models import Component, ComponentStatistic
 
 
 class Filter(object):
@@ -58,6 +58,10 @@ class Filter(object):
             prefetch_related(prefetch).
             filter(pk=self.__component_pk)
         )
+
+        if not component:
+            raise Http404
+
         self.__component = [*component][0]
 
     def __get_components_list(self):
