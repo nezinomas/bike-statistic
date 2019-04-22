@@ -19,7 +19,8 @@ def login(client):
 
 @pytest.fixture(scope='module', autouse=True)
 def mock_workout():
-    with patch('project.reports.library.insert_data.__workouts') as mocked:
+    mock_func = 'project.reports.library.insert_data.__workouts'
+    with patch(mock_func) as mocked:
         mocked.return_value = [Workout(
             {
                 'ascent': 9,
@@ -34,7 +35,8 @@ def mock_workout():
 
 @pytest.fixture(scope='session', autouse=True)
 def mock_get_temperature():
-    with patch('project.reports.library.insert_data.get_temperature') as mocked:
+    mock_func = 'project.reports.library.insert_data.get_temperature'
+    with patch(mock_func) as mocked:
         mocked.return_value = 1.5
         yield
 
