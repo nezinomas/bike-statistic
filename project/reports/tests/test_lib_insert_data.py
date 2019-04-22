@@ -32,6 +32,13 @@ def mock_workout():
         yield
 
 
+@pytest.fixture(scope='session', autouse=True)
+def mock_get_temperature():
+    with patch('project.reports.library.insert_data.get_temperature') as mocked:
+        mocked.return_value = 1.5
+        yield
+
+
 def test_insert_data_exists():
     DataFactory(
         date=datetime(2000, 1, 1).date(),
