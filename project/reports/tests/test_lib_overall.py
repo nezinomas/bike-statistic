@@ -6,7 +6,6 @@ import pytest
 
 from ...core.factories import BikeFactory, DataFactory
 from ..library.overall import Overall
-from ..models import Data
 
 pytestmark = pytest.mark.django_db
 
@@ -49,7 +48,7 @@ def data(django_db_blocker):
 
 
 def test_create_categories(db):
-    obj = Overall(Data)
+    obj = Overall()
 
     expected = [2017, 2018]
 
@@ -57,7 +56,7 @@ def test_create_categories(db):
 
 
 def test_create_series(db):
-    obj = Overall(Data).create_series()
+    obj = Overall().create_series()
 
     assert 2 == len(obj)
 
