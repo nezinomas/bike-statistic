@@ -8,9 +8,12 @@ from ..models import Data
 
 class Overall(object):
     def __init__(self):
-        qs = self.__create_query()
-        df = self.__create_dataframe(qs)
-        self.pivotTable = self.__create_pivot_table(df)
+        self.__create_dataframe()
+        self.__create_pivot_table()
+
+    @property
+    def df(self):
+        return self.__df
 
     def __create_query(self):
         return Data.objects.values(
@@ -21,14 +24,14 @@ class Overall(object):
             'bike__short_name'
         )
 
-    def __create_dataframe(self, qs):
-        df = read_frame(qs)
-        df['date'] = pd.to_datetime(df['date']).dt.year
-        return df
+    def __create_dataframe(self):
+        qs = self.__create_query()
+        self.__df = read_frame(qs)
+        self.__df['date'] = pd.to_datetime(self.__df['date']).dt.year
 
-    def __create_pivot_table(self, df):
-        return pd.pivot_table(
-            df,
+    def __create_pivot_table(self):
+        self.__pivotTable = pd.pivot_table(
+            self.__df,
             index=['bike__short_name', 'bike__date'],
             columns=['date'],
             values=['distance'],
@@ -37,15 +40,15 @@ class Overall(object):
         ).sort_values('bike__date')
 
     def create_categories(self):
-        return [x[-1] for x in list(self.pivotTable.columns.values)]
+        return [x[-1] for x in list(self.__pivotTable.columns.values)]
 
     def create_series(self):
         series = []
-        bikes = [x[0] for x in list(self.pivotTable.index)]
+        bikes = [x[0] for x in list(self.__pivotTable.index)]
 
         for key, bike in enumerate(bikes):
             item = {}
-            q = self.pivotTable.query(
+            q = self.__pivotTable.query(
                 "bike__short_name==['{}']".format(bike)).values.tolist()[0]
 
             item = {
