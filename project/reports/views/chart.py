@@ -7,7 +7,7 @@ from ..library.overall import Overall
 def api_overall(request):
     obj = Overall()
     chart = {
-        'first': {
+        'overall': {
             'xAxis': {'categories': obj.create_categories()},
             'series': obj.create_series()[::-1]
         }

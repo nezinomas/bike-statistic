@@ -20,7 +20,7 @@
                     console.log(data)
                     Highcharts.chart("my-chart", {
                         chart : { type: 'column'},
-                        xAxis: data.first.xAxis,
+                        xAxis: data.overall.xAxis,
                         margin: 0,
                         title: {
                             text: ''
@@ -48,7 +48,7 @@
                                 stacking: 'normal',
                             }
                         },
-                        series: data.first.series,
+                        series: data.overall.series,
                     });
                 }
             });
