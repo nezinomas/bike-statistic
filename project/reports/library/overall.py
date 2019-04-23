@@ -1,19 +1,19 @@
-import pandas as pd
 import numpy as np
-
+import pandas as pd
 from django_pandas.io import read_frame
 
 from . import chart
+from ..models import Data
 
 
 class Overall(object):
-    def __init__(self, model):
-        qs = self.__create_query(model)
+    def __init__(self):
+        qs = self.__create_query()
         df = self.__create_dataframe(qs)
         self.pivotTable = self.__create_pivot_table(df)
 
-    def __create_query(self, model):
-        return model.objects.values(
+    def __create_query(self):
+        return Data.objects.values(
             'date',
             'distance',
             'time',
