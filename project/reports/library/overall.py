@@ -13,7 +13,13 @@ class Overall(object):
         self.pivotTable = self.__create_pivot_table(df)
 
     def __create_query(self, model):
-        return model.objects.values('date', 'distance', 'time', 'bike__date', 'bike__short_name')
+        return model.objects.values(
+            'date',
+            'distance',
+            'time',
+            'bike__date',
+            'bike__short_name'
+        )
 
     def __create_dataframe(self, qs):
         df = read_frame(qs)
