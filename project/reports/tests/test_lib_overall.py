@@ -67,3 +67,12 @@ def test_bikes():
     expected = ['bike1', 'bike2']
 
     assert expected == actual
+
+
+@pytest.mark.django_db
+@pytest.mark.noautofixt
+def test_no_data():
+    with pytest.raises(Exception) as excinfo:
+        Overall()
+
+    assert str(excinfo.value) == 'No data in db.'
