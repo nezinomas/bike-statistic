@@ -1,11 +1,11 @@
-from ..library.overall import Overall
-from .. import models
-from django.shortcuts import render
 from django.http import JsonResponse
+from django.shortcuts import render
+
+from ..library.overall import Overall
 
 
 def api_overall(request):
-    obj = Overall(models.Data)
+    obj = Overall()
     chart = {
         'first': {
             'xAxis': {'categories': obj.create_categories()},
