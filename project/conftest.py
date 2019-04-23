@@ -4,8 +4,6 @@ import pytest
 
 from .core.factories import UserFactory
 
-pytestmark = pytest.mark.django_db
-
 
 @pytest.fixture(scope="session", autouse=True)
 def temp_folder_for_cash(tmpdir_factory):
@@ -13,7 +11,8 @@ def temp_folder_for_cash(tmpdir_factory):
         pass
 
 
-@pytest.fixture(scope='session')
-def login(client):
+@pytest.fixture()
+def login(client, django_db_blocker):
     UserFactory()
+
     client.login(username='bob', password='123')
