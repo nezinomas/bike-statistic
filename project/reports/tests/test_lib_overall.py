@@ -3,9 +3,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 import pandas.api.types as ptypes
 import pytest
-from mock import patch
 
-from ...core.factories import BikeFactory, DataFactory
 from ..library.overall import Overall
 
 pytestmark = pytest.mark.django_db
