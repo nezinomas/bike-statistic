@@ -47,24 +47,23 @@ def test_df_date_type():
 
     assert ptypes.is_int64_dtype(actual['date'])
 
- 
-def test_create_categories():
-    obj = Overall()
 
+def test_create_categories():
+    actual = Overall().years
     expected = [2017, 2018]
 
-    assert expected == obj.create_categories()
+    assert expected == actual
 
 
-def test_create_series():
-    obj = Overall().create_series()
+def test_distances():
+    actual = Overall().distances
+    expected = [[10.0, 100.0], [200.0, 0.0]]
 
-    assert 2 == len(obj)
+    assert expected == actual
 
-    # bike1
-    assert 'bike1' == obj[0]['name']
-    assert [10.0, 100.0] == obj[0]['data']
 
-    # bike2
-    assert 'bike2' == obj[1]['name']
-    assert [200.0, 0.0] == obj[1]['data']
+def test_bikes():
+    actual = Overall().bikes
+    expected = ['bike1', 'bike2']
+
+    assert expected == actual
