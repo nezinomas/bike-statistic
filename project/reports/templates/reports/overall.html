@@ -20,7 +20,9 @@
                     console.log(data)
                     Highcharts.chart("my-chart", {
                         chart : { type: 'column'},
-                        xAxis: data.overall.xAxis,
+                        xAxis: {
+                            categories: data.overall.xAxis,
+                        },
                         margin: 0,
                         title: {
                             text: ''
