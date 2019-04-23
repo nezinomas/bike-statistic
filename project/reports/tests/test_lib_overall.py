@@ -1,14 +1,30 @@
 from datetime import datetime, timedelta
 
+import pandas as pd
+import pandas.api.types as ptypes
 import pytest
-from django.test import TestCase
 
 from ...core.factories import BikeFactory, DataFactory
 from ..library.overall import Overall
 from ..models import Data
-from ...bikes import models as M
 
 pytestmark = pytest.mark.django_db
+
+
+def set_date(year, month, day):
+    return datetime(year, month, day).date()
+
+
+@pytest.fixture()
+def df():
+    data = {
+        'date': [set_date(2017, 1, 1), set_date(2018, 1, 1), set_date(2017, 1, 1)],
+        'distance': [10.0, 100.0, 200.0],
+        'time': [timedelta(seconds=15), timedelta(seconds=115), timedelta(seconds=1115)],
+        'bike__date': [set_date(1999, 1, 1), set_date(1999, 1, 1), set_date(2000, 1, 1)],
+        'bike_short_name': ['bike1', 'bike1', 'bike2']
+    }
+    return pd.DataFrame(data)
 
 
 @pytest.fixture(scope='module', autouse=True)
