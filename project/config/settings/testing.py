@@ -8,3 +8,5 @@ DATABASES = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+
+CASH_ROOT = os.path.join(PROJECT_ROOT, '.testing_temp')
