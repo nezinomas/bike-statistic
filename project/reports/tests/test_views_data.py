@@ -1,14 +1,15 @@
 import json
+from datetime import datetime, timedelta, date
 
 import pytest
 from django.urls import resolve, reverse
 from freezegun import freeze_time
 
 from .. import forms
-from ...core.factories import UserFactory
+from ...core.factories import BikeFactory, UserFactory
 from ...core.helpers.test_helpers import login_rediretion
 from ..views import data, data_list
-
+from ..models import Data
 
 def test_data_list_not_loged(client):
     login_rediretion(
@@ -119,3 +120,57 @@ def test_index_redirection(client, login):
 def test_index_func(client):
     view = resolve('/')
     assert data.index == view.func
+
+
+@pytest.mark.django_db
+def test_data_create_form_valid(client, login):
+    url = reverse(
+        'reports:data_create',
+        kwargs={
+            'start_date': '2000-01-01',
+            'end_date': '2000-01-31'
+        }
+    )
+    bike = BikeFactory()
+    data = {
+        'bike': str(bike.id),
+        'date': date(2000, 1, 1),
+        'distance': 10.12,
+        'time': timedelta(seconds=15),
+        'temperature': 0.0,
+        'ascent': 0.0,
+        'descent': 0.0,
+        'max_speed': 0.0,
+        'cadence': 0,
+        'heart_rate': 0,
+        'checked': 'y'
+    }
+
+    response = client.post(url, data=data)
+    actual = json.loads(response.content)
+
+    assert actual['form_is_valid']
+
+    last_id = Data.objects.values_list('id', flat=True)[0]
+    s = '<tr id="row_id_{0}" data-pk="{0}"'
+    s += ' data-url="/api/data/2000-01-01/2000-01-31/update/{0}/"'
+    assert s.format(last_id) in actual['html_list']
+
+    assert '<td class="text-center">2000-01-01' in actual['html_list']
+    assert '<td class="text-center">10.12</td>' in actual['html_list']
+    assert '<td class="text-center">0:00:15</td>' in actual['html_list']
+
+
+@pytest.mark.django_db
+def test_data_create_form_invalid(client, login):
+    url = reverse(
+        'reports:data_create',
+        kwargs={
+            'start_date': '2000-01-01',
+            'end_date': '2000-01-31'
+        }
+    )
+    response = client.post(url, data={})
+    actual = json.loads(response.content)
+
+    assert not actual['form_is_valid']
