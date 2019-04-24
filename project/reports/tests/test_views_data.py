@@ -1,33 +1,13 @@
 import json
-from datetime import datetime, timedelta, date
 
 import pytest
 from django.urls import resolve, reverse
 from freezegun import freeze_time
 
 from .. import forms
-from ...core.factories import BikeFactory, UserFactory
 from ...core.helpers.test_helpers import login_rediretion
 from ..views import data, data_list
 from ..models import Data
-
-
-@pytest.fixture()
-def post_data():
-    bike = BikeFactory()
-    return {
-        'bike': str(bike.id),
-        'date': date(2000, 1, 1),
-        'distance': 10.12,
-        'time': timedelta(seconds=15),
-        'temperature': 0.0,
-        'ascent': 0.0,
-        'descent': 0.0,
-        'max_speed': 0.0,
-        'cadence': 0,
-        'heart_rate': 0,
-        'checked': 'y'
-    }
 
 
 def test_data_list_not_loged(client):
