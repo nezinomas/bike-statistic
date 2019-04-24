@@ -36,12 +36,19 @@ def test_data_list_not_valid_date_02(client):
 def test_data_list_date_filter_redirection(client, login):
     url = reverse(
         'reports:data_list',
-        kwargs={'start_date': '1999-01-01', 'end_date': '1999-01-01'}
+        kwargs={
+            'start_date': '1999-01-01',
+            'end_date': '1999-01-01'
+        }
     )
 
     response = client.post(
         url,
-        {'date_filter': True, 'start_date': '2000-01-01', 'end_date': '2000-01-31'},
+        {
+            'date_filter': True,
+            'start_date': '2000-01-01',
+            'end_date': '2000-01-31'
+        },
         follow=True
     )
 
