@@ -1,9 +1,9 @@
 from django.urls import reverse
 
 
-def login_rediretion(client, url_name):
+def login_rediretion(client, url_name, *args, **kwargs):
         login_url = reverse('accounts:login')
-        url = reverse(url_name)
+        url = reverse(url_name, **kwargs)
         response = client.get(url)
 
         assert response.url == '{login_url}?next={url}'.format(
