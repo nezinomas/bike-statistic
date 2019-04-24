@@ -2,8 +2,9 @@ import pytest
 from django.urls import resolve, reverse
 from freezegun import freeze_time
 
-from ..views import data
+from .. import forms
 from ...core.factories import UserFactory
+from ..views import data, data_list
 
 
 @pytest.mark.django_db
@@ -29,6 +30,23 @@ def test_data_list_not_valid_date_01(client):
 def test_data_list_not_valid_date_02(client):
     response = client.get('/data/xxxx-xx-xx/xxxx-xx-xx/')
     assert 404 == response.status_code
+
+
+@pytest.mark.django_db
+def test_data_list_date_filter_redirection(client, login):
+    url = reverse(
+        'reports:data_list',
+        kwargs={'start_date': '1999-01-01', 'end_date': '1999-01-01'}
+    )
+
+    response = client.post(
+        url,
+        {'date_filter': True, 'start_date': '2000-01-01', 'end_date': '2000-01-31'},
+        follow=True
+    )
+
+    assert 200 == response.status_code
+    assert data_list == resolve(response.redirect_chain[0][0]).func
 
 
 @pytest.mark.django_db
