@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 
 import pytest
 
@@ -42,7 +42,7 @@ def test_data_form_is_valid():
     form = DataForm(
         data={
             'bike': str(bike.id),
-            'date': datetime(2000, 1, 1),
+            'date': date(2000, 1, 1),
             'distance': 10.12,
             'time': timedelta(seconds=15),
             'temperature': 0.0,
