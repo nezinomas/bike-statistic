@@ -52,16 +52,12 @@ def test_data_list_date_filter_redirection(client, login):
             'end_date': '1999-01-01'
         }
     )
-
-    response = client.post(
-        url,
-        {
-            'date_filter': True,
-            'start_date': '2000-01-01',
-            'end_date': '2000-01-31'
-        },
-        follow=True
-    )
+    data = {
+        'date_filter': True,
+        'start_date': '2000-01-01',
+        'end_date': '2000-01-31'
+    }
+    response = client.post(url, data=data, follow=True)
 
     assert 200 == response.status_code
     assert data_list == resolve(response.redirect_chain[0][0]).func
