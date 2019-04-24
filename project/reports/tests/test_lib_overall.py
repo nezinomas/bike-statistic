@@ -3,9 +3,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 import pandas.api.types as ptypes
 import pytest
-from mock import patch
 
-from ...core.factories import BikeFactory, DataFactory
 from ..library.overall import Overall
 
 pytestmark = pytest.mark.django_db
@@ -27,19 +25,17 @@ def df():
 
 
 @pytest.fixture(autouse=True)
-def mock_Overall__create_query(request):
+def mock_Overall__create_query(monkeypatch, request):
     if 'noautofixt' in request.keywords:
         return
 
-    with patch.object(Overall, '_Overall__create_query', return_value=True):
-        yield
+    monkeypatch.setattr(Overall, '_Overall__create_query', lambda x: True)
 
 
 @pytest.fixture(autouse=True)
-def mock_read_frame():
-    with patch('project.reports.library.overall.read_frame') as mocked:
-        mocked.return_value = df()
-        yield
+def mock_read_frame(monkeypatch):
+    mock_target = 'project.reports.library.overall.read_frame'
+    monkeypatch.setattr(mock_target, lambda x: df())
 
 
 def test_df_date_type():
@@ -67,3 +63,12 @@ def test_bikes():
     expected = ['bike1', 'bike2']
 
     assert expected == actual
+
+
+@pytest.mark.django_db
+@pytest.mark.noautofixt
+def test_no_data():
+    with pytest.raises(Exception) as excinfo:
+        Overall()
+
+    assert str(excinfo.value) == 'No data in db.'

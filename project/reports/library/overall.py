@@ -43,6 +43,10 @@ class Overall(object):
 
     def __create_dataframe(self):
         qs = self.__create_query()
+
+        if not qs:
+            raise Exception('No data in db.')
+
         self.__df = read_frame(qs)
         self.__df['date'] = pd.to_datetime(self.__df['date']).dt.year
 
