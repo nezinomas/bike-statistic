@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from django.urls import resolve, reverse
 from freezegun import freeze_time
@@ -14,6 +16,7 @@ def test_data_list_not_loged(client):
         'reports:data_list',
         kwargs={'start_date': '2000-01-01', 'end_date': '2000-01-31'}
     )
+
 
 @pytest.mark.django_db
 def test_data_list_valid_date(client, login):
