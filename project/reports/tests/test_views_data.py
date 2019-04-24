@@ -11,6 +11,25 @@ from ...core.helpers.test_helpers import login_rediretion
 from ..views import data, data_list
 from ..models import Data
 
+
+@pytest.fixture()
+def post_data():
+    bike = BikeFactory()
+    return {
+        'bike': str(bike.id),
+        'date': date(2000, 1, 1),
+        'distance': 10.12,
+        'time': timedelta(seconds=15),
+        'temperature': 0.0,
+        'ascent': 0.0,
+        'descent': 0.0,
+        'max_speed': 0.0,
+        'cadence': 0,
+        'heart_rate': 0,
+        'checked': 'y'
+    }
+
+
 def test_data_list_not_loged(client):
     login_rediretion(
         client,
@@ -123,7 +142,7 @@ def test_index_func(client):
 
 
 @pytest.mark.django_db
-def test_data_create_form_valid(client, login):
+def test_data_create_form_valid(client, login, post_data):
     url = reverse(
         'reports:data_create',
         kwargs={
@@ -131,22 +150,7 @@ def test_data_create_form_valid(client, login):
             'end_date': '2000-01-31'
         }
     )
-    bike = BikeFactory()
-    data = {
-        'bike': str(bike.id),
-        'date': date(2000, 1, 1),
-        'distance': 10.12,
-        'time': timedelta(seconds=15),
-        'temperature': 0.0,
-        'ascent': 0.0,
-        'descent': 0.0,
-        'max_speed': 0.0,
-        'cadence': 0,
-        'heart_rate': 0,
-        'checked': 'y'
-    }
-
-    response = client.post(url, data=data)
+    response = client.post(url, data=post_data)
     actual = json.loads(response.content)
 
     assert actual['form_is_valid']
