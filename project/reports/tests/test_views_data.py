@@ -4,8 +4,16 @@ from freezegun import freeze_time
 
 from .. import forms
 from ...core.factories import UserFactory
+from ...core.helpers.test_helpers import login_rediretion
 from ..views import data, data_list
 
+
+def test_data_list_not_loged(client):
+    login_rediretion(
+        client,
+        'reports:data_list',
+        kwargs={'start_date': '2000-01-01', 'end_date': '2000-01-31'}
+    )
 
 @pytest.mark.django_db
 def test_data_list_valid_date(client, login):
