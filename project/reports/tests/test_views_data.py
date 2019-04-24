@@ -10,6 +10,10 @@ from ..views import data, data_list
 from ..models import Data
 
 
+def last_id():
+    return Data.objects.values_list('id', flat=True)[0]
+
+
 def test_data_list_not_loged(client):
     login_rediretion(
         client,
@@ -135,14 +139,14 @@ def test_data_create_form_valid(client, login, post_data):
     assert '<td class="text-center">10.12</td>' in actual['html_list']
     assert '<td class="text-center">0:00:15</td>' in actual['html_list']
 
-    last_id = Data.objects.values_list('id', flat=True)[0]
+    id = last_id()
     row = '<tr id="row_id_{0}" data-pk="{0}"'
     update = 'data-url="/api/data/2000-01-01/2000-01-31/update/{0}/"'
     delete = 'data-url="/api/data/2000-01-01/2000-01-31/delete/{0}/"'
 
-    assert row.format(last_id) in actual['html_list']
-    assert update.format(last_id) in actual['html_list']
-    assert delete.format(last_id) in actual['html_list']
+    assert row.format(id) in actual['html_list']
+    assert update.format(id) in actual['html_list']
+    assert delete.format(id) in actual['html_list']
 
 
 @pytest.mark.django_db
