@@ -37,3 +37,16 @@ def test_view_table_template(client, login):
     response = client.get(url)
 
     assert 'reports/table.html' == response.templates[0].name
+
+
+@pytest.mark.django_db
+def test_view_table_context_has_items(client, login):
+    GoalFactory()
+
+    url = reverse('reports:reports_table', kwargs={'year': 2000})
+    response = client.get(url)
+
+    assert 'objects' in response.context
+    assert 'month' in response.context
+    assert 'year' in response.context
+    assert 'stats' in response.context
