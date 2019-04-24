@@ -55,8 +55,14 @@ def test_data_list_date_filter_redirection(client, login):
     assert 200 == response.status_code
     assert data_list == resolve(response.redirect_chain[0][0]).func
 
-    assert '<input type="text" name="start_date" value="2000-01-01"' in str(response.content)
-    assert '<input type="text" name="end_date" value="2000-01-31"' in str(response.content)
+    assert (
+        '<input type="text" name="start_date" value="2000-01-01"'
+        in str(response.content)
+    )
+    assert (
+        '<input type="text" name="end_date" value="2000-01-31"'
+        in str(response.content)
+    )
 
 
 @pytest.mark.django_db
