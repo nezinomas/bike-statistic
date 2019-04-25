@@ -157,21 +157,21 @@ def test_data_create_form_valid(client, login, post_data):
     )
     response = client.post(url, data=post_data)
     actual = json.loads(response.content)
+    content = actual['html_list']
 
     assert actual['form_is_valid']
-
-    assert '<td class="text-center">2000-01-01' in actual['html_list']
-    assert '<td class="text-center">10.12</td>' in actual['html_list']
-    assert '<td class="text-center">0:00:15</td>' in actual['html_list']
+    assert '<td class="text-center">2000-01-01' in content
+    assert '<td class="text-center">10.12</td>' in content
+    assert '<td class="text-center">0:00:15</td>' in content
 
     id = last_id()
     row = '<tr id="row_id_{0}" data-pk="{0}"'
     update = 'data-url="/api/data/2000-01-01/2000-01-31/update/{0}/"'
     delete = 'data-url="/api/data/2000-01-01/2000-01-31/delete/{0}/"'
 
-    assert row.format(id) in actual['html_list']
-    assert update.format(id) in actual['html_list']
-    assert delete.format(id) in actual['html_list']
+    assert row.format(id) in content
+    assert update.format(id) in content
+    assert delete.format(id) in content
 
 
 @pytest.mark.django_db
@@ -310,9 +310,7 @@ def test_data_update_loaded_form(client, login):
         }
     )
     response = client.get(url)
-
     actual = json.loads(response.content)
-
     content = actual['html_form']
 
     assert '<option value="{}" selected>bike</option>'.format(data.bike.pk) in content
@@ -375,7 +373,6 @@ def test_data_quick_update(client, login):
         }
     )
     response = client.get(url_quick_update)
-
     actual = json.loads(response.content)
 
     # empty class="" means checked=y
