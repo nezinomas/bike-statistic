@@ -6,13 +6,9 @@ from ...core.factories import BikeFactory
 from ..forms import DataForm, DateFilterForm
 
 
-def test_date_filter_form_is_valid():
-    form = DateFilterForm(
-        data={
-            'start_date': '2000-01-01',
-            'end_date': '2000-01-31'
-        }
-    )
+def test_date_filter_form_is_valid(jan_2000):
+    form = DateFilterForm(data=jan_2000)
+
     assert form.is_valid()
 
 
@@ -23,6 +19,7 @@ def test_date_filter_form_invalid():
             'end_date': 'xxx'
         }
     )
+
     assert not form.is_valid()
 
 
@@ -33,6 +30,7 @@ def test_date_filter_form_invalid_start_bigger_than_end():
             'end_date': '2000-01-01'
         }
     )
+
     assert not form.is_valid()
 
 
@@ -40,4 +38,5 @@ def test_date_filter_form_invalid_start_bigger_than_end():
 def test_data_form_is_valid(post_data):
     bike = BikeFactory()
     form = DataForm(data=post_data)
+
     assert form.is_valid()
