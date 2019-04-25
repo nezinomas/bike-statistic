@@ -223,3 +223,81 @@ def test_data_delete_load_confirm_form(client, login):
 
     assert url in actual['html_form']
     assert msg in actual['html_form']
+
+
+@pytest.mark.django_db
+def test_data_update(client, login, post_data):
+    data = DataFactory()
+
+    url = reverse(
+        'reports:data_update',
+        kwargs={
+            'start_date': '2000-01-01',
+            'end_date': '2000-01-31',
+            'pk': data.pk
+        }
+    )
+    response = client.post(url, data=post_data)
+
+    actual = json.loads(response.content)
+    content = actual['html_list']
+
+    assert actual['form_is_valid']
+    assert '<td class="text-center">10.12</td>' in content  # distance
+    assert '<td class="text-center">0:00:15</td>' in content  # time
+    assert '<td class="text-center">1.1</td>' in content  # temperature
+    assert '<td class="text-center">600</td>' in content  # ascent
+    assert '<td class="text-center">500</td>' in content  # descent
+    assert '<td class="text-center">110.0</td>' in content  # max_speed
+    assert '<td class="text-center">120</td>' in content  # cadence
+    assert '<td class="text-center">200</td>' in content  # heart rate
+
+    row = ('<tr id="row_id_{id}" data-pk="{id}" data-url="{url}" data-tbl="0" class="">')
+    assert row.format(id=data.pk, url=url) in content  # row checked
+
+
+@pytest.mark.django_db
+def test_data_update_loaded_form(client, login):
+    DataFactory.reset_sequence()
+    data = DataFactory()
+
+    url = reverse(
+        'reports:data_update',
+        kwargs={
+            'start_date': '2000-01-01',
+            'end_date': '2000-01-31',
+            'pk': data.pk
+        }
+    )
+    response = client.get(url)
+
+    actual = json.loads(response.content)
+
+    content = actual['html_form']
+
+    assert '<option value="{}" selected>bike</option>'.format(data.pk) in content
+    assert '<input type="text" name="date" value="2000-01-01"' in content
+    assert '<input type="number" name="distance" value="10.0"' in content
+    assert '<input type="text" name="time" value="00:16:40"' in content
+    assert '<input type="number" name="temperature" value="10.0"' in content
+    assert '<input type="number" name="ascent" value="100.0"' in content
+    assert '<input type="number" name="descent" value="0.0"' in content
+    assert '<input type="number" name="max_speed" value="15.0"' in content
+    assert '<input type="number" name="heart_rate" value="141"' in content
+    assert '<input type="number" name="cadence" value="86"' in content
+    assert '<input type="hidden" name="checked" value="n"' in content
+
+
+@pytest.mark.django_db
+def test_data_update_object_not_found(client, login):
+    url = reverse(
+        'reports:data_update',
+        kwargs={
+            'start_date': '2000-01-01',
+            'end_date': '2000-01-31',
+            'pk': 999
+        }
+    )
+    response = client.get(url)
+
+    assert 404 == response.status_code
