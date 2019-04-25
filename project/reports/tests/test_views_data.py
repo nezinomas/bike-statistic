@@ -275,7 +275,7 @@ def test_data_update_loaded_form(client, login):
 
     content = actual['html_form']
 
-    assert '<option value="{}" selected>bike</option>'.format(data.pk) in content
+    assert '<option value="{}" selected>bike</option>'.format(data.bike.pk) in content
     assert '<input type="text" name="date" value="2000-01-01"' in content
     assert '<input type="number" name="distance" value="10.0"' in content
     assert '<input type="text" name="time" value="00:16:40"' in content
