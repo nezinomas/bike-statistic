@@ -13,11 +13,11 @@ def post_data():
         'date': date(2000, 1, 1),
         'distance': 10.12,
         'time': timedelta(seconds=15),
-        'temperature': 0.0,
-        'ascent': 0.0,
-        'descent': 0.0,
-        'max_speed': 0.0,
-        'cadence': 0,
-        'heart_rate': 0,
-        'checked': 'y'
+        'temperature': 1.1,
+        'ascent': 600,
+        'descent': 500,
+        'max_speed': 110,
+        'cadence': 120,
+        'heart_rate': 200,
+        'checked': 'n'
     }
