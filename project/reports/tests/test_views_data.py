@@ -301,3 +301,51 @@ def test_data_update_object_not_found(client, login):
     response = client.get(url)
 
     assert 404 == response.status_code
+
+
+@pytest.mark.django_db
+def test_data_quick_update(client, login):
+    DataFactory.reset_sequence()
+    data = DataFactory()
+
+    assert 'n' == data.checked
+
+    url_quick_update = reverse(
+        'reports:data_quick_update',
+        kwargs={
+            'start_date': '2000-01-01',
+            'end_date': '2000-01-31',
+            'pk': data.pk
+        }
+    )
+    url_update = reverse(
+        'reports:data_update',
+        kwargs={
+            'start_date': '2000-01-01',
+            'end_date': '2000-01-31',
+            'pk': data.pk
+        }
+    )
+    response = client.get(url_quick_update)
+
+    actual = json.loads(response.content)
+
+    # empty class="" means checked=y
+    row = '<tr id="row_id_{id}" data-pk="{id}" data-url="{url}" data-tbl="0" class="">'
+    assert row.format(url=url_update, id=data.pk) in actual['html_list']
+
+
+@pytest.mark.django_db
+def test_data_quick_update_404(client, login):
+
+    url_quick_update = reverse(
+        'reports:data_quick_update',
+        kwargs={
+            'start_date': '2000-01-01',
+            'end_date': '2000-01-31',
+            'pk': 999
+        }
+    )
+    response = client.get(url_quick_update)
+
+    assert 404 == response.status_code
