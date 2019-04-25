@@ -2,7 +2,7 @@ import pytest
 from django.urls import resolve, reverse
 from mock import patch
 from .. import views
-
+from ...core.helpers.test_helpers import login_rediretion
 
 @pytest.mark.django_db
 def test_insert_view_status_code_200(client, login):
@@ -20,12 +20,7 @@ def test_view_func():
 
 @pytest.mark.django_db
 def test_insert_data_redirection_if_user_not_logged(client):
-        login_url = reverse('accounts:login')
-        url = reverse('reports:insert_data')
-        response = client.get(url)
-
-        assert response.url == '{login_url}?next={url}'.format(
-            login_url=login_url, url=url)
+    login_rediretion(client, 'reports:insert_data')
 
 
 @patch('project.reports.views.data.inserter', return_value=True)

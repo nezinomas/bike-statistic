@@ -1,10 +1,25 @@
+import json
+
 import pytest
 from django.urls import resolve, reverse
 from freezegun import freeze_time
 
 from .. import forms
-from ...core.factories import UserFactory
+from ...core.helpers.test_helpers import login_rediretion
 from ..views import data, data_list
+from ..models import Data
+
+
+def last_id():
+    return Data.objects.values_list('id', flat=True)[0]
+
+
+def test_data_list_not_loged(client):
+    login_rediretion(
+        client,
+        'reports:data_list',
+        kwargs={'start_date': '2000-01-01', 'end_date': '2000-01-31'}
+    )
 
 
 @pytest.mark.django_db
@@ -41,19 +56,24 @@ def test_data_list_date_filter_redirection(client, login):
             'end_date': '1999-01-01'
         }
     )
-
-    response = client.post(
-        url,
-        {
-            'date_filter': True,
-            'start_date': '2000-01-01',
-            'end_date': '2000-01-31'
-        },
-        follow=True
-    )
+    data = {
+        'date_filter': True,
+        'start_date': '2000-01-01',
+        'end_date': '2000-01-31'
+    }
+    response = client.post(url, data=data, follow=True)
 
     assert 200 == response.status_code
     assert data_list == resolve(response.redirect_chain[0][0]).func
+
+    assert (
+        '<input type="text" name="start_date" value="2000-01-01"'
+        in str(response.content)
+    )
+    assert (
+        '<input type="text" name="end_date" value="2000-01-31"'
+        in str(response.content)
+    )
 
 
 @pytest.mark.django_db
@@ -99,3 +119,46 @@ def test_index_redirection(client, login):
 def test_index_func(client):
     view = resolve('/')
     assert data.index == view.func
+
+
+@pytest.mark.django_db
+def test_data_create_form_valid(client, login, post_data):
+    url = reverse(
+        'reports:data_create',
+        kwargs={
+            'start_date': '2000-01-01',
+            'end_date': '2000-01-31'
+        }
+    )
+    response = client.post(url, data=post_data)
+    actual = json.loads(response.content)
+
+    assert actual['form_is_valid']
+
+    assert '<td class="text-center">2000-01-01' in actual['html_list']
+    assert '<td class="text-center">10.12</td>' in actual['html_list']
+    assert '<td class="text-center">0:00:15</td>' in actual['html_list']
+
+    id = last_id()
+    row = '<tr id="row_id_{0}" data-pk="{0}"'
+    update = 'data-url="/api/data/2000-01-01/2000-01-31/update/{0}/"'
+    delete = 'data-url="/api/data/2000-01-01/2000-01-31/delete/{0}/"'
+
+    assert row.format(id) in actual['html_list']
+    assert update.format(id) in actual['html_list']
+    assert delete.format(id) in actual['html_list']
+
+
+@pytest.mark.django_db
+def test_data_create_form_invalid(client, login):
+    url = reverse(
+        'reports:data_create',
+        kwargs={
+            'start_date': '2000-01-01',
+            'end_date': '2000-01-31'
+        }
+    )
+    response = client.post(url, data={})
+    actual = json.loads(response.content)
+
+    assert not actual['form_is_valid']

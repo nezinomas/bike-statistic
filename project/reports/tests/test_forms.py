@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 
 import pytest
 
@@ -37,21 +37,7 @@ def test_date_filter_form_invalid_start_bigger_than_end():
 
 
 @pytest.mark.django_db
-def test_data_form_is_valid():
+def test_data_form_is_valid(post_data):
     bike = BikeFactory()
-    form = DataForm(
-        data={
-            'bike': str(bike.id),
-            'date': datetime(2000, 1, 1),
-            'distance': 10.12,
-            'time': timedelta(seconds=15),
-            'temperature': 0.0,
-            'ascent': 0.0,
-            'descent': 0.0,
-            'max_speed': 0.0,
-            'cadence': 0,
-            'heart_rate': 0,
-            'checked': 'y'
-        }
-    )
+    form = DataForm(data=post_data)
     assert form.is_valid()
