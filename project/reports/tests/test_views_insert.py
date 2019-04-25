@@ -1,8 +1,10 @@
 import pytest
 from django.urls import resolve, reverse
 from mock import patch
-from .. import views
+
 from ...core.helpers.test_helpers import login_rediretion
+from .. import views
+
 
 @pytest.mark.django_db
 def test_insert_view_status_code_200(client, login):
