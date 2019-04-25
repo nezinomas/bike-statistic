@@ -15,23 +15,13 @@ def last_id():
     return Data.objects.values_list('id', flat=True)[0]
 
 
-def test_data_list_not_loged(client):
-    login_rediretion(
-        client,
-        'reports:data_list',
-        kwargs={'start_date': '2000-01-01', 'end_date': '2000-01-31'}
-    )
+def test_data_list_not_loged(client, jan_2000):
+    login_rediretion(client, 'reports:data_list', kwargs=jan_2000)
 
 
 @pytest.mark.django_db
-def test_data_list_valid_date(client, login):
-    url = reverse(
-        'reports:data_list',
-        kwargs={
-            'start_date': '2000-01-01',
-            'end_date': '2000-01-31'
-        }
-    )
+def test_data_list_valid_date(client, login, jan_2000):
+    url = reverse('reports:data_list', kwargs=jan_2000)
     response = client.get(url)
 
     assert '<form class="filter"' in str(response.content)
@@ -49,19 +39,9 @@ def test_data_list_not_valid_date_02(client):
 
 
 @pytest.mark.django_db
-def test_data_list_date_filter_redirection(client, login):
-    url = reverse(
-        'reports:data_list',
-        kwargs={
-            'start_date': '1999-01-01',
-            'end_date': '1999-01-01'
-        }
-    )
-    data = {
-        'date_filter': True,
-        'start_date': '2000-01-01',
-        'end_date': '2000-01-31'
-    }
+def test_data_list_date_filter_redirection(client, login, jan_2000):
+    url = reverse('reports:data_list', kwargs=jan_2000)
+    data = {**jan_2000, 'date_filter': True}
     response = client.post(url, data=data, follow=True)
 
     assert 200 == response.status_code
@@ -138,23 +118,13 @@ def test_index_func(client):
     assert data.index == view.func
 
 
-def test_data_create_not_loged(client):
-    login_rediretion(
-        client,
-        'reports:data_create',
-        kwargs={'start_date': '2000-01-01', 'end_date': '2000-01-31'}
-    )
+def test_data_create_not_loged(client, jan_2000):
+    login_rediretion(client, 'reports:data_create', kwargs=jan_2000)
 
 
 @pytest.mark.django_db
-def test_data_create_form_valid(client, login, post_data):
-    url = reverse(
-        'reports:data_create',
-        kwargs={
-            'start_date': '2000-01-01',
-            'end_date': '2000-01-31'
-        }
-    )
+def test_data_create_form_valid(client, login, post_data, jan_2000):
+    url = reverse('reports:data_create', kwargs=jan_2000)
     response = client.post(url, data=post_data)
     actual = json.loads(response.content)
     content = actual['html_list']
@@ -175,40 +145,23 @@ def test_data_create_form_valid(client, login, post_data):
 
 
 @pytest.mark.django_db
-def test_data_create_form_invalid(client, login):
-    url = reverse(
-        'reports:data_create',
-        kwargs={
-            'start_date': '2000-01-01',
-            'end_date': '2000-01-31'
-        }
-    )
+def test_data_create_form_invalid(client, login, jan_2000):
+    url = reverse('reports:data_create', kwargs=jan_2000)
     response = client.post(url, data={})
     actual = json.loads(response.content)
 
     assert not actual['form_is_valid']
 
 
-def test_data_delete_not_loged(client):
-    login_rediretion(
-        client,
-        'reports:data_delete',
-        kwargs={'start_date': '2000-01-01', 'end_date': '2000-01-31', 'pk': 999}
-    )
+def test_data_delete_not_loged(client, jan_2000):
+    login_rediretion(client, 'reports:data_delete', kwargs={**jan_2000, 'pk': 99})
 
 
 @pytest.mark.django_db
-def test_data_delete(client, login):
+def test_data_delete(client, login, jan_2000):
     data = DataFactory()
 
-    url = reverse(
-        'reports:data_delete',
-        kwargs={
-            'start_date': '2000-01-01',
-            'end_date': '2000-01-31',
-            'pk': data.pk
-        }
-    )
+    url = reverse('reports:data_delete', kwargs={**jan_2000, 'pk': data.pk})
     response = client.post(url)
 
     actual = json.loads(response.content)
@@ -218,32 +171,18 @@ def test_data_delete(client, login):
 
 
 @pytest.mark.django_db
-def test_data_delete_404(client, login):
-    url = reverse(
-        'reports:data_delete',
-        kwargs={
-            'start_date': '2000-01-01',
-            'end_date': '2000-01-31',
-            'pk': 100
-        }
-    )
+def test_data_delete_404(client, login, jan_2000):
+    url = reverse('reports:data_delete', kwargs={**jan_2000, 'pk': 99})
     response = client.post(url)
 
     assert 404 == response.status_code
 
 
 @pytest.mark.django_db
-def test_data_delete_load_confirm_form(client, login):
+def test_data_delete_load_confirm_form(client, login, jan_2000):
     data = DataFactory()
 
-    url = reverse(
-        'reports:data_delete',
-        kwargs={
-            'start_date': '2000-01-01',
-            'end_date': '2000-01-31',
-            'pk': data.pk
-        }
-    )
+    url = reverse('reports:data_delete', kwargs={**jan_2000, 'pk': data.pk})
     response = client.get(url)
 
     actual = json.loads(response.content)
@@ -257,26 +196,19 @@ def test_data_delete_load_confirm_form(client, login):
     assert msg in actual['html_form']
 
 
-def test_data_update_not_loged(client):
+def test_data_update_not_loged(client, jan_2000):
     login_rediretion(
         client,
         'reports:data_update',
-        kwargs={'start_date': '2000-01-01', 'end_date': '2000-01-31', 'pk': 9}
+        kwargs={**jan_2000, 'pk': 99}
     )
 
 
 @pytest.mark.django_db
-def test_data_update(client, login, post_data):
+def test_data_update(client, login, post_data, jan_2000):
     data = DataFactory()
 
-    url = reverse(
-        'reports:data_update',
-        kwargs={
-            'start_date': '2000-01-01',
-            'end_date': '2000-01-31',
-            'pk': data.pk
-        }
-    )
+    url = reverse('reports:data_update', kwargs={**jan_2000, 'pk': data.pk})
     response = client.post(url, data=post_data)
 
     actual = json.loads(response.content)
@@ -297,19 +229,13 @@ def test_data_update(client, login, post_data):
 
 
 @pytest.mark.django_db
-def test_data_update_loaded_form(client, login):
+def test_data_update_loaded_form(client, login, jan_2000):
     DataFactory.reset_sequence()
     data = DataFactory()
 
-    url = reverse(
-        'reports:data_update',
-        kwargs={
-            'start_date': '2000-01-01',
-            'end_date': '2000-01-31',
-            'pk': data.pk
-        }
-    )
+    url = reverse('reports:data_update', kwargs={**jan_2000, 'pk': data.pk})
     response = client.get(url)
+
     actual = json.loads(response.content)
     content = actual['html_form']
 
@@ -327,30 +253,19 @@ def test_data_update_loaded_form(client, login):
 
 
 @pytest.mark.django_db
-def test_data_update_object_not_found(client, login):
-    url = reverse(
-        'reports:data_update',
-        kwargs={
-            'start_date': '2000-01-01',
-            'end_date': '2000-01-31',
-            'pk': 999
-        }
-    )
+def test_data_update_object_not_found(client, login, jan_2000):
+    url = reverse('reports:data_update', kwargs={**jan_2000, 'pk': 99})
     response = client.get(url)
 
     assert 404 == response.status_code
 
 
-def test_data_quick_update_not_loged(client):
-    login_rediretion(
-        client,
-        'reports:data_quick_update',
-        kwargs={'start_date': '2000-01-01', 'end_date': '2000-01-31', 'pk': 9}
-    )
+def test_data_quick_update_not_loged(client, jan_2000):
+    login_rediretion(client, 'reports:data_quick_update', kwargs={**jan_2000, 'pk': 99})
 
 
 @pytest.mark.django_db
-def test_data_quick_update(client, login):
+def test_data_quick_update(client, login, jan_2000):
     DataFactory.reset_sequence()
     data = DataFactory()
 
@@ -358,19 +273,11 @@ def test_data_quick_update(client, login):
 
     url_quick_update = reverse(
         'reports:data_quick_update',
-        kwargs={
-            'start_date': '2000-01-01',
-            'end_date': '2000-01-31',
-            'pk': data.pk
-        }
+        kwargs={**jan_2000, 'pk': data.pk}
     )
     url_update = reverse(
         'reports:data_update',
-        kwargs={
-            'start_date': '2000-01-01',
-            'end_date': '2000-01-31',
-            'pk': data.pk
-        }
+        kwargs={**jan_2000, 'pk': data.pk}
     )
     response = client.get(url_quick_update)
     actual = json.loads(response.content)
@@ -381,15 +288,11 @@ def test_data_quick_update(client, login):
 
 
 @pytest.mark.django_db
-def test_data_quick_update_404(client, login):
+def test_data_quick_update_404(client, login, jan_2000):
 
     url_quick_update = reverse(
         'reports:data_quick_update',
-        kwargs={
-            'start_date': '2000-01-01',
-            'end_date': '2000-01-31',
-            'pk': 999
-        }
+        kwargs={**jan_2000, 'pk': 99}
     )
     response = client.get(url_quick_update)
 
