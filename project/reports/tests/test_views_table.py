@@ -1,8 +1,13 @@
 import pytest
 from django.urls import resolve, reverse
 
-from .. import views
+from ...core.helpers.test_helpers import login_rediretion
 from ...goals.factories import GoalFactory
+from .. import views
+
+
+def test_view_table_not_loged(client):
+    login_rediretion(client, 'reports:reports_table', kwargs={'year': 2000})
 
 
 @pytest.mark.django_db
