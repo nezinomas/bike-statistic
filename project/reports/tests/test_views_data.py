@@ -77,6 +77,14 @@ def test_data_list_date_filter_redirection(client, login):
     )
 
 
+def test_data_partial_not_loged(client):
+    login_rediretion(
+        client,
+        'reports:data_partial',
+        kwargs={'start_date': '2000-01-01'}
+    )
+
+
 @pytest.mark.django_db
 @freeze_time("1999-01-15")
 def test_data_partial_redirection(client, login):
@@ -90,6 +98,10 @@ def test_data_partial_redirection(client, login):
 def test_data_partial_func(client):
     view = resolve('/data/1999-01-01/')
     assert data.data_partial == view.func
+
+
+def test_data_empty_not_loged(client):
+    login_rediretion(client, 'reports:data_empty')
 
 
 @freeze_time("1999-01-15")
@@ -107,6 +119,10 @@ def test_data_empty_func(client):
     assert data.data_empty == view.func
 
 
+def test_index_not_loged(client):
+    login_rediretion(client, 'reports:index')
+
+
 @freeze_time("1999-01-15")
 @pytest.mark.django_db
 def test_index_redirection(client, login):
@@ -120,6 +136,14 @@ def test_index_redirection(client, login):
 def test_index_func(client):
     view = resolve('/')
     assert data.index == view.func
+
+
+def test_data_create_not_loged(client):
+    login_rediretion(
+        client,
+        'reports:data_create',
+        kwargs={'start_date': '2000-01-01', 'end_date': '2000-01-31'}
+    )
 
 
 @pytest.mark.django_db
@@ -163,6 +187,14 @@ def test_data_create_form_invalid(client, login):
     actual = json.loads(response.content)
 
     assert not actual['form_is_valid']
+
+
+def test_data_delete_not_loged(client):
+    login_rediretion(
+        client,
+        'reports:data_delete',
+        kwargs={'start_date': '2000-01-01', 'end_date': '2000-01-31', 'pk': 999}
+    )
 
 
 @pytest.mark.django_db
@@ -223,6 +255,14 @@ def test_data_delete_load_confirm_form(client, login):
 
     assert url in actual['html_form']
     assert msg in actual['html_form']
+
+
+def test_data_update_not_loged(client):
+    login_rediretion(
+        client,
+        'reports:data_update',
+        kwargs={'start_date': '2000-01-01', 'end_date': '2000-01-31', 'pk': 9}
+    )
 
 
 @pytest.mark.django_db
@@ -301,6 +341,14 @@ def test_data_update_object_not_found(client, login):
     response = client.get(url)
 
     assert 404 == response.status_code
+
+
+def test_data_quick_update_not_loged(client):
+    login_rediretion(
+        client,
+        'reports:data_quick_update',
+        kwargs={'start_date': '2000-01-01', 'end_date': '2000-01-31', 'pk': 9}
+    )
 
 
 @pytest.mark.django_db
