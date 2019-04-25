@@ -4,10 +4,11 @@ import pytest
 from django.urls import resolve, reverse
 from freezegun import freeze_time
 
-from .. import forms
+from ...core.factories import DataFactory
 from ...core.helpers.test_helpers import login_rediretion
-from ..views import data, data_list
+from .. import forms
 from ..models import Data
+from ..views import data, data_list
 
 
 def last_id():
@@ -162,3 +163,63 @@ def test_data_create_form_invalid(client, login):
     actual = json.loads(response.content)
 
     assert not actual['form_is_valid']
+
+
+@pytest.mark.django_db
+def test_data_delete(client, login):
+    data = DataFactory()
+
+    url = reverse(
+        'reports:data_delete',
+        kwargs={
+            'start_date': '2000-01-01',
+            'end_date': '2000-01-31',
+            'pk': data.pk
+        }
+    )
+    response = client.post(url)
+
+    actual = json.loads(response.content)
+
+    assert actual['form_is_valid']
+    assert not Data.objects.all()
+
+
+@pytest.mark.django_db
+def test_data_delete_404(client, login):
+    url = reverse(
+        'reports:data_delete',
+        kwargs={
+            'start_date': '2000-01-01',
+            'end_date': '2000-01-31',
+            'pk': 100
+        }
+    )
+    response = client.post(url)
+
+    assert 404 == response.status_code
+
+
+@pytest.mark.django_db
+def test_data_delete_load_confirm_form(client, login):
+    data = DataFactory()
+
+    url = reverse(
+        'reports:data_delete',
+        kwargs={
+            'start_date': '2000-01-01',
+            'end_date': '2000-01-31',
+            'pk': data.pk
+        }
+    )
+    response = client.get(url)
+
+    actual = json.loads(response.content)
+
+    url = '<form method="post" action="{u}"'.format(u=url)
+    msg = (
+        'Are you sure you want to delete record: <strong>2000-01-01</strong>'
+        ' / <strong>bike</strong>?')
+
+    assert url in actual['html_form']
+    assert msg in actual['html_form']
