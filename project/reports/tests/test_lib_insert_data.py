@@ -11,12 +11,6 @@ from ..library.insert_data import insert_data
 pytestmark = pytest.mark.django_db
 
 
-@pytest.fixture(autouse=True)
-def login(client):
-    UserFactory()
-    client.login(username='bob', password='123')
-
-
 @pytest.fixture(scope='module', autouse=True)
 def mock_workout():
     mock_func = 'project.reports.library.insert_data.__workouts'
