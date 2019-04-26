@@ -6,7 +6,7 @@ from mock import patch
 from .. import models
 from ...core.factories import BikeFactory, DataFactory, UserFactory
 from ..endomondo import Workout
-from ..library.insert_data import insert_data
+from ..library.insert_data import insert_data, get_temperature
 
 pytestmark = pytest.mark.django_db
 
@@ -27,12 +27,23 @@ def mock_workout():
         yield
 
 
-@pytest.fixture(scope='session', autouse=True)
-def mock_get_temperature():
-    mock_func = 'project.reports.library.insert_data.get_temperature'
-    with patch(mock_func) as mocked:
-        mocked.return_value = 1.5
-        yield
+@pytest.fixture(autouse=True)
+def mock_get_page(monkeypatch):
+    string = (
+        '<div class="now__weather"><span class="unit unit_temperature_c">'
+        '<span class="nowvalue__text_l">'
+        '<span class="nowvalue__sign">+</span>22,'
+        '<span class="nowvalue__text_m">5</span>'
+        '</span></span></div>'
+    )
+    monkeypatch.setattr(
+        'project.reports.library.insert_data._get_page_content', lambda x: string)
+
+
+def test_get_temperature():
+    actual = get_temperature()
+
+    assert 22.5 == actual
 
 
 def test_insert_data_exists():
