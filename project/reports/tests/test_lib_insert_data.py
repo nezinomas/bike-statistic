@@ -26,7 +26,7 @@ def mock_workout(monkeypatch):
     monkeypatch.setattr(mock_func, lambda maxResults: return_val)
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture()
 def mock_get_page(monkeypatch):
     mock_func = 'project.reports.library.insert_data._get_page_content'
     string = (
@@ -45,7 +45,7 @@ def mock_get_page_exception(monkeypatch):
     monkeypatch.setattr(mock_func, lambda x: Exception())
 
 
-def test_get_temperature():
+def test_get_temperature(mock_get_page):
     actual = get_temperature()
 
     assert 22.5 == actual
@@ -56,7 +56,7 @@ def test_get_temperature_if_exception(mock_get_page_exception):
     get_temperature()
 
 
-def test_insert_data_exists():
+def test_insert_data_exists(mock_get_page):
     DataFactory(
         date=datetime(2000, 1, 1).date(),
         distance=10.12,
@@ -69,7 +69,7 @@ def test_insert_data_exists():
     assert 1 == actual.count()
 
 
-def test_insert_data_not_exists_1():
+def test_insert_data_not_exists_1(mock_get_page):
     DataFactory(
         date=datetime(1999, 1, 1).date(),
         distance=10.10,
@@ -83,7 +83,7 @@ def test_insert_data_not_exists_1():
     assert 2 == data.count()
 
 
-def test_insert_data_not_exists_2():
+def test_insert_data_not_exists_2(mock_get_page):
     DataFactory(
         date=datetime(2000, 1, 1).date(),
         distance=9.12345678,
