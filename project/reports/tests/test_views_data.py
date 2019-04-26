@@ -3,12 +3,23 @@ import json
 import pytest
 from django.urls import resolve, reverse
 from freezegun import freeze_time
+from mock import patch
 
 from ...core.factories import DataFactory
 from ...core.helpers.test_helpers import login_rediretion
 from .. import forms
 from ..models import Data
 from ..views import data, data_list
+
+
+@pytest.fixture(scope='class')
+def db_data(django_db_blocker):
+    with django_db_blocker.unblock():
+        DataFactory.reset_sequence()
+        obj = DataFactory()
+    yield obj
+    with django_db_blocker.unblock():
+        obj.delete()
 
 
 def last_id():
@@ -29,8 +40,8 @@ def test_data_list_valid_date(client, login, jan_2000):
 
 
 def test_data_list_not_valid_date_01(client):
-        response = client.get('/data/2000/2001/')
-        assert 404 == response.status_code
+    response = client.get('/data/2000/2001/')
+    assert 404 == response.status_code
 
 
 def test_data_list_not_valid_date_02(client):
@@ -158,10 +169,9 @@ def test_data_delete_not_loged(client, jan_2000):
 
 
 @pytest.mark.django_db
-def test_data_delete(client, login, jan_2000):
-    data = DataFactory()
-
-    url = reverse('reports:data_delete', kwargs={**jan_2000, 'pk': data.pk})
+def test_data_delete(client, login, jan_2000, db_data):
+    id = db_data.pk
+    url = reverse('reports:data_delete', kwargs={**jan_2000, 'pk': id})
     response = client.post(url)
 
     actual = json.loads(response.content)
@@ -179,10 +189,8 @@ def test_data_delete_404(client, login, jan_2000):
 
 
 @pytest.mark.django_db
-def test_data_delete_load_confirm_form(client, login, jan_2000):
-    data = DataFactory()
-
-    url = reverse('reports:data_delete', kwargs={**jan_2000, 'pk': data.pk})
+def test_data_delete_load_confirm_form(client, login, jan_2000, db_data):
+    url = reverse('reports:data_delete', kwargs={**jan_2000, 'pk': db_data.pk})
     response = client.get(url)
 
     actual = json.loads(response.content)
@@ -205,10 +213,8 @@ def test_data_update_not_loged(client, jan_2000):
 
 
 @pytest.mark.django_db
-def test_data_update(client, login, post_data, jan_2000):
-    data = DataFactory()
-
-    url = reverse('reports:data_update', kwargs={**jan_2000, 'pk': data.pk})
+def test_data_update(client, login, post_data, jan_2000, db_data):
+    url = reverse('reports:data_update', kwargs={**jan_2000, 'pk': db_data.pk})
     response = client.post(url, data=post_data)
 
     actual = json.loads(response.content)
@@ -225,21 +231,18 @@ def test_data_update(client, login, post_data, jan_2000):
     assert '<td class="text-center">200</td>' in content  # heart rate
 
     row = ('<tr id="row_id_{id}" data-pk="{id}" data-url="{url}" data-tbl="0" class="">')
-    assert row.format(id=data.pk, url=url) in content  # row checked
+    assert row.format(id=db_data.pk, url=url) in content  # row checked
 
 
 @pytest.mark.django_db
-def test_data_update_loaded_form(client, login, jan_2000):
-    DataFactory.reset_sequence()
-    data = DataFactory()
-
-    url = reverse('reports:data_update', kwargs={**jan_2000, 'pk': data.pk})
+def test_data_update_loaded_form(client, login, jan_2000, db_data):
+    url = reverse('reports:data_update', kwargs={**jan_2000, 'pk': db_data.pk})
     response = client.get(url)
 
     actual = json.loads(response.content)
     content = actual['html_form']
 
-    assert '<option value="{}" selected>bike</option>'.format(data.bike.pk) in content
+    assert '<option value="{}" selected>bike</option>'.format(db_data.bike.pk) in content
     assert '<input type="text" name="date" value="2000-01-01"' in content
     assert '<input type="number" name="distance" value="10.0"' in content
     assert '<input type="text" name="time" value="00:16:40"' in content
@@ -265,31 +268,27 @@ def test_data_quick_update_not_loged(client, jan_2000):
 
 
 @pytest.mark.django_db
-def test_data_quick_update(client, login, jan_2000):
-    DataFactory.reset_sequence()
-    data = DataFactory()
-
-    assert 'n' == data.checked
+def test_data_quick_update(client, login, jan_2000, db_data):
+    assert 'n' == db_data.checked
 
     url_quick_update = reverse(
         'reports:data_quick_update',
-        kwargs={**jan_2000, 'pk': data.pk}
+        kwargs={**jan_2000, 'pk': db_data.pk}
     )
     url_update = reverse(
         'reports:data_update',
-        kwargs={**jan_2000, 'pk': data.pk}
+        kwargs={**jan_2000, 'pk': db_data.pk}
     )
     response = client.get(url_quick_update)
     actual = json.loads(response.content)
 
     # empty class="" means checked=y
     row = '<tr id="row_id_{id}" data-pk="{id}" data-url="{url}" data-tbl="0" class="">'
-    assert row.format(url=url_update, id=data.pk) in actual['html_list']
+    assert row.format(url=url_update, id=db_data.pk) in actual['html_list']
 
 
 @pytest.mark.django_db
 def test_data_quick_update_404(client, login, jan_2000):
-
     url_quick_update = reverse(
         'reports:data_quick_update',
         kwargs={**jan_2000, 'pk': 99}
