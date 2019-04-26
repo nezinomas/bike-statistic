@@ -39,10 +39,21 @@ def mock_get_page(monkeypatch):
     monkeypatch.setattr(mock_func, lambda x: string)
 
 
+@pytest.fixture()
+def mock_get_page_exception(monkeypatch):
+    mock_func = 'project.reports.library.insert_data._get_page_content'
+    monkeypatch.setattr(mock_func, lambda x: Exception())
+
+
 def test_get_temperature():
     actual = get_temperature()
 
     assert 22.5 == actual
+
+
+@pytest.mark.xfail(raises=Exception)
+def test_get_temperature_if_exception(mock_get_page_exception):
+    get_temperature()
 
 
 def test_insert_data_exists():
