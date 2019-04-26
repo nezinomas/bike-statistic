@@ -1,34 +1,34 @@
 from datetime import datetime, timedelta
 
 import pytest
-from mock import patch
 
-from .. import models
 from ...core.factories import BikeFactory, DataFactory, UserFactory
+from .. import models
 from ..endomondo import Workout
-from ..library.insert_data import insert_data, get_temperature
+from ..library.insert_data import get_temperature, insert_data
 
 pytestmark = pytest.mark.django_db
 
 
-@pytest.fixture(scope='module', autouse=True)
-def mock_workout():
+@pytest.fixture(autouse=True)
+def mock_workout(monkeypatch):
     mock_func = 'project.reports.library.insert_data.__workouts'
-    with patch(mock_func) as mocked:
-        mocked.return_value = [Workout(
-            {
-                'ascent': 9,
-                'descent': 9,
-                'distance': 10.12345,
-                'duration': 15,
-                'sport': 2,
-                'start_time': '2000-01-01 14:48:05 UTC'
-            })]
-        yield
+    return_val = [Workout(
+        {
+            'ascent': 9,
+            'descent': 9,
+            'distance': 10.12345,
+            'duration': 15,
+            'sport': 2,
+            'start_time': '2000-01-01 14:48:05 UTC'
+        }
+    )]
+    monkeypatch.setattr(mock_func, lambda maxResults: return_val)
 
 
 @pytest.fixture(autouse=True)
 def mock_get_page(monkeypatch):
+    mock_func = 'project.reports.library.insert_data._get_page_content'
     string = (
         '<div class="now__weather"><span class="unit unit_temperature_c">'
         '<span class="nowvalue__text_l">'
@@ -36,8 +36,7 @@ def mock_get_page(monkeypatch):
         '<span class="nowvalue__text_m">5</span>'
         '</span></span></div>'
     )
-    monkeypatch.setattr(
-        'project.reports.library.insert_data._get_page_content', lambda x: string)
+    monkeypatch.setattr(mock_func, lambda x: string)
 
 
 def test_get_temperature():
