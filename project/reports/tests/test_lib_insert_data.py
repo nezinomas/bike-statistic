@@ -97,7 +97,22 @@ def test_insert_data_not_exists_2():
     assert 2 == data.count()
 
 
-def test_insert_data_must_be_rounded():
+def test_insert_data_not_exists_3(mock_get_page_exception):
+    DataFactory(
+        date=datetime(2000, 1, 1).date(),
+        distance=9.12345678,
+        time=timedelta(seconds=15)
+    )
+
+    insert_data()
+
+    data = [*models.Data.objects.order_by('-pk')]
+
+    assert 2 == len(data)
+    assert data[0].temperature is None
+
+
+def test_insert_data_must_be_rounded(mock_get_page):
     BikeFactory()
 
     insert_data()
