@@ -17,7 +17,13 @@
                 url: $("#my-chart").attr("data-url"),
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data)
+                    // console.log(data)
+                    Highcharts.setOptions({
+                        lang: {
+                            thousandsSep: '.',
+                            decimalPoint: ',',
+                        }
+                    });
                     Highcharts.chart("my-chart", {
                         chart : { type: 'column'},
                         xAxis: {
@@ -42,8 +48,12 @@
                             itemMarginBottom: 10
                         },
                         tooltip: {
-                            headerFormat: '<b>{point.x}</b><br/>',
-                            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                            pointFormat: '{point.y:,.0f}',
+                            formatter: function () {
+                                return '<b>' + this.x + '</b><br/>' +
+                                    `${this.series.name}: ${Highcharts.numberFormat(this.point.y, 0)}<br/>` +
+                                    `Total: ${Highcharts.numberFormat(this.point.stackTotal, 0)}`;
+                            }
                         },
                         plotOptions: {
                             column: {
