@@ -42,7 +42,6 @@ urlpatterns = [
         name='data_delete'
     ),
 
-    path('api/reports/overall/', views.api_overall, name='api-overall'),
     path('reports/overall/', views.overall, name='overall'),
     path('reports/<int:year>/', views.table, name='reports_table'),
 ]

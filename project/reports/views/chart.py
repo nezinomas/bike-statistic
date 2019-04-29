@@ -5,7 +5,7 @@ from ..library.chart import get_color
 from ..library.overall import Overall
 
 
-def api_overall(request):
+def overall(request):
     o = Overall()
 
     series = []
@@ -25,8 +25,4 @@ def api_overall(request):
             'series': series[::-1],
         }
     }
-    return JsonResponse(chart)
-
-
-def overall(request):
-    return render(request, template_name='reports/overall.html', context={})
+    return render(request, template_name='reports/overall.html', context={'chart': chart})
