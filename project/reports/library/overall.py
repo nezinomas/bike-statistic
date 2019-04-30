@@ -13,7 +13,6 @@ class Overall(object):
 
         self.__create_dataframe()
         self.__create_pivot_table()
-        self.__create_years_list()
         self.__calc_statistic()
 
     @property
@@ -49,6 +48,7 @@ class Overall(object):
 
         self.__df = read_frame(qs)
         self.__df['date'] = pd.to_datetime(self.__df['date']).dt.year
+        self.__df['distance'] = self.__df['distance'].astype(float)
 
     def __create_pivot_table(self):
         self.__pivotTable = pd.pivot_table(
@@ -58,17 +58,13 @@ class Overall(object):
             values=['distance'],
             fill_value=0,
             aggfunc=[np.sum],
-        ).sort_values('bike__date')
+        ).sort_values('bike__date').reset_index().set_index('bike__short_name')
 
-    def __create_years_list(self):
-        self.__years = [x[-1] for x in list(self.__pivotTable.columns.values)]
+        self.__pivotTable.drop(columns=['bike__date'], inplace=True)
 
     def __calc_statistic(self):
-        self.__bikes = [x[0] for x in list(self.__pivotTable.index)]
+        data = self.__pivotTable.to_dict('split')
 
-        for key, bike in enumerate(self.__bikes):
-            q = (
-                self.__pivotTable.query("bike__short_name==['{}']".format(bike))
-                .values.tolist()[0]
-            )
-            self.__distances.append([float(x) for x in q])
+        self.__bikes = data['index']
+        self.__distances = data['data']
+        self.__years = list(self.__pivotTable.columns.levels[2])[:-1]
