@@ -60,7 +60,7 @@ class Overall(object):
             aggfunc=[np.sum],
         ).sort_values('bike__date').reset_index().set_index('bike__short_name')
 
-        self.__pivotTable.drop(columns=['bike__date'], inplace=True)
+        self.__pivotTable.drop(columns=['bike__date'], axis=1, level=0, inplace=True)
 
     def __calc_statistic(self):
         data = self.__pivotTable.to_dict('split')
