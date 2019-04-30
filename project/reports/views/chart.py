@@ -25,4 +25,10 @@ def overall(request):
             'series': series[::-1],
         }
     }
-    return render(request, template_name='reports/overall.html', context={'chart': chart})
+
+    context = {
+        'chart': chart,
+        'tbody': o.totals_table,
+        'tfooter': o.totals_grand
+    }
+    return render(request, template_name='reports/overall.html', context=context)
