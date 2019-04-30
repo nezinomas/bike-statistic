@@ -1,5 +1,5 @@
 {% extends "category_charts.html" %}
-
+{% load get_index %}{% load humanize %} 
 
 {% block breadcrumb %}{{ block.super }}
     <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="{% url 'reports:overall' %}">Owerall</a>
@@ -9,54 +9,82 @@
 {% block content %}
 
 <div class='row'>
-    <div class='col'>
-        <div id="my-chart" data-url="{% url 'reports:api-overall' %}"></div>
+    <div class='col-9'>
+        <div id="my-chart"></div>
 
         <script>
-            $.ajax({
-                url: $("#my-chart").attr("data-url"),
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data)
-                    Highcharts.chart("my-chart", {
-                        chart : { type: 'column'},
-                        xAxis: {
-                            categories: data.overall.xAxis,
-                        },
-                        margin: 0,
-                        title: {
-                            text: ''
-                        },
-                        yAxis: {
-                            min: 0,
-                            title: {
-                                text: 'km, thousants'
-                            },
-                        },
-                        legend: {
-                            align: 'right',
-                            verticalAlign: 'middle',
-                            shadow: false,
-                            reversed: true,
-                            layout: 'vertical',
-                            itemMarginBottom: 10
-                        },
-                        tooltip: {
-                            headerFormat: '<b>{point.x}</b><br/>',
-                            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-                        },
-                        plotOptions: {
-                            column: {
-                                stacking: 'normal',
-                            }
-                        },
-                        series: data.overall.series,
-                    });
+            // console.log(data)
+            Highcharts.setOptions({
+                lang: {
+                    thousandsSep: '.',
+                    decimalPoint: ',',
                 }
             });
+            Highcharts.chart("my-chart", {
+                chart : { type: 'column'},
+                xAxis: {
+                    categories: {{ chart.overall.xAxis }},
+                },
+                margin: 0,
+                title: {
+                    text: ''
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'km, thousants'
+                    },
+                },
+                legend: {
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    shadow: false,
+                    reversed: true,
+                    layout: 'vertical',
+                    itemMarginBottom: 10
+                },
+                tooltip: {
+                    pointFormat: '{point.y:,.0f}',
+                    formatter: function () {
+                        return '<b>' + this.x + '</b><br/>' +
+                            `${this.series.name}: ${Highcharts.numberFormat(this.point.y, 0)}<br/>` +
+                            `Total: ${Highcharts.numberFormat(this.point.stackTotal, 0)}`;
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                    }
+                },
+                series: {{ chart.overall.series|safe }},
+            });
         </script>
+    </div>
 
-
+    <div class="col-3">
+        <table class="table table-striped table-hover table-md mt-2">
+            <thead class="thead-light">
+                <tr>
+                    <th>Metai</th>
+                    {% for bike in tbody.columns %}<th class="text-right mr-1">{{ bike }}</th>{% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in tbody.index %}
+                <tr>
+                <td>{{ row }}</td>
+                {% for value in tbody.data|get_index:forloop.counter0 %}
+                <td class="text-right mr-2">{% if value %}{{ value|floatformat:0|intcomma }}{% else %}-{% endif %}</td>{% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <th>Total</th>
+                {% for value in tfooter.data|get_index:0 %}
+                <th class="text-right">{{ value|floatformat:0|intcomma }}</th>
+                {% endfor %}
+            </tfoot>
+        </table>
     </div>
 </div>
 {% endblock content %}
