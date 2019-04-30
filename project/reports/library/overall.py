@@ -10,10 +10,13 @@ class Overall(object):
         self.__years = []
         self.__distances = []
         self.__bikes = []
+        self.__totals_table = []
+        self.__totals_grand = []
 
         self.__create_dataframe()
         self.__create_pivot_table()
         self.__calc_statistic()
+        self.__calc_totals()
 
     @property
     def df(self):
@@ -30,6 +33,14 @@ class Overall(object):
     @property
     def bikes(self):
         return self.__bikes
+
+    @property
+    def totals_table(self):
+        return self.__totals_table
+
+    @property
+    def totals_grand(self):
+        return self.__totals_grand
 
     def __create_query(self):
         return Data.objects.values(
@@ -68,3 +79,16 @@ class Overall(object):
         self.__bikes = data['index']
         self.__distances = data['data']
         self.__years = list(self.__pivotTable.columns.levels[2])[:-1]
+
+    def __calc_totals(self):
+        df = self.__pivotTable.copy().T.reset_index().set_index('date')
+        df.drop(columns=['level_0', 'level_1'], inplace=True)
+
+        #  Total sum per row:
+        df.loc['Total', :] = df.sum(axis=0)
+
+        #  Total sum per column:
+        df.loc[:, 'Total'] = df.sum(axis=1)
+
+        self.__totals_table = df.query("date != 'Total'").to_dict('split')
+        self.__totals_grand = df.query("date == 'Total'").to_dict('split')
