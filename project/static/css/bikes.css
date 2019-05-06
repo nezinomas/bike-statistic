@@ -20,6 +20,14 @@ table tfoot td {
   padding-bottom: .35rem!important;
 }
 
+table tfoot th.text-right {
+  padding-right: .35rem!important;
+}
+
+table tfoot th.text-left {
+  padding-left: .35rem!important;
+}
+
 .table-striped>tbody>tr:nth-child(odd) {
    background-color: #fdefd5;
  }

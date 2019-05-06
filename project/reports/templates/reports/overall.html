@@ -79,7 +79,7 @@
                 {% endfor %}
             </tbody>
             <tfoot>
-                <th>Total</th>
+                <th class="text-left">Total</th>
                 {% for value in tfooter.data|get_index:0 %}
                 <th class="text-right">{{ value|floatformat:0|intcomma }}</th>
                 {% endfor %}
