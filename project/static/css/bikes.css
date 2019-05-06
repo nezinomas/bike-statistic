@@ -117,3 +117,7 @@ table tfoot th.text-left {
    border-top: 1px solid #dee2e6;
    border-bottom: 1px solid #dee2e6;
  }
+
+ .data-table-px {
+   padding: 0 6rem 0 5rem;
+ }
