@@ -11,6 +11,22 @@ def overall(monkeypatch):
     monkeypatch.setattr(_cls.format('bikes'), ['bike1',  'bike2'])
     monkeypatch.setattr(_cls.format('distances'), [[10, 20], [30, 40]])
     monkeypatch.setattr(_cls.format('years'), [2000, 2002])
+    monkeypatch.setattr(
+        _cls.format('totals_table'),
+        {
+            'columns': ['bike1', 'bike2'],
+            'data': [[10, 20], [30, 40]],
+            'index': [2000, 2002]
+        }
+    )
+    monkeypatch.setattr(
+        _cls.format('totals_grand'),
+        {
+            'columns': ['bike1', 'bike2'],
+            'data': [[30, 60]],
+            'index': ['Total']
+        }
+    )
 
 
 def test_overall_chart_series(client):
