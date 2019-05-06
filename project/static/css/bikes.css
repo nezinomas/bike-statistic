@@ -20,6 +20,14 @@ table tfoot td {
   padding-bottom: .35rem!important;
 }
 
+table tfoot th.text-right {
+  padding-right: .35rem!important;
+}
+
+table tfoot th.text-left {
+  padding-left: .35rem!important;
+}
+
 .table-striped>tbody>tr:nth-child(odd) {
    background-color: #fdefd5;
  }
@@ -108,4 +116,8 @@ table tfoot td {
    /* background-color: #e1f5fe; */
    border-top: 1px solid #dee2e6;
    border-bottom: 1px solid #dee2e6;
+ }
+
+ .data-table-px {
+   padding: 0 6rem 0 5rem;
  }
