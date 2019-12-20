@@ -11,7 +11,8 @@ ALLOWED_HOSTS = ['*']
 
 # ================   APP CONFIGURATION
 INSTALLED_APPS += [
-    'debug_toolbar'
+    'debug_toolbar',
+    'django_extensions',
 ]
 
 
