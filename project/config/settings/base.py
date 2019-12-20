@@ -110,6 +110,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'bootstrap4',
     'widget_tweaks',
+    'crequest',
     'project.accounts',
     'project.core',
     'project.bikes',
