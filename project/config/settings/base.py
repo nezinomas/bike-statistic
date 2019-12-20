@@ -112,7 +112,6 @@ INSTALLED_APPS = [
     'bootstrap4',
     'widget_tweaks',
     'crequest',
-    'project.accounts',
     'project.core',
     'project.bikes',
     'project.goals',
