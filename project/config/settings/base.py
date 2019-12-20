@@ -1,6 +1,8 @@
 import os
 from ..secrets import get_secret
 
+AUTH_USER_MODEL = 'users.User'
+
 # ================   PATH CONFIGURATION
 # ..\project_project\project\config
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -13,7 +15,7 @@ PROJECT_ROOT = os.path.dirname(SITE_ROOT)
 # ================   SITE CONFIGURATION
 LOGOUT_REDIRECT_URL = 'reports:index'
 LOGIN_REDIRECT_URL = 'reports:index'
-LOGIN_URL = 'accounts:login'
+LOGIN_URL = 'users:login'
 
 
 # ================   CASH CONFIGURATION
@@ -114,7 +116,8 @@ INSTALLED_APPS = [
     'project.core',
     'project.bikes',
     'project.goals',
-    'project.reports'
+    'project.reports',
+    'project.users'
 ]
 
 

@@ -5,7 +5,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('project.accounts.urls')),
+    path('', include('project.users.urls')),
     path('', include('project.bikes.urls')),
     path('', include('project.goals.urls')),
     path('', include('project.reports.urls')),
@@ -17,10 +17,26 @@ if settings.DEBUG:
 
     urlpatterns += [
         path('__debug__/', include(debug_toolbar.urls)),
-        path('403/', permission_denied, kwargs={'exception': Exception("Permission Denied")}, name='error403'),
-        path('404/', page_not_found, kwargs={'exception': Exception("Page not Found")}, name='error404'),
-        path('500/', server_error, name='error500'),
     ]
-    urlpatterns += static.static(settings.MEDIA_URL,
-                                 document_root=settings.MEDIA_ROOT)
+
+    urlpatterns += [
+        path(
+            '403/',
+            permission_denied,
+            kwargs={'exception': Exception("Permission Denied")}, name='error403'
+        ),
+        path(
+            '404/',
+            page_not_found,
+            kwargs={'exception': Exception("Page not Found")}, name='error404'
+        ),
+        path(
+            '500/',
+            server_error,
+            name='error500'
+        ),
+    ]
+
+    urlpatterns += static.static(settings.STATIC_URL,
+                                 document_root=settings.STATIC_ROOT)
 
