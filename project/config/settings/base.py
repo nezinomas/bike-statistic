@@ -27,10 +27,7 @@ MEDIA_URL = "/media/"
 
 # ================   STATIC FILE CONFIGURATION
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(SITE_ROOT, 'static'),
-]
-# STATIC_ROOT = os.path.join(SITE_ROOT, 'static')
+STATICFILES_DIRS = os.path.join(SITE_ROOT, 'static')
 
 
 # ================   DEBUG CONFIGURATION
@@ -70,13 +67,13 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(SITE_ROOT, 'templates')],
-        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.static',
                 'project.bikes.context.bike_list',
                 'project.bikes.context.component_list',
                 'project.goals.context.goal_list',
