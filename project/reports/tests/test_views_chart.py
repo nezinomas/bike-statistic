@@ -3,6 +3,8 @@ from django.urls import resolve, reverse
 
 from ..views import chart
 
+pytestmark = pytest.mark.django_db
+
 
 @pytest.fixture(autouse=True)
 def overall(monkeypatch):

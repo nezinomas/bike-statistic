@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 
 import factory
-from django.contrib.auth.models import User
 
 from ..bikes.models import Bike, Component, ComponentStatistic
 from ..reports.models import Data
@@ -77,12 +76,3 @@ class DataFactory(factory.DjangoModelFactory):
     @factory.sequence
     def temperature(n):
         return 10 * (n + 1)
-
-
-class UserFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = User
-
-    username = 'bob'
-    password = factory.PostGenerationMethodCall('set_password', '123')
-    email = 'bob@d.lt'

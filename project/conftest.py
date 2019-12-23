@@ -1,8 +1,6 @@
-import tempfile
-from mock import patch
 import pytest
 
-from .core.factories import UserFactory
+from .users.factories import UserFactory
 
 
 @pytest.fixture(scope='session')

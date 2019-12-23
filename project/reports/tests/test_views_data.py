@@ -3,13 +3,13 @@ import json
 import pytest
 from django.urls import resolve, reverse
 from freezegun import freeze_time
-from mock import patch
 
 from ...core.factories import DataFactory
 from ...core.helpers.test_helpers import login_rediretion
-from .. import forms
 from ..models import Data
 from ..views import data, data_list
+
+pytestmark = pytest.mark.django_db
 
 
 @pytest.fixture(scope='class')
@@ -30,7 +30,6 @@ def test_data_list_not_loged(client, jan_2000):
     login_rediretion(client, 'reports:data_list', kwargs=jan_2000)
 
 
-@pytest.mark.django_db
 def test_data_list_valid_date(client, login, jan_2000):
     url = reverse('reports:data_list', kwargs=jan_2000)
     response = client.get(url)
@@ -49,7 +48,6 @@ def test_data_list_not_valid_date_02(client):
     assert 404 == response.status_code
 
 
-@pytest.mark.django_db
 def test_data_list_date_filter_redirection(client, login, jan_2000):
     url = reverse('reports:data_list', kwargs=jan_2000)
     data = {**jan_2000, 'date_filter': True}
@@ -76,7 +74,6 @@ def test_data_partial_not_loged(client):
     )
 
 
-@pytest.mark.django_db
 @freeze_time("1999-01-15")
 def test_data_partial_redirection(client, login):
     response = client.get('/data/1999-01-01/', follow=True)
@@ -96,7 +93,6 @@ def test_data_empty_not_loged(client):
 
 
 @freeze_time("1999-01-15")
-@pytest.mark.django_db
 def test_data_empty_redirection(client, login):
     response = client.get('/data/', follow=True)
 
@@ -115,7 +111,6 @@ def test_index_not_loged(client):
 
 
 @freeze_time("1999-01-15")
-@pytest.mark.django_db
 def test_index_redirection(client, login):
     response = client.get('/', follow=True)
 
@@ -133,7 +128,6 @@ def test_data_create_not_loged(client, jan_2000):
     login_rediretion(client, 'reports:data_create', kwargs=jan_2000)
 
 
-@pytest.mark.django_db
 def test_data_create_form_valid(client, login, post_data, jan_2000):
     url = reverse('reports:data_create', kwargs=jan_2000)
     response = client.post(url, data=post_data)
@@ -155,7 +149,6 @@ def test_data_create_form_valid(client, login, post_data, jan_2000):
     assert delete.format(id) in content
 
 
-@pytest.mark.django_db
 def test_data_create_form_invalid(client, login, jan_2000):
     url = reverse('reports:data_create', kwargs=jan_2000)
     response = client.post(url, data={})
@@ -168,7 +161,6 @@ def test_data_delete_not_loged(client, jan_2000):
     login_rediretion(client, 'reports:data_delete', kwargs={**jan_2000, 'pk': 99})
 
 
-@pytest.mark.django_db
 def test_data_delete(client, login, jan_2000, db_data):
     id = db_data.pk
     url = reverse('reports:data_delete', kwargs={**jan_2000, 'pk': id})
@@ -180,7 +172,6 @@ def test_data_delete(client, login, jan_2000, db_data):
     assert not Data.objects.all()
 
 
-@pytest.mark.django_db
 def test_data_delete_404(client, login, jan_2000):
     url = reverse('reports:data_delete', kwargs={**jan_2000, 'pk': 99})
     response = client.post(url)
@@ -188,7 +179,6 @@ def test_data_delete_404(client, login, jan_2000):
     assert 404 == response.status_code
 
 
-@pytest.mark.django_db
 def test_data_delete_load_confirm_form(client, login, jan_2000, db_data):
     url = reverse('reports:data_delete', kwargs={**jan_2000, 'pk': db_data.pk})
     response = client.get(url)
@@ -212,7 +202,6 @@ def test_data_update_not_loged(client, jan_2000):
     )
 
 
-@pytest.mark.django_db
 def test_data_update(client, login, post_data, jan_2000, db_data):
     url = reverse('reports:data_update', kwargs={**jan_2000, 'pk': db_data.pk})
     response = client.post(url, data=post_data)
@@ -234,7 +223,6 @@ def test_data_update(client, login, post_data, jan_2000, db_data):
     assert row.format(id=db_data.pk, url=url) in content  # row checked
 
 
-@pytest.mark.django_db
 def test_data_update_loaded_form(client, login, jan_2000, db_data):
     url = reverse('reports:data_update', kwargs={**jan_2000, 'pk': db_data.pk})
     response = client.get(url)
@@ -255,7 +243,6 @@ def test_data_update_loaded_form(client, login, jan_2000, db_data):
     assert '<input type="hidden" name="checked" value="n"' in content
 
 
-@pytest.mark.django_db
 def test_data_update_object_not_found(client, login, jan_2000):
     url = reverse('reports:data_update', kwargs={**jan_2000, 'pk': 99})
     response = client.get(url)
@@ -267,7 +254,6 @@ def test_data_quick_update_not_loged(client, jan_2000):
     login_rediretion(client, 'reports:data_quick_update', kwargs={**jan_2000, 'pk': 99})
 
 
-@pytest.mark.django_db
 def test_data_quick_update(client, login, jan_2000, db_data):
     assert 'n' == db_data.checked
 
@@ -287,7 +273,6 @@ def test_data_quick_update(client, login, jan_2000, db_data):
     assert row.format(url=url_update, id=db_data.pk) in actual['html_list']
 
 
-@pytest.mark.django_db
 def test_data_quick_update_404(client, login, jan_2000):
     url_quick_update = reverse(
         'reports:data_quick_update',
