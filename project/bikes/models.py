@@ -3,6 +3,14 @@ from django.db import models
 from django.utils.text import slugify
 
 
+class BikeQuerySet(models.QuerySet):
+    def related(self):
+        return self
+
+    def items(self):
+        return self.related()
+
+
 class Bike(models.Model):
     date = models.DateField()
     full_name = models.CharField(
@@ -27,6 +35,8 @@ class Bike(models.Model):
 
     class Meta:
         ordering = ['date']
+
+    objects = BikeQuerySet.as_manager()
 
 
 class BikeInfo(models.Model):
