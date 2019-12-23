@@ -1,22 +1,28 @@
 from .base import *
 
-# ================   DEBUG CONFIGURATION
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 
-# ================   project CONFIGURATION
 ALLOWED_HOSTS = ['*']
 
 
-# ================   APP CONFIGURATION
 INSTALLED_APPS += [
     'debug_toolbar',
     'django_extensions',
 ]
 
 
-# ================   MIDDLEWARE CONFIGURATION
+SHELL_PLUS_PRINT_SQL = True
+
+
+STATIC_ROOT = None
+STATICFILES_DIRS = [
+    os.path.join(SITE_ROOT, 'static'),
+]
+
+
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ] + MIDDLEWARE
@@ -29,9 +35,10 @@ TEMPLATES[0]['OPTIONS']['loaders'] = [
     'django.template.loaders.app_directories.Loader', ]
 
 
-#================   DEBUG_TOOLBAR_PANEL
-DEBUG_TOOLBAR_PATCH_SETTINGS = False
 INTERNAL_IPS = ['127.0.0.1', 'localhost']
+
+
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
 DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.versions.VersionsPanel',
     'debug_toolbar.panels.timer.TimerPanel',
@@ -49,7 +56,6 @@ DEBUG_TOOLBAR_PANELS = [
 ]
 
 
-# ================   DUMMY CASHE
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',

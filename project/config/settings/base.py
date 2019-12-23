@@ -6,9 +6,9 @@ AUTH_USER_MODEL = 'users.User'
 # ================   PATH CONFIGURATION
 # ..\project_project\project\config
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# ..\project_project\project
+# ..\root_catalog\project_catalog
 SITE_ROOT = os.path.dirname(BASE_DIR)
-# ..\project_project
+# ..\project_catalog
 PROJECT_ROOT = os.path.dirname(SITE_ROOT)
 
 
@@ -29,7 +29,7 @@ MEDIA_URL = "/media/"
 
 # ================   STATIC FILE CONFIGURATION
 STATIC_URL = '/static/'
-STATICFILES_DIRS = os.path.join(SITE_ROOT, 'static')
+STATIC_ROOT = os.path.join(SITE_ROOT, 'static')
 
 
 # ================   DEBUG CONFIGURATION
@@ -63,8 +63,6 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-USE_THOUSAND_SEPARATOR = True
-
 
 # ================   TEMPLATE CONFIGURATION
 TEMPLATES = [
@@ -96,6 +94,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'crequest.middleware.CrequestMiddleware',
 ]
 
 
@@ -108,6 +107,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.humanize',
     'bootstrap_datepicker_plus',
+    'django.contrib.staticfiles',
     'crispy_forms',
     'bootstrap4',
     'widget_tweaks',
