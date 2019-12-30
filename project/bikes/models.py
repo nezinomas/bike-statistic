@@ -2,10 +2,18 @@ from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
 from django.utils.text import slugify
 
+from ..core.lib import utils
+from ..users.models import User
+
 
 class BikeQuerySet(models.QuerySet):
     def related(self):
-        return self
+        user = utils.get_user()
+        return (
+            self
+            .prefetch_related('user')
+            .filter(user=user)
+        )
 
     def items(self):
         return self.related()
@@ -19,11 +27,19 @@ class Bike(models.Model):
     )
     short_name = models.CharField(
         max_length=20,
-        unique=True
     )
     slug = models.SlugField(
         editable=False
     )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='bikes'
+    )
+
+    class Meta:
+        ordering = ['date']
+        unique_together = ('user', 'short_name')
 
     def __str__(self):
         return str(self.short_name)
@@ -32,9 +48,6 @@ class Bike(models.Model):
         self.slug = slugify(self.short_name)
 
         super().save(*args, **kwargs)
-
-    class Meta:
-        ordering = ['date']
 
     objects = BikeQuerySet.as_manager()
 
