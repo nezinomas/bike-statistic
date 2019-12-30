@@ -37,6 +37,8 @@ class Bike(models.Model):
         related_name='bikes'
     )
 
+    objects = BikeQuerySet.as_manager()
+
     class Meta:
         ordering = ['date']
         unique_together = ('user', 'short_name')
@@ -49,7 +51,18 @@ class Bike(models.Model):
 
         super().save(*args, **kwargs)
 
-    objects = BikeQuerySet.as_manager()
+
+class BikeInfoQuerySet(models.QuerySet):
+    def related(self):
+        user = utils.get_user()
+        return (
+            self
+            # .select_related('bike')
+            .filter(bike__user=user)
+        )
+
+    def items(self):
+        return self.related()
 
 
 class BikeInfo(models.Model):
@@ -65,11 +78,13 @@ class BikeInfo(models.Model):
         related_name='bike_info',
     )
 
-    def __str__(self):
-        return '{bike}: {component}'.format(self.bike, self.component)
+    objects = BikeInfoQuerySet.as_manager()
 
     class Meta:
         ordering = ['component']
+
+    def __str__(self):
+        return f'{self.bike}: {self.component}'
 
 
 class Component(models.Model):
