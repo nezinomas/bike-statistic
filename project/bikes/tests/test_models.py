@@ -38,8 +38,8 @@ def test_bike_items_for_logged_user(get_user):
 
 @pytest.mark.xfail
 def test_bike_short_name_unique_for_one_user(get_user):
-    BikeFactory()
-    BikeFactory()
+    BikeFactory(short_name='xxx')
+    BikeFactory(short_name='xxx')
 
 
 def test_bike_short_name_unique_for_two_users(get_user):
