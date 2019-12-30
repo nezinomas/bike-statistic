@@ -1,19 +1,21 @@
 import os
 from ..secrets import get_secret
 
+AUTH_USER_MODEL = 'users.User'
+
 # ================   PATH CONFIGURATION
 # ..\project_project\project\config
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# ..\project_project\project
+# ..\root_catalog\project_catalog
 SITE_ROOT = os.path.dirname(BASE_DIR)
-# ..\project_project
+# ..\project_catalog
 PROJECT_ROOT = os.path.dirname(SITE_ROOT)
 
 
 # ================   SITE CONFIGURATION
 LOGOUT_REDIRECT_URL = 'reports:index'
 LOGIN_REDIRECT_URL = 'reports:index'
-LOGIN_URL = 'accounts:login'
+LOGIN_URL = 'users:login'
 
 
 # ================   CASH CONFIGURATION
@@ -27,9 +29,6 @@ MEDIA_URL = "/media/"
 
 # ================   STATIC FILE CONFIGURATION
 STATIC_URL = '/static/'
-#STATICFILES_DIRS = [
-#    os.path.join(SITE_ROOT, 'static'),
-#]
 STATIC_ROOT = os.path.join(SITE_ROOT, 'static')
 
 
@@ -70,13 +69,13 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(SITE_ROOT, 'templates')],
-        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.static',
                 'project.bikes.context.bike_list',
                 'project.bikes.context.component_list',
                 'project.goals.context.goal_list',
@@ -95,6 +94,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'crequest.middleware.CrequestMiddleware',
 ]
 
 
@@ -105,17 +105,18 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
     'django.contrib.humanize',
     'bootstrap_datepicker_plus',
+    'django.contrib.staticfiles',
     'crispy_forms',
     'bootstrap4',
     'widget_tweaks',
-    'project.accounts',
+    'crequest',
     'project.core',
     'project.bikes',
     'project.goals',
-    'project.reports'
+    'project.reports',
+    'project.users'
 ]
 
 

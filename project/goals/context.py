@@ -3,7 +3,7 @@ import pickle
 
 from django.conf import settings
 
-from ..goals import signals
+from ..goals.models import Goal
 
 
 def load_cashed_content(name):
@@ -12,10 +12,6 @@ def load_cashed_content(name):
 
 
 def goal_list(context):
-    try:
-        goals = load_cashed_content('goals.p')
-    except:
-        signals.cash_goals(None, None)
-        goals = load_cashed_content('goals.p')
+    goals = list(Goal.objects.all().values())
 
     return {'goal_list': goals}
