@@ -108,7 +108,7 @@ class Component(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='bikes'
+        related_name='components'
     )
 
     objects = ComponentQuerySet.as_manager()
