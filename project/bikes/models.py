@@ -57,7 +57,7 @@ class BikeInfoQuerySet(models.QuerySet):
         user = utils.get_user()
         return (
             self
-            # .select_related('bike')
+            .select_related('bike')
             .filter(bike__user=user)
         )
 
