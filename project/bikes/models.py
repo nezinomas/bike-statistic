@@ -87,18 +87,38 @@ class BikeInfo(models.Model):
         return f'{self.bike}: {self.component}'
 
 
+class ComponentQuerySet(models.QuerySet):
+    def related(self):
+        user = utils.get_user()
+        return (
+            self
+            .select_related('user')
+            .filter(user=user)
+        )
+
+    def items(self):
+        return self.related()
+
+
 class Component(models.Model):
     name = models.CharField(
         max_length=100,
-        unique=True,
         validators=[MaxLengthValidator(99), MinLengthValidator(3)]
     )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='bikes'
+    )
 
-    def __str__(self):
-        return str(self.name)
+    objects = ComponentQuerySet.as_manager()
 
     class Meta:
         ordering = ['name']
+        unique_together = ('user', 'name')
+
+    def __str__(self):
+        return str(self.name)
 
 
 class ComponentStatistic(models.Model):

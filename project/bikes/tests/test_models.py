@@ -3,8 +3,8 @@ from datetime import date
 import pytest
 
 from ...users.factories import UserFactory
-from ..factories import BikeFactory, BikeInfoFactory
-from ..models import Bike, BikeInfo
+from ..factories import BikeFactory, BikeInfoFactory, ComponentFactory
+from ..models import Bike, BikeInfo, Component
 
 pytestmark = pytest.mark.django_db
 
@@ -101,3 +101,56 @@ def test_bike_info_items(get_user):
     BikeInfoFactory()
 
     assert BikeInfo.objects.items().count() == 1
+
+
+# ----------------------------------------------------------------------------
+#                                                                    Component
+# ----------------------------------------------------------------------------
+def test_component_str():
+    obj = ComponentFactory.build()
+
+    assert str(obj) == 'Component'
+
+
+def test_component_items(get_user):
+    ComponentFactory()
+
+    assert Component.objects.items().count() == 1
+
+
+def test_component_items_for_logged_user(get_user):
+    ComponentFactory()
+    ComponentFactory(user=UserFactory(username='XXX'))
+
+    assert Component.objects.all().count() == 2
+    assert Component.objects.items().count() == 1
+
+
+@pytest.mark.xfail
+def test_component_unique_for_one_user(get_user):
+    _user = UserFactory(username='XXX')
+
+    Component.objects.create(user=_user, name='X')
+    Component.objects.create(user=_user, name='X')
+
+
+def test_component_unique_for_two_users(get_user):
+    ComponentFactory()
+    ComponentFactory(user=UserFactory(username='XXX'))
+
+
+def test_component_related_qs_count(get_user, django_assert_max_num_queries):
+    ComponentFactory(name='C1')
+    ComponentFactory(name='C2')
+
+    assert Component.objects.all().count() == 2
+
+    with django_assert_max_num_queries(1):
+        list(q.user for q in Component.objects.related())
+
+
+@pytest.mark.xfail
+@pytest.mark.parametrize('name', ['x', 'x'*100])
+def test_component_name_validation(name):
+    user = UserFactory()
+    Component(name=name, user=user).full_clean()

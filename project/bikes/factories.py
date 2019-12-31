@@ -3,7 +3,7 @@ from datetime import date
 import factory
 
 from ..users.factories import UserFactory
-from .models import Bike, BikeInfo
+from .models import Bike, BikeInfo, Component
 
 
 class BikeFactory(factory.DjangoModelFactory):
@@ -24,3 +24,12 @@ class BikeInfoFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = BikeInfo
+
+
+class ComponentFactory(factory.DjangoModelFactory):
+    user = factory.SubFactory(UserFactory)
+    name = 'Component'
+
+    class Meta:
+        model = Component
+        django_get_or_create = ('user', 'name',)
