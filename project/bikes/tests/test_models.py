@@ -83,7 +83,7 @@ def test_bike_info_related_different_users(get_user):
 
     actual = BikeInfo.objects.related()
 
-    # expense names for user bob
+    # for user bob
     assert len(actual) == 1
     assert actual[0].component == 'N1'
 
