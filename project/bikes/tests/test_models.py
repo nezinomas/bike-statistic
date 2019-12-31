@@ -1,3 +1,5 @@
+from datetime import date
+
 import pytest
 
 from ...users.factories import UserFactory
@@ -38,13 +40,26 @@ def test_bike_items_for_logged_user(get_user):
 
 @pytest.mark.xfail
 def test_bike_short_name_unique_for_one_user(get_user):
-    BikeFactory(short_name='xxx')
-    BikeFactory(short_name='xxx')
+    _user = UserFactory(username='XXX')
+    _date = date(1, 1, 1)
+
+    Bike.objects.create(user=_user, short_name='X', date=_date)
+    Bike.objects.create(user=_user, short_name='X', date=_date)
 
 
 def test_bike_short_name_unique_for_two_users(get_user):
     BikeFactory()
     BikeFactory(user=UserFactory(username='XXX'))
+
+
+def test_bike_related_qs_count(get_user, django_assert_max_num_queries):
+    BikeFactory(short_name='C1')
+    BikeFactory(short_name='C2')
+
+    assert Bike.objects.all().count() == 2
+
+    with django_assert_max_num_queries(1):
+        list(q.short_name for q in Bike.objects.related())
 
 
 # ----------------------------------------------------------------------------
@@ -75,6 +90,8 @@ def test_bike_info_related_different_users(get_user):
 def test_bike_info_related_qs_count(get_user, django_assert_max_num_queries):
     BikeInfoFactory(component='C1')
     BikeInfoFactory(component='C2')
+
+    assert BikeInfo.objects.all().count() == 2
 
     with django_assert_max_num_queries(1):
         list(q.bike.short_name for q in BikeInfo.objects.related())
