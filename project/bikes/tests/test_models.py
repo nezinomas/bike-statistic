@@ -3,8 +3,9 @@ from datetime import date
 import pytest
 
 from ...users.factories import UserFactory
-from ..factories import BikeFactory, BikeInfoFactory, ComponentFactory
-from ..models import Bike, BikeInfo, Component
+from ..factories import (BikeFactory, BikeInfoFactory, ComponentFactory,
+                         ComponentStatisticFactory)
+from ..models import Bike, BikeInfo, Component, ComponentStatistic
 
 pytestmark = pytest.mark.django_db
 
@@ -154,3 +155,44 @@ def test_component_related_qs_count(get_user, django_assert_max_num_queries):
 def test_component_name_validation(name):
     user = UserFactory()
     Component(name=name, user=user).full_clean()
+
+
+# ---------------------------------------------------------------------------------------
+#                                                                     Component Statistic
+# ---------------------------------------------------------------------------------------
+def test_component_statistic_str():
+    obj = ComponentStatisticFactory.build()
+
+    assert str(obj) == 'Short Name / Component / 1999-01-01 ... 1999-01-31'
+
+
+def test_component_statistic_related_different_users(get_user):
+    u = UserFactory(username='tom')
+
+    b1 = BikeFactory(short_name='B1')  # user bob
+    b2 = BikeFactory(short_name='B2', user=u)  # user tom
+
+    ComponentStatisticFactory(bike=b1)
+    ComponentStatisticFactory(bike=b2)
+
+    actual = ComponentStatistic.objects.related()
+
+    # for user bob
+    assert len(actual) == 1
+    assert str(actual[0]) == 'B1 / Component / 1999-01-01 ... 1999-01-31'
+
+
+def test_component_statistic_related_qs_count(get_user, django_assert_max_num_queries):
+    ComponentStatisticFactory()
+    ComponentStatisticFactory()
+
+    assert ComponentStatistic.objects.all().count() == 2
+
+    with django_assert_max_num_queries(1):
+        list(q.bike.short_name for q in ComponentStatistic.objects.related())
+
+
+def test_component_statistic_items(get_user):
+    ComponentStatisticFactory()
+
+    assert ComponentStatistic.objects.items().count() == 1

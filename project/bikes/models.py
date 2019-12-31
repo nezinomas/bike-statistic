@@ -121,6 +121,19 @@ class Component(models.Model):
         return str(self.name)
 
 
+class ComponentStatisticQuerySet(models.QuerySet):
+    def related(self):
+        user = utils.get_user()
+        return (
+            self
+            .select_related('bike', 'component')
+            .filter(bike__user=user)
+        )
+
+    def items(self):
+        return self.related()
+
+
 class ComponentStatistic(models.Model):
     start_date = models.DateField()
     end_date = models.DateField(
@@ -146,14 +159,10 @@ class ComponentStatistic(models.Model):
         related_name='components'
     )
 
+    objects = ComponentStatisticQuerySet.as_manager()
+
     class Meta:
         ordering = ['-start_date']
 
     def __str__(self):
-        return '{bike} / {component} / {start} ... {end}'.\
-            format(
-                bike=self.bike,
-                component=self.component,
-                start=self.start_date,
-                end=self.end_date
-            )
+        return f'{self.bike} / {self.component} / {self.start_date} ... {self.end_date}'
