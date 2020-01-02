@@ -17,6 +17,9 @@ def last_id():
     return Data.objects.values_list('id', flat=True)[0]
 
 
+# ---------------------------------------------------------------------------------------
+#                                                                               data_list
+# ---------------------------------------------------------------------------------------
 def test_data_list_not_loged(client, jan_2000):
     login_rediretion(client, 'reports:data_list', kwargs=jan_2000)
 
@@ -57,6 +60,9 @@ def test_data_list_date_filter_redirection(client, login, jan_2000):
     )
 
 
+# ---------------------------------------------------------------------------------------
+#                                                                            data_partial
+# ---------------------------------------------------------------------------------------
 def test_data_partial_not_loged(client):
     login_rediretion(
         client,
@@ -79,6 +85,9 @@ def test_data_partial_func(client):
     assert data.data_partial == view.func
 
 
+# ---------------------------------------------------------------------------------------
+#                                                                              data_empty
+# ---------------------------------------------------------------------------------------
 def test_data_empty_not_loged(client):
     login_rediretion(client, 'reports:data_empty')
 
@@ -97,6 +106,9 @@ def test_data_empty_func(client):
     assert data.data_empty == view.func
 
 
+# ---------------------------------------------------------------------------------------
+#                                                                                   index
+# ---------------------------------------------------------------------------------------
 def test_index_not_loged(client):
     login_rediretion(client, 'reports:index')
 
@@ -115,6 +127,9 @@ def test_index_func(client):
     assert data.index == view.func
 
 
+# ---------------------------------------------------------------------------------------
+#                                                                             data_create
+# ---------------------------------------------------------------------------------------
 def test_data_create_not_loged(client, jan_2000):
     login_rediretion(client, 'reports:data_create', kwargs=jan_2000)
 
@@ -148,6 +163,9 @@ def test_data_create_form_invalid(client, login, jan_2000):
     assert not actual['form_is_valid']
 
 
+# ---------------------------------------------------------------------------------------
+#                                                                             data_delete
+# ---------------------------------------------------------------------------------------
 def test_data_delete_not_loged(client, jan_2000):
     login_rediretion(client, 'reports:data_delete', kwargs={**jan_2000, 'pk': 99})
 
@@ -185,6 +203,9 @@ def test_data_delete_load_confirm_form(client, login, jan_2000):
     assert msg in actual['html_form']
 
 
+# ---------------------------------------------------------------------------------------
+#                                                                             data_update
+# ---------------------------------------------------------------------------------------
 def test_data_update_not_loged(client, jan_2000):
     login_rediretion(
         client,
@@ -244,6 +265,9 @@ def test_data_update_object_not_found(client, login, jan_2000):
     assert response.status_code == 404
 
 
+# ---------------------------------------------------------------------------------------
+#                                                                       data_quick_update
+# ---------------------------------------------------------------------------------------
 def test_data_quick_update_not_loged(client, jan_2000):
     login_rediretion(client, 'reports:data_quick_update', kwargs={**jan_2000, 'pk': 99})
 
