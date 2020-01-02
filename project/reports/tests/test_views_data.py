@@ -31,20 +31,20 @@ def test_data_list_valid_date(client, login, jan_2000):
 
 def test_data_list_not_valid_date_01(client):
     response = client.get('/data/2000/2001/')
-    assert 404 == response.status_code
+    assert response.status_code == 404
 
 
 def test_data_list_not_valid_date_02(client):
     response = client.get('/data/xxxx-xx-xx/xxxx-xx-xx/')
-    assert 404 == response.status_code
+    assert response.status_code == 404
 
 
 def test_data_list_date_filter_redirection(client, login, jan_2000):
     url = reverse('reports:data_list', kwargs=jan_2000)
-    data = {**jan_2000, 'date_filter': True}
-    response = client.post(url, data=data, follow=True)
+    data_ = {**jan_2000, 'date_filter': True}
+    response = client.post(url, data=data_, follow=True)
 
-    assert 200 == response.status_code
+    assert response.status_code == 200
     assert data_list == resolve(response.redirect_chain[0][0]).func
 
     assert (
@@ -69,8 +69,8 @@ def test_data_partial_not_loged(client):
 def test_data_partial_redirection(client, login):
     response = client.get('/data/1999-01-01/', follow=True)
 
-    assert 200 == response.status_code
-    assert 'data_list' == response.resolver_match.url_name
+    assert response.status_code == 200
+    assert response.resolver_match.url_name == 'data_list'
 
 
 @freeze_time("1999-01-15")
@@ -87,8 +87,8 @@ def test_data_empty_not_loged(client):
 def test_data_empty_redirection(client, login):
     response = client.get('/data/', follow=True)
 
-    assert 200 == response.status_code
-    assert 'data_list' == response.resolver_match.url_name
+    assert response.status_code == 200
+    assert response.resolver_match.url_name == 'data_list'
 
 
 @freeze_time("1999-01-15")
@@ -105,8 +105,8 @@ def test_index_not_loged(client):
 def test_index_redirection(client, login):
     response = client.get('/', follow=True)
 
-    assert 200 == response.status_code
-    assert 'data_list' == response.resolver_match.url_name
+    assert response.status_code == 200
+    assert response.resolver_match.url_name == 'data_list'
 
 
 @freeze_time("1999-01-15")
@@ -130,14 +130,14 @@ def test_data_create_form_valid(client, login, post_data, jan_2000):
     assert '<td class="text-center">10.12</td>' in content
     assert '<td class="text-center">0:00:15</td>' in content
 
-    id = last_id()
+    id_ = last_id()
     row = '<tr id="row_id_{0}" data-pk="{0}"'
     update = 'data-url="/api/data/2000-01-01/2000-01-31/update/{0}/"'
     delete = 'data-url="/api/data/2000-01-01/2000-01-31/delete/{0}/"'
 
-    assert row.format(id) in content
-    assert update.format(id) in content
-    assert delete.format(id) in content
+    assert row.format(id_) in content
+    assert update.format(id_) in content
+    assert delete.format(id_) in content
 
 
 def test_data_create_form_invalid(client, login, jan_2000):
@@ -168,7 +168,7 @@ def test_data_delete_404(client, login, jan_2000):
     url = reverse('reports:data_delete', kwargs={**jan_2000, 'pk': 99})
     response = client.post(url)
 
-    assert 404 == response.status_code
+    assert response.status_code == 404
 
 
 def test_data_delete_load_confirm_form(client, login, jan_2000):
@@ -179,10 +179,8 @@ def test_data_delete_load_confirm_form(client, login, jan_2000):
     actual = json.loads(response.content)
 
     url = f'<form method="post" action="{url}"'
-    msg = (
-        'Are you sure you want to delete record: <strong>2000-01-01 Short Name</strong>?')
+    msg = f'Are you sure you want to delete record: <strong>{obj}</strong>?'
 
-    print(actual['html_form'])
     assert url in actual['html_form']
     assert msg in actual['html_form']
 
@@ -201,7 +199,7 @@ def test_data_update(client, login, post_data, jan_2000):
     response = client.post(url, data=post_data)
 
     actual = json.loads(response.content)
-    print(actual)
+
     content = actual['html_list']
 
     assert actual['form_is_valid']
@@ -243,7 +241,7 @@ def test_data_update_object_not_found(client, login, jan_2000):
     url = reverse('reports:data_update', kwargs={**jan_2000, 'pk': 99})
     response = client.get(url)
 
-    assert 404 == response.status_code
+    assert response.status_code == 404
 
 
 def test_data_quick_update_not_loged(client, jan_2000):
@@ -253,7 +251,7 @@ def test_data_quick_update_not_loged(client, jan_2000):
 def test_data_quick_update(client, login, jan_2000):
     obj = DataFactory()
 
-    assert 'n' == obj.checked
+    assert obj.checked == 'n'
 
     url_quick_update = reverse(
         'reports:data_quick_update',
@@ -278,4 +276,4 @@ def test_data_quick_update_404(client, login, jan_2000):
     )
     response = client.get(url_quick_update)
 
-    assert 404 == response.status_code
+    assert response.status_code == 404
