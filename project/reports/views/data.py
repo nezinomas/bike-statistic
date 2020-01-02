@@ -53,9 +53,10 @@ def data_list(request, start_date, end_date):
             url = reverse_lazy('reports:data_list', kwargs=kwargs)
             return redirect(url)
 
-    objects = models.Data.objects\
-        .prefetch_related('bike')\
+    objects = (
+        models.Data.objects.items()
         .filter(date__range=(start_date, end_date))
+    )
     filter_form = forms.DateFilterForm(
         initial={'start_date': start_date, 'end_date': end_date}
     )
@@ -117,9 +118,10 @@ def data_quick_update(request, start_date, end_date, pk):
     object.checked = 'y'
     object.save()
 
-    objects = models.Data.objects\
-        .prefetch_related('bike')\
+    objects = (
+        models.Data.objects.items()
         .filter(date__range=(start_date, end_date))
+    )
 
     context = {
         'objects': objects,

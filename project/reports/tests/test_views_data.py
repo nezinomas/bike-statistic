@@ -6,6 +6,7 @@ from freezegun import freeze_time
 
 from ...core.factories import DataFactory
 from ...core.helpers.test_helpers import login_rediretion
+from ...users.factories import UserFactory
 from ..factories import DataFactory
 from ..models import Data
 from ..views import data, data_list
@@ -58,6 +59,18 @@ def test_data_list_date_filter_redirection(client, login, jan_2000):
         '<input type="text" name="end_date" value="2000-01-31"'
         in str(response.content)
     )
+
+
+def test_data_list_user_items(client_logged, jan_2000):
+    DataFactory()
+    DataFactory(user=UserFactory(username='xxx'))
+
+    url = reverse('reports:data_list', kwargs=jan_2000)
+    data_ = {**jan_2000, 'date_filter': True}
+    response = client_logged.post(url, data=data_, follow=True)
+
+    assert len(response.context['objects']) == 1
+    assert response.context['objects'][0].user.username == 'bob'
 
 
 # ---------------------------------------------------------------------------------------
@@ -301,3 +314,19 @@ def test_data_quick_update_404(client, login, jan_2000):
     response = client.get(url_quick_update)
 
     assert response.status_code == 404
+
+
+def test_data_quick_update_user_items(client_logged, jan_2000):
+    obj = DataFactory()
+    DataFactory(user=UserFactory(username='xxx'))
+
+    url_quick_update = reverse(
+        'reports:data_quick_update',
+        kwargs={**jan_2000, 'pk': obj.pk}
+    )
+
+    response = client_logged.get(url_quick_update)
+    # actual = json.loads(response.content)
+
+    assert len(response.context['objects']) == 1
+    assert response.context['objects'][0].user.username == 'bob'
