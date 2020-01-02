@@ -2,7 +2,7 @@ from datetime import date, timedelta
 
 import pytest
 
-from ...core.factories import BikeFactory
+from ...bikes.factories import BikeFactory
 
 
 @pytest.fixture()
