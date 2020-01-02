@@ -2,6 +2,21 @@ from django.db import models
 from django.utils.timezone import now
 
 from ..bikes import models as bikeModels
+from ..core.lib import utils
+from ..users.models import User
+
+
+class DataQuerySet(models.QuerySet):
+    def related(self):
+        user = utils.get_user()
+        return (
+            self
+            .select_related('user')
+            .filter(user=user)
+        )
+
+    def items(self):
+        return self.related()
 
 
 class Data(models.Model):
@@ -10,6 +25,11 @@ class Data(models.Model):
     no = 'n'
     checked_choices = ((yes, 'Yes'), (no, 'No'))
 
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='data'
+    )
     bike = models.ForeignKey(
         bikeModels.Bike,
         on_delete=models.CASCADE,
@@ -45,8 +65,10 @@ class Data(models.Model):
         default=no,
     )
 
-    def __str__(self):
-        return(str(self.date))
+    objects = DataQuerySet.as_manager()
 
     class Meta:
         ordering = ['-date']
+
+    def __str__(self):
+        return f'{self.date:%Y-%m-%d} {self.bike}'
