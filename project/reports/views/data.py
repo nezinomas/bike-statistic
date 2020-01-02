@@ -82,14 +82,14 @@ def data_create(request, start_date, end_date):
 
 @login_required
 def data_delete(request, start_date, end_date, pk):
-    object = get_object_or_404(models.Data, pk=pk)
+    obj = get_object_or_404(models.Data, pk=pk)
     data = {}
 
     if request.method == 'POST':
-        object.delete()
+        obj.delete()
         helper.form_valid(data, start_date, end_date)
     else:
-        context = {'object': object, 'start_date': start_date, 'end_date': end_date}
+        context = {'object': obj, 'start_date': start_date, 'end_date': end_date}
         data['html_form'] = render_to_string(
             'reports/includes/partial_data_delete.html', context, request)
 
@@ -98,8 +98,8 @@ def data_delete(request, start_date, end_date, pk):
 
 @login_required()
 def data_update(request, start_date, end_date, pk):
-    object = get_object_or_404(models.Data, pk=pk)
-    form = forms.DataForm(request.POST or None, instance=object)
+    obj = get_object_or_404(models.Data, pk=pk)
+    form = forms.DataForm(request.POST or None, instance=obj)
     url = reverse(
         'reports:data_update',
         kwargs={
@@ -114,9 +114,9 @@ def data_update(request, start_date, end_date, pk):
 
 @login_required()
 def data_quick_update(request, start_date, end_date, pk):
-    object = get_object_or_404(models.Data, pk=pk)
-    object.checked = 'y'
-    object.save()
+    obj = get_object_or_404(models.Data, pk=pk)
+    obj.checked = 'y'
+    obj.save()
 
     objects = (
         models.Data.objects.items()
