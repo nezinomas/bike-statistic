@@ -326,7 +326,6 @@ def test_data_quick_update_user_items(client_logged, jan_2000):
     )
 
     response = client_logged.get(url_quick_update)
-    # actual = json.loads(response.content)
 
     assert len(response.context['objects']) == 1
     assert response.context['objects'][0].user.username == 'bob'
