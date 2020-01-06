@@ -1,6 +1,3 @@
-from datetime import datetime
-from typing import List
-
 from django.shortcuts import render
 
 from ...bikes.models import Bike
@@ -10,22 +7,8 @@ from ..library.distance_summary import DistanceSummary
 from ..models import Data
 
 
-def _years() -> List[int]:
-    now = datetime.now().year
-    start = now
-
-    try:
-        start = utils.get_user().date_joined.year
-    except AttributeError:
-        pass
-
-    _years = [x for x in range(start, now + 1)]
-
-    return _years
-
-
 def overall(request):
-    years = _years()
+    years = utils.years()
     bikes = Bike.objects.items().values_list('short_name', flat=True).order_by('date')
     data = Data.objects.bike_summary()
 
