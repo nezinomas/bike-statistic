@@ -1,4 +1,5 @@
 import pytest
+from django.contrib.auth.models import AnonymousUser
 
 from .users.factories import UserFactory
 
@@ -20,6 +21,16 @@ def get_user(monkeypatch):
     monkeypatch.setattr(mock_func, lambda: user)
 
     return user
+
+
+@pytest.fixture()
+def anonymous_user(monkeypatch):
+    user_ = AnonymousUser()
+
+    mock_func = 'project.core.lib.utils.get_user'
+    monkeypatch.setattr(mock_func, lambda: user_)
+
+    return user_
 
 
 @pytest.fixture()
