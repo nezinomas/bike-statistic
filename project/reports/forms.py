@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date
 
 from bootstrap_datepicker_plus import DatePickerInput, MonthPickerInput
 from crispy_forms.helper import FormHelper
