@@ -77,8 +77,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.static',
                 'project.bikes.context.bike_list',
-                'project.bikes.context.component_list',
-                'project.goals.context.goal_list',
             ],
         },
     },

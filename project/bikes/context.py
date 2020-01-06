@@ -15,9 +15,3 @@ def bike_list(context):
     bikes = list(Bike.objects.all().values())
 
     return {'bike_list': bikes}
-
-
-def component_list(context):
-    components = list(Component.objects.all().values())
-
-    return {'component_list': components}
