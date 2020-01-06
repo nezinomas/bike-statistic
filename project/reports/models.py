@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import Count, F, Sum
+from django.db.models.functions import TruncYear
 from django.utils.timezone import now
 
 from ..bikes import models as bikeModels
@@ -17,6 +19,23 @@ class DataQuerySet(models.QuerySet):
 
     def items(self):
         return self.related()
+
+    def bike_summary(self):
+        return (
+            self
+            .related()
+            .annotate(cnt=Count('bike'))
+            .values('bike')
+            .annotate(date=TruncYear('date'))
+            .values('date')
+            .annotate(sum=Sum('distance'))
+            .order_by('date')
+            .values(
+                'date',
+                bike=F('bike__short_name'),
+                distance=F('sum'),
+            )
+        )
 
 
 class Data(models.Model):
