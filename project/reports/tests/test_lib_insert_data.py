@@ -49,7 +49,7 @@ def _get_page_exception(monkeypatch):
 def test_get_temperature(_get_page):
     actual = get_temperature()
 
-    assert 22.5 == actual
+    assert actual == 22.5
 
 
 @pytest.mark.xfail(raises=Exception)
@@ -67,7 +67,7 @@ def test_insert_data_exists(_get_page):
 
     actual = models.Data.objects.all()
 
-    assert 1 == actual.count()
+    assert actual.count() == 1
 
 
 def test_insert_data_not_exists_1(_get_page, get_user):
@@ -81,7 +81,7 @@ def test_insert_data_not_exists_1(_get_page, get_user):
 
     data = models.Data.objects.order_by('-pk')
 
-    assert 2 == data.count()
+    assert data.count() == 2
 
     for row in data:
         assert row.user.username == 'bob'
@@ -98,7 +98,7 @@ def test_insert_data_not_exists_2(_get_page, get_user):
 
     data = models.Data.objects.order_by('-pk')
 
-    assert 2 == data.count()
+    assert data.count() == 2
 
     for row in data:
         assert row.user.username == 'bob'
@@ -114,7 +114,7 @@ def test_insert_data_not_exists_3(_get_page_exception, get_user):
 
     data = [*models.Data.objects.order_by('-pk')]
 
-    assert 2 == len(data)
+    assert len(data) == 2
     assert data[0].temperature is None
 
     for row in data:
@@ -129,5 +129,5 @@ def test_insert_data_must_be_rounded(_get_page, get_user):
     data = models.Data.objects.order_by('-pk')
     inserted_row = data[0]
 
-    assert 1 == data.count()
-    assert 10.12 == inserted_row.distance
+    assert data.count() == 1
+    assert inserted_row.distance == 10.12
