@@ -16,3 +16,12 @@ def test_bike_list(rf, get_user):
 
     assert len(actual['bike_list']) == 1
     assert actual['bike_list'][0].short_name == 'B1'
+
+
+@pytest.mark.django_db
+def test_bike_list_user_not_logged(rf, anonymous_user):
+    r = rf.get('/fake/')
+
+    actual = bike_list(r)
+
+    assert not actual['bike_list']
