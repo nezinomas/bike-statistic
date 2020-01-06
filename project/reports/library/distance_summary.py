@@ -34,6 +34,9 @@ class DistanceSummary():
         # select total row
         df = df.loc['total':]
 
+        if df.empty:
+            return {}
+
         return df.to_dict('records')[0]
 
     @property

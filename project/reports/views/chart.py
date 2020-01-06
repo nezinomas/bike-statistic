@@ -19,7 +19,7 @@ def _years() -> List[int]:
     except AttributeError:
         pass
 
-    _years = [x for x in range(start, now)]
+    _years = [x for x in range(start, now + 1)]
 
     return _years
 
@@ -44,7 +44,7 @@ def overall(request):
         'years': years,
         'chart_data': chart_data[::-1],
         'bikes': bikes,
-        'body': zip(obj.table, obj.total_column),
+        'table_data': list(zip(obj.table, obj.total_column)),
         'total_row': obj.total_row,
         'total': sum(obj.total_row.values())
     }
