@@ -2,7 +2,8 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from ...core.factories import BikeFactory, DataFactory, UserFactory
+from ...bikes.factories import BikeFactory
+from ...reports.factories import DataFactory
 from .. import models
 from ..endomondo import Workout
 from ..library.insert_data import get_temperature, insert_data
@@ -69,7 +70,7 @@ def test_insert_data_exists(mock_get_page):
     assert 1 == actual.count()
 
 
-def test_insert_data_not_exists_1(mock_get_page):
+def test_insert_data_not_exists_1(mock_get_page, get_user):
     DataFactory(
         date=datetime(1999, 1, 1).date(),
         distance=10.10,
@@ -82,8 +83,11 @@ def test_insert_data_not_exists_1(mock_get_page):
 
     assert 2 == data.count()
 
+    for row in data:
+        assert row.user.username == 'bob'
 
-def test_insert_data_not_exists_2(mock_get_page):
+
+def test_insert_data_not_exists_2(mock_get_page, get_user):
     DataFactory(
         date=datetime(2000, 1, 1).date(),
         distance=9.12345678,
@@ -96,8 +100,10 @@ def test_insert_data_not_exists_2(mock_get_page):
 
     assert 2 == data.count()
 
+    for row in data:
+        assert row.user.username == 'bob'
 
-def test_insert_data_not_exists_3(mock_get_page_exception):
+def test_insert_data_not_exists_3(mock_get_page_exception, get_user):
     DataFactory(
         date=datetime(2000, 1, 1).date(),
         distance=9.12345678,
@@ -111,8 +117,11 @@ def test_insert_data_not_exists_3(mock_get_page_exception):
     assert 2 == len(data)
     assert data[0].temperature is None
 
+    for row in data:
+        assert row.user.username == 'bob'
 
-def test_insert_data_must_be_rounded(mock_get_page):
+
+def test_insert_data_must_be_rounded(mock_get_page, get_user):
     BikeFactory()
 
     insert_data()

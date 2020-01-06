@@ -1,18 +1,21 @@
 from datetime import timedelta
-
-from urllib.request import urlopen
 from urllib.error import HTTPError, URLError
+from urllib.request import urlopen
+
 from bs4 import BeautifulSoup
 
 from ...bikes.models import Bike
-from ...config.secrets import get_secret
+from ...core.lib import utils
 from ..endomondo.endomondo import MobileApi
 from ..models import Data
 
 
 def __workouts(maxResults):
-    endomondo = MobileApi(email=get_secret("ENDOMONDO_USER"),
-                          password=get_secret("ENDOMONDO_PASS"))
+    user = utils.get_user()
+    endomondo = MobileApi(
+        email=user.endomondo_user,
+        password=user.endomondo_password
+    )
     endomondo.get_auth_token()
 
     return endomondo.get_workouts(maxResults=maxResults)
@@ -75,5 +78,6 @@ def insert_data(maxResults=20):
                 max_speed=workout.speed_max,
                 heart_rate=workout.heart_rate_avg,
                 cadence=workout.cadence_avg,
-                temperature=temperature
+                temperature=temperature,
+                user=utils.get_user()
             )
