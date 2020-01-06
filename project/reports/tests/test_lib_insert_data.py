@@ -12,7 +12,7 @@ pytestmark = pytest.mark.django_db
 
 
 @pytest.fixture(autouse=True)
-def mock_workout(monkeypatch):
+def _workout(monkeypatch):
     mock_func = 'project.reports.library.insert_data.__workouts'
     return_val = [Workout(
         {
@@ -28,7 +28,7 @@ def mock_workout(monkeypatch):
 
 
 @pytest.fixture()
-def mock_get_page(monkeypatch):
+def _get_page(monkeypatch):
     mock_func = 'project.reports.library.insert_data._get_page_content'
     string = (
         '<div class="now__weather"><span class="unit unit_temperature_c">'
@@ -41,23 +41,23 @@ def mock_get_page(monkeypatch):
 
 
 @pytest.fixture()
-def mock_get_page_exception(monkeypatch):
+def _get_page_exception(monkeypatch):
     mock_func = 'project.reports.library.insert_data._get_page_content'
     monkeypatch.setattr(mock_func, lambda x: Exception())
 
 
-def test_get_temperature(mock_get_page):
+def test_get_temperature(_get_page):
     actual = get_temperature()
 
     assert 22.5 == actual
 
 
 @pytest.mark.xfail(raises=Exception)
-def test_get_temperature_if_exception(mock_get_page_exception):
+def test_get_temperature_if_exception(_get_page_exception):
     get_temperature()
 
 
-def test_insert_data_exists(mock_get_page):
+def test_insert_data_exists(_get_page):
     DataFactory(
         date=datetime(2000, 1, 1).date(),
         distance=10.12,
@@ -70,7 +70,7 @@ def test_insert_data_exists(mock_get_page):
     assert 1 == actual.count()
 
 
-def test_insert_data_not_exists_1(mock_get_page, get_user):
+def test_insert_data_not_exists_1(_get_page, get_user):
     DataFactory(
         date=datetime(1999, 1, 1).date(),
         distance=10.10,
@@ -87,7 +87,7 @@ def test_insert_data_not_exists_1(mock_get_page, get_user):
         assert row.user.username == 'bob'
 
 
-def test_insert_data_not_exists_2(mock_get_page, get_user):
+def test_insert_data_not_exists_2(_get_page, get_user):
     DataFactory(
         date=datetime(2000, 1, 1).date(),
         distance=9.12345678,
@@ -103,7 +103,7 @@ def test_insert_data_not_exists_2(mock_get_page, get_user):
     for row in data:
         assert row.user.username == 'bob'
 
-def test_insert_data_not_exists_3(mock_get_page_exception, get_user):
+def test_insert_data_not_exists_3(_get_page_exception, get_user):
     DataFactory(
         date=datetime(2000, 1, 1).date(),
         distance=9.12345678,
@@ -121,7 +121,7 @@ def test_insert_data_not_exists_3(mock_get_page_exception, get_user):
         assert row.user.username == 'bob'
 
 
-def test_insert_data_must_be_rounded(mock_get_page, get_user):
+def test_insert_data_must_be_rounded(_get_page, get_user):
     BikeFactory()
 
     insert_data()
