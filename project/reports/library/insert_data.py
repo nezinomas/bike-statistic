@@ -10,7 +10,7 @@ from ..endomondo.endomondo import MobileApi
 from ..models import Data
 
 
-def __workouts(maxResults):
+def get_workouts(maxResults):
     user = utils.get_user()
     endomondo = MobileApi(
         email=user.endomondo_user,
@@ -21,7 +21,7 @@ def __workouts(maxResults):
     return endomondo.get_workouts(maxResults=maxResults)
 
 
-def _get_page_content(page):
+def get_weather_page(page):
     try:
         html = urlopen(page)
         return html
@@ -31,7 +31,7 @@ def _get_page_content(page):
 
 def get_temperature():
     url = 'https://www.gismeteo.lt/weather-vilnius-4230/now/'
-    page = _get_page_content(url)
+    page = get_weather_page(url)
     soup = BeautifulSoup(page, 'html.parser')
 
     element = soup.find('span', {'class': 'nowvalue__text_l'})
@@ -44,7 +44,7 @@ def get_temperature():
 
 
 def insert_data(maxResults=20):
-    workouts = __workouts(maxResults=maxResults)
+    _workouts = get_workouts(maxResults=maxResults)
 
     bike = Bike.objects.order_by('pk')[0]
 
@@ -53,7 +53,7 @@ def insert_data(maxResults=20):
     except:
         temperature = None
 
-    for workout in workouts:
+    for workout in _workouts:
         if workout.name is not None and 'cycling' in workout.name.lower():
 
             distance = round(workout.distance, 2)

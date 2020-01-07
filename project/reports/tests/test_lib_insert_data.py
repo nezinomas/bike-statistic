@@ -13,7 +13,7 @@ pytestmark = pytest.mark.django_db
 
 @pytest.fixture(autouse=True)
 def _workout(monkeypatch):
-    mock_func = 'project.reports.library.insert_data.__workouts'
+    mock_func = 'project.reports.library.insert_data.get_workouts'
     return_val = [Workout(
         {
             'ascent': 9,
@@ -29,7 +29,7 @@ def _workout(monkeypatch):
 
 @pytest.fixture()
 def _get_page(monkeypatch):
-    mock_func = 'project.reports.library.insert_data._get_page_content'
+    mock_func = 'project.reports.library.insert_data.get_weather_page'
     string = (
         '<div class="now__weather"><span class="unit unit_temperature_c">'
         '<span class="nowvalue__text_l">'
@@ -42,7 +42,7 @@ def _get_page(monkeypatch):
 
 @pytest.fixture()
 def _get_page_exception(monkeypatch):
-    mock_func = 'project.reports.library.insert_data._get_page_content'
+    mock_func = 'project.reports.library.insert_data.get_weather_page'
     monkeypatch.setattr(mock_func, lambda x: Exception())
 
 
