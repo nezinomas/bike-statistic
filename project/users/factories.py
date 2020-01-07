@@ -16,7 +16,7 @@ class UserFactory(factory.DjangoModelFactory):
     username = 'bob'
     password = make_password('123')
     email = 'bob@bob.com'
-    date_joined = datetime(1999, 1, 1)
+    date_joined = datetime(2000, 1, 1)
     endomondo_id = 999
     endomondo_user = 'ebob'
     endomondo_password = make_password('123')

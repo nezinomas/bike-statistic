@@ -68,12 +68,12 @@ def test_overall_context_data_table(client, get_user, _data):
     response = client.get(url)
 
     table = [
-        {'year': 2000.0, 'B1': 10.0, 'B2': 20.0},
-        {'year': 2001.0, 'B1': 0.0, 'B2': 35.0},
+        {'year': 2000, 'B1': 10.0, 'B2': 20.0},
+        {'year': 2001, 'B1': 0.0, 'B2': 35.0},
     ]
     total_column = [
-        {'year': 2000.0, 'total': 30.0},
-        {'year': 2001.0, 'total': 35.0},
+        {'year': 2000, 'total': 30.0},
+        {'year': 2001, 'total': 35.0},
     ]
 
     actual = response.context['table_data']
@@ -111,7 +111,6 @@ def test_overall_context_chart_data(client, get_user, _data):
             'borderWidth': '0.5'
         }
     ]
-
     actual = response.context['chart_data']
 
     assert actual == expect

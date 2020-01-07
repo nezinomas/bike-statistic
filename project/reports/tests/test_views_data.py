@@ -4,7 +4,7 @@ import pytest
 from django.urls import resolve, reverse
 from freezegun import freeze_time
 
-from ...core.factories import DataFactory
+from ...reports.factories import DataFactory
 from ...core.helpers.test_helpers import login_rediretion
 from ...users.factories import UserFactory
 from ..factories import DataFactory
