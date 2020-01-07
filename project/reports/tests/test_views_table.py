@@ -17,7 +17,7 @@ def test_view_table_200(client, login):
     url = reverse('reports:reports_table', kwargs={'year': 2000})
     response = client.get(url)
 
-    assert 200 == response.status_code
+    assert response.status_code == 200
 
 
 @pytest.mark.django_db
@@ -25,7 +25,7 @@ def test_view_table_404(client, login):
     url = reverse('reports:reports_table', kwargs={'year': 2000})
     response = client.get(url)
 
-    assert 404 == response.status_code
+    assert response.status_code == 404
 
 
 def test_view_table_func():
@@ -41,7 +41,7 @@ def test_view_table_template(client, login):
     url = reverse('reports:reports_table', kwargs={'year': 2000})
     response = client.get(url)
 
-    assert 'reports/table.html' == response.templates[0].name
+    assert response.templates[0].name == 'reports/table.html'
 
 
 @pytest.mark.django_db
