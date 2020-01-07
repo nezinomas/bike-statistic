@@ -159,3 +159,16 @@ def test_two_users(_get_page):
 
     assert actual[0].bike.short_name == 'B1'
     assert actual[1].bike.short_name == 'B2'
+
+
+@pytest.mark.xfail
+def test_insert_all_users_no_bikes(_get_page):
+    UserFactory(username='U1')
+    UserFactory(username='U2')
+
+    insert_data_all_users()
+
+
+@pytest.mark.xfail
+def test_insert_current_user_no_bikes(_get_page, get_user):
+    insert_data_current_user()

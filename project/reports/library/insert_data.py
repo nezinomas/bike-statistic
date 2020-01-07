@@ -34,7 +34,11 @@ def _get_weather_page(page):
 
 
 def _insert_data(api, user, temperature, max_results):
-    bike = Bike.objects.filter(user=user).order_by('pk')[0]
+    bike = Bike.objects.filter(user=user).order_by('pk')
+    if not bike.exists():
+        raise Exception('Add at least one Bike.')
+
+    bike = bike[0] # select first bike
 
     workouts = _get_workouts(api=api, max_results=max_results)
 
