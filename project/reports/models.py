@@ -17,8 +17,14 @@ class DataQuerySet(models.QuerySet):
             .filter(user=user)
         )
 
-    def items(self):
-        return self.related()
+    def _filter_by_year(self, year):
+        if year:
+            return self.filter(date__year=year)
+
+        return self
+
+    def items(self, year=None):
+        return self.related()._filter_by_year(year)
 
     def bike_summary(self):
         return (
