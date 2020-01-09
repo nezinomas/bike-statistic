@@ -174,6 +174,12 @@ def test_season_progress_keys(_data):
     assert 'goal_delta' in actual[0]
 
 
+def test_season_progress_no_year(_data):
+    actual = Progress().season_progress()
+
+    assert actual == {}
+
+
 def test_season_progress_sorting(_data):
     actual = Progress(2000).season_progress(goal=1000)
 
