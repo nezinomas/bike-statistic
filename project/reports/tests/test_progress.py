@@ -152,7 +152,7 @@ def test_month_stats(_data):
 #                                                                         season progress
 # ---------------------------------------------------------------------------------------
 def test_season_progress_keys(_data):
-    actual = Progress(2000).season_progress(year=2000, goal=1000)
+    actual = Progress(2000).season_progress(goal=1000)
 
     assert 'date' in actual[0]
     assert 'bikes' in actual[0]
@@ -175,84 +175,83 @@ def test_season_progress_keys(_data):
 
 
 def test_season_progress_sorting(_data):
-    actual = Progress(2000).season_progress(year=2000, goal=1000)
+    actual = Progress(2000).season_progress(goal=1000)
 
     assert datetime(2000, 1, 31) == actual[0]['date']
     assert datetime(2000, 1, 1) == actual[1]['date']
 
 
 def test_season_progress_distance_cumulative_sum(_data):
-    actual = Progress(2000).season_progress(year=2000, goal=1000)
+    actual = Progress(2000).season_progress(goal=1000)
 
     assert actual[0]['season_distance'] == 30.0
     assert actual[1]['season_distance'] == 10.0
 
 
 def test_season_progress_seconds_cumulative_sum(_data):
-    actual = Progress(2000).season_progress(year=2000, goal=1000)
+    actual = Progress(2000).season_progress(goal=1000)
 
     assert round(actual[0]['season_seconds'], 1) == 3000
     assert round(actual[1]['season_seconds'], 1) == 1000
 
 
 def test_season_progress_season_speed(_data):
-    actual = Progress(2000).season_progress(year=2000, goal=1000)
+    actual = Progress(2000).season_progress(goal=1000)
 
     assert round(actual[0]['season_speed'], 1) == 36.0
     assert round(actual[1]['season_speed'], 1) == 36.0
 
 
 def test_season_progress_goal_percents(_data):
-    actual = Progress(2000).season_progress(year=2000, goal=1000)
+    actual = Progress(2000).season_progress(goal=1000)
 
     assert round(actual[0]['goal_percent'], 1) == 35.4
     assert round(actual[1]['goal_percent'], 1) == 366.0
 
 
 def test_season_progress_day_goal(_data):
-    actual = Progress(2000).season_progress(year=2000, goal=1000)
+    actual = Progress(2000).season_progress(goal=1000)
 
     assert round(actual[0]['goal_day'], 3) == 84.699
     assert round(actual[1]['goal_day'], 3) == 2.732
 
 
 def test_season_progress_day_goal_empty(_data):
-    actual = Progress(2000).season_progress(year=2000)
-
+    actual = Progress(2000).season_progress()
     assert actual[0]['goal_day'] == 0.0
     assert actual[1]['goal_day'] == 0.0
 
 
 def test_season_progress_km_delta(_data):
-    actual = Progress(2000).season_progress(year=2000, goal=1000)
+    actual = Progress(2000).season_progress(goal=1000)
 
     assert round(actual[0]['goal_delta'], 3) == -54.699
     assert round(actual[1]['goal_delta'], 3) == 7.268
 
 
 def test_season_progress_per_day_season(_data):
-    actual = Progress(2000).season_progress(year=2000, goal=1000)
+    actual = Progress(2000).season_progress(goal=1000)
 
     assert round(actual[0]['season_per_day'], 3) == 0.968
     assert round(actual[1]['season_per_day'], 3) == 10.0
 
 
 def test_season_progress_ascent_cumulative_sum(_data):
-    actual = Progress(2000).season_progress(year=2000, goal=1000)
+    actual = Progress(2000).season_progress(goal=1000)
 
     assert actual[0]['season_ascent'] == 300
     assert actual[1]['season_ascent'] == 100
 
 
 def test_season_progress_workout_speed(_data):
-    actual = Progress(2000).season_progress(year=2000, goal=1000)
+    actual = Progress(2000).season_progress(goal=1000)
 
     assert round(actual[0]['speed'], 1) == 36.0
     assert round(actual[1]['speed'], 1) == 36.0
 
 
 def test_season_progress_day_num(_data):
-    actual = Progress(2000).season_progress(year=2000, goal=1000)
+    actual = Progress(2000).season_progress(goal=1000)
 
     assert actual[0]['day_nr'] == 31
     assert actual[1]['day_nr'] == 1

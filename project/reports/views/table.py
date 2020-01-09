@@ -23,7 +23,7 @@ def table(request, year):
         {
             'year': year,
             'e': obj.extremums().get(year),
-            'season': obj.season_progress(year=year, goal=goal),
+            'season': obj.season_progress(goal=goal),
             'month': obj.month_stats(),
         }
     )

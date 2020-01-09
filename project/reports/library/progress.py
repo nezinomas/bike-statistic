@@ -9,6 +9,7 @@ from ..models import Data
 
 class Progress():
     def __init__(self, year=None):
+        self._year = year
         self._df = self._build_df(year)
 
     def _build_df(self, year):
@@ -126,14 +127,14 @@ class Progress():
 
         return df.to_dict('index')
 
-    def season_progress(self, year, goal=0):
+    def season_progress(self, goal=0):
         df = self._df.copy()
 
-        if df.empty:
+        if df.empty or not self._year:
             return {}
 
         # metu diena, int
-        first = pd.to_datetime(date(year, 1, 1))
+        first = pd.to_datetime(date(self._year, 1, 1))
         df.loc[:, 'day_nr'] = (df['date'] - first).dt.days + 1
         df.loc[:, 'year_month'] = df['date'].dt.to_period('M').astype(str)
 
@@ -145,7 +146,7 @@ class Progress():
         df.loc[:, 'season_speed'] = self._speed(df['season_distance'], df['season_seconds'])
 
         # calculate goal progress
-        year_len = 366 if calendar.isleap(year) else 365
+        year_len = 366 if calendar.isleap(self._year) else 365
         per_day = goal / year_len
 
         df.loc[:, 'goal_day'] = df['day_nr'] * per_day
