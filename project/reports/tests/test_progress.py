@@ -131,6 +131,33 @@ def test_data_extremums_speed_one_season(get_user):
 
 
 # ---------------------------------------------------------------------------------------
+#                                                                               distances
+# ---------------------------------------------------------------------------------------
+def test_distances_one_season(get_user):
+    DataFactory()
+    DataFactory(date=date(2000, 1, 10), distance=25.0)
+    DataFactory(date=date(3000, 1, 10), distance=35.0)
+
+    actual = Progress(2000).distances()
+
+    assert len(actual) == 1
+    assert actual[2000]['distance'] == 35.0
+
+
+
+def test_data_distances_all_seasons(get_user):
+    DataFactory()
+    DataFactory(date=date(2000, 1, 10), distance=30.0)
+    DataFactory(date=date(2010, 1, 10), distance=35.0)
+
+    actual = Progress().distances()
+
+    assert len(actual) == 2
+    assert actual[2010]['distance'] == 35.0
+    assert actual[2000]['distance'] == 40.0
+
+
+# ---------------------------------------------------------------------------------------
 #                                                                             month stats
 # ---------------------------------------------------------------------------------------
 def test_month_stats(_data):

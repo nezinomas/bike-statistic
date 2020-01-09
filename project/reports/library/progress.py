@@ -74,6 +74,27 @@ class Progress():
 
         return df
 
+    def distances(self):
+        df = self._df.copy()
+
+        if df.empty:
+            return {}
+
+        years = df['year'].unique()
+
+        final = dict()
+        for year in years:
+            _df = self._filter_df(df, year)
+
+            if _df.empty:
+                continue
+
+            final.update({
+                year: {'distance': _df['distance'].sum()}
+            })
+
+        return final
+
     def extremums(self):
         df = self._df.copy()
 
