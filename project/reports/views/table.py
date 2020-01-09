@@ -1,20 +1,29 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from ...core.lib.stats_goals import StatsGoals
+from ...goals.models import Goal
+from ..library.progress import Progress
 
 
 @login_required()
 def table(request, year):
-    objStats = StatsGoals(year)
+    goal = list(
+        Goal.objects
+        .items()
+        .filter(year=year)
+        .values_list('goal', flat=True)
+    )
+    goal = goal[0] if goal else 0
+
+    obj = Progress(year)
 
     return render(
         request,
         'reports/table.html',
         {
-            'objects': objStats.year_progress(),
-            'month': objStats.month_stats(),
             'year': year,
-            'stats': objStats.year_stats()
+            'e': obj.extremums().get(year),
+            'season': obj.season_progress(year=year, goal=goal),
+            'month': obj.month_stats(),
         }
     )
