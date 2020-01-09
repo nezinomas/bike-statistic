@@ -34,6 +34,13 @@ def test_data_items(get_user):
     assert Data.objects.items().count() == 1
 
 
+def test_data_items_filtered(get_user):
+    DataFactory()
+    DataFactory(date=date(2100, 1, 1))
+
+    assert Data.objects.items(2000).count() == 1
+
+
 def test_data_items_for_logged_user(get_user):
     DataFactory()
     DataFactory(user=UserFactory(username='XXX'))
