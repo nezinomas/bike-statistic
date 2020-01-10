@@ -9,10 +9,10 @@ from ..core.mixins.form_mixin import FormMixin
 from .models import Bike, BikeInfo, Component, ComponentStatistic
 
 
-class ComponentForm(forms.ModelForm):
+class ComponentForm(FormMixin, forms.ModelForm):
     class Meta:
         model = Component
-        fields = '__all__'
+        fields = ['name']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

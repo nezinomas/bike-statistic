@@ -108,3 +108,39 @@ def test_bike_info_blank_data(get_user):
     assert 'bike' in form.errors
     assert 'component' in form.errors
     assert 'description' in form.errors
+
+
+# ---------------------------------------------------------------------------------------
+#                                                                               Component
+# ---------------------------------------------------------------------------------------
+def test_component_init(get_user):
+    ComponentForm()
+
+
+def test_component_init_fields(get_user):
+    form = ComponentForm().as_p()
+
+    assert '<input type="text" name="name"' in form
+    assert '<select name="user"' not in form
+
+
+def test_component_valid_data(get_user):
+    form = ComponentForm(data={
+        'name': 'Component',
+    })
+
+    assert form.is_valid()
+
+    data = form.save()
+
+    assert data.name == 'Component'
+    assert data.user.username == 'bob'
+
+
+def test_component_blank_data(get_user):
+    form = ComponentForm(data={})
+
+    assert not form.is_valid()
+
+    assert len(form.errors) == 1
+    assert 'name' in form.errors
