@@ -43,7 +43,7 @@ def save_data(request, context, form, bike_slug, pk):
 
 @login_required()
 def index(request, bike_slug):
-    qs = Component.objects.all().first()
+    qs = Component.objects.items().first()
     url = reverse(
         'bikes:stats_list',
         kwargs={'bike_slug': bike_slug, 'component_pk': qs.pk}

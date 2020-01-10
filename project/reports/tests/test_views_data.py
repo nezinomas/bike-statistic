@@ -192,7 +192,7 @@ def test_data_delete(client, login, jan_2000):
     actual = json.loads(response.content)
 
     assert actual['form_is_valid']
-    assert not Data.objects.all()
+    assert not Data.objects.items()
 
 
 def test_data_delete_404(client, login, jan_2000):

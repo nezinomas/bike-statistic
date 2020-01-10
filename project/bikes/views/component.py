@@ -14,7 +14,7 @@ def save_component(request, context, form):
         if form.is_valid():
             form.save()
             data['form_is_valid'] = True
-            components = Component.objects.all()
+            components = Component.objects.items()
             data['html_list'] = render_to_string(
                 'bikes/includes/partial_component_list.html', {'components': components})
         else:
@@ -31,7 +31,7 @@ def save_component(request, context, form):
 
 @login_required()
 def lists(request):
-    components = Component.objects.all()
+    components = Component.objects.items()
     return render(request, 'bikes/component_list.html', {'components': components})
 
 
@@ -58,7 +58,7 @@ def delete(request, pk):
     if request.method == 'POST':
         component.delete()
         data['form_is_valid'] = True
-        components = Component.objects.all()
+        components = Component.objects.items()
         data['html_list'] = render_to_string(
             'bikes/includes/partial_component_list.html',
             {'components': components}

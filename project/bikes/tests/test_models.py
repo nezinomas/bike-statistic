@@ -92,7 +92,7 @@ def test_bike_info_related_qs_count(get_user, django_assert_max_num_queries):
     BikeInfoFactory(component='C1')
     BikeInfoFactory(component='C2')
 
-    assert BikeInfo.objects.all().count() == 2
+    assert BikeInfo.objects.items().count() == 2
 
     with django_assert_max_num_queries(1):
         list(q.bike.short_name for q in BikeInfo.objects.related())
