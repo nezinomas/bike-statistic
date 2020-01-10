@@ -32,7 +32,11 @@ def save_component(request, context, form):
 @login_required()
 def lists(request):
     components = Component.objects.items()
-    return render(request, 'bikes/component_list.html', {'components': components})
+    return render(
+        request,
+        'bikes/component_list.html',
+        {'components': components}
+    )
 
 
 @login_required()
