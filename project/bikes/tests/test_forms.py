@@ -3,8 +3,10 @@ from datetime import date
 import pytest
 from freezegun import freeze_time
 
+from ...bikes.factories import BikeFactory
 from ...users.factories import UserFactory
-from ..forms import BikeForm, ComponentForm, ComponentStatisticForm
+from ..forms import (BikeForm, BikeInfoForm, ComponentForm,
+                     ComponentStatisticForm)
 
 pytestmark = pytest.mark.django_db
 
@@ -62,3 +64,47 @@ def test_bike_blank_data(get_user):
     assert len(form.errors) == 2
     assert 'date' in form.errors
     assert 'short_name' in form.errors
+
+
+# ---------------------------------------------------------------------------------------
+#                                                                               Bike Info
+# ---------------------------------------------------------------------------------------
+def test_bike_info_init(get_user):
+    BikeInfoForm()
+
+
+def test_bike_info_init_fields(get_user):
+    form = BikeInfoForm().as_p()
+
+    assert '<input type="text" name="component"' in form
+    assert '<input type="text" name="description"' in form
+    assert '<input type="hidden" name="bike"' in form
+
+
+def test_bike_info_valid_data(get_user):
+    b = BikeFactory()
+
+    form = BikeInfoForm(data={
+        'component': 'Component',
+        'description': 'Description',
+        'bike': b.pk,
+    })
+
+    assert form.is_valid()
+
+    data = form.save()
+
+    assert data.component == 'Component'
+    assert data.description == 'Description'
+    assert data.bike.short_name == 'Short Name'
+
+
+def test_bike_info_blank_data(get_user):
+    form = BikeInfoForm(data={})
+
+    assert not form.is_valid()
+
+    assert len(form.errors) == 3
+    assert 'bike' in form.errors
+    assert 'component' in form.errors
+    assert 'description' in form.errors
