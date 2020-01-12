@@ -140,7 +140,6 @@ class Progress():
         df.loc[:, 'distance_per_day'] = df['distance'] / df['monthlen']
         df.loc[:, 'speed'] = self._speed(df['distance'], df['seconds'])
 
-
         # make df index year_month
         df.reset_index()
         df.index = df['year_month']
@@ -164,7 +163,7 @@ class Progress():
         df.loc[:, 'season_seconds'] = df['seconds'][::-1].cumsum()
         df.loc[:, 'season_ascent'] = df['ascent'][::-1].cumsum()
         df.loc[:, 'season_per_day'] = df['season_distance'] / df['day_nr']
-        df.loc[:, 'season_speed'] = self._speed(df['season_distance'], df['season_seconds'])
+        df.loc[:, 'season_speed'] = self._speed(df['season_distance'],df['season_seconds'])
 
         # calculate goal progress
         year_len = 366 if calendar.isleap(self._year) else 365
