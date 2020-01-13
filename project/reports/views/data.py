@@ -5,9 +5,8 @@ from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 
 from .. import forms, models
-
-from ..library import insert_data as inserter
 from ..helpers import view_data_helper as helper
+from ..library.insert_data import insert_data_current_user as inserter
 
 
 @login_required()
@@ -142,7 +141,7 @@ def data_quick_update(request, start_date, end_date, pk):
 @login_required()
 def insert_data(request):
     try:
-        inserter.insert_data_current_user(10)
+        inserter(10)
         message = 'ok'
     except Exception as ex:
         template = "An exception of type {0} occurred. Arguments:\n{1!r}"

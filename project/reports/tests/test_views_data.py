@@ -183,7 +183,7 @@ def test_data_delete_not_loged(client, jan_2000):
     login_rediretion(client, 'reports:data_delete', kwargs={**jan_2000, 'pk': 99})
 
 
-def test_data_delete(client, login, jan_2000):
+def test_data_delete(client, login, jan_2000, get_user):
     obj = DataFactory()
 
     url = reverse('reports:data_delete', kwargs={**jan_2000, 'pk': obj.pk})
