@@ -11,7 +11,7 @@
 <div class='row'>
     <div class='col-6'>
         <div id="my-chart"></div>
-
+        {% if bikes %}
         <script>
             Highcharts.setOptions({
                 lang: {
@@ -58,6 +58,7 @@
                 series: {{ chart_data|safe }},
             });
         </script>
+        {% endif %}
     </div>
 
     <div class="col-6"></div>
