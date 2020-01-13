@@ -140,7 +140,6 @@ class Progress():
         df.loc[:, 'distance_per_day'] = df['distance'] / df['monthlen']
         df.loc[:, 'speed'] = self._speed(df['distance'], df['seconds'])
 
-
         # make df index year_month
         df.reset_index()
         df.index = df['year_month']

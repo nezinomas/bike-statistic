@@ -18,12 +18,18 @@ def format_date(day=1):
 
 def form_valid(data, start_date, end_date):
     data['form_is_valid'] = True
-    objects = Data.objects\
-        .prefetch_related('bike')\
+    objects = (
+        Data.objects
+        .items()
         .filter(date__range=(start_date, end_date))
+    )
     data['html_list'] = render_to_string(
         'reports/includes/partial_data_list.html',
-        {'objects': objects, 'start_date': start_date, 'end_date': end_date}
+        {
+            'objects': objects,
+            'start_date': start_date,
+            'end_date': end_date,
+        }
     )
 
 
