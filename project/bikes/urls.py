@@ -11,10 +11,10 @@ urlpatterns = [
     path('component/delete/<int:pk>/', component.delete, name='component_delete'),
 
     path('<slug:bike_slug>/component/', stats.index, name='stats_index'),
-    path('<slug:bike_slug>/component/<int:component_pk>', stats.lists, name='stats_list'),
-    path('<slug:bike_slug>/component/<int:component_pk>/create', stats.create, name='stats_create'),
-    path('<slug:bike_slug>/component/<int:stats_pk>/update', stats.update, name='stats_update'),
-    path('<slug:bike_slug>/component/<int:stats_pk>/delete', stats.delete, name='stats_delete'),
+    path('<slug:bike_slug>/component/<int:component_pk>/', stats.lists, name='stats_list'),
+    path('<slug:bike_slug>/component/<int:component_pk>/create/', stats.create, name='stats_create'),
+    path('<slug:bike_slug>/component/<int:stats_pk>/update/', stats.update, name='stats_update'),
+    path('<slug:bike_slug>/component/<int:stats_pk>/delete/', stats.delete, name='stats_delete'),
 
     path('bike/', bike.lists, name='bike_list'),
     path('bike/create/', bike.create, name='bike_create'),
@@ -25,5 +25,5 @@ urlpatterns = [
     path('<slug:bike_slug>/info/', info.lists, name='info_list'),
     path('<slug:bike_slug>/info/create/', info.create, name='info_create'),
     path('<slug:bike_slug>/info/update/<int:pk>/', info.update, name='info_update'),
-    path('<slug:bike_slug>/info/delete/<int:pk>', info.delete, name='info_delete'),
+    path('<slug:bike_slug>/info/delete/<int:pk>/', info.delete, name='info_delete'),
 ]
