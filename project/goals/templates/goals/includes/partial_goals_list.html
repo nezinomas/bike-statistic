@@ -48,6 +48,8 @@
             <td class="text-center">{{ s.distance_max_value|floatformat:1 }}</td>
             {% endwith %}
         </tr>
+        {% empty %}
+        <tr><td class="bg-warning text-center" colspan="14">No records</td></tr>
         {% endfor %}
     </tbody>
 </table>
