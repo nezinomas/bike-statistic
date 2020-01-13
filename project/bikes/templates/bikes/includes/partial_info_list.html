@@ -19,6 +19,8 @@
                 {% button_delete type='button' pk=item.id url=url_delete tbl='0' %}
             </td>
         </tr>
+        {% empty %}
+        <tr><td class="bg-warning text-center" colspan="3">No records</td></tr>
         {% endfor %}
     </tbody>
 </table>

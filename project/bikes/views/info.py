@@ -38,7 +38,12 @@ def save_data(request, context, form, bike_slug):
 @login_required()
 def index(request):
     bike = Bike.objects.items().first()
-    return redirect(reverse('bikes:info_list', kwargs={'bike_slug': bike.slug}))
+
+    bike_slug = 'no_bike'
+    if bike:
+        bike_slug = bike.slug
+
+    return redirect(reverse('bikes:info_list', kwargs={'bike_slug': bike_slug}))
 
 
 @login_required()
