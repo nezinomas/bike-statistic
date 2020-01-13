@@ -140,6 +140,14 @@ def test_index_func(client):
     assert data.index == view.func
 
 
+def test_index_no_records(client_logged):
+    url = reverse('reports:index')
+    response = client_logged.get(url, follow=True)
+
+    assert '<td class="bg-warning text-center" colspan="11">No records</td>' in str(
+        response.content)
+
+
 # ---------------------------------------------------------------------------------------
 #                                                                             data_create
 # ---------------------------------------------------------------------------------------

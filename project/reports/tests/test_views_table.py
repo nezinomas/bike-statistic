@@ -25,6 +25,24 @@ def test_view_table_func():
 
 
 @pytest.mark.django_db
+def test_view_table_no_records_top_table(client, login):
+    url = reverse('reports:reports_table', kwargs={'year': 2000})
+    response = client.get(url)
+
+    assert '<td class="bg-warning text-center" colspan="10">No records</td>' in str(
+        response.content)
+
+
+@pytest.mark.django_db
+def test_view_table_no_records(client, login):
+    url = reverse('reports:reports_table', kwargs={'year': 2000})
+    response = client.get(url)
+
+    assert '<td class="bg-warning text-center" colspan="20">No records</td>' in str(
+        response.content)
+
+
+@pytest.mark.django_db
 def test_view_table_template(client, login):
     url = reverse('reports:reports_table', kwargs={'year': 2000})
     response = client.get(url)
