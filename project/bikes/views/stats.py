@@ -62,16 +62,24 @@ def save_data(request, context, form, bike_slug, pk):
 @login_required()
 def index(request, bike_slug):
     qs = Component.objects.items().first()
-    url = reverse(
-        'bikes:stats_list',
-        kwargs={'bike_slug': bike_slug, 'component_pk': qs.pk}
-    )
+
+    if qs:
+        url = reverse(
+            'bikes:stats_list',
+            kwargs={'bike_slug': bike_slug, 'component_pk': pk}
+        )
+    else:
+        url = reverse('bikes:component_list')
+
     return redirect(url)
 
 
 @login_required()
 def lists(request, bike_slug, component_pk):
-    component = Component.objects.get(pk=component_pk)
+    component = Component.objects.filter(pk=component_pk)[:1]
+    if not component:
+        return redirect(reverse('bikes:component_list'))
+
     components = Component.objects.items()
     data = (
         Data.objects

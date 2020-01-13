@@ -83,3 +83,44 @@ def test_bike_info_list_no_records(client_logged):
 
     assert '<td class="bg-warning text-center" colspan="3">No records</td>' in str(
         response.content)
+
+
+# ---------------------------------------------------------------------------------------
+#                                                                         component index
+# ---------------------------------------------------------------------------------------
+def test_component_index_func():
+    view = resolve('/xxx/component/')
+
+    assert views.stats.index == view.func
+
+
+def test_component_index_302(client_logged):
+    url = reverse('bikes:stats_index', kwargs={'bike_slug': 'x'})
+    response = client_logged.get(url)
+
+    assert response.status_code == 302
+
+
+def test_component_index_no_records(client_logged):
+    url = reverse('bikes:stats_index', kwargs={'bike_slug': 'x'})
+    response = client_logged.get(url, follow=True)
+
+    assert response.status_code == 200
+    assert response.resolver_match.view_name == 'bikes:component_list'
+
+
+# ---------------------------------------------------------------------------------------
+#                                                                          component list
+# ---------------------------------------------------------------------------------------
+def test_component_list_func():
+    view = resolve('/xxx/component/1/')
+
+    assert views.stats.lists == view.func
+
+
+def test_component_list_no_records(client_logged):
+    url = reverse('bikes:stats_list', kwargs={'component_pk': 0, 'bike_slug': 'x'})
+    response = client_logged.get(url, follow=True)
+
+    assert response.status_code == 200
+    assert response.resolver_match.view_name == 'bikes:component_list'
