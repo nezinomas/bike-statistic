@@ -1,6 +1,7 @@
 import pytest
 
 from ...bikes.factories import BikeFactory
+from ...users.factories import UserFactory
 from ..forms import DataForm, DateFilterForm
 
 
@@ -43,3 +44,16 @@ def test_data_form_is_valid(post_data):
     form = DataForm(data=post_data)
 
     assert form.is_valid()
+
+
+@pytest.mark.django_db
+def test_data_bike_current_user(get_user):
+    u = UserFactory(username='xxx')
+
+    BikeFactory(short_name='T1')  # user bob, current user
+    BikeFactory(short_name='T2', user=u)  # user xxx
+
+    form = DataForm().as_p()
+
+    assert 'T1' in form
+    assert 'T2' not in form
