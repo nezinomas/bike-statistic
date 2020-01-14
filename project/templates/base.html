@@ -48,7 +48,7 @@
           </ul>
           {% else %}
           <form class="form-inline ml-auto">
-            <a href="{% url 'accounts:login' %}" class="btn btn-outline-secondary btn-sm">Log in</a>
+            <a href="{% url 'users:login' %}" class="btn btn-outline-secondary btn-sm">Log in</a>
           </form>
           {% endif %}
         </div>
@@ -61,20 +61,20 @@
         <div class="fixed-column">
           <h6 class="side-bar">Data</h6>
           <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action" href="{% url 'reports:data_empty' %}">View</a></li>
-            <a class="list-group-item list-group-item-action" href="{% url 'reports:insert_data' %}">Update</a></li>
+            <a class="list-group-item list-group-item-action" href="{% url 'reports:data_empty' %}">View</a>
+            <a class="list-group-item list-group-item-action" href="{% url 'reports:insert_data' %}">Update</a>
           </div>
 
           <h6 class="side-bar">Charts</h6>
           <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action" href="{% url 'reports:overall' %}">Overall</a></li>
+            <a class="list-group-item list-group-item-action" href="{% url 'reports:overall' %}">Overall</a>
           </div>
 
           <h6 class="side-bar">Stats & Goals</h6>
           <div class="list-group list-group-flush">
-            {% for item in goal_list  %}
-            {% if forloop.counter < 4 %}
-            <a class="list-group-item list-group-item-action" href="{% url 'reports:reports_table' item.year %}">{{ item.year }}</a></li>
+            {% for item in years  %}
+            {% if forloop.counter < 6 %}
+            <a class="list-group-item list-group-item-action" href="{% url 'reports:reports_table' item %}">{{ item }}</a>
             {% endif %}
             {% endfor %}
           </div>
@@ -82,16 +82,16 @@
           <h6 class="side-bar">Component wear</h6>
           <div class="list-group list-group-flush">
             {% for bike in bike_list %}
-            <a class="list-group-item list-group-item-action" href="{% url 'bikes:stats_index' bike.slug %}">{{ bike.short_name }}</a></li>
+            <a class="list-group-item list-group-item-action" href="{% url 'bikes:stats_index' bike.slug %}">{{ bike.short_name }}</a>
             {% endfor %}
           </div>
 
           <h6 class="side-bar">Settings</h6>
           <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action" href="{% url 'goals:goals_list' %}">Goals</a></li>
-            <a class="list-group-item list-group-item-action" href="{% url 'bikes:component_list' %}">Components</a></li>
-            <a class="list-group-item list-group-item-action" href="{% url 'bikes:bike_list' %}">Bikes</a></li>
-            <a class="list-group-item list-group-item-action" href="{% url 'bikes:info_index' %}">Bike Info</a></li>
+            <a class="list-group-item list-group-item-action" href="{% url 'goals:goals_list' %}">Goals</a>
+            <a class="list-group-item list-group-item-action" href="{% url 'bikes:component_list' %}">Components</a>
+            <a class="list-group-item list-group-item-action" href="{% url 'bikes:bike_list' %}">Bikes</a>
+            <a class="list-group-item list-group-item-action" href="{% url 'bikes:info_index' %}">Bike Info</a>
           </div>
         </div>
         <!-- content -->

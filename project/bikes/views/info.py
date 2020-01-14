@@ -8,9 +8,7 @@ from ..models import Bike, BikeInfo
 
 
 def form_valid(data, bike_slug):
-    objects = BikeInfo.objects.\
-        prefetch_related('bike').\
-        filter(bike__slug=bike_slug)
+    objects = BikeInfo.objects.items().filter(bike__slug=bike_slug)
     data['form_is_valid'] = True
     data['html_list'] = render_to_string(
         'bikes/includes/partial_info_list.html',
@@ -39,15 +37,18 @@ def save_data(request, context, form, bike_slug):
 
 @login_required()
 def index(request):
-    bike = Bike.objects.all().first()
-    return redirect(reverse('bikes:info_list', kwargs={'bike_slug': bike.slug}))
+    bike = Bike.objects.items().first()
+
+    bike_slug = 'no_bike'
+    if bike:
+        bike_slug = bike.slug
+
+    return redirect(reverse('bikes:info_list', kwargs={'bike_slug': bike_slug}))
 
 
 @login_required()
 def lists(request, bike_slug):
-    obj = BikeInfo.objects.\
-        prefetch_related('bike').\
-        filter(bike__slug=bike_slug)
+    obj = BikeInfo.objects.items().filter(bike__slug=bike_slug)
     rendered = render(
         request,
         'bikes/info_list.html',

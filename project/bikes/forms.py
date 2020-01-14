@@ -1,16 +1,18 @@
+from datetime import datetime
+
+from bootstrap_datepicker_plus import DatePickerInput
+from crispy_forms.helper import FormHelper
 from django import forms
 
-from crispy_forms.helper import FormHelper
-from bootstrap_datepicker_plus import DatePickerInput
-
-from .models import Bike, Component, ComponentStatistic, BikeInfo
 from ..core.helpers.form_helpers import set_field_properties
+from ..core.mixins.form_mixin import FormMixin
+from .models import Bike, BikeInfo, Component, ComponentStatistic
 
 
-class ComponentForm(forms.ModelForm):
+class ComponentForm(FormMixin, forms.ModelForm):
     class Meta:
         model = Component
-        fields = '__all__'
+        fields = ['name']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -35,16 +37,18 @@ class ComponentStatisticForm(forms.ModelForm):
         set_field_properties(self, self.helper)
 
 
-class BikeForm(forms.ModelForm):
+class BikeForm(FormMixin, forms.ModelForm):
     class Meta:
         model = Bike
-        fields = '__all__'
+        fields = ['date', 'full_name', 'short_name']
         widgets = {
             'date': DatePickerInput(format='%Y-%m-%d'),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.fields['date'].initial = datetime.now()
 
         self.helper = FormHelper()
         set_field_properties(self, self.helper)

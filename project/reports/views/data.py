@@ -5,9 +5,8 @@ from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 
 from .. import forms, models
-
-from ..library.insert_data import insert_data as inserter
 from ..helpers import view_data_helper as helper
+from ..library.insert_data import insert_data_current_user as inserter
 
 
 @login_required()
@@ -53,9 +52,10 @@ def data_list(request, start_date, end_date):
             url = reverse_lazy('reports:data_list', kwargs=kwargs)
             return redirect(url)
 
-    objects = models.Data.objects\
-        .prefetch_related('bike')\
+    objects = (
+        models.Data.objects.items()
         .filter(date__range=(start_date, end_date))
+    )
     filter_form = forms.DateFilterForm(
         initial={'start_date': start_date, 'end_date': end_date}
     )
@@ -81,14 +81,14 @@ def data_create(request, start_date, end_date):
 
 @login_required
 def data_delete(request, start_date, end_date, pk):
-    object = get_object_or_404(models.Data, pk=pk)
+    obj = get_object_or_404(models.Data, pk=pk)
     data = {}
 
     if request.method == 'POST':
-        object.delete()
+        obj.delete()
         helper.form_valid(data, start_date, end_date)
     else:
-        context = {'object': object, 'start_date': start_date, 'end_date': end_date}
+        context = {'object': obj, 'start_date': start_date, 'end_date': end_date}
         data['html_form'] = render_to_string(
             'reports/includes/partial_data_delete.html', context, request)
 
@@ -97,8 +97,8 @@ def data_delete(request, start_date, end_date, pk):
 
 @login_required()
 def data_update(request, start_date, end_date, pk):
-    object = get_object_or_404(models.Data, pk=pk)
-    form = forms.DataForm(request.POST or None, instance=object)
+    obj = get_object_or_404(models.Data, pk=pk)
+    form = forms.DataForm(request.POST or None, instance=obj)
     url = reverse(
         'reports:data_update',
         kwargs={
@@ -113,13 +113,14 @@ def data_update(request, start_date, end_date, pk):
 
 @login_required()
 def data_quick_update(request, start_date, end_date, pk):
-    object = get_object_or_404(models.Data, pk=pk)
-    object.checked = 'y'
-    object.save()
+    obj = get_object_or_404(models.Data, pk=pk)
+    obj.checked = 'y'
+    obj.save()
 
-    objects = models.Data.objects\
-        .prefetch_related('bike')\
+    objects = (
+        models.Data.objects.items()
         .filter(date__range=(start_date, end_date))
+    )
 
     context = {
         'objects': objects,
@@ -141,13 +142,17 @@ def data_quick_update(request, start_date, end_date, pk):
 def insert_data(request):
     try:
         inserter(10)
-        message = 'ok'
+        msg = '<p>OK</p>'
     except Exception as ex:
-        template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-        message = template.format(type(ex).__name__, ex.args)
+        msg = (
+            f'<p>{ex}</p>'
+            f'<p>{"-"*120}</p>'
+            f'<p>Type: {type(ex).__name__}</p>'
+            f'<p>Args: {ex.args}</p>'
+        )
         return render(
             request,
             template_name='reports/data_insert.html',
-            context={'message': message}
+            context={'message': msg}
         )
     return redirect(reverse('reports:data_empty'))

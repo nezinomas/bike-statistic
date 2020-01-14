@@ -2,7 +2,7 @@ from django.urls import reverse
 
 
 def login_rediretion(client, url_name, *args, **kwargs):
-        login_url = reverse('accounts:login')
+        login_url = reverse('users:login')
         url = reverse(url_name, **kwargs)
         response = client.get(url)
 

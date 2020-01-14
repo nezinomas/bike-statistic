@@ -1,11 +1,12 @@
-from datetime import date, timedelta
-
 import pytest
 
-from ...core.factories import BikeFactory
+from ...bikes.factories import BikeFactory
 from ..forms import DataForm, DateFilterForm
 
 
+# ---------------------------------------------------------------------------------------
+#                                                                             Filter Form
+# ---------------------------------------------------------------------------------------
 def test_date_filter_form_is_valid(jan_2000):
     form = DateFilterForm(data=jan_2000)
 
@@ -34,9 +35,11 @@ def test_date_filter_form_invalid_start_bigger_than_end():
     assert not form.is_valid()
 
 
+# ---------------------------------------------------------------------------------------
+#                                                                               Data Form
+# ---------------------------------------------------------------------------------------
 @pytest.mark.django_db
 def test_data_form_is_valid(post_data):
-    bike = BikeFactory()
     form = DataForm(data=post_data)
 
     assert form.is_valid()

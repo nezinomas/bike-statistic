@@ -1,23 +1,14 @@
-import os
-import pickle
-
-from django.conf import settings
-
-from ..bikes.models import Bike, Component
-
-
-def load_cashed_content(name):
-    file = os.path.join(settings.CASH_ROOT, name)
-    return pickle.load(open(file, "rb"))
+from ..bikes.models import Bike
+from ..core.lib import utils
 
 
 def bike_list(context):
-    bikes = list(Bike.objects.all().values())
+    user = utils.get_user()
+
+    # AnonymousUser don't have id
+    if user.id:
+        bikes = list(Bike.objects.items())
+    else:
+        bikes = None
 
     return {'bike_list': bikes}
-
-
-def component_list(context):
-    components = list(Component.objects.all().values())
-
-    return {'component_list': components}
