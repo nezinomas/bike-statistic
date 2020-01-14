@@ -6,7 +6,6 @@ from ..core.lib import utils
 
 
 class User(AbstractUser):
-    endomondo_id = models.CharField(max_length=12)
     endomondo_user = models.CharField(
         _('Endomondo user'),
         max_length=32
