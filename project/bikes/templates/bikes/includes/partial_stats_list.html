@@ -38,6 +38,8 @@
             <td class="km pr-1 text-right">
                 {% with km|get_item:item.id as km %}{{ km|floatformat:0|intcomma }}{% endwith %}</td>
         </tr>
+        {% empty %}
+        <tr><td class="bg-warning text-center" colspan="6">No records</td></tr>
         {% endfor %}
     </tbody>
 </table>

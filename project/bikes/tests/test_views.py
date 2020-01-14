@@ -1,6 +1,7 @@
 import pytest
 from django.urls import resolve, reverse
 
+from ...bikes.factories import BikeFactory, ComponentFactory
 from .. import views
 
 pytestmark = pytest.mark.django_db
@@ -110,17 +111,42 @@ def test_component_index_no_records(client_logged):
 
 
 # ---------------------------------------------------------------------------------------
-#                                                                          component list
+#                                                                component statistic list
 # ---------------------------------------------------------------------------------------
-def test_component_list_func():
+def test_stats_list_func():
     view = resolve('/xxx/component/1/')
 
     assert views.stats.lists == view.func
 
 
-def test_component_list_no_records(client_logged):
+def test_stats_list_no_bike_no_componant(client_logged):
     url = reverse('bikes:stats_list', kwargs={'component_pk': 0, 'bike_slug': 'x'})
     response = client_logged.get(url, follow=True)
 
     assert response.status_code == 200
-    assert response.resolver_match.view_name == 'bikes:component_list'
+
+
+def test_stats_list_200(client_logged):
+    b = BikeFactory()
+    c = ComponentFactory()
+
+    url = reverse('bikes:stats_list', kwargs={'component_pk': c.pk, 'bike_slug': b.slug})
+    response = client_logged.get(url)
+
+    assert response.status_code == 200
+
+
+def test_stats_list_no_records(client_logged):
+    b = BikeFactory()
+    c = ComponentFactory()
+
+    url = reverse('bikes:stats_list',
+                  kwargs={
+                    'component_pk': c.pk,
+                    'bike_slug': b.slug
+                 })
+
+    response = client_logged.get(url)
+
+    assert '<td class="bg-warning text-center" colspan="6">No records</td>' in str(
+        response.content)

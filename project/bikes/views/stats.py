@@ -66,7 +66,7 @@ def index(request, bike_slug):
     if qs:
         url = reverse(
             'bikes:stats_list',
-            kwargs={'bike_slug': bike_slug, 'component_pk': pk}
+            kwargs={'bike_slug': bike_slug, 'component_pk': qs.pk}
         )
     else:
         url = reverse('bikes:component_list')
@@ -99,7 +99,7 @@ def lists(request, bike_slug, component_pk):
     return render(
         request,
         'bikes/stats_list.html', {
-            'component': component,
+            'component': component[0],
             'components': components,
             'component_statistic': component_statistic,
             'km': obj.component_km,
