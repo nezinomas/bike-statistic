@@ -142,13 +142,17 @@ def data_quick_update(request, start_date, end_date, pk):
 def insert_data(request):
     try:
         inserter(10)
-        message = 'ok'
+        msg = '<p>OK</p>'
     except Exception as ex:
-        template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-        message = template.format(type(ex).__name__, ex.args)
+        msg = (
+            f'<p>{ex}</p>'
+            f'<p>{"-"*120}</p>'
+            f'<p>Type: {type(ex).__name__}</p>'
+            f'<p>Args: {ex.args}</p>'
+        )
         return render(
             request,
             template_name='reports/data_insert.html',
-            context={'message': message}
+            context={'message': msg}
         )
     return redirect(reverse('reports:data_empty'))

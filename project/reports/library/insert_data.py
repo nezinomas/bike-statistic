@@ -12,6 +12,9 @@ from ..models import Data
 
 
 def _endomondo_api(endomondo_user, endomondo_password):
+    if not endomondo_user or not endomondo_password:
+        raise Exception('No Endomondo user/password entered')
+
     api = MobileApi(
         email=endomondo_user,
         password=endomondo_password
@@ -94,8 +97,12 @@ def insert_data_current_user(max_results=20):
         temperature = None
 
     user = utils.get_user()
-    api = _endomondo_api(endomondo_user=user.endomondo_user,
-                        endomondo_password=user.endomondo_password)
+
+    try:
+        api = _endomondo_api(endomondo_user=user.endomondo_user,
+                             endomondo_password=user.endomondo_password)
+    except Exception as e:
+        raise Exception(str(e))
 
     _insert_data(api, user, temperature, max_results)
 

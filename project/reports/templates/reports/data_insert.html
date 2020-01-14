@@ -2,6 +2,6 @@
 
 
 {% block content %}
-    <p>{{ message }}</p>
-    <p><a href="{% url 'reports:data_empty' %}">Data</a></p>
+    <p></p>
+    {{ message|safe }}
 {% endblock content %}
