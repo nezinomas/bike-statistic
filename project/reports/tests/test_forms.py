@@ -40,7 +40,7 @@ def test_date_filter_form_invalid_start_bigger_than_end():
 #                                                                               Data Form
 # ---------------------------------------------------------------------------------------
 @pytest.mark.django_db
-def test_data_form_is_valid(post_data):
+def test_data_form_is_valid(post_data, get_user):
     form = DataForm(data=post_data)
 
     assert form.is_valid()
