@@ -13,7 +13,7 @@ def test_user_str():
 
 @pytest.mark.django_db
 def test_user_endomondo_password(encrypt_key):
-    u = UserFactory()
+    u = UserFactory(username='xxx')
 
     actual = User.objects.get(pk=u.pk)
     actual = utils.decrypt(actual.endomondo_password)
