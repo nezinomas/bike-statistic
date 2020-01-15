@@ -17,4 +17,6 @@ urlpatterns = [
         views.CustomLogin.as_view(template_name='users/login.html'),
         name='login'
     ),
+    path('profile/sync/', views.sync_list, name='sync_list'),
+    path('profile/sync/update/', views.sync_update, name='sync_update'),
 ]
