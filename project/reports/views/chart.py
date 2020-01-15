@@ -24,7 +24,7 @@ def overall(request):
         })
 
     context = {
-        'years': years,
+        'year_list': years,
         'chart_data': chart_data[::-1],
         'bikes': bikes,
         'table_data': list(zip(obj.table, obj.total_column)),

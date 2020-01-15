@@ -55,10 +55,11 @@ def test_insert_data_no_errors(mocked, client, login):
     assert response.url == reverse('reports:data_empty')
 
 
-@patch('project.reports.views.data.inserter', side_effect=Exception())
+@patch('project.reports.views.data.inserter', side_effect=Exception('Error X'))
 @pytest.mark.django_db
 def test_insert_data_exception_occurs(mocked, client, login):
     url = reverse('reports:insert_data')
     response = client.get(url)
 
-    assert 'An exception of type Exception occurred.' in str(response.content)
+    assert '<p>Error X</p>' in str(response.content)
+    assert '<p>Type: Exception</p>' in str(response.content)
