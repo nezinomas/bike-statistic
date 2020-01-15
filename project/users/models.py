@@ -19,6 +19,7 @@ class User(AbstractUser):
         return str(self.username)
 
     def save(self, *args, **kwargs):
-        self.endomondo_password = utils.encrypt(self.endomondo_password)
+        if self.endomondo_user:
+            self.endomondo_password = utils.encrypt(self.endomondo_password)
 
         super().save(*args, **kwargs)
