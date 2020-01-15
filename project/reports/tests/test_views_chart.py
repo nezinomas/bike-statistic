@@ -1,64 +1,116 @@
+from datetime import date
+
 import pytest
 from django.urls import resolve, reverse
+from freezegun import freeze_time
 
+from ...bikes.factories import BikeFactory
+from ..factories import DataFactory
 from ..views import chart
 
-
-@pytest.fixture(autouse=True)
-def overall(monkeypatch):
-    _cls = 'project.reports.views.chart.Overall.{}'
-    monkeypatch.setattr(_cls.format('__init__'), lambda x: None)
-    monkeypatch.setattr(_cls.format('bikes'), ['bike1',  'bike2'])
-    monkeypatch.setattr(_cls.format('distances'), [[10, 20], [30, 40]])
-    monkeypatch.setattr(_cls.format('years'), [2000, 2002])
-    monkeypatch.setattr(
-        _cls.format('totals_table'),
-        {
-            'columns': ['bike1', 'bike2'],
-            'data': [[10, 20], [30, 40]],
-            'index': [2000, 2002]
-        }
-    )
-    monkeypatch.setattr(
-        _cls.format('totals_grand'),
-        {
-            'columns': ['bike1', 'bike2'],
-            'data': [[30, 60]],
-            'index': ['Total']
-        }
-    )
+pytestmark = pytest.mark.django_db
 
 
-def test_overall_chart_series(client):
-    url = reverse('reports:overall')
-    response = client.get(url)
+@pytest.fixture()
+def _data():
+    b1 = BikeFactory(short_name='B1', date=date(2000, 1, 1))
+    b2 = BikeFactory(short_name='B2', date=date(1999, 1, 1))
 
-    actual = response.context['chart']['overall']['series']
-
-    assert 'bike2' == actual[0]['name']
-    assert 'bike1' == actual[1]['name']
-
-    assert [30, 40] == actual[0]['data']
-    assert [10, 20] == actual[1]['data']
-
-
-def test_overall_chart_xaxis(client):
-    url = reverse('reports:overall')
-    response = client.get(url)
-
-    actual = response.context['chart']['overall']['xAxis']
-
-    assert [2000, 2002] == actual
-
-
-def test_overall_200(client):
-    url = reverse('reports:overall')
-    response = client.get(url)
-
-    assert 200 == response.status_code
+    DataFactory(date=date(2000, 1, 1), bike=b1, distance=10.0)
+    DataFactory(date=date(2000, 1, 1), bike=b2, distance=20.0)
+    DataFactory(date=date(2001, 1, 1), bike=b2, distance=35.0)
 
 
 def test_overall_func():
     view = resolve('/reports/overall/')
 
     assert chart.overall == view.func
+
+
+def test_overall_200_no_data(client, get_user):
+    url = reverse('reports:overall')
+    response = client.get(url)
+
+    assert response.status_code == 200
+
+
+def test_overall_200(client, get_user, _data):
+    url = reverse('reports:overall')
+    response = client.get(url)
+
+    assert response.status_code == 200
+
+
+@freeze_time('2002-12-31')
+def test_overall_context_years(client, get_user):
+    get_user.date_joined = date(1998, 1, 1)
+
+    url = reverse('reports:overall')
+    response = client.get(url)
+
+    actual = response.context['year_list']
+
+    assert actual == [1998, 1999, 2000, 2001, 2002]
+
+
+def test_overall_context_bikes(client, get_user, _data):
+    url = reverse('reports:overall')
+    response = client.get(url)
+
+    actual = response.context['bikes']
+
+    assert list(actual) == ['B2', 'B1']
+
+
+@freeze_time('2001-01-01')
+def test_overall_context_data_table(client, get_user, _data):
+    url = reverse('reports:overall')
+    response = client.get(url)
+
+    table = [
+        {'year': 2000, 'B1': 10.0, 'B2': 20.0},
+        {'year': 2001, 'B1': 0.0, 'B2': 35.0},
+    ]
+    total_column = [
+        {'year': 2000, 'total': 30.0},
+        {'year': 2001, 'total': 35.0},
+    ]
+
+    actual = response.context['table_data']
+
+    assert actual == list(zip(table, total_column))
+
+
+@freeze_time('2001-01-01')
+def test_overall_context_total_value(client, get_user, _data):
+    url = reverse('reports:overall')
+    response = client.get(url)
+
+    actual = response.context['total']
+
+    assert actual == 65.0
+
+
+@freeze_time('2001-01-01')
+def test_overall_context_chart_data(client, get_user, _data):
+    url = reverse('reports:overall')
+    response = client.get(url)
+
+    expect = [
+        {
+            'name': 'B1',
+            'data': [10.0, 0.0],
+            'color': 'rgba(54, 162, 235, 0.35)',
+            'borderColor': 'rgba(54, 162, 235, 1)',
+            'borderWidth': '0.5'
+        }, {
+            'name': 'B2',
+            'data': [20.0, 35.0],
+            'color': 'rgba(255, 99, 132, 0.35)',
+            'borderColor': 'rgba(255, 99, 132, 1)',
+            'borderWidth': '0.5'
+        }
+    ]
+    actual = response.context['chart_data']
+
+    assert actual == expect

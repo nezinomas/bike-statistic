@@ -1,24 +1,34 @@
 from datetime import timedelta
-
-from urllib.request import urlopen
 from urllib.error import HTTPError, URLError
+from urllib.request import urlopen
+
 from bs4 import BeautifulSoup
 
 from ...bikes.models import Bike
-from ...config.secrets import get_secret
+from ...core.lib import utils
+from ...users.models import User
 from ..endomondo.endomondo import MobileApi
 from ..models import Data
 
 
-def __workouts(maxResults):
-    endomondo = MobileApi(email=get_secret("ENDOMONDO_USER"),
-                          password=get_secret("ENDOMONDO_PASS"))
-    endomondo.get_auth_token()
+def _endomondo_api(endomondo_user, endomondo_password):
+    if not endomondo_user or not endomondo_password:
+        raise Exception('No Endomondo user/password entered')
 
-    return endomondo.get_workouts(maxResults=maxResults)
+    api = MobileApi(
+        email=endomondo_user,
+        password=utils.decrypt(endomondo_password)
+    )
+    api.get_auth_token()
+
+    return api
 
 
-def _get_page_content(page):
+def _get_workouts(api, max_results):
+    return api.get_workouts(maxResults=max_results)
+
+
+def _get_weather_page(page):
     try:
         html = urlopen(page)
         return html
@@ -26,41 +36,27 @@ def _get_page_content(page):
         return
 
 
-def get_temperature():
-    url = 'https://www.gismeteo.lt/weather-vilnius-4230/now/'
-    page = _get_page_content(url)
-    soup = BeautifulSoup(page, 'html.parser')
+def _insert_data(api, user, temperature, max_results):
+    bike = Bike.objects.filter(user=user).order_by('pk')
+    if not bike.exists():
+        raise Exception('Add at least one Bike.')
 
-    element = soup.find('span', {'class': 'nowvalue__text_l'})
+    bike = bike[0] # select first bike
 
-    temperature = element.text
-    temperature = temperature.replace(',', '.')
-    temperature = temperature.replace('−', '-')
-
-    return float(temperature)
-
-
-def insert_data(maxResults=20):
-    workouts = __workouts(maxResults=maxResults)
-
-    bike = Bike.objects.order_by('pk')[0]
-
-    try:
-        temperature = get_temperature()
-    except:
-        temperature = None
+    workouts = _get_workouts(api=api, max_results=max_results)
 
     for workout in workouts:
         if workout.name is not None and 'cycling' in workout.name.lower():
 
             distance = round(workout.distance, 2)
 
-            row_exists = Data.objects.\
-                filter(
+            row_exists = (
+                Data.objects.filter(
                     date=workout.start_time,
                     distance=distance,
-                    time=timedelta(seconds=workout.duration)
-                )
+                    time=timedelta(seconds=workout.duration),
+                    user=user
+                ))
 
             if row_exists:
                 continue
@@ -75,5 +71,55 @@ def insert_data(maxResults=20):
                 max_speed=workout.speed_max,
                 heart_rate=workout.heart_rate_avg,
                 cadence=workout.cadence_avg,
-                temperature=temperature
+                temperature=temperature,
+                user=user
             )
+
+
+def get_temperature():
+    url = 'https://www.gismeteo.lt/weather-vilnius-4230/now/'
+    page = _get_weather_page(url)
+    soup = BeautifulSoup(page, 'html.parser')
+
+    element = soup.find('span', {'class': 'nowvalue__text_l'})
+
+    temperature = element.text
+    temperature = temperature.replace(',', '.')
+    temperature = temperature.replace('−', '-')
+
+    return float(temperature)
+
+
+def insert_data_current_user(max_results=20):
+    try:
+        temperature = get_temperature()
+    except:
+        temperature = None
+
+    user = utils.get_user()
+
+    try:
+        api = _endomondo_api(endomondo_user=user.endomondo_user,
+                             endomondo_password=user.endomondo_password)
+    except Exception as e:
+        raise Exception(str(e))
+
+    _insert_data(api, user, temperature, max_results)
+
+
+def insert_data_all_users(max_results=20):
+    try:
+        temperature = get_temperature()
+    except:
+        temperature = None
+
+    users = User.objects.all()
+
+    for user in users:
+        try:
+            api = _endomondo_api(endomondo_user=user.endomondo_user,
+                                endomondo_password=user.endomondo_password)
+        except:
+            continue
+
+        _insert_data(api, user, temperature, max_results)

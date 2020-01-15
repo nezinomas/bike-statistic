@@ -2,17 +2,26 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from ...core.factories import BikeFactory, DataFactory, UserFactory
-from .. import models
+from ...bikes.factories import BikeFactory
+from ...reports.factories import DataFactory
+from ...users.factories import UserFactory
 from ..endomondo import Workout
-from ..library.insert_data import get_temperature, insert_data
+from ..library.insert_data import (get_temperature, insert_data_all_users,
+                                   insert_data_current_user)
+from ..models import Data
 
 pytestmark = pytest.mark.django_db
 
 
 @pytest.fixture(autouse=True)
-def mock_workout(monkeypatch):
-    mock_func = 'project.reports.library.insert_data.__workouts'
+def _api(monkeypatch):
+    mock_func = 'project.reports.library.insert_data._endomondo_api'
+    monkeypatch.setattr(mock_func, lambda endomondo_user, endomondo_password: None)
+
+
+@pytest.fixture(autouse=True)
+def _workout(monkeypatch):
+    mock_func = 'project.reports.library.insert_data._get_workouts'
     return_val = [Workout(
         {
             'ascent': 9,
@@ -23,12 +32,12 @@ def mock_workout(monkeypatch):
             'start_time': '2000-01-01 14:48:05 UTC'
         }
     )]
-    monkeypatch.setattr(mock_func, lambda maxResults: return_val)
+    monkeypatch.setattr(mock_func, lambda api, max_results: return_val)
 
 
 @pytest.fixture()
-def mock_get_page(monkeypatch):
-    mock_func = 'project.reports.library.insert_data._get_page_content'
+def _get_page(monkeypatch):
+    mock_func = 'project.reports.library.insert_data._get_weather_page'
     string = (
         '<div class="now__weather"><span class="unit unit_temperature_c">'
         '<span class="nowvalue__text_l">'
@@ -40,85 +49,126 @@ def mock_get_page(monkeypatch):
 
 
 @pytest.fixture()
-def mock_get_page_exception(monkeypatch):
-    mock_func = 'project.reports.library.insert_data._get_page_content'
+def _get_page_exception(monkeypatch):
+    mock_func = 'project.reports.library.insert_data._get_weather_page'
     monkeypatch.setattr(mock_func, lambda x: Exception())
 
 
-def test_get_temperature(mock_get_page):
+def test_get_temperature(_get_page):
     actual = get_temperature()
 
-    assert 22.5 == actual
+    assert actual == 22.5
 
 
 @pytest.mark.xfail(raises=Exception)
-def test_get_temperature_if_exception(mock_get_page_exception):
+def test_get_temperature_if_exception(_get_page_exception):
     get_temperature()
 
 
-def test_insert_data_exists(mock_get_page):
+def test_insert_data_exists(_get_page, get_user):
     DataFactory(
         date=datetime(2000, 1, 1).date(),
         distance=10.12,
         time=timedelta(seconds=15)
     )
-    insert_data()
+    insert_data_current_user()
 
-    actual = models.Data.objects.all()
+    actual = Data.objects.all()
 
-    assert 1 == actual.count()
+    assert actual.count() == 1
 
 
-def test_insert_data_not_exists_1(mock_get_page):
+def test_insert_data_not_exists_1(_get_page, get_user):
     DataFactory(
         date=datetime(1999, 1, 1).date(),
         distance=10.10,
         time=timedelta(seconds=15)
     )
 
-    insert_data()
+    insert_data_current_user()
 
-    data = models.Data.objects.order_by('-pk')
+    data = Data.objects.order_by('-pk')
 
-    assert 2 == data.count()
+    assert data.count() == 2
+
+    for row in data:
+        assert row.user.username == 'bob'
 
 
-def test_insert_data_not_exists_2(mock_get_page):
+def test_insert_data_not_exists_2(_get_page, get_user):
     DataFactory(
         date=datetime(2000, 1, 1).date(),
         distance=9.12345678,
         time=timedelta(seconds=15)
     )
 
-    insert_data()
+    insert_data_current_user()
 
-    data = models.Data.objects.order_by('-pk')
+    data = Data.objects.order_by('-pk')
 
-    assert 2 == data.count()
+    assert data.count() == 2
 
+    for row in data:
+        assert row.user.username == 'bob'
 
-def test_insert_data_not_exists_3(mock_get_page_exception):
+def test_insert_data_not_exists_3(_get_page_exception, get_user):
     DataFactory(
         date=datetime(2000, 1, 1).date(),
         distance=9.12345678,
         time=timedelta(seconds=15)
     )
 
-    insert_data()
+    insert_data_current_user()
 
-    data = [*models.Data.objects.order_by('-pk')]
+    data = [*Data.objects.order_by('-pk')]
 
-    assert 2 == len(data)
+    assert len(data) == 2
     assert data[0].temperature is None
 
+    for row in data:
+        assert row.user.username == 'bob'
 
-def test_insert_data_must_be_rounded(mock_get_page):
+
+def test_insert_data_must_be_rounded(_get_page, get_user):
     BikeFactory()
 
-    insert_data()
+    insert_data_current_user()
 
-    data = models.Data.objects.order_by('-pk')
+    data = Data.objects.order_by('-pk')
     inserted_row = data[0]
 
-    assert 1 == data.count()
-    assert 10.12 == inserted_row.distance
+    assert data.count() == 1
+    assert inserted_row.distance == 10.12
+
+
+def test_two_users(_get_page):
+    u1 = UserFactory(username='U1')
+    u2 = UserFactory(username='U2')
+
+    BikeFactory(short_name='B1', user=u1)
+    BikeFactory(short_name='B2', user=u2)
+
+    insert_data_all_users()
+
+    actual = Data.objects.all().order_by('user__username', 'bike__short_name')
+
+    assert actual.count() == 2
+
+    assert actual[0].user.username == 'U1'
+    assert actual[1].user.username == 'U2'
+
+    assert actual[0].bike.short_name == 'B1'
+    assert actual[1].bike.short_name == 'B2'
+
+
+@pytest.mark.xfail
+def test_insert_all_users_no_bikes(_get_page):
+    UserFactory(username='U1')
+    UserFactory(username='U2')
+
+    insert_data_all_users()
+
+
+@pytest.mark.xfail
+def test_insert_current_user_no_bikes(_get_page, get_user):
+    insert_data_current_user()

@@ -1,16 +1,31 @@
-from django import forms
-from datetime import datetime, date
-from crispy_forms.helper import FormHelper
+from datetime import date
+
 from bootstrap_datepicker_plus import DatePickerInput, MonthPickerInput
+from crispy_forms.helper import FormHelper
+from django import forms
 
-from . import models
+from ..bikes.models import Bike
 from ..core.helpers.form_helpers import set_field_properties
+from ..core.mixins.form_mixin import FormMixin
+from . import models
 
 
-class DataForm(forms.ModelForm):
+class DataForm(FormMixin, forms.ModelForm):
     class Meta:
         model = models.Data
-        fields = '__all__'
+        fields = [
+            'bike',
+            'date',
+            'distance',
+            'time',
+            'temperature',
+            'ascent',
+            'descent',
+            'max_speed',
+            'cadence',
+            'heart_rate',
+            'checked',
+        ]
         widgets = {
             'date': DatePickerInput(format='%Y-%m-%d'),
             'checked': forms.HiddenInput(),
@@ -18,6 +33,8 @@ class DataForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.fields['bike'].queryset = Bike.objects.items()
 
         self.helper = FormHelper()
         set_field_properties(self, self.helper)

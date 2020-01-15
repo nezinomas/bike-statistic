@@ -6,15 +6,19 @@ from django.http import JsonResponse
 from .models import Goal
 from .forms import GoalForm
 
-from ..core.lib.stats_goals import StatsGoals
-
+from ..reports.library.progress import Progress
 
 def form_valid(data):
-    objects = StatsGoals().objects()
+    goals = Goal.objects.items()
+
+    obj = Progress()
+    stats = obj.extremums()
+    distances = obj.distances()
+
     data['form_is_valid'] = True
     data['html_list'] = render_to_string(
         'goals/includes/partial_goals_list.html',
-        {'objects': objects}
+        {'goals': goals, 'stats': stats, 'distances': distances}
     )
 
 
@@ -39,11 +43,16 @@ def save_data(request, context, form):
 
 @login_required()
 def goals_list(request):
-    objects = StatsGoals().all_goals_stats()
+    goals = Goal.objects.items()
+
+    obj = Progress()
+    stats = obj.extremums()
+    distances = obj.distances()
+
     rendered = render(
         request,
         'goals/goals_list.html',
-        {'objects': objects}
+        {'goals': goals, 'stats': stats, 'distances': distances}
     )
     return rendered
 

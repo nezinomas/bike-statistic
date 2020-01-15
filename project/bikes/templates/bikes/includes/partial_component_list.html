@@ -12,9 +12,9 @@
         {% url 'bikes:component_update' component.id as url_update %}
         {% url 'bikes:component_delete' component.id as url_delete %}
         <tr id="row_id_{{ component.pk }}" data-pk="{{ component.pk }}" data-url="{{ url_update }}" data-tbl="0">
-            <td class="py-1 align-middle">{{ component.id }}</td>
-            <td class="py-1 align-middle">{{ component.name }}</td>
-            <td class="py-1 align-middle">
+            <td class="py-1">{{ component.id }}</td>
+            <td class="py-1">{{ component.name }}</td>
+            <td class="py-1 text-right">
                 {% button_edit label=True pk=component.id url=url_update tbl=0 %}
                 {% button_delete type='button' label=True pk=component.id url=url_delete tbl='0' %}
             </td>

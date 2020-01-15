@@ -1,34 +1,34 @@
-from django.http import JsonResponse
 from django.shortcuts import render
 
+from ...bikes.models import Bike
+from ...core.lib import utils
 from ..library.chart import get_color
-from ..library.overall import Overall
+from ..library.distance_summary import DistanceSummary
+from ..models import Data
 
 
 def overall(request):
-    o = Overall()
+    years = utils.years()
+    bikes = Bike.objects.items().values_list('short_name', flat=True).order_by('date')
+    data = Data.objects.bike_summary()
 
-    series = []
-    for i, bike in enumerate(o.bikes):
-        item = {
-            'name': bike,
-            'data': o.distances[i],
+    obj = DistanceSummary(years=years, bikes=bikes, data=data)
+
+    # update chart_data with bar color, border color, border_width
+    chart_data = obj.chart_data
+    for i, dt in enumerate(chart_data):
+        dt.update({
             'color': get_color(i, 0.35),
             'borderColor': get_color(i, 1),
             'borderWidth': '0.5',
-        }
-        series.append(item)
-
-    chart = {
-        'overall': {
-            'xAxis': o.years,
-            'series': series[::-1],
-        }
-    }
+        })
 
     context = {
-        'chart': chart,
-        'tbody': o.totals_table,
-        'tfooter': o.totals_grand
+        'year_list': years,
+        'chart_data': chart_data[::-1],
+        'bikes': bikes,
+        'table_data': list(zip(obj.table, obj.total_column)),
+        'total_row': obj.total_row,
+        'total': sum(obj.total_row.values())
     }
     return render(request, template_name='reports/overall.html', context=context)
