@@ -1,10 +1,10 @@
 from datetime import datetime
 
 import factory
+import pytz
 from django.contrib.auth.hashers import make_password
 from django.db.models.signals import post_save
 
-from ..core.lib import utils
 from ..users.models import User
 
 
@@ -17,6 +17,6 @@ class UserFactory(factory.DjangoModelFactory):
     username = 'bob'
     password = make_password('123')
     email = 'bob@bob.com'
-    date_joined = datetime(2000, 1, 1)
+    date_joined = datetime(2000, 1, 1, tzinfo=pytz.UTC)
     endomondo_user = 'ebob'
     endomondo_password = '123'
