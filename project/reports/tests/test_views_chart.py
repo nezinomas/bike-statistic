@@ -48,7 +48,7 @@ def test_overall_context_years(client, get_user):
     url = reverse('reports:overall')
     response = client.get(url)
 
-    actual = response.context['years']
+    actual = response.context['year_list']
 
     assert actual == [1998, 1999, 2000, 2001, 2002]
 
