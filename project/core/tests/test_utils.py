@@ -14,3 +14,12 @@ def test_years_user_logged(get_user):
     actual = utils.years()
 
     assert actual == [1999, 2000, 2001]
+
+
+def test_encrypt_decrypt(encrypt_key):
+    txt = 'abc123'
+
+    encrypted = utils.encrypt(txt)
+    decrypted = utils.decrypt(encrypted)
+
+    assert decrypted == txt

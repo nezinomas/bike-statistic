@@ -17,7 +17,7 @@ def _endomondo_api(endomondo_user, endomondo_password):
 
     api = MobileApi(
         email=endomondo_user,
-        password=endomondo_password
+        password=utils.decrypt(endomondo_password)
     )
     api.get_auth_token()
 

@@ -5,8 +5,3 @@
 {% block breadcrumb %}{{ block.super }}
     <span class="navbar-text">&raquo;</span><a class="nav-link" href="{% url 'goals:goals_list' %}">Settings</a>
 {% endblock breadcrumb %}
-
-
-{% block head %}
-    <link rel="stylesheet" href="{% static 'css/bikes.css' %}">
-{% endblock head %}

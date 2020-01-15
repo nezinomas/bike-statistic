@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{% static 'bootstrap_datepicker/css/bootstrap-datetimepicker-4.17.47.css' %}" />
     <link rel="stylesheet" href="{% static 'bootstrap_datepicker_plus/css/datepicker-widget.css' %}" />
     <link rel="stylesheet" href="{% static 'css/app_global.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/bikes.css' %}" />
     {% block head %}{% endblock head %}
 
     <title>Bike statistic</title>
@@ -92,6 +93,11 @@
             <a class="list-group-item list-group-item-action" href="{% url 'bikes:component_list' %}">Components</a>
             <a class="list-group-item list-group-item-action" href="{% url 'bikes:bike_list' %}">Bikes</a>
             <a class="list-group-item list-group-item-action" href="{% url 'bikes:info_index' %}">Bike Info</a>
+          </div>
+
+          <h6 class="side-bar">Profile</h6>
+          <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action" href="{% url 'users:sync_list' %}">Endomondo</a>
           </div>
         </div>
         <!-- content -->
