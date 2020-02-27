@@ -301,7 +301,6 @@ class MobileApi(object):
         for entry in r.json().get('data', []):
             workout = self.build_workout(entry)
             workouts.append(workout)
-            #print '[{id}] {start_time}: {name}'.format(entry)
 
         return workouts
 
