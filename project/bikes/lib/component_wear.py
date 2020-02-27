@@ -12,8 +12,8 @@ class ComponentWear:
 
         self._components = components
 
-        df = self._build_df(data)
-        self._component_km = self._get_component_km(df)
+        self.df = self._build_df(data)
+        self._component_km = self._get_component_km(self.df)
 
     @property
     def component_km(self):
@@ -21,10 +21,8 @@ class ComponentWear:
 
     @property
     def bike_km(self):
-        values = list(self._component_km.values())
-        km = pd.Series(values, dtype=float)
-
-        return np.sum(km) if not km.empty else 0
+        km = self.df.distance.sum()
+        return km if km else 0
 
     @property
     def component_stats(self):
