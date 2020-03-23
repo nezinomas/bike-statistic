@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from . import __version__, __title__
-from .workout import sports, Workout, TrackPoint
-from .utils import chunks, str_to_datetime, datetime_to_str, gzip_string
-from .exceptions import *
-
+import json
+import logging
 import platform
-import uuid
-import socket
 import random
-from datetime import datetime, timedelta
+import socket
+import uuid
+import zlib
+from datetime import datetime
 
 import requests
-import zlib
-import json
 
-import logging
+from . import __title__, __version__
+from .exceptions import *
+from .utils import chunks, datetime_to_str, gzip_string, str_to_datetime
+from .workout import TrackPoint, Workout
 
 URL_AUTHENTICATE = 'https://api.mobile.endomondo.com/mobile/auth'
 URL_WORKOUTS = 'https://api.mobile.endomondo.com/mobile/api/workouts'
@@ -145,7 +144,7 @@ class MobileApi(object):
         params.setdefault('language', 'en')
 
         # Flatten 'fields'
-        if type(params.get('fields')) is list:
+        if isinstance(params.get('fields'), list):
             params['fields'] = ','.join(params['fields'])
 
         if data and params.get('gzip') == 'true':
@@ -183,7 +182,7 @@ class MobileApi(object):
                     raise AuthenticationError('Authentication token was not valid.')
 
         except:
-            '''pass'''
+            pass
 
         return r
 
@@ -282,10 +281,10 @@ class MobileApi(object):
         kwargs.setdefault('fields', ['device', 'simple', 'basic', 'lcp_count'])
 
         # Flatten 'before'
-        if before != None:
+        if before is not None:
             if isinstance(before, datetime):
                 kwargs['before'] = datetime_to_str(before)
-            elif type(before) is str:
+            elif isinstance(before, str):
                 kwargs['before'] = before
             else:
                 raise ValueError(
@@ -301,7 +300,6 @@ class MobileApi(object):
         for entry in r.json().get('data', []):
             workout = self.build_workout(entry)
             workouts.append(workout)
-            #print '[{id}] {start_time}: {name}'.format(entry)
 
         return workouts
 
@@ -346,7 +344,7 @@ class MobileApi(object):
     def post_workout(self, workout, properties={}):
         ''' Post workout in endomondo.
 
-            At most basic, it should look like: 
+            At most basic, it should look like:
             [workoutId] => -8848933288523797092
             [sport] => 46
             [duration] => 180

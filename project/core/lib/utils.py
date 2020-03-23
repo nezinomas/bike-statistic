@@ -38,7 +38,6 @@ def decrypt(txt):
         # base64 decode
         txt = base64.urlsafe_b64decode(txt)
         cipher_suite = Fernet(key)
-        print(f'key: {get_secret("ENCRYPT_KEY")}')
         decoded_text = cipher_suite.decrypt(txt).decode("ascii")
         return decoded_text
     except Exception as e:
