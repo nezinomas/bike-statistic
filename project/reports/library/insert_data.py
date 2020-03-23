@@ -1,6 +1,6 @@
 from datetime import timedelta
-import requests
 
+import requests
 from bs4 import BeautifulSoup
 
 from ...bikes.models import Bike
