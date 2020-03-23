@@ -1,6 +1,5 @@
 from datetime import timedelta
-from urllib.error import HTTPError, URLError
-from urllib.request import urlopen
+import requests
 
 from bs4 import BeautifulSoup
 
@@ -30,9 +29,12 @@ def _get_workouts(api, max_results):
 
 def _get_weather_page(page):
     try:
-        html = urlopen(page)
-        return html
-    except (HTTPError, URLError):
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"}
+        html = requests.get(page, headers=headers)
+        return html.text
+
+    except Exception:
         return
 
 
