@@ -165,14 +165,15 @@ class GarminActivity():
 
     def __init__(self, data):
         self.name = (data.get('activityType') or {}).get('typeKey')
+        self.ascent = data.get('elevationGain')
+        self.descent = data.get('elevationLoss')
+        self.avg_hr = data.get('averageHR')
+        self.avg_candece = data.get('avgStrokeCadence')
+
         self._start_time = data.get('startTimeLocal')
         self._distance = data.get('distance')  # meters
         self._duration = data.get('movingDuration')  # seconds
-        self.ascent = data.get('elevationGain')
-        self.descent = data.get('elevationLoss')
         self._max_speed = data.get('maxSpeed')  # meter/second
-        self.avg_hr = data.get('averageHR')
-        self.avg_candece = data.get('avgStrokeCadence')
 
     @property
     def start_time(self):
