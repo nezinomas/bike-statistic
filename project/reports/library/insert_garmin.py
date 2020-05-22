@@ -80,7 +80,7 @@ def _insert_data(client, user, temperature, max_results):
                 Data.objects.filter(
                     date=workout.start_time,
                     distance=workout.distance,
-                    time=timedelta(seconds=workout.duration),
+                    time=workout.duration,
                     user=user
                 ))
 
@@ -91,7 +91,7 @@ def _insert_data(client, user, temperature, max_results):
                 bike=bike,
                 date=workout.start_time,
                 distance=workout.distance,
-                time=timedelta(seconds=workout.duration),
+                time=workout.duration,
                 ascent=workout.ascent,
                 descent=workout.descent,
                 max_speed=workout.max_speed,
@@ -169,7 +169,8 @@ class GarminActivity():
 
     @property
     def duration(self):
-        return int(self._duration)
+        seconds = int(self._duration)
+        return timedelta(seconds=seconds)
 
     @property
     def distance(self):
