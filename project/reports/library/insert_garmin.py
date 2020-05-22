@@ -152,6 +152,17 @@ def insert_data_all_users(max_results=10):
 
 
 class GarminActivity():
+    name = None
+    ascent = 0
+    descent = 0
+    avg_hr = None
+    avg_candece = None
+
+    _start_time = None
+    _distance = 0.0
+    _duration = 0
+    _max_speed = 0
+
     def __init__(self, data):
         self.name = (data.get('activityType') or {}).get('typeKey')
         self._start_time = data.get('startTimeLocal')
