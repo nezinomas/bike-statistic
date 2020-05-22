@@ -177,7 +177,12 @@ class GarminActivity():
 
     @property
     def start_time(self):
-        return datetime.strptime(self._start_time, "%Y-%m-%d %H:%M:%S")
+        date = datetime.now()
+
+        if self._start_time:
+            date = datetime.strptime(self._start_time, "%Y-%m-%d %H:%M:%S")
+
+        return date
 
     @property
     def duration(self):
