@@ -116,7 +116,7 @@ def get_temperature():
     return float(temperature)
 
 
-def insert_data_current_user(max_results=1):
+def insert_data_current_user(max_results=10):
     try:
         temperature = get_temperature()
     except:
@@ -133,7 +133,7 @@ def insert_data_current_user(max_results=1):
     _insert_data(client, user, temperature, max_results)
 
 
-def insert_data_all_users(max_results=20):
+def insert_data_all_users(max_results=10):
     try:
         temperature = get_temperature()
     except:
