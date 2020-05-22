@@ -172,7 +172,7 @@ class GarminActivity():
 
         self._start_time = data.get('startTimeLocal')
         self._distance = data.get('distance')  # meters
-        self._duration = data.get('movingDuration')  # seconds
+        self._duration = data.get('duration')  # seconds
         self._max_speed = data.get('maxSpeed')  # meter/second
 
     @property
