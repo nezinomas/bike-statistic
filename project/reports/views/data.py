@@ -6,7 +6,7 @@ from django.urls import reverse, reverse_lazy
 
 from .. import forms, models
 from ..helpers import view_data_helper as helper
-from ..library.insert_data import insert_data_current_user as inserter
+from ..library.insert_garmin import insert_data_current_user as inserter
 
 
 @login_required()
