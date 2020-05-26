@@ -48,7 +48,7 @@ def _get_weather_page(page):
         html = requests.get(page, headers=headers)
         return html.text
 
-    except Exception:
+    except Exception:  # pylint: disable=broad-except
         return
 
 
@@ -119,7 +119,7 @@ def get_temperature():
 def insert_data_current_user(max_results=10):
     try:
         temperature = get_temperature()
-    except:
+    except Exception:  # pylint: disable=broad-except
         temperature = None
 
     user = utils.get_user()
@@ -136,7 +136,7 @@ def insert_data_current_user(max_results=10):
 def insert_data_all_users(max_results=10):
     try:
         temperature = get_temperature()
-    except:
+    except Exception:  # pylint: disable=broad-except
         temperature = None
 
     users = User.objects.all()
@@ -145,7 +145,7 @@ def insert_data_all_users(max_results=10):
         try:
             client = _client(username=user.endomondo_user,
                              password=user.endomondo_password)
-        except:
+        except Exception:  # pylint: disable=broad-except
             continue
 
         _insert_data(client, user, temperature, max_results)
