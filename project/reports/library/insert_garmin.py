@@ -67,7 +67,6 @@ def _insert_data(client, user, temperature, max_results):
         GarminConnectTooManyRequestsError,
     ) as err:
         raise Exception("Error occured during Garmin Connect Client get activities: %s" % err)
-
     except Exception:  # pylint: disable=broad-except
         raise Exception("Unknown error occured during Garmin Connect Client get activities")
 
