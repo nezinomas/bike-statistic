@@ -21,8 +21,12 @@ class ComponentWear:
 
     @property
     def bike_km(self):
-        km = self.df.distance.sum()
-        return km if km else 0
+        try:
+            km = self.df.distance.sum()
+        except:
+            km = 0
+
+        return km
 
     @property
     def component_stats(self):
