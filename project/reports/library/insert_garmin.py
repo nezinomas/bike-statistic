@@ -167,7 +167,7 @@ class GarminActivity():
         self.ascent = data.get('elevationGain')
         self.descent = data.get('elevationLoss')
         self.avg_hr = data.get('averageHR')
-        self.avg_candece = data.get('avgStrokeCadence')
+        self.avg_candece = data.get('averageBikingCadenceInRevPerMinute')
 
         self._start_time = data.get('startTimeLocal')
         self._distance = data.get('distance')  # meters
