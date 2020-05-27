@@ -199,11 +199,11 @@ class Temperature():
 
         return float(temperature)
 
-    def _get_weather_page(self, page):
+    def _get_weather_page(self, url):
         try:
             headers = {
                 "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"}
-            html = requests.get(page, headers=headers)
+            html = requests.get(url, headers=headers)
             return html.text
 
         except Exception:  # pylint: disable=broad-except
