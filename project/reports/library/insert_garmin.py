@@ -12,117 +12,119 @@ from ...users.models import User
 from ..models import Data
 
 
-def _client(username, password):
-    if not username or not password:
-        raise Exception('No Endomondo user/password entered')
+class SyncWithGarmin():
+    def __init__(self, max_results=10):
+        self._max_results = max_results
+        self._temparature = Temperature().temperature
 
-    try:
-        client = Garmin(username, utils.decrypt(password))
-    except (
-        GarminConnectConnectionError,
-        GarminConnectAuthenticationError,
-        GarminConnectTooManyRequestsError,
-    ) as err:
-        raise Exception("Error occured during Garmin Connect Client init: %s" % err)
-    except Exception:  # pylint: disable=broad-except
-        raise Exception("Unknown error occured during Garmin Connect Client init")
+    def insert_data_current_user(self):
+        user = utils.get_user()
 
-    try:
-        client.login()
-    except (
-        GarminConnectConnectionError,
-        GarminConnectAuthenticationError,
-        GarminConnectTooManyRequestsError,
-    ) as err:
-        raise Exception("Error occured during Garmin Connect Client login: %s" % err)
-    except Exception:  # pylint: disable=broad-except
-        raise Exception("Unknown error occured during Garmin Connect Client login")
+        try:
+            client = self._client(
+                username=user.endomondo_user,
+                password=user.endomondo_password
+            )
+        except Exception as e:
+            raise Exception(str(e))
 
-    return client
+        self._insert_data(client, user)
 
+    def insert_data_all_users(self):
+        users = User.objects.all()
 
-def _insert_data(client, user, temperature, max_results):
-    bike = Bike.objects.filter(user=user).order_by('pk')
-    if not bike.exists():
-        raise Exception('Add at least one Bike.')
+        for user in users:
+            try:
+                client = self._client(
+                    username=user.endomondo_user,
+                    password=user.endomondo_password
+                )
+            except Exception:  # pylint: disable=broad-except
+                continue
 
-    bike = bike[0]  # select first bike
+            self._insert_data(client, user)
 
-    try:
-        workouts = client.get_activities(0, max_results)
-    except (
-        GarminConnectConnectionError,
-        GarminConnectAuthenticationError,
-        GarminConnectTooManyRequestsError,
-    ) as err:
-        raise Exception("Error occured during Garmin Connect Client get activities: %s" % err)
-    except Exception:  # pylint: disable=broad-except
-        raise Exception("Unknown error occured during Garmin Connect Client get activities")
+    def _client(self, username, password):
+        if not username or not password:
+            raise Exception('No Endomondo user/password entered')
 
-    for w in workouts:
-        workout = GarminActivity(w)
+        try:
+            client = Garmin(username, utils.decrypt(password))
+        except (
+            GarminConnectConnectionError,
+            GarminConnectAuthenticationError,
+            GarminConnectTooManyRequestsError,
+        ) as err:
+            raise Exception(
+                "Error occured during Garmin Connect Client init: %s" % err)
+        except Exception:  # pylint: disable=broad-except
+            raise Exception(
+                "Unknown error occured during Garmin Connect Client init")
 
-        if workout.name is not None and 'biking' in workout.name.lower():
+        try:
+            client.login()
+        except (
+            GarminConnectConnectionError,
+            GarminConnectAuthenticationError,
+            GarminConnectTooManyRequestsError,
+        ) as err:
+            raise Exception(
+                "Error occured during Garmin Connect Client login: %s" % err)
+        except Exception:  # pylint: disable=broad-except
+            raise Exception(
+                "Unknown error occured during Garmin Connect Client login")
 
-            row_exists = (
-                Data.objects.filter(
+        return client
+
+    def _insert_data(self, client, user):
+        bike = Bike.objects.filter(user=user).order_by('pk')
+        if not bike.exists():
+            raise Exception('Add at least one Bike.')
+
+        bike = bike[0]  # select first bike
+
+        try:
+            workouts = client.get_activities(0, self._max_results)
+        except (
+            GarminConnectConnectionError,
+            GarminConnectAuthenticationError,
+            GarminConnectTooManyRequestsError,
+        ) as err:
+            raise Exception(
+                "Error occured during Garmin Connect Client get activities: %s" % err)
+        except Exception:  # pylint: disable=broad-except
+            raise Exception(
+                "Unknown error occured during Garmin Connect Client get activities")
+
+        for w in workouts:
+            workout = GarminActivity(w)
+
+            if workout.name is not None and 'biking' in workout.name.lower():
+
+                row_exists = (
+                    Data.objects.filter(
+                        date=workout.start_time,
+                        distance=workout.distance,
+                        time=workout.duration,
+                        user=user
+                    ))
+
+                if row_exists:
+                    continue
+
+                Data.objects.create(
+                    bike=bike,
                     date=workout.start_time,
                     distance=workout.distance,
                     time=workout.duration,
+                    ascent=workout.ascent,
+                    descent=workout.descent,
+                    max_speed=workout.max_speed,
+                    heart_rate=workout.avg_hr,
+                    cadence=workout.avg_cadence,
+                    temperature=self._temperature,
                     user=user
-                ))
-
-            if row_exists:
-                continue
-
-            Data.objects.create(
-                bike=bike,
-                date=workout.start_time,
-                distance=workout.distance,
-                time=workout.duration,
-                ascent=workout.ascent,
-                descent=workout.descent,
-                max_speed=workout.max_speed,
-                heart_rate=workout.avg_hr,
-                cadence=workout.avg_cadence,
-                temperature=temperature,
-                user=user
-            )
-
-
-def insert_data_current_user(max_results=10):
-    try:
-        temperature = Temperature().temperature
-    except Exception:  # pylint: disable=broad-except
-        temperature = None
-
-    user = utils.get_user()
-
-    try:
-        client = _client(username=user.endomondo_user,
-                         password=user.endomondo_password)
-    except Exception as e:
-        raise Exception(str(e))
-
-    _insert_data(client, user, temperature, max_results)
-
-
-def insert_data_all_users(max_results=10):
-    try:
-        temperature = Temperature().temperature
-    except Exception:  # pylint: disable=broad-except
-        temperature = None
-
-    users = User.objects.all()
-
-    for user in users:
-        try:
-            client = _client(username=user.endomondo_user,
-                             password=user.endomondo_password)
-        except Exception:  # pylint: disable=broad-except
-            continue
-
-        _insert_data(client, user, temperature, max_results)
+                )
 
 
 class GarminActivity():

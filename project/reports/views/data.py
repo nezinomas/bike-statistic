@@ -6,7 +6,7 @@ from django.urls import reverse, reverse_lazy
 
 from .. import forms, models
 from ..helpers import view_data_helper as helper
-from ..library.insert_garmin import insert_data_current_user as inserter
+from ..library.insert_garmin import SyncWithGarmin
 
 
 @login_required()
@@ -141,7 +141,7 @@ def data_quick_update(request, start_date, end_date, pk):
 @login_required()
 def insert_data(request):
     try:
-        inserter(10)
+        SyncWithGarmin().insert_data_current_user()
         msg = '<p>OK</p>'
     except Exception as ex:
         msg = (

@@ -1,5 +1,5 @@
-from .library.insert_garmin import insert_data_all_users as inserter
+from .library.insert_garmin import SyncWithGarmin
 
 
 def insert_from_endomondo():
-    inserter(10)
+    SyncWithGarmin().insert_data_all_users()
