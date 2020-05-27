@@ -77,24 +77,8 @@ class SyncWithGarmin():
         return client
 
     def _insert_data(self, client, user):
-        bike = Bike.objects.filter(user=user).order_by('pk')
-        if not bike.exists():
-            raise Exception('Add at least one Bike.')
-
-        bike = bike[0]  # select first bike
-
-        try:
-            workouts = client.get_activities(0, self._max_results)
-        except (
-            GarminConnectConnectionError,
-            GarminConnectAuthenticationError,
-            GarminConnectTooManyRequestsError,
-        ) as err:
-            raise Exception(
-                "Error occured during Garmin Connect Client get activities: %s" % err)
-        except Exception:  # pylint: disable=broad-except
-            raise Exception(
-                "Unknown error occured during Garmin Connect Client get activities")
+        bike = self._get_bike(user)
+        workouts = self._get_workouts(client)
 
         for w in workouts:
             workout = GarminActivity(w)
@@ -126,6 +110,29 @@ class SyncWithGarmin():
                     user=user
                 )
 
+    def _get_bike(self, user):
+        bike = Bike.objects.filter(user=user).order_by('pk')
+
+        if not bike.exists():
+            raise Exception('Add at least one Bike.')
+
+        return bike[0]  # select first bike
+
+    def _get_workouts(self, client):
+        try:
+            workouts = client.get_activities(0, self._max_results)
+        except (
+            GarminConnectConnectionError,
+            GarminConnectAuthenticationError,
+            GarminConnectTooManyRequestsError,
+        ) as err:
+            raise Exception(
+                "Error occured during Garmin Connect Client get activities: %s" % err)
+        except Exception:  # pylint: disable=broad-except
+            raise Exception(
+                "Unknown error occured during Garmin Connect Client get activities")
+
+        return workouts
 
 class GarminActivity():
     name = None
