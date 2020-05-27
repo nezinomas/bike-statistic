@@ -41,17 +41,6 @@ def _client(username, password):
     return client
 
 
-def _get_weather_page(page):
-    try:
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"}
-        html = requests.get(page, headers=headers)
-        return html.text
-
-    except Exception:  # pylint: disable=broad-except
-        return
-
-
 def _insert_data(client, user, temperature, max_results):
     bike = Bike.objects.filter(user=user).order_by('pk')
     if not bike.exists():
@@ -101,23 +90,9 @@ def _insert_data(client, user, temperature, max_results):
             )
 
 
-def get_temperature():
-    url = 'https://www.gismeteo.lt/weather-vilnius-4230/now/'
-    page = _get_weather_page(url)
-    soup = BeautifulSoup(page, 'html.parser')
-
-    element = soup.find('span', {'class': 'nowvalue__text_l'})
-
-    temperature = element.text
-    temperature = temperature.replace(',', '.')
-    temperature = temperature.replace('−', '-')
-
-    return float(temperature)
-
-
 def insert_data_current_user(max_results=10):
     try:
-        temperature = get_temperature()
+        temperature = Temperature().temperature
     except Exception:  # pylint: disable=broad-except
         temperature = None
 
@@ -134,7 +109,7 @@ def insert_data_current_user(max_results=10):
 
 def insert_data_all_users(max_results=10):
     try:
-        temperature = get_temperature()
+        temperature = Temperature().temperature
     except Exception:  # pylint: disable=broad-except
         temperature = None
 
@@ -196,3 +171,35 @@ class GarminActivity():
     def max_speed(self):
         speed = self._max_speed * (3600 / 1000)
         return round(speed, 2)
+
+
+class Temperature():
+    def __init__(self):
+        self.get_temperature()
+
+    @property
+    def temperature(self):
+        return self._temperature
+
+    def get_temperature(self):
+        url = 'https://www.gismeteo.lt/weather-vilnius-4230/now/'
+        page = self._get_weather_page(url)
+        soup = BeautifulSoup(page, 'html.parser')
+
+        element = soup.find('span', {'class': 'nowvalue__text_l'})
+
+        temperature = element.text
+        temperature = temperature.replace(',', '.')
+        temperature = temperature.replace('−', '-')
+
+        self._temperature = temperature
+
+    def _get_weather_page(self, page):
+        try:
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"}
+            html = requests.get(page, headers=headers)
+            return html.text
+
+        except Exception:  # pylint: disable=broad-except
+            return ''
