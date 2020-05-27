@@ -6,7 +6,7 @@ from ...bikes.factories import BikeFactory
 from ...reports.factories import DataFactory
 from ...users.factories import UserFactory
 from ..endomondo import Workout
-from ..library.insert_data import (get_temperature, insert_data_all_users,
+from ..library.insert_endomondo import (get_temperature, insert_data_all_users,
                                    insert_data_current_user)
 from ..models import Data
 
