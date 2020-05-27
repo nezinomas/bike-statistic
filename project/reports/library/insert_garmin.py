@@ -95,7 +95,7 @@ def _insert_data(client, user, temperature, max_results):
                 descent=workout.descent,
                 max_speed=workout.max_speed,
                 heart_rate=workout.avg_hr,
-                cadence=workout.avg_candece,
+                cadence=workout.avg_cadence,
                 temperature=temperature,
                 user=user
             )
@@ -155,7 +155,7 @@ class GarminActivity():
     ascent = 0
     descent = 0
     avg_hr = None
-    avg_candece = None
+    avg_cadence = None
 
     _start_time = None
     _distance = 0.0
@@ -167,7 +167,7 @@ class GarminActivity():
         self.ascent = data.get('elevationGain')
         self.descent = data.get('elevationLoss')
         self.avg_hr = data.get('averageHR')
-        self.avg_candece = data.get('averageBikingCadenceInRevPerMinute')
+        self.avg_cadence = data.get('averageBikingCadenceInRevPerMinute')
 
         self._start_time = data.get('startTimeLocal')
         self._distance = data.get('distance')  # meters
