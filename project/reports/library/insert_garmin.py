@@ -15,7 +15,7 @@ from ..models import Data
 class SyncWithGarmin():
     def __init__(self, max_results=10):
         self._max_results = max_results
-        self._temparature = Temperature().temperature
+        self._temperature = Temperature().temperature
 
     def insert_data_current_user(self):
         user = utils.get_user()
