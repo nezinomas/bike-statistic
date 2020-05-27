@@ -175,7 +175,10 @@ class GarminActivity():
 
 class Temperature():
     def __init__(self):
-        self.get_temperature()
+        try:
+            self._temperature = self.get_temperature()
+        except Exception:  # pylint: disable=broad-except
+            self._temperature = None
 
     @property
     def temperature(self):
@@ -192,7 +195,7 @@ class Temperature():
         temperature = temperature.replace(',', '.')
         temperature = temperature.replace('−', '-')
 
-        self._temperature = temperature
+        return float(temperature)
 
     def _get_weather_page(self, page):
         try:
