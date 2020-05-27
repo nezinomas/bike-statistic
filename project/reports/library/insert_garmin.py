@@ -178,7 +178,7 @@ class GarminActivity():
 class Temperature():
     def __init__(self):
         try:
-            self._temperature = self.get_temperature()
+            self._temperature = self._get_temperature()
         except Exception:  # pylint: disable=broad-except
             self._temperature = None
 
@@ -186,7 +186,7 @@ class Temperature():
     def temperature(self):
         return self._temperature
 
-    def get_temperature(self):
+    def _get_temperature(self):
         url = 'https://www.gismeteo.lt/weather-vilnius-4230/now/'
         page = self._get_weather_page(url)
         soup = BeautifulSoup(page, 'html.parser')
