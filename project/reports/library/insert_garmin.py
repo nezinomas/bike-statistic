@@ -13,6 +13,8 @@ from ..models import Data
 
 
 class SyncWithGarmin():
+    activities = ('cycling', 'biking', 'commuting')
+
     def __init__(self, max_results=10):
         self._max_results = max_results
         self._temperature = Temperature().temperature
@@ -83,8 +85,7 @@ class SyncWithGarmin():
         for w in workouts:
             workout = GarminActivity(w)
 
-            if workout.name is not None and 'biking' in workout.name.lower():
-
+            if workout.name.lower() in self.activities:
                 row_exists = (
                     Data.objects.filter(
                         date=workout.start_time,
