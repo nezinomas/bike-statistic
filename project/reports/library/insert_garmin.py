@@ -85,7 +85,7 @@ class SyncWithGarmin():
         for w in workouts:
             workout = GarminActivity(w)
 
-            if workout.name.lower() in self.activities:
+            if any(activity in workout.name.lower() for activity in self.activities):
                 row_exists = (
                     Data.objects.filter(
                         date=workout.start_time,
