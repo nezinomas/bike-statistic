@@ -20,21 +20,14 @@ class SyncWithGarmin():
         self._temperature = Temperature().temperature
 
     def insert_data_current_user(self):
-        user = utils.get_user()
-
-        try:
-            client = self._client(
-                username=user.endomondo_user,
-                password=user.endomondo_password
-            )
-        except Exception as e:
-            raise Exception(str(e))
-
-        self._insert_data(client, user)
+        users = [utils.get_user()]
+        self._inserter(users)
 
     def insert_data_all_users(self):
         users = User.objects.all()
+        self._inserter(users)
 
+    def _inserter(self, users):
         for user in users:
             try:
                 client = self._client(
