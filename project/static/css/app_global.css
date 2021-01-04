@@ -14,7 +14,7 @@ h6.side-bar {
 }
 
 h6.side-bar:first-child { 
-  margin-top: .5rem;
+  margin-top: .25rem;
 }
 
 .navbar {

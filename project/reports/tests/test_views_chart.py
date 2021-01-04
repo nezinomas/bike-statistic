@@ -1,7 +1,8 @@
-from datetime import date
+from datetime import date, datetime
 
 import pytest
 from django.urls import resolve, reverse
+from django.utils import timezone
 from freezegun import freeze_time
 
 from ...bikes.factories import BikeFactory
@@ -43,7 +44,7 @@ def test_overall_200(client, get_user, _data):
 
 @freeze_time('2002-12-31')
 def test_overall_context_years(client, get_user):
-    get_user.date_joined = date(1998, 1, 1)
+    get_user.date_joined = datetime(1998, 1, 1, tzinfo=timezone.utc)
 
     url = reverse('reports:overall')
     response = client.get(url)
