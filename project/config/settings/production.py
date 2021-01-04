@@ -25,3 +25,7 @@ SECURE_SSL_REDIRECT = True
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = 'DENY'
+
+CRONJOBS = [
+    ('2,30 * * * *', 'project.reports.cron.insert_from_endomondo', '> /dev/null 2>&1'),
+]
