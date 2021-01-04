@@ -31,8 +31,8 @@ class SyncWithGarmin():
         for user in users:
             try:
                 client = self._client(
-                    username=user.endomondo_user,
-                    password=user.endomondo_password
+                    username=user.garmin_user,
+                    password=user.garmin_password
                 )
             except Exception:  # pylint: disable=broad-except
                 continue

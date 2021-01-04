@@ -21,7 +21,7 @@ def sync_list(request):
     template = 'users/sync.html'
     context = {
         'form': form,
-        'password': request.user.endomondo_password[:50],
+        'password': request.user.garmin_password[:50],
     }
 
     return render(request, template, context)
@@ -42,7 +42,7 @@ def sync_update(request):
     template = 'users/sync.html'
     context = {
         'form': form,
-        'password': request.user.endomondo_password[:50],
+        'password': request.user.garmin_password[:50],
     }
     return (
         render(request, template, context)

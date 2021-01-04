@@ -15,8 +15,8 @@ def test_external_init(get_user):
 def test_external_fields(get_user):
     form = ExternalUserForm().as_p()
 
-    assert '<input type="text" name="endomondo_user"' in form
-    assert '<input type="password" name="endomondo_password"' in form
+    assert '<input type="text" name="garmin_user"' in form
+    assert '<input type="password" name="garmin_password"' in form
 
 
 def test_external_initial_value(get_user):
@@ -24,7 +24,7 @@ def test_external_initial_value(get_user):
 
     form = ExternalUserForm().as_p()
 
-    assert '<input type="text" name="endomondo_user" value="ebob"' in form
+    assert '<input type="text" name="garmin_user" value="ebob"' in form
 
 
 def test_external_blank_data(get_user):
@@ -34,16 +34,16 @@ def test_external_blank_data(get_user):
 
     assert len(form.errors) == 2
 
-    assert 'endomondo_user' in form.errors
-    assert 'endomondo_password' in form.errors
+    assert 'garmin_user' in form.errors
+    assert 'garmin_password' in form.errors
 
 
 def test_external_valid_data(get_user):
     UserFactory()
 
     form = ExternalUserForm(data={
-        'endomondo_user': 'user@email.com',
-        'endomondo_password': '123456',
+        'garmin_user': 'user@email.com',
+        'garmin_password': '123456',
     })
 
     assert form.is_valid()
@@ -56,5 +56,5 @@ def test_external_valid_data(get_user):
     actual = actual[0]
 
     assert actual.username == 'bob'
-    assert actual.endomondo_user == 'user@email.com'
-    assert utils.decrypt(actual.endomondo_password) == '123456'
+    assert actual.garmin_user == 'user@email.com'
+    assert utils.decrypt(actual.garmin_password) == '123456'
