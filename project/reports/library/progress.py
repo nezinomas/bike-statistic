@@ -134,9 +134,8 @@ class Progress():
         df.index = df['date']
         df = df.resample('M').sum() # group_by month and get sum of groups
 
-        idx = df.index.values
-        df.loc[:, 'year_month'] = pd.to_datetime(idx).to_period('M')
-        df.loc[:, 'monthlen'] = pd.to_datetime(idx).day
+        df['year_month'] = df.index.to_period('M')
+        df.loc[:, 'monthlen'] = df.index.day
         df.loc[:, 'distance_per_day'] = df['distance'] / df['monthlen']
         df.loc[:, 'speed'] = self._speed(df['distance'], df['seconds'])
 
