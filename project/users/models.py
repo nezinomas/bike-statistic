@@ -6,12 +6,12 @@ from ..core.lib import utils
 
 
 class User(AbstractUser):
-    endomondo_user = models.CharField(
-        _('Endomondo user'),
+    garmin_user = models.CharField(
+        _('Garmin user'),
         max_length=32
     )
-    endomondo_password = models.CharField(
-        _('Endomondo password'),
+    garmin_password = models.CharField(
+        _('Garmin password'),
         max_length=254
     )
 
@@ -19,7 +19,7 @@ class User(AbstractUser):
         return str(self.username)
 
     def save(self, *args, **kwargs):
-        if self.endomondo_user:
-            self.endomondo_password = utils.encrypt(self.endomondo_password)
+        if self.garmin_user:
+            self.garmin_password = utils.encrypt(self.garmin_password)
 
         super().save(*args, **kwargs)

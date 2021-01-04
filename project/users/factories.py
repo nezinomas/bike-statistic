@@ -18,5 +18,5 @@ class UserFactory(factory.DjangoModelFactory):
     password = make_password('123')
     email = 'bob@bob.com'
     date_joined = datetime(2000, 1, 1, tzinfo=pytz.UTC)
-    endomondo_user = 'ebob'
-    endomondo_password = '123'
+    garmin_user = 'ebob'
+    garmin_password = '123'
