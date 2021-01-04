@@ -41,7 +41,7 @@ class SyncWithGarmin():
 
     def _client(self, username, password):
         if not username or not password:
-            raise Exception('No Endomondo user/password entered')
+            raise Exception('No Garmin user/password entered')
 
         try:
             client = Garmin(username, utils.decrypt(password))
