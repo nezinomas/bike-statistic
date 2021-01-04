@@ -30,5 +30,5 @@ X_FRAME_OPTIONS = 'DENY'
 
 
 CRONJOBS = [
-    ('2,30 * * * *', 'project.reports.cron.insert_from_endomondo', '> /dev/null 2>&1'),
+    ('2,30 * * * *', 'project.reports.cron.cron_insert_from_garmin', '> /dev/null 2>&1'),
 ]

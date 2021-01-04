@@ -9,16 +9,16 @@ from .models import User
 class ExternalUserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['endomondo_user', 'endomondo_password']
+        fields = ['garmin_user', 'garmin_password']
         widgets = {
-            'endomondo_password': PasswordInput(),
+            'garmin_password': PasswordInput(),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self._user = utils.get_user()
-        self.fields['endomondo_user'].initial = self._user.endomondo_user
+        self.fields['garmin_user'].initial = self._user.garmin_user
 
         self.helper = FormHelper()
         set_field_properties(self, self.helper)
@@ -26,7 +26,7 @@ class ExternalUserForm(ModelForm):
     def save(self, *args, **kwargs):
         instance = super().save(commit=False)
 
-        self._user.endomondo_user = instance.endomondo_user
-        self._user.endomondo_password = instance.endomondo_password
+        self._user.garmin_user = instance.garmin_user
+        self._user.garmin_password = instance.garmin_password
 
         self._user.save()

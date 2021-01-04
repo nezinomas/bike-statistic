@@ -12,10 +12,10 @@ def test_user_str():
 
 
 @pytest.mark.django_db
-def test_user_endomondo_password(encrypt_key):
+def test_user_garmin_password(encrypt_key):
     u = UserFactory(username='xxx')
 
     actual = User.objects.get(pk=u.pk)
-    actual = utils.decrypt(actual.endomondo_password)
+    actual = utils.decrypt(actual.garmin_password)
 
     assert actual == '123'
