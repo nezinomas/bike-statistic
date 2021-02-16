@@ -19,7 +19,7 @@ class User(AbstractUser):
         return str(self.username)
 
     def save(self, *args, **kwargs):
-        if self.garmin_user:
+        if self.garmin_user and len(self.garmin_password) < 40:
             self.garmin_password = utils.encrypt(self.garmin_password)
 
         super().save(*args, **kwargs)
