@@ -19,7 +19,11 @@ class User(AbstractUser):
         return str(self.username)
 
     def save(self, *args, **kwargs):
-        if self.garmin_user:
-            self.garmin_password = utils.encrypt(self.garmin_password)
+        if self.id:
+            if self.garmin_password:
+                self.garmin_password = utils.encrypt(self.garmin_password)
+            else:
+                u = User.objects.get(id=self.id)
+                self.garmin_password = u.garmin_password
 
         super().save(*args, **kwargs)
