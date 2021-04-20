@@ -3,7 +3,6 @@ from datetime import date, datetime
 
 import pytest
 from django.urls import resolve, reverse
-from freezegun import freeze_time
 from mock import patch
 
 from ...core.helpers.test_helpers import login_rediretion
