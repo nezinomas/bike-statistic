@@ -24,6 +24,7 @@ def test_bike_init_fields(get_user):
     assert '<input type="text" name="date"' in form
     assert '<input type="text" name="full_name"' in form
     assert '<input type="text" name="short_name"' in form
+    assert '<input type="checkbox" name="main"' in form
 
     assert '<select name="user"' not in form
     assert '<select name="slug"' not in form
@@ -43,6 +44,7 @@ def test_bike_valid_data(get_user):
         'date': '2000-01-01',
         'full_name': 'Full Name',
         'short_name': 'Short Name',
+        'main': True,
     })
 
     assert form.is_valid()
@@ -54,6 +56,7 @@ def test_bike_valid_data(get_user):
     assert data.short_name == 'Short Name'
     assert data.slug == 'short-name'
     assert data.user.username == 'bob'
+    assert data.main
 
 
 def test_bike_blank_data(get_user):
@@ -64,6 +67,19 @@ def test_bike_blank_data(get_user):
     assert len(form.errors) == 2
     assert 'date' in form.errors
     assert 'short_name' in form.errors
+
+
+def test_bike_main_only_one(get_user):
+    BikeFactory(main=True)
+
+    form = BikeForm(data={
+        'date': '2000-01-01',
+        'full_name': 'Full Name',
+        'short_name': 'Short Name',
+        'main': True,
+    })
+
+    assert not form.is_valid()
 
 
 # ---------------------------------------------------------------------------------------
