@@ -9,7 +9,8 @@ TEMPLATES[0]['OPTIONS']['debug'] = False
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': ':memory:'
+        'NAME': ':memory:',
+        'TIMEOUT': 25,
     }
 }
 
@@ -43,3 +44,7 @@ MIGRATION_MODULES = {
     'goals': None,
     'reports': None,
 }
+
+
+# Bonus: Use a faster password hasher. This REALLY helps.
+PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher',)
