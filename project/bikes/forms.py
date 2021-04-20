@@ -65,6 +65,10 @@ class BikeForm(FormMixin, forms.ModelForm):
 
         qs = Bike.objects.items().filter(main=True)
 
+        # exclude self if update
+        if self.instance.pk is not None:
+            qs = qs.exclude(pk=self.instance.pk)
+
         if _main and qs.count() > 0:
             raise forms.ValidationError(f'Gali būti tik vienas pagrindinis dviratis!')
 

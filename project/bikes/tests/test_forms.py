@@ -1,3 +1,4 @@
+from django.forms.models import model_to_dict
 from datetime import date
 
 import pytest
@@ -56,6 +57,20 @@ def test_bike_valid_data(get_user):
     assert data.short_name == 'Short Name'
     assert data.slug == 'short-name'
     assert data.user.username == 'bob'
+    assert data.main
+
+
+def test_bike_upate_turn_off_main(get_user):
+    b = BikeFactory(main=True)
+    b.short_name = 'xxxx'
+
+    form = BikeForm(model_to_dict(b), instance=b)
+
+    assert form.is_valid()
+
+    data = form.save()
+
+    assert data.short_name == 'xxxx'
     assert data.main
 
 
