@@ -16,6 +16,6 @@ def test_user_garmin_password(encrypt_key):
     u = UserFactory(username='xxx')
 
     actual = User.objects.get(pk=u.pk)
-    actual = utils.decrypt(actual.garmin_password)
+    actual = actual.garmin_password
 
     assert actual == '123'
