@@ -110,7 +110,13 @@ class SyncWithGarmin():
         if not bike.exists():
             raise Exception('Add at least one Bike.')
 
-        return bike[0]  # select first bike
+        _bike = bike.filter(main=True)
+        if _bike.count() > 0:
+            rtn = _bike[0] # main bike
+        else:
+            rtn = bike[0] # first bike if no main bike
+
+        return rtn
 
     def _get_workouts(self, client):
         try:
