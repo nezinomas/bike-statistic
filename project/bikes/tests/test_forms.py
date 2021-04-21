@@ -1,7 +1,7 @@
-from django.forms.models import model_to_dict
 from datetime import date
 
 import pytest
+from django.forms.models import model_to_dict
 from freezegun import freeze_time
 
 from ...bikes.factories import BikeFactory, ComponentFactory
