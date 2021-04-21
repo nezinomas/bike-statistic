@@ -37,6 +37,7 @@ class Bike(models.Model):
         related_name='bikes'
     )
     main = models.BooleanField(default=False)
+    retired = models.BooleanField(default=False)
 
     objects = BikeQuerySet.as_manager()
 

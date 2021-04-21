@@ -68,6 +68,10 @@ def test_bike_main_field():
     assert isinstance(Bike._meta.get_field('main'), models.BooleanField)
 
 
+def test_bike_retired_field():
+    assert isinstance(Bike._meta.get_field('retired'), models.BooleanField)
+
+
 # ---------------------------------------------------------------------------------------
 #                                                                               Bike Info
 # ---------------------------------------------------------------------------------------

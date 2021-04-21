@@ -26,6 +26,7 @@ def test_bike_init_fields(get_user):
     assert '<input type="text" name="full_name"' in form
     assert '<input type="text" name="short_name"' in form
     assert '<input type="checkbox" name="main"' in form
+    assert '<input type="checkbox" name="retired"' in form
 
     assert '<select name="user"' not in form
     assert '<select name="slug"' not in form
@@ -46,6 +47,7 @@ def test_bike_valid_data(get_user):
         'full_name': 'Full Name',
         'short_name': 'Short Name',
         'main': True,
+        'retired': True,
     })
 
     assert form.is_valid()
