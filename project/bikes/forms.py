@@ -40,7 +40,13 @@ class ComponentStatisticForm(forms.ModelForm):
 class BikeForm(FormMixin, forms.ModelForm):
     class Meta:
         model = Bike
-        fields = ['date', 'full_name', 'short_name']
+        fields = [
+            'date',
+            'full_name',
+            'short_name',
+            'main',
+            'retired',
+        ]
         widgets = {
             'date': DatePickerInput(format='%Y-%m-%d'),
         }
@@ -52,6 +58,28 @@ class BikeForm(FormMixin, forms.ModelForm):
 
         self.helper = FormHelper()
         set_field_properties(self, self.helper)
+
+        self.helper.form_show_labels = True
+
+        self.fields['date'].label = ''
+        self.fields['full_name'].label = ''
+        self.fields['short_name'].label = ''
+        self.fields['main'].label = 'Pagrindinis'
+        self.fields['retired'].label = 'Parduotas'
+
+    def clean_main(self):
+        _main = self.cleaned_data.get('main')
+
+        qs = Bike.objects.items().filter(main=True)
+
+        # exclude self if update
+        if self.instance.pk is not None:
+            qs = qs.exclude(pk=self.instance.pk)
+
+        if _main and qs.count() > 0:
+            raise forms.ValidationError(f'Gali būti tik vienas pagrindinis dviratis!')
+
+        return _main
 
 
 class BikeInfoForm(forms.ModelForm):

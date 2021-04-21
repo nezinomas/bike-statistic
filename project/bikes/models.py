@@ -36,6 +36,8 @@ class Bike(models.Model):
         on_delete=models.CASCADE,
         related_name='bikes'
     )
+    main = models.BooleanField(default=False)
+    retired = models.BooleanField(default=False)
 
     objects = BikeQuerySet.as_manager()
 

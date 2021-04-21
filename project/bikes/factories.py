@@ -11,6 +11,8 @@ class BikeFactory(factory.DjangoModelFactory):
     date = date(1999, 1, 1)
     full_name = 'Full Name'
     short_name = 'Short Name'
+    main = False
+    retired = False
 
     class Meta:
         model = Bike

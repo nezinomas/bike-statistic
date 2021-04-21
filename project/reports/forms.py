@@ -34,7 +34,7 @@ class DataForm(FormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['bike'].queryset = Bike.objects.items()
+        self.fields['bike'].queryset = Bike.objects.items().filter(retired=False)
 
         self.helper = FormHelper()
         set_field_properties(self, self.helper)

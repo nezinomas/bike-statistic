@@ -9,6 +9,8 @@
                     <td width="300rem">{{ form.date|as_crispy_field }}</td>
                     <td width="300rem">{{ form.full_name|as_crispy_field }}</td>
                     <td width="300rem">{{ form.short_name|as_crispy_field }}</td>
+                    <td>{{ form.main|as_crispy_field }}</td>
+                    <td>{{ form.retired|as_crispy_field }}</td>
                     <td class="text-right last">
                         {% button_close pk=form.instance.pk tbl='0' label='True' %}
                         {% button_update pk=form.instance.pk tbl='0' label='True' %}

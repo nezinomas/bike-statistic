@@ -1,6 +1,7 @@
 from datetime import date
 
 import pytest
+from django.db import models
 
 from ...users.factories import UserFactory
 from ..factories import (BikeFactory, BikeInfoFactory, ComponentFactory,
@@ -61,6 +62,14 @@ def test_bike_related_qs_count(get_user, django_assert_max_num_queries):
 
     with django_assert_max_num_queries(1):
         list(q.short_name for q in Bike.objects.related())
+
+
+def test_bike_main_field():
+    assert isinstance(Bike._meta.get_field('main'), models.BooleanField)
+
+
+def test_bike_retired_field():
+    assert isinstance(Bike._meta.get_field('retired'), models.BooleanField)
 
 
 # ---------------------------------------------------------------------------------------
