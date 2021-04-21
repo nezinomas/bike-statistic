@@ -40,7 +40,13 @@ class ComponentStatisticForm(forms.ModelForm):
 class BikeForm(FormMixin, forms.ModelForm):
     class Meta:
         model = Bike
-        fields = ['date', 'full_name', 'short_name', 'main']
+        fields = [
+            'date',
+            'full_name',
+            'short_name',
+            'main',
+            'retired',
+        ]
         widgets = {
             'date': DatePickerInput(format='%Y-%m-%d'),
         }
@@ -59,6 +65,7 @@ class BikeForm(FormMixin, forms.ModelForm):
         self.fields['full_name'].label = ''
         self.fields['short_name'].label = ''
         self.fields['main'].label = 'Pagrindinis'
+        self.fields['retired'].label = 'Parduotas'
 
     def clean_main(self):
         _main = self.cleaned_data.get('main')

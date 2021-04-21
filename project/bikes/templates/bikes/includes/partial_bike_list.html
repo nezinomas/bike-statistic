@@ -14,7 +14,12 @@
         {% url 'bikes:bike_delete' item.id as url_delete %}
         <tr id="row_id_{{ item.id }}" data-pk="{{ item.id }}" data-url="{{ url_update }}" data-tbl="0">
             <td>{{ item.date|date:'Y-m-d' }}</td>
-            <td>{% if item.main %}<span style="color:rgb(4, 196, 4)"><i class="far fa-star"></i></span> {% else %}<span class="empty"></span>{% endif %}{{ item.full_name }}</td>
+            <td>
+                {% if item.main %}<span style="color:rgb(4, 196, 4)"><i class="far fa-star"></i></span>{% endif %}
+                {% if item.retired %}<span style="color:rgb(230, 1, 1)"><i class="fas fa-ban"></i></span>{% endif %}
+                {% if not item.main and not item.retired %}<span class="empty"></span>{% endif %}
+                {{ item.full_name }}
+            </td>
             <td><a href="{% url 'bikes:info_list' item.slug %}">{{ item.short_name }}</a></td>
             <td class="text-right last">
                 {% button_edit pk=item.id url=url_update tbl='0' label='True' %}
@@ -27,7 +32,7 @@
     </tbody>
 </table>
 <style>
-    #div_id_main {
+    #div_id_main, #div_id_retired {
         padding-top: .2rem;
         margin-left: 2rem;
     }
