@@ -5,6 +5,8 @@ from ...users.factories import UserFactory
 from ..forms import DataForm, DateFilterForm
 
 
+pytestmark = pytest.mark.django_db
+
 # ---------------------------------------------------------------------------------------
 #                                                                             Filter Form
 # ---------------------------------------------------------------------------------------
@@ -39,14 +41,12 @@ def test_date_filter_form_invalid_start_bigger_than_end():
 # ---------------------------------------------------------------------------------------
 #                                                                               Data Form
 # ---------------------------------------------------------------------------------------
-@pytest.mark.django_db
 def test_data_form_is_valid(post_data, get_user):
     form = DataForm(data=post_data)
 
     assert form.is_valid()
 
 
-@pytest.mark.django_db
 def test_data_bike_current_user(get_user):
     u = UserFactory(username='xxx')
 
