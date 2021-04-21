@@ -57,3 +57,13 @@ def test_data_bike_current_user(get_user):
 
     assert 'T1' in form
     assert 'T2' not in form
+
+
+def test_retired_bike_not_in_form(get_user):
+    BikeFactory(short_name='T1')
+    BikeFactory(short_name='T2', retired=True)
+
+    form = DataForm().as_p()
+
+    assert 'T1' in form
+    assert 'T2' not in form
