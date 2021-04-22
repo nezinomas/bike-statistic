@@ -77,9 +77,18 @@ class BikeForm(FormMixin, forms.ModelForm):
             qs = qs.exclude(pk=self.instance.pk)
 
         if _main and qs.count() > 0:
-            raise forms.ValidationError(f'Gali būti tik vienas pagrindinis dviratis!')
+            raise forms.ValidationError('Gali būti tik vienas pagrindinis dviratis!')
 
         return _main
+
+    def clean_retired(self):
+        _main = self.cleaned_data.get('main')
+        _retired = self.cleaned_data.get('retired')
+
+        if _main and _retired:
+            raise forms.ValidationError('Pagrindio dviračio negalima žymėti kaip Parduotas!')
+
+        return _retired
 
 
 class BikeInfoForm(forms.ModelForm):

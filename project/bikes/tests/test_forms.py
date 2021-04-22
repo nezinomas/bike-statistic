@@ -1,7 +1,7 @@
-from django.forms.models import model_to_dict
 from datetime import date
 
 import pytest
+from django.forms.models import model_to_dict
 from freezegun import freeze_time
 
 from ...bikes.factories import BikeFactory, ComponentFactory
@@ -47,7 +47,7 @@ def test_bike_valid_data(get_user):
         'full_name': 'Full Name',
         'short_name': 'Short Name',
         'main': True,
-        'retired': True,
+        'retired': False,
     })
 
     assert form.is_valid()
@@ -95,6 +95,15 @@ def test_bike_main_only_one(get_user):
         'short_name': 'Short Name',
         'main': True,
     })
+
+    assert not form.is_valid()
+
+
+def test_bike_main_cant_be_retired(get_user):
+    b = BikeFactory(main=True)
+    b.retired = True
+
+    form = BikeForm(model_to_dict(b), instance=b)
 
     assert not form.is_valid()
 
