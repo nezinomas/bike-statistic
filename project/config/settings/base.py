@@ -54,7 +54,7 @@ DATABASES = {
         },
     }
 }
-
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # ================   GENERAL CONFIGURATION
 LANGUAGE_CODE = 'en-us'
@@ -145,4 +145,5 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # ================   CRISPY FORMS
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
