@@ -26,22 +26,6 @@
 
   <body>
 	{% block body %}
-	<header class="section-header py-3">
-		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
-		<div class="container-fluid">
-			<div class="nav-item dropdown ms-auto me-0">
-			<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ user.username }}</a>
-			<ul class="dropdown-menu dropdown-menu-end">
-				<li><a class="dropdown-item" href="#">My account</a></li>
-				<li><a class="dropdown-item" href="#">Change password</a></li>
-				<li><div class="dropdown-divider"></div></li>
-				<li><a class="dropdown-item" href="{% url 'users:logout' %}">Log out</a></li>
-			</ul>
-			</div>
-		</div> <!-- container-fluid.// -->
-		</nav>
-	</header>
-
 	<div class="container-fluid">
 		<section class="section-content py-3">
 			<div class="row">
