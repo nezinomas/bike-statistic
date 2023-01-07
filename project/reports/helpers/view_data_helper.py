@@ -1,8 +1,8 @@
 from calendar import monthrange
 from datetime import datetime
 
-from django.template.loader import render_to_string
 from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 from ..models import Data
 
