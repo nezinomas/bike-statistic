@@ -6,7 +6,9 @@ TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['bike.unknownbug.net']
 
-INSTALLED_APPS += []
+INSTALLED_APPS += [
+    'django_crontab',
+]
 
 TEMPLATES[0]['OPTIONS']['loaders'] = [
     ['django.template.loaders.cached.Loader', [
@@ -25,6 +27,7 @@ SECURE_SSL_REDIRECT = True
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = 'DENY'
+
 
 CRONJOBS = [
     ('2,30 * * * *', 'project.reports.cron.cron_insert_from_garmin', '> /dev/null 2>&1'),
