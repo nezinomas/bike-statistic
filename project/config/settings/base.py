@@ -54,6 +54,7 @@ DATABASES = {
         },
     }
 }
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 # ================   GENERAL CONFIGURATION
@@ -105,10 +106,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.humanize',
-    'bootstrap_datepicker_plus',
     'django.contrib.staticfiles',
+    'bootstrap_datepicker_plus',
     'crispy_forms',
-    'bootstrap4',
+    'crispy_bootstrap5',
     'widget_tweaks',
     'crequest',
     'project.core',
@@ -145,4 +146,5 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # ================   CRISPY FORMS
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

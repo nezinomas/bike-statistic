@@ -42,10 +42,10 @@ class DataForm(FormMixin, forms.ModelForm):
 
 class DateFilterForm(forms.Form):
     start_date = forms.DateField(
-        widget=MonthPickerInput().start_of('event days'),
+        widget=DatePickerInput(),
     )
     end_date = forms.DateField(
-        widget=MonthPickerInput().end_of('event days'),
+        widget=DatePickerInput(),
     )
 
     def __init__(self, *args, **kwargs):

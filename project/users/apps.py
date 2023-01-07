@@ -1,5 +1,8 @@
 from django.apps import AppConfig
 
 
-class authConfig(AppConfig):
-    name = 'project.users'
+App_name = 'users'
+
+
+class CoreConfig(AppConfig):
+    name = f'project.{App_name}'
