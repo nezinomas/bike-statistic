@@ -1,3 +1,27 @@
-body {
-  font-size: .85rem!important;
+:root {
+  --bs-body-font-size: 0.7rem;
+  --font-size-xs: .65rem;
+  --font-size-sm: .7rem;
+}
+
+.tooltip,
+.form-control,
+.form-control-sm {
+  font-size: var(--font-size-sm);
+}
+
+.btn-xs {
+  font-size: var(--font-size-xs);
+  line-height: 0.25rem !important;
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+  padding-left: 0.25rem !important;
+  padding-right: 0.25rem !important;
+  margin-top: -0.65rem !important;
+  margin-bottom: -0.45rem !important;
+}
+
+.btn-sm {
+  font-size: var(--font-size-sm);
+  padding: .2rem .3rem;
 }
