@@ -1,5 +1,8 @@
 from django.apps import AppConfig
 
 
-class bikesConfig(AppConfig):
-    name = 'project.bikes'
+App_name = 'bikes'
+
+
+class CoreConfig(AppConfig):
+    name = f'project.{App_name}'

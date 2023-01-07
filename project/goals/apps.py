@@ -1,5 +1,8 @@
 from django.apps import AppConfig
 
 
-class goalsConfig(AppConfig):
-    name = 'project.goals'
+App_name = 'goals'
+
+
+class CoreConfig(AppConfig):
+    name = f'project.{App_name}'
