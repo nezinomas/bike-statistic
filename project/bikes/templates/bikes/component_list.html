@@ -2,11 +2,6 @@
 {% load buttons %}
 
 
-{% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="#">Components</a>
-{% endblock %}
-
-
 {% block content %}
 <p class="text-right my-2">
     {% url 'bikes:component_create' as url_create %}

@@ -1,7 +1,2 @@
 {% extends "base.html" %}
 {% load static %}
-
-
-{% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span><a class="nav-link" href="{% url 'bikes:stats_list' bike_slug component.pk %}">Component Wear</a>
-{% endblock breadcrumb %}

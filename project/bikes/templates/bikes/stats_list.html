@@ -2,14 +2,6 @@
 {% load humanize %}{% load buttons %}
 
 
-{% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span>
-    <a class="nav-link" href="{% url 'bikes:stats_index' bike_slug %}">{{ bike_slug|title }}</a>
-    <span class="navbar-text">&raquo;</span>
-    <a class="nav-link disabled" href="{% url 'bikes:stats_list' bike_slug component.pk %}">{{ component.name }}</a>
-{% endblock %}
-
-
 {% block content %}
     <div class="row my-2">
         <div class="col text-left">

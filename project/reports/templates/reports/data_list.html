@@ -2,11 +2,6 @@
 {% load static %}{% load buttons %}{% load crispy_forms_tags %}
 
 
-{% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="{% url 'reports:data_empty' %}">View</a>
-{% endblock breadcrumb %}
-
-
 {% block content %}
 
 <form class="filter" method="post">

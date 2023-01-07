@@ -1,12 +1,6 @@
 {% extends "category_settings.html" %}
 {% load buttons %}
 
-
-{% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="#">Goals</a>
-{% endblock %}
-
-
 {% block content %}
 <p class="text-right my-2">
     {% url 'goals:goals_create' as url_create %}

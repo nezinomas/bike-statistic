@@ -2,14 +2,6 @@
 {% load buttons %}
 
 
-{% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span>
-    <a class="nav-link" href="{% url 'bikes:info_index' %}">Bike Info</a>
-    <span class="navbar-text">&raquo;</span>
-    <a class="nav-link disabled" href="{% url 'bikes:info_list' bike_slug %}">{{ bike_slug|title }}</a>
-{% endblock %}
-
-
 {% block content %}
 
 <div class="row my-2">

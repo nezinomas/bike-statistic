@@ -2,11 +2,6 @@
 {% load static %}{% load humanize %}{% load filters %}{% load dictionary_row %}
 
 
-{% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="{% url 'reports:reports_table' year %}">{{ year }}</a>
-{% endblock breadcrumb %}
-
-
 {% block head %}{{ block.super }}
 <script src="https://unpkg.com/sticky-table-headers"></script>
     <style>
