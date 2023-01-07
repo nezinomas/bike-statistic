@@ -1,4 +1,4 @@
-{% extends parent_template|default:'category_wear.html' %}
+{% extends 'category_wear.html' %}
 {% load humanize %}{% load buttons %}
 
 
@@ -6,7 +6,7 @@
     <span class="navbar-text">&raquo;</span>
     <a class="nav-link" href="{% url 'bikes:stats_index' bike_slug %}">{{ bike_slug|title }}</a>
     <span class="navbar-text">&raquo;</span>
-    <a class="nav-link disabled" href="{% url 'bikes:stats_list' bike_slug component_pk %}">{{ component_name }}</a>
+    <a class="nav-link disabled" href="{% url 'bikes:stats_list' bike_slug component.pk %}">{{ component.name }}</a>
 {% endblock %}
 
 
@@ -14,13 +14,13 @@
     <div class="row my-2">
         <div class="col text-left">
             <nav class="nav">
-                {% for item in component_list %}
-                <a href="{% url 'bikes:stats_list' bike_slug item.id %}" class="nav-link {% if item.id == stats_id %}active disabled{% endif %}">{{ item.name }}</a>
+                {% for item in components %}
+                <a href="{% url 'bikes:stats_list' bike_slug item.id %}" class="nav-link {% if item.id == component.pk %}active disabled{% endif %}">{{ item.name }}</a>
                 {% if not forloop.last %}<span class="navbar-text">|</span>{% endif %}{% endfor %}
             </nav>
         </div>
         <div class="col-sm-2 text-right">
-            {% url 'bikes:stats_create' bike_slug component_pk as url_create %}
+            {% url 'bikes:stats_create' bike_slug component.pk as url_create %}
             {% button_create url=url_create label='New Component' tbl='0' width='70%' %}
         </div>
     </div>

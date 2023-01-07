@@ -1,24 +1,14 @@
-import os
-import pickle
-
-from django.conf import settings
+from ..bikes.models import Bike
+from ..core.lib import utils
 
 
 def bike_list(context):
-    try:
-        f = os.path.join(settings.CASH_ROOT, 'bikes.p')
-        bikes = pickle.load(open(f, "rb"))
-    except:
-        bikes = []
+    user = utils.get_user()
+
+    # AnonymousUser don't have id
+    if user.id:
+        bikes = list(Bike.objects.items())
+    else:
+        bikes = None
 
     return {'bike_list': bikes}
-
-
-def component_list(context):
-    try:
-        f = os.path.join(settings.CASH_ROOT, 'components.p')
-        components = pickle.load(open(f, "rb"))
-    except:
-        components = []
-
-    return {'component_list': components}

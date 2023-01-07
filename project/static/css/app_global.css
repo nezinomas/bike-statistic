@@ -1,3 +1,7 @@
+body {
+  font-size: .85rem!important;
+}
+
 .list-group-item {
   padding: .25rem 0 .25rem .5rem;
   font-size: .8rem;
@@ -10,7 +14,7 @@ h6.side-bar {
 }
 
 h6.side-bar:first-child { 
-  margin-top: .5rem;
+  margin-top: .25rem;
 }
 
 .navbar {
@@ -42,4 +46,12 @@ h6.side-bar:first-child {
 
 .invalid-feedback {
   display: block;
+}
+
+.fixed-column {
+  width:150px;
+}
+
+.fluid-column {
+  width:calc(100% - 155px);
 }

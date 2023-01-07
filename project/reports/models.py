@@ -1,7 +1,47 @@
 from django.db import models
+from django.db.models import Count, F, Sum
+from django.db.models.functions import TruncYear
 from django.utils.timezone import now
 
 from ..bikes import models as bikeModels
+from ..core.lib import utils
+from ..users.models import User
+
+
+class DataQuerySet(models.QuerySet):
+    def related(self):
+        user = utils.get_user()
+        return (
+            self
+            .select_related('user')
+            .filter(user=user)
+        )
+
+    def _filter_by_year(self, year):
+        if year:
+            return self.filter(date__year=year)
+
+        return self
+
+    def items(self, year=None):
+        return self.related()._filter_by_year(year)
+
+    def bike_summary(self):
+        return (
+            self
+            .related()
+            .annotate(cnt=Count('bike'))
+            .values('bike')
+            .annotate(date=TruncYear('date'))
+            .values('date')
+            .annotate(sum=Sum('distance'))
+            .order_by('date')
+            .values(
+                'date',
+                bike=F('bike__short_name'),
+                distance=F('sum'),
+            )
+        )
 
 
 class Data(models.Model):
@@ -10,6 +50,11 @@ class Data(models.Model):
     no = 'n'
     checked_choices = ((yes, 'Yes'), (no, 'No'))
 
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='data'
+    )
     bike = models.ForeignKey(
         bikeModels.Bike,
         on_delete=models.CASCADE,
@@ -45,8 +90,10 @@ class Data(models.Model):
         default=no,
     )
 
-    def __str__(self):
-        return(str(self.date))
+    objects = DataQuerySet.as_manager()
 
     class Meta:
         ordering = ['-date']
+
+    def __str__(self):
+        return f'{self.date:%Y-%m-%d} {self.bike}'

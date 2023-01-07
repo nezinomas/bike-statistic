@@ -1,32 +1,24 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
-from django.contrib.auth.models import User
-from factory import DjangoModelFactory, SubFactory, PostGenerationMethodCall
+import factory
+import pytz
 
-from ..bikes.models import Bike
+from ..bikes.factories import BikeFactory
+from ..users.factories import UserFactory
 from .models import Data
 
 
-class BikeFactory(DjangoModelFactory):
-    class Meta:
-        model = Bike
+class DataFactory(factory.DjangoModelFactory):
+    user = factory.SubFactory(UserFactory)
+    bike = factory.SubFactory(BikeFactory)
+    date = datetime(2000, 1, 1, tzinfo=pytz.UTC)
+    distance = 10
+    time = timedelta(seconds=(1000))
+    ascent = 100
+    max_speed = 15
+    cadence = 85
+    heart_rate = 140
+    temperature = 10
 
-    full_name = 'xbike'
-    short_name = 'xbike'
-    date = datetime(1970, 1, 1).date()
-
-
-class DataFactory(DjangoModelFactory):
     class Meta:
         model = Data
-
-    bike = SubFactory(BikeFactory)
-
-
-class UserFactory(DjangoModelFactory):
-    class Meta:
-        model = User
-
-    username = 'bob'
-    password = PostGenerationMethodCall('set_password', '123')
-    email = 'bob@d.lt'

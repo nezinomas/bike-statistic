@@ -8,7 +8,7 @@ from ..forms import BikeForm
 
 
 def form_valid(data):
-    objects = Bike.objects.all()
+    objects = Bike.objects.items()
     data['form_is_valid'] = True
     data['html_list'] = render_to_string(
         'bikes/includes/partial_bike_list.html',
@@ -37,7 +37,7 @@ def save_data(request, context, form):
 
 @login_required()
 def lists(request):
-    obj = Bike.objects.all()
+    obj = Bike.objects.items()
     # reikia, nes kitaip pirma karta paspaudus ant date picker jis neveikia
     form_media = BikeForm(None).media
     rendered = render(

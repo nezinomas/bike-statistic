@@ -1,5 +1,3 @@
-import datetime
-
 from django.shortcuts import reverse, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
@@ -8,15 +6,19 @@ from django.http import JsonResponse
 from .models import Goal
 from .forms import GoalForm
 
-from .library.statistic import Statistic
-
+from ..reports.library.progress import Progress
 
 def form_valid(data):
-    objects = Statistic().objects()
+    goals = Goal.objects.items()
+
+    obj = Progress()
+    stats = obj.extremums()
+    distances = obj.distances()
+
     data['form_is_valid'] = True
     data['html_list'] = render_to_string(
         'goals/includes/partial_goals_list.html',
-        {'objects': objects}
+        {'goals': goals, 'stats': stats, 'distances': distances}
     )
 
 
@@ -41,11 +43,16 @@ def save_data(request, context, form):
 
 @login_required()
 def goals_list(request):
-    objects = Statistic().objects()
+    goals = Goal.objects.items()
+
+    obj = Progress()
+    stats = obj.extremums()
+    distances = obj.distances()
+
     rendered = render(
         request,
         'goals/goals_list.html',
-        {'objects': objects}
+        {'goals': goals, 'stats': stats, 'distances': distances}
     )
     return rendered
 
@@ -82,21 +89,3 @@ def goals_delete(request, year):
             request
         )
     return JsonResponse(data)
-
-
-@login_required()
-def goals_table(request, year):
-    objStats = Statistic(year)
-    start = datetime.date(year, 1, 1)
-    end = datetime.date(year, 12, 31)
-
-    return render(
-        request,
-        'goals/goals_table.html',
-        {
-            'objects': objStats.table(),
-            'month': objStats.month_table(),
-            'year': year,
-            'stats': objStats.stats(start, end)
-        }
-    )

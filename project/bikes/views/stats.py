@@ -3,20 +3,39 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.template.loader import render_to_string
 
+from ...reports.models import Data
 from ..forms import ComponentStatisticForm
-from ..helpers.view_stats_helper import Filter
+from ..lib.component_wear import ComponentWear
 from ..models import Bike, Component, ComponentStatistic
 
 
-def form_valid(data, bike_slug, pk):
-    obj = Filter(bike_slug, pk)
+def form_valid(data, bike_slug, component_pk):
+    components = Component.objects.items()
+    data1 = (
+        Data.objects
+        .items()
+        .filter(bike__slug=bike_slug)
+        .values()
+    )
+    component_statistic = (
+        ComponentStatistic.objects
+        .items()
+        .filter(bike__slug=bike_slug, component__pk=component_pk)
+        .values()
+    )
+
+    obj = ComponentWear(components=component_statistic, data=data1)
+
     data['form_is_valid'] = True
     data['html_list'] = render_to_string(
         'bikes/includes/partial_stats_list.html',
         {
-            'components': obj.components(),
-            'total': obj.total_distance(),
-            'bike_slug': bike_slug
+            'components': components,
+            'component_statistic': component_statistic,
+            'km': obj.component_km,
+            'stats': obj.component_stats,
+            'total': obj.bike_km,
+            'bike_slug': bike_slug,
         }
     )
 
@@ -42,27 +61,51 @@ def save_data(request, context, form, bike_slug, pk):
 
 @login_required()
 def index(request, bike_slug):
-    qs = Component.objects.all().first()
-    url = reverse(
-        'bikes:stats_list',
-        kwargs={'bike_slug': bike_slug, 'component_pk': qs.pk}
-    )
+    qs = Component.objects.items().first()
+
+    if qs:
+        url = reverse(
+            'bikes:stats_list',
+            kwargs={'bike_slug': bike_slug, 'component_pk': qs.pk}
+        )
+    else:
+        url = reverse('bikes:component_list')
+
     return redirect(url)
 
 
 @login_required()
 def lists(request, bike_slug, component_pk):
-    o = Filter(bike_slug, component_pk)
-    components = o.components()
+    component = Component.objects.filter(pk=component_pk)[:1]
+    if not component:
+        return redirect(reverse('bikes:component_list'))
+
+    components = Component.objects.items()
+    data = (
+        Data.objects
+        .items()
+        .filter(bike__slug=bike_slug)
+        .values()
+    )
+    component_statistic = (
+        ComponentStatistic.objects
+        .items()
+        .filter(bike__slug=bike_slug, component__pk=component_pk)
+        .values()
+    )
+
+    obj = ComponentWear(components=component_statistic, data=data)
+
     return render(
         request,
         'bikes/stats_list.html', {
+            'component': component[0],
             'components': components,
-            'total': o.total_distance(),
+            'component_statistic': component_statistic,
+            'km': obj.component_km,
+            'stats': obj.component_stats,
+            'total': obj.bike_km,
             'bike_slug': bike_slug,
-            'component_pk': component_pk,
-            'stats_id': components[0]['pk'],
-            'component_name': components[0]['name']
         }
     )
 
