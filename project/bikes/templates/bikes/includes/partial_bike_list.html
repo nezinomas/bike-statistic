@@ -15,8 +15,8 @@
         <tr id="row_id_{{ item.id }}" data-pk="{{ item.id }}" data-url="{{ url_update }}" data-tbl="0">
             <td>{{ item.date|date:'Y-m-d' }}</td>
             <td>
-                {% if item.main %}<span style="color:rgb(4, 196, 4)"><i class="far fa-star"></i></span>{% endif %}
-                {% if item.retired %}<span style="color:rgb(230, 1, 1)"><i class="fas fa-ban"></i></span>{% endif %}
+                {% if item.main %}<span style="color:rgb(4, 196, 4)"><i class="bi bi-star"></i></span>{% endif %}
+                {% if item.retired %}<span style="color:rgb(230, 1, 1)"><i class="bi bi-dash-circle"></i></span>{% endif %}
                 {% if not item.main and not item.retired %}<span class="empty"></span>{% endif %}
                 {{ item.full_name }}
             </td>
