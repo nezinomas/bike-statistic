@@ -25,89 +25,92 @@
   </head>
 
   <body>
-    {% block body %}
-    <!-- top navidation bar -->
-    <div class="container-fluid">
-    <nav class="navbar navbar-expand navbar-light bg-light">
-        <nav class="nav">
-            {% block breadcrumb %}
-              <a class="nav-link" href="{% url 'reports:data_empty' %}">Home</a>
-            {% endblock breadcrumb %}
-          </nav>
-        <div class="collapse navbar-collapse" id="mainMenu">
-          {% if user.is_authenticated %}
-          <ul class="navbar-nav ml-auto">
-            <li class="list-group-item list-group-item-action dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{ user.username }}
-              </a>
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
-                <a class="dropdown-item" href="#">My account</a>
-                <a class="dropdown-item" href="#">Change password</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{% url 'users:logout' %}">Log out</a>
-              </div>
-            </li>
-          </ul>
-          {% else %}
-          <form class="form-inline ml-auto">
-            <a href="{% url 'users:login' %}" class="btn btn-outline-secondary btn-sm">Log in</a>
-          </form>
-          {% endif %}
-        </div>
-      </nav>
-    </div>
+	{% block body %}
+	<header class="section-header py-3">
+		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+		<div class="container-fluid">
+			{% block breadcrumb %}<a class="nav-link" href="{% url 'reports:data_empty' %}">Home</a>{% endblock breadcrumb %}
+			<div class="nav-item dropdown ms-auto me-0">
+			<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ user.username }}</a>
+			<ul class="dropdown-menu dropdown-menu-end">
+				<li><a class="dropdown-item" href="#">My account</a></li>
+				<li><a class="dropdown-item" href="#">Change password</a></li>
+				<li><div class="dropdown-divider"></div></li>
+				<li><a class="dropdown-item" href="{% url 'users:logout' %}">Log out</a></li>
+			</ul>
+			</div>
+		</div> <!-- container-fluid.// -->
+		</nav>
+	</header>
 
-    <div class="container-fluid">
-      <div class="row mx-0">
-        <!-- side bar -->
-        <div class="fixed-column">
-          <h6 class="side-bar">Data</h6>
-          <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action" href="{% url 'reports:data_empty' %}">View</a>
-            <a class="list-group-item list-group-item-action" href="{% url 'reports:insert_data' %}">Update</a>
-          </div>
-
-          <h6 class="side-bar">Charts</h6>
-          <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action" href="{% url 'reports:overall' %}">Overall</a>
-          </div>
-
-          <h6 class="side-bar">Stats & Goals</h6>
-          <div class="list-group list-group-flush">
-            {% for item in years  %}
-            {% if forloop.counter < 6 %}
-            <a class="list-group-item list-group-item-action" href="{% url 'reports:reports_table' item %}">{{ item }}</a>
-            {% endif %}
-            {% endfor %}
-          </div>
-
-          <h6 class="side-bar">Component wear</h6>
-          <div class="list-group list-group-flush">
-            {% for bike in bike_list %}
-            <a class="list-group-item list-group-item-action" href="{% url 'bikes:stats_index' bike.slug %}">{{ bike.short_name }}</a>
-            {% endfor %}
-          </div>
-
-          <h6 class="side-bar">Settings</h6>
-          <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action" href="{% url 'goals:goals_list' %}">Goals</a>
-            <a class="list-group-item list-group-item-action" href="{% url 'bikes:component_list' %}">Components</a>
-            <a class="list-group-item list-group-item-action" href="{% url 'bikes:bike_list' %}">Bikes</a>
-            <a class="list-group-item list-group-item-action" href="{% url 'bikes:info_index' %}">Bike Info</a>
-          </div>
-
-          <h6 class="side-bar">Profile</h6>
-          <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action" href="{% url 'users:sync_list' %}">Garmin</a>
-          </div>
-        </div>
-        <!-- content -->
-        <div class="fluid-column">
-          {% block content %}{% endblock content %}
-        </div>
-      </div>
-    </div>
-    {% endblock body %}
+	<div class="container-fluid">
+		<section class="section-content py-3">
+			<div class="row">
+				<aside class="col-lg-1">
+					<nav class="sidebar">
+						<!-- Data -->
+						<h6 class="side-bar"> Data </h6>
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'reports:data_empty' %}"> View </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'reports:insert_data' %}"> Update </a>
+							</li>
+						</ul>
+						<!-- Charts -->
+						<h6 class="side-bar"> Charts </h6>
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'reports:overall' %}"> Overall </a>
+							</li>
+						</ul>
+						<!-- Stats and Goals -->
+						<h6 class="side-bar"> Stats & Goals </h6>
+						<ul class="nav flex-column">
+							{% for item in years %}
+							{% if forloop.counter < 6 %}
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'reports:reports_table' item %}"> {{ item }} </a>
+							</li>
+							{% endif %}
+							{% endfor %}
+						</ul>
+						<!-- Component wear -->
+						<h6 class="side-bar"> Component wear </h6>
+						<ul class="nav flex-column">
+							{% for bike in bike_list %}
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'bikes:stats_index' bike.slug %}"> {{ bike.short_name }} </a>
+							</li>
+							{% endfor %}
+						</ul>
+						<!-- Settings -->
+						<h6 class="side-bar"> Settings </h6>
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'goals:goals_list' %}"> Goals </a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'bikes:component_list' %}">Components</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'bikes:info_index' %}">Bike Info</a>
+							</li>
+						</ul>
+						<!-- Profile -->
+						<h6 class="side-bar"> Profile </h6>
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'users:sync_list' %}"> Garmin </a>
+							</li>
+						</ul>
+					</nav>
+				</aside>
+				<main class="col">{% block content %}{% endblock content %}
+				</main>
+			</div>
+		</section>
+	  {% endblock body %}
   </body>
 </html>
