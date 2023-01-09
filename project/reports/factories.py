@@ -8,7 +8,7 @@ from ..users.factories import UserFactory
 from .models import Data
 
 
-class DataFactory(factory.DjangoModelFactory):
+class DataFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     bike = factory.SubFactory(BikeFactory)
     date = datetime(2000, 1, 1, tzinfo=pytz.UTC)
