@@ -1,7 +1,7 @@
 :root {
-  --bs-body-font-size: 0.7rem;
+  --bs-body-font-size: 0.75rem;
   --font-size-xs: .65rem;
-  --font-size-sm: .7rem;
+  --font-size-sm: .75rem;
 }
 
 .tooltip,
@@ -24,4 +24,14 @@
 .btn-sm {
   font-size: var(--font-size-sm);
   padding: .2rem .3rem;
+}
+
+.table-sm > thead > tr > th {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.table-sm > tbody > tr {
+  padding-top: 0.15rem;
+  padding-bottom: 0.15rem;
 }
