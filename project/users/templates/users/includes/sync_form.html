@@ -1,4 +1,5 @@
-{% load crispy_forms_tags %}{% load buttons %}
+{% load crispy_forms_tags %}
+{% load slippers %}
 
 <form method="post" action="{% url 'users:sync_update' %}" class="mb-5" novalidate>
     {% csrf_token %}
@@ -19,7 +20,7 @@
     </div>
     {% endfor %}
 
-    <div class="form-group">{% button_update label='Update' pk='0' tbl='0' %}</div>
+    <div class="form-group">{% save_button label='Update' %}</div>
 </form>
 <p>Raw passwords are not stored, so there is no way to see this user's password.</p>
 <p>{% if password %}<b>Encrypted password:</b> {{ password }}******************

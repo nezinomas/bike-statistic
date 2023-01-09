@@ -1,5 +1,7 @@
 {% extends "category_data.html" %}
-{% load static %}{% load buttons %}{% load crispy_forms_tags %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load slippers %}
 
 
 {% block content %}
@@ -12,7 +14,7 @@
         <div class="col-sm-1 pr-0 mr-0"><input type="submit" name="date_filter" value="Filter" class="btn btn-secondary btn-sm" id="submit-id-date_filter"></div>
         <div class="col text-right">
             {% url 'reports:data_create' start_date end_date as url_create %}
-            {% button_create url=url_create label='New row' tbl='0' width="35%" %}
+            {% new_button url=url_create label='New row' tbl='0' width="35%" %}
         </div>
     </div>
 </form>

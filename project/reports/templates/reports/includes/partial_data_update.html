@@ -1,4 +1,6 @@
-{% load crispy_forms_tags %}{% load buttons %}
+{% load crispy_forms_tags %}
+{% load slippers %}
+
 <tr id="edit-form">
     <td colspan="11" class="mx-0 px-0 py-0 my-0">
         <form method="post" action="{{ url }}" class="js-update-form" data-pk="{{ form.instance.pk }}" data-tbl="0" novalidate>
@@ -20,8 +22,8 @@
                         {{ form.checked }}
                     </td>
                     <td class="text-right last">
-                        {% button_close pk=form.instance.pk tbl='0' %}
-                        {% button_update pk=form.instance.pk tbl='0' %}
+                        {% close_button %}
+                        {% save_button %}
                     </td>
                 </tr>
             </table>
