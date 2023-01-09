@@ -10,20 +10,9 @@
   font-size: var(--font-size-sm);
 }
 
-.btn-xs {
-  font-size: var(--font-size-xs);
-  line-height: 0.25rem !important;
-  padding-top: 0.25rem !important;
-  padding-bottom: 0.25rem !important;
-  padding-left: 0.25rem !important;
-  padding-right: 0.25rem !important;
-  margin-top: -0.65rem !important;
-  margin-bottom: -0.45rem !important;
-}
-
 .btn-sm {
   font-size: var(--font-size-sm);
-  padding: .2rem .3rem;
+  padding: .1rem .3rem;
 }
 
 .table-sm > thead > tr > th {
