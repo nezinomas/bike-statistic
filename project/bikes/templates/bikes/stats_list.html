@@ -1,5 +1,6 @@
 {% extends 'category_wear.html' %}
-{% load humanize %}{% load buttons %}
+{% load humanize %}
+{% load slippers %}
 
 
 {% block content %}
@@ -13,7 +14,7 @@
         </div>
         <div class="col-sm-2 text-right">
             {% url 'bikes:stats_create' bike_slug component.pk as url_create %}
-            {% button_create url=url_create label='New Component' tbl='0' width='70%' %}
+            {% new_button url=url_create label='New Component' width='70%' %}
         </div>
     </div>
     {% include 'bikes/includes/partial_stats_list.html' %}

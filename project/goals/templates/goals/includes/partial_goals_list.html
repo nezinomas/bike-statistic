@@ -1,4 +1,7 @@
-{% load buttons %}{% load humanize %}{% load template_filters %}
+{% load humanize %}
+{% load template_filters %}
+{% load slippers %}
+
 <table class="table table-striped table-hover table-md tbl-js" id="tbl-0">
     <thead class="thead-light">
         <tr>
@@ -29,8 +32,8 @@
             <td>{{ goal.year }}</td>
             <td>{{ goal.goal|intcomma }}</td>
             <td class="text-right last">
-                {% button_edit pk=goal.id url=url_update tbl=0 %}
-                {% button_delete type='button' pk=goal.id url=url_delete tbl='0' %}
+                {% edit_button url=url_update %}
+                {% delete_button url=url_delete %}
             </td>
             {% with distances|get_item:goal.year as d %}
             <td class="pr-2 text-right b-left {% if d.distance >= goal.goal %}table-success{% else %}table-danger{% endif %}" width="120rem">{{ d.distance|floatformat:0|intcomma }}</td>

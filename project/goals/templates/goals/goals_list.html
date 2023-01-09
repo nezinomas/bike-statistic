@@ -1,10 +1,10 @@
 {% extends "category_settings.html" %}
-{% load buttons %}
+{% load slippers %}
 
 {% block content %}
 <p class="text-right my-2">
     {% url 'goals:goals_create' as url_create %}
-    {% button_create url=url_create label='New Goal' tbl='0' width='19%' %}
+    {% new_button url=url_create label='New Goal' tbl='0' width='19%' %}
 </p>
 
 {% include 'goals/includes/partial_goals_list.html' %}

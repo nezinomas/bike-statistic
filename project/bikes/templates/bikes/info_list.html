@@ -1,6 +1,5 @@
 {% extends "category_settings.html" %}
-{% load buttons %}
-
+{% load slippers %}
 
 {% block content %}
 
@@ -14,7 +13,7 @@
     </div>
     <div class="col text-right">
         {% url 'bikes:info_create' bike_slug as url_create %}
-        {% button_create url=url_create label='New Record' tbl='0' width='38%' %}
+        {% new_button url=url_create label='New Record' width='38%' %}
     </div>
 </div>
 
