@@ -13,7 +13,7 @@ pytestmark = pytest.mark.django_db
 def test_bike_list_func():
     view = resolve('/bike/')
 
-    assert views.bike.lists == view.func
+    assert views.bike_lists is view.func
 
 
 def test_bike_list_200_no_data(client_logged):
@@ -44,7 +44,7 @@ def test_bike_list_no_records(client_logged):
 def test_bike_info_index_func():
     view = resolve('/info/')
 
-    assert views.info.index == view.func
+    assert views.bike_info_index is view.func
 
 
 def test_bike_info_index_302(client_logged):
@@ -68,7 +68,7 @@ def test_bike_info_index_no_records(client_logged):
 def test_bike_info_list_func():
     view = resolve('/xxx/info/')
 
-    assert views.info.lists == view.func
+    assert views.bike_info_lists is view.func
 
 
 def test_bike_info_list_200(client_logged):
@@ -92,7 +92,7 @@ def test_bike_info_list_no_records(client_logged):
 def test_component_index_func():
     view = resolve('/xxx/component/')
 
-    assert views.stats.index == view.func
+    assert views.bike_stats_index is view.func
 
 
 def test_component_index_302(client_logged):
@@ -116,7 +116,7 @@ def test_component_index_no_records(client_logged):
 def test_stats_list_func():
     view = resolve('/xxx/component/1/')
 
-    assert views.stats.lists == view.func
+    assert views.bike_stats_lists is view.func
 
 
 def test_stats_list_no_bike_no_componant(client_logged):
