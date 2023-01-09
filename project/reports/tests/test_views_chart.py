@@ -6,8 +6,8 @@ from django.utils import timezone
 from freezegun import freeze_time
 
 from ...bikes.factories import BikeFactory
+from .. import views
 from ..factories import DataFactory
-from ..views import chart
 
 pytestmark = pytest.mark.django_db
 
@@ -25,7 +25,7 @@ def _data():
 def test_overall_func():
     view = resolve('/reports/overall/')
 
-    assert chart.overall == view.func
+    assert views.overall is view.func
 
 
 def test_overall_200_no_data(client, get_user):

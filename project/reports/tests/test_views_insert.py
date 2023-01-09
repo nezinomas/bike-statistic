@@ -19,7 +19,7 @@ def current_month_range():
     )
 
 
-@patch('project.reports.views.data.SyncWithGarmin.insert_data_current_user', return_value=True)
+@patch('project.reports.views.SyncWithGarmin.insert_data_current_user', return_value=True)
 @pytest.mark.django_db
 def test_insert_view_status_code_200(mocked, client, login):
     url = reverse('reports:insert_data')
@@ -37,7 +37,7 @@ def test_insert_view_status_code_200(mocked, client, login):
 def test_view_func():
     view = resolve('/data/insert/')
 
-    assert view.func == views.insert_data
+    assert view.func is views.insert_data
 
 
 @pytest.mark.django_db
@@ -45,7 +45,7 @@ def test_insert_data_redirection_if_user_not_logged(client):
     login_rediretion(client, 'reports:insert_data')
 
 
-@patch('project.reports.views.data.SyncWithGarmin.insert_data_current_user', return_value=True)
+@patch('project.reports.views.SyncWithGarmin.insert_data_current_user', return_value=True)
 @pytest.mark.django_db
 def test_insert_data_no_errors(mocked, client, login):
     url = reverse('reports:insert_data')
@@ -54,7 +54,7 @@ def test_insert_data_no_errors(mocked, client, login):
     assert response.url == reverse('reports:data_empty')
 
 
-@patch('project.reports.views.data.SyncWithGarmin.insert_data_current_user', side_effect=Exception('Error X'))
+@patch('project.reports.views.SyncWithGarmin.insert_data_current_user', side_effect=Exception('Error X'))
 @pytest.mark.django_db
 def test_insert_data_exception_occurs(mocked, client, login):
     url = reverse('reports:insert_data')
