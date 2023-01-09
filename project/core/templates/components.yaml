@@ -1,0 +1,6 @@
+components:
+    new_button: "core/includes/new_button.html"
+    save_button: "core/includes/save_button.html"
+    edit_button: "core/includes/edit_button.html"
+    delete_button: "core/includes/delete_button.html"
+    close_button: "core/includes/close_button.html"
