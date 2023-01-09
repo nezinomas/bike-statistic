@@ -6,7 +6,7 @@ from ..users.factories import UserFactory
 from .models import Bike, BikeInfo, Component, ComponentStatistic
 
 
-class BikeFactory(factory.DjangoModelFactory):
+class BikeFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     date = date(1999, 1, 1)
     full_name = 'Full Name'
@@ -19,7 +19,7 @@ class BikeFactory(factory.DjangoModelFactory):
         django_get_or_create = ('user', 'short_name',)
 
 
-class BikeInfoFactory(factory.DjangoModelFactory):
+class BikeInfoFactory(factory.django.DjangoModelFactory):
     bike = factory.SubFactory(BikeFactory)
     component = 'Component'
     description = 'Description'
@@ -28,7 +28,7 @@ class BikeInfoFactory(factory.DjangoModelFactory):
         model = BikeInfo
 
 
-class ComponentFactory(factory.DjangoModelFactory):
+class ComponentFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     name = 'Component'
 
@@ -37,7 +37,7 @@ class ComponentFactory(factory.DjangoModelFactory):
         django_get_or_create = ('user', 'name',)
 
 
-class ComponentStatisticFactory(factory.DjangoModelFactory):
+class ComponentStatisticFactory(factory.django.DjangoModelFactory):
     start_date = date(1999, 1, 1)
     end_date = date(1999, 1, 31)
     price = 1.11
