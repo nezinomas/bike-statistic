@@ -4,9 +4,15 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 
-from .. import forms, models
-from ..helpers import view_data_helper as helper
-from ..library.insert_garmin import SyncWithGarmin
+from ..bikes.models import Bike
+from ..core.lib import utils
+from ..goals.models import Goal
+from . import forms, models
+from .helpers import view_data_helper as helper
+from .library.chart import get_color
+from .library.distance_summary import DistanceSummary
+from .library.insert_garmin import SyncWithGarmin
+from .library.progress import Progress
 
 
 @login_required()
@@ -156,3 +162,54 @@ def insert_data(request):
             context={'message': msg}
         )
     return redirect(reverse('reports:data_empty'))
+
+@login_required()
+def table(request, year):
+    goal = list(
+        Goal.objects
+        .items()
+        .filter(year=year)
+        .values_list('goal', flat=True)
+    )
+    goal = goal[0] if goal else 0
+
+    obj = Progress(year)
+
+    return render(
+        request,
+        'reports/table.html',
+        {
+            'year': year,
+            'e': obj.extremums().get(year),
+            'season': obj.season_progress(goal=goal),
+            'month': obj.month_stats(),
+        }
+    )
+
+
+def overall(request):
+    years = utils.years()
+    bikes = Bike.objects.items().values_list(
+        'short_name', flat=True).order_by('date')
+    data = models.Data.objects.bike_summary()
+
+    obj = DistanceSummary(years=years, bikes=bikes, data=data)
+
+    # update chart_data with bar color, border color, border_width
+    chart_data = obj.chart_data
+    for i, dt in enumerate(chart_data):
+        dt.update({
+            'color': get_color(i, 0.35),
+            'borderColor': get_color(i, 1),
+            'borderWidth': '0.5',
+        })
+
+    context = {
+        'year_list': years,
+        'chart_data': chart_data[::-1],
+        'bikes': bikes,
+        'table_data': list(zip(obj.table, obj.total_column)),
+        'total_row': obj.total_row,
+        'total': sum(obj.total_row.values())
+    }
+    return render(request, template_name='reports/overall.html', context=context)
