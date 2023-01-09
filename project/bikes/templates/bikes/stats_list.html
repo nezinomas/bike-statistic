@@ -1,13 +1,6 @@
 {% extends 'category_wear.html' %}
-{% load humanize %}{% load buttons %}
-
-
-{% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span>
-    <a class="nav-link" href="{% url 'bikes:stats_index' bike_slug %}">{{ bike_slug|title }}</a>
-    <span class="navbar-text">&raquo;</span>
-    <a class="nav-link disabled" href="{% url 'bikes:stats_list' bike_slug component.pk %}">{{ component.name }}</a>
-{% endblock %}
+{% load humanize %}
+{% load slippers %}
 
 
 {% block content %}
@@ -21,7 +14,7 @@
         </div>
         <div class="col-sm-2 text-right">
             {% url 'bikes:stats_create' bike_slug component.pk as url_create %}
-            {% button_create url=url_create label='New Component' tbl='0' width='70%' %}
+            {% new_button url=url_create label='New Component' width='70%' %}
         </div>
     </div>
     {% include 'bikes/includes/partial_stats_list.html' %}

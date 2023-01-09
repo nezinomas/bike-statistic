@@ -1,9 +1,11 @@
-{% load buttons %}{% load humanize %}
-<table class="table table-striped table-hover table-md tbl-js" style="table-layout:fixed!important;" id="tbl-0">
-    <thead class="thead-light">
+{% load humanize %}
+{% load slippers %}
+
+<table class="table table-sm table-striped table-hover align-middle">
+    <thead class="table-primary">
         <tr>
-            <th width="150rem" class="text-left">Bike</th>
-            <th width="200rem" class="text-center">Date <span class="date-align">&nbsp;</span></th>
+            <th width="150rem">Bike</th>
+            <th width="200rem" class="text-center">Date</th>
             <th class="text-center">Distance</th>
             <th class="text-center">Time</th>
             <th class="text-center">&#8451;</th>
@@ -12,16 +14,16 @@
             <th class="text-center">Max Speed</th>
             <th class="text-center">Heart Rate</th>
             <th class="text-center">Cadense</th>
-            <th width="113rem" class="text-right">Actions</th>
+            <th width="113rem" class="text-end">Actions</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-group-divider">
         {% for obj in objects %}
         {% url 'reports:data_update' start_date end_date obj.id as url_update %}
         {% url 'reports:data_delete' start_date end_date obj.id as url_delete %}
         {% url 'reports:data_quick_update' start_date end_date obj.id as url_quick_update %}
         <tr id="row_id_{{ obj.pk }}" data-pk="{{ obj.pk }}" data-url="{{ url_update }}" data-tbl="0" class="{% if obj.checked == 'n' %}table-info{% endif %}">
-            <td class="text-left">{{ obj.bike }}</td>
+            <td>{{ obj.bike }}</td>
             <td class="text-center">{{ obj.date|date:'Y-m-d' }}<span class="date-align">&nbsp;</span></td>
             <td class="text-center">{{ obj.distance }}</td>
             <td class="text-center">{{ obj.time }}</td>
@@ -31,12 +33,12 @@
             <td class="text-center">{{ obj.max_speed|floatformat:1 }}</td>
             <td class="text-center">{{ obj.heart_rate|default_if_none:'-' }}</td>
             <td class="text-center">{{ obj.cadence|default_if_none:'-' }}</td>
-            <td class="text-right">
+            <td class="text-end">
                 {% if obj.checked == 'n' %}
-                    {% button_quick_update url=url_quick_update pk=obj.pk tbl='0' %}
+                    {% save_button %}
                 {% endif %}
-                {% button_edit pk=obj.id url=url_update tbl='0' %}
-                {% button_delete type='button' pk=obj.id url=url_delete tbl='0' %}
+                {% edit_button %}
+                {% delete_button %}
             </td>
         </tr>
         {% empty %}

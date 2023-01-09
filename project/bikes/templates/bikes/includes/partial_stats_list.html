@@ -1,4 +1,6 @@
-{% load buttons %}{% load humanize %}{% load template_filters %}
+{% load humanize %}
+{% load template_filters %}
+{% load slippers %}
 
 <div class="row mb-2 mr-0 px-1 py-2 wear-stats">
     <div class="col-1-sm ml-3">{{ component.name }}:</div>
@@ -32,8 +34,8 @@
             <td>{{ item.price|default_if_none:'-' }}</td>
             <td>{{ item.brand }}</td>
             <td class="text-right">
-                {% button_edit pk=item.id url=url_update tbl=component.id %}
-                {% button_delete type='button' pk=item.id url=url_delete tbl=component.id %}
+                {% edit_button url=url_update %}
+                {% delete_button url_delete %}
             </td>
             <td class="km pr-1 text-right">
                 {% with km|get_item:item.id as km %}{{ km|floatformat:0|intcomma }}{% endwith %}</td>

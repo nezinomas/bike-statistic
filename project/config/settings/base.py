@@ -112,6 +112,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'widget_tweaks',
     'crequest',
+    'slippers',
     'project.core',
     'project.bikes',
     'project.goals',

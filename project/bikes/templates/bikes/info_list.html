@@ -1,14 +1,5 @@
 {% extends "category_settings.html" %}
-{% load buttons %}
-
-
-{% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span>
-    <a class="nav-link" href="{% url 'bikes:info_index' %}">Bike Info</a>
-    <span class="navbar-text">&raquo;</span>
-    <a class="nav-link disabled" href="{% url 'bikes:info_list' bike_slug %}">{{ bike_slug|title }}</a>
-{% endblock %}
-
+{% load slippers %}
 
 {% block content %}
 
@@ -22,7 +13,7 @@
     </div>
     <div class="col text-right">
         {% url 'bikes:info_create' bike_slug as url_create %}
-        {% button_create url=url_create label='New Record' tbl='0' width='38%' %}
+        {% new_button url=url_create label='New Record' width='38%' %}
     </div>
 </div>
 
