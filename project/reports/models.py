@@ -13,7 +13,7 @@ class DataQuerySet(models.QuerySet):
         user = utils.get_user()
         return (
             self
-            .select_related('user')
+            .select_related('user', 'bike')
             .filter(user=user)
         )
 
