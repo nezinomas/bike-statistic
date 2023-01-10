@@ -7,13 +7,13 @@ from django.template.loader import render_to_string
 from ..models import Data
 
 
-def format_date(day=1):
+def format_date(day: int = None):
     now = datetime.now()
     year = now.year
     month = now.month
-    day = day if day == 1 else monthrange(year, month)[1]
+    day = day or monthrange(year, month)[1]
 
-    return '{y}-{m:02d}-{d:02d}'.format(y=year, m=month, d=day)
+    return f'{year}-{month:02d}-{day:02d}'
 
 
 def form_valid(data, start_date, end_date):
