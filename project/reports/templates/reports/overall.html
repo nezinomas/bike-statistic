@@ -65,7 +65,7 @@
                 <thead class="thead-light">
                     <tr>
                         <th>Metai</th>
-                        {% for bike in bikes %}<th class="text-right mr-1">{{ bike }}</th>{% endfor %}
+                        {% for bike in bikes %}<th class="text-right me-1">{{ bike }}</th>{% endfor %}
                         <th class="text-right">Total</th>
                     </tr>
                 </thead>
@@ -75,7 +75,7 @@
                         <td>{{ row.year|floatformat:0 }}</td>
                         {% for bike in bikes %}
                         {% with row|get_item:bike as value %}
-                        <td class="text-right mr-1">{% if value %}{{ value|floatformat:0|intcomma }}{% else %}-{% endif %}</td>
+                        <td class="text-right me-1">{% if value %}{{ value|floatformat:0|intcomma }}{% else %}-{% endif %}</td>
                         {% endwith %}{% endfor %}
                         <td class="text-right">{{ total.total|floatformat:0|intcomma }}</td>
                     </tr>

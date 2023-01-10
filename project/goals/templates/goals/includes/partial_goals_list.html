@@ -17,7 +17,7 @@
             <th width="100rem">Year</th>
             <th width="100rem">Goal, km</th>
             <th class="text-right" width="80rem">Actions</th>
-            <th class="text-right pr-2 b-left" width="90rem">Distance</th>
+            <th class="text-right pe-2 b-left" width="90rem">Distance</th>
             {% for i in i|rjust:5 %}
             <th class="text-center b-left">Date</th>
             <th class="text-center">Value</th>
@@ -36,7 +36,7 @@
                 {% delete_button url=url_delete %}
             </td>
             {% with distances|get_item:goal.year as d %}
-            <td class="pr-2 text-right b-left {% if d.distance >= goal.goal %}table-success{% else %}table-danger{% endif %}" width="120rem">{{ d.distance|floatformat:0|intcomma }}</td>
+            <td class="pe-2 text-right b-left {% if d.distance >= goal.goal %}table-success{% else %}table-danger{% endif %}" width="120rem">{{ d.distance|floatformat:0|intcomma }}</td>
             {% endwith %}
             {% with stats|get_item:goal.year as s %}
             <td class="text-center b-left">{{ s.temp_max_date|date:"Y-m-d" }}</td>
