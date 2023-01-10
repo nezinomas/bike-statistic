@@ -19,16 +19,18 @@ from .library.progress import Progress
 
 class DataList(ListViewMixin):
     model = models.Data
-    template_name = 'reports/data_list.html'
 
     def get_queryset(self):
         start_date = self.request.GET.get('start_date') or helper.format_date(day=1)
         end_date = self.request.GET.get('end_date') or helper.format_date()
         return self.model.objects.items().filter(date__range=(start_date, end_date))
 
-    def get_context_data(self, **kwargs):
+    def get_template_names(self):
         if self.request.htmx:
-            self.template_name = 'reports/includes/partial_data_list.html'
+            return 'reports/includes/partial_data_list.html'
+        return 'reports/data_list.html'
+
+    def get_context_data(self, **kwargs):
         context = {
             'filter_form': forms.DateFilterForm(self.request.GET or None),
         }
