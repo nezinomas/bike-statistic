@@ -18,7 +18,7 @@
         </tr>
     </thead>
     <tbody class="table-group-divider">
-        {% for obj in objects %}
+        {% for obj in object_list %}
         {% url 'reports:data_update' start_date end_date obj.id as url_update %}
         {% url 'reports:data_delete' start_date end_date obj.id as url_delete %}
         {% url 'reports:data_quick_update' start_date end_date obj.id as url_quick_update %}

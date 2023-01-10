@@ -6,6 +6,8 @@ from django.urls import reverse, reverse_lazy
 
 from ..bikes.models import Bike
 from ..core.lib import utils
+from ..core.mixins.views import (ListViewMixin, TemplateViewMixin,
+                                 rendered_content)
 from ..goals.models import Goal
 from . import forms, models
 from .helpers import view_data_helper as helper
@@ -15,63 +17,22 @@ from .library.insert_garmin import SyncWithGarmin
 from .library.progress import Progress
 
 
-@login_required()
-def index(request):
-    return redirect(reverse('reports:data_empty'))
+class DataList(ListViewMixin):
+    model = models.Data
+    template_name = 'reports/data_list.html'
 
+    def get_queryset(self):
+        start_date = self.request.GET.get('start_date') or helper.format_date(day=1)
+        end_date = self.request.GET.get('end_date') or helper.format_date()
+        return self.model.objects.items().filter(date__range=(start_date, end_date))
 
-@login_required()
-def data_empty(request):
-    return redirect(
-        reverse(
-            'reports:data_list',
-            kwargs={
-                'start_date': helper.format_date(),
-                'end_date': helper.format_date('last'),
-            }
-        )
-    )
-
-
-@login_required()
-def data_partial(request, start_date):
-    return redirect(
-        reverse(
-            'reports:data_list',
-            kwargs={
-                'start_date': start_date,
-                'end_date': helper.format_date('last'),
-            }
-        )
-    )
-
-
-@login_required()
-def data_list(request, start_date, end_date):
-    # paspaustas filter mygtukas
-    if 'date_filter' in request.POST:
-        filter_form = forms.DateFilterForm(request.POST)
-
-        if filter_form.is_valid():
-            data = filter_form.cleaned_data
-            kwargs = {'start_date': data['start_date'], 'end_date': data['end_date']}
-            url = reverse_lazy('reports:data_list', kwargs=kwargs)
-            return redirect(url)
-
-    objects = (
-        models.Data.objects.items()
-        .filter(date__range=(start_date, end_date))
-    )
-    filter_form = forms.DateFilterForm(
-        initial={'start_date': start_date, 'end_date': end_date}
-    )
-    context = {
-        'objects': objects,
-        'filter_form': filter_form,
-        'start_date': start_date,
-        'end_date': end_date
-    }
-    return render(request, 'reports/data_list.html', context)
+    def get_context_data(self, **kwargs):
+        if self.request.htmx:
+            self.template_name = 'reports/includes/partial_data_list.html'
+        context = {
+            'filter_form': forms.DateFilterForm(self.request.GET or None),
+        }
+        return super().get_context_data(**kwargs) | context
 
 
 @login_required()
