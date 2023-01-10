@@ -57,15 +57,3 @@ class DateFilterForm(forms.Form):
 
         self.helper = FormHelper()
         set_field_properties(self, self.helper)
-
-    def clean(self):
-        cleaned_data = super().clean()
-
-        start = cleaned_data.get("start_date")
-        end = cleaned_data.get("end_date")
-
-        if not isinstance(start, date) or not isinstance(end, date):
-            raise forms.ValidationError('Invalid start or end date.')
-
-        if start > end:
-            raise forms.ValidationError('End date is greater than start date.')
