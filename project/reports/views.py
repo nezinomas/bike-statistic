@@ -6,9 +6,9 @@ from django.urls import reverse, reverse_lazy
 
 from ..bikes.models import Bike
 from ..core.lib import utils
-from ..core.mixins.views import (ListViewMixin, TemplateViewMixin,
+from ..core.mixins.views import (DetailViewMixin, ListViewMixin,
+                                 TemplateViewMixin, UpdateViewMixin,
                                  rendered_content)
-from ..goals.models import Goal
 from . import forms, models
 from .helpers import view_data_helper as helper
 from .library.chart import get_color
@@ -53,6 +53,17 @@ class YearProgress(TemplateViewMixin):
         return super().get_context_data(**kwargs) | context
 
 
+class QuickUpdate(DetailViewMixin):
+    model = models.Data
+    template_name = 'reports/includes/partial_data_row.html'
+
+    def get_context_data(self, **kwargs):
+        self.object.checked = 'y'
+        self.object.save()
+        context = {'obj': self.object}
+        return super().get_context_data(**kwargs) | context
+
+
 @login_required()
 def data_create(request, start_date, end_date):
     form = forms.DataForm(request.POST or None)
@@ -94,33 +105,6 @@ def data_update(request, start_date, end_date, pk):
     )
     context = {'url': url}
     return helper.save_data(request, context, form, start_date, end_date)
-
-
-@login_required()
-def data_quick_update(request, start_date, end_date, pk):
-    obj = get_object_or_404(models.Data, pk=pk)
-    obj.checked = 'y'
-    obj.save()
-
-    objects = (
-        models.Data.objects.items()
-        .filter(date__range=(start_date, end_date))
-    )
-
-    context = {
-        'objects': objects,
-        'start_date': start_date,
-        'end_date': end_date
-    }
-
-    data = {
-        'html_list': render_to_string(
-            'reports/includes/partial_data_list.html',
-            context=context,
-            request=request,
-        )
-    }
-    return JsonResponse(data)
 
 
 @login_required()

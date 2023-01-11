@@ -21,10 +21,7 @@ urlpatterns = [
         name='data_update'
     ),
     path(
-        'api/data/<date:start_date>/<date:end_date>/quick_update/<int:pk>/',
-        views.data_quick_update,
-        name='data_quick_update'
-    ),
+        'data/quick_update/<int:pk>/', views.QuickUpdate.as_view(), name='data_quick_update'),
     path(
         'api/data/<date:start_date>/<date:end_date>/delete/<int:pk>/',
         views.data_delete,
