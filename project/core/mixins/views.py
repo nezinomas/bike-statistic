@@ -29,6 +29,10 @@ def httpHtmxResponse(hx_trigger_name=None, status_code=204):
     )
 
 
+class DetailViewMixin(LoginRequiredMixin, DetailView):
+    pass
+
+
 class ListViewMixin(LoginRequiredMixin, ListView):
     pass
 
