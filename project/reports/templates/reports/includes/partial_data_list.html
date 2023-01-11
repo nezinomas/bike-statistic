@@ -1,5 +1,3 @@
-{% load humanize %}
-{% load slippers %}
 
 <table class="table table-sm table-striped table-hover align-middle">
     <thead class="table-primary">
@@ -19,28 +17,7 @@
     </thead>
     <tbody class="table-group-divider">
         {% for obj in object_list %}
-        {% url 'reports:data_update' start_date end_date obj.id as url_update %}
-        {% url 'reports:data_delete' start_date end_date obj.id as url_delete %}
-        {% url 'reports:data_quick_update' start_date end_date obj.id as url_quick_update %}
-        <tr id="row_id_{{ obj.pk }}" data-pk="{{ obj.pk }}" data-url="{{ url_update }}" data-tbl="0" class="{% if obj.checked == 'n' %}table-info{% endif %}">
-            <td>{{ obj.bike }}</td>
-            <td class="text-center">{{ obj.date|date:'Y-m-d' }}<span class="date-align">&nbsp;</span></td>
-            <td class="text-center">{{ obj.distance }}</td>
-            <td class="text-center">{{ obj.time }}</td>
-            <td class="text-center">{{ obj.temperature|default_if_none:'-' }}</td>
-            <td class="text-center">{{ obj.ascent|floatformat:0|intcomma }}</td>
-            <td class="text-center">{{ obj.descent|floatformat:0|intcomma }}</td>
-            <td class="text-center">{{ obj.max_speed|floatformat:1 }}</td>
-            <td class="text-center">{{ obj.heart_rate|default_if_none:'-' }}</td>
-            <td class="text-center">{{ obj.cadence|default_if_none:'-' }}</td>
-            <td class="text-end">
-                {% if obj.checked == 'n' %}
-                    {% save_button %}
-                {% endif %}
-                {% edit_button %}
-                {% delete_button %}
-            </td>
-        </tr>
+        {% include 'reports/includes/partial_data_row.html' %}
         {% empty %}
         <tr><td class="bg-warning text-center" colspan="11">No records</td></tr>
         {% endfor %}

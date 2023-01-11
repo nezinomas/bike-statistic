@@ -1,0 +1,28 @@
+{% load humanize %}
+{% load slippers %}
+{% load template_filters %}
+
+
+{% url 'reports:data_update' start_date end_date obj.id as url_update %}
+{% url 'reports:data_delete' start_date end_date obj.id as url_delete %}
+{% url 'reports:data_quick_update' obj.id as url_quick_update %}
+{% var row_id="row-id-"|join:obj.pk %}
+<tr id="{{row_id}}" class="{% if obj.checked == 'n' %}table-info{% endif %}">
+    <td>{{ obj.bike }}</td>
+    <td class="text-center">{{ obj.date|date:'Y-m-d' }}<span class="date-align">&nbsp;</span></td>
+    <td class="text-center">{{ obj.distance }}</td>
+    <td class="text-center">{{ obj.time }}</td>
+    <td class="text-center">{{ obj.temperature|default_if_none:'-' }}</td>
+    <td class="text-center">{{ obj.ascent|floatformat:0|intcomma }}</td>
+    <td class="text-center">{{ obj.descent|floatformat:0|intcomma }}</td>
+    <td class="text-center">{{ obj.max_speed|floatformat:1 }}</td>
+    <td class="text-center">{{ obj.heart_rate|default_if_none:'-' }}</td>
+    <td class="text-center">{{ obj.cadence|default_if_none:'-' }}</td>
+    <td class="text-end">
+        {% if obj.checked == 'n' %}
+            {% save_button url=url_quick_update target=row_id swap='outerHTML' %}
+        {% endif %}
+        {% edit_button %}
+        {% delete_button %}
+    </td>
+</tr>
