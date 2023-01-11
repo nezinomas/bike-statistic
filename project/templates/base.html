@@ -52,7 +52,7 @@
 							{% for item in years %}
 							{% if forloop.counter < 6 %}
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'reports:reports_table' item %}"> {{ item }} </a>
+								<a class="nav-link" href="{% url 'reports:year_progress' item %}"> {{ item }} </a>
 							</li>
 							{% endif %}
 							{% endfor %}

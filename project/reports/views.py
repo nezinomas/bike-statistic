@@ -14,7 +14,7 @@ from .helpers import view_data_helper as helper
 from .library.chart import get_color
 from .library.distance_summary import DistanceSummary
 from .library.insert_garmin import SyncWithGarmin
-from .library.progress import Progress
+from .library.progress import Progress, ProgressData
 
 
 class DataList(ListViewMixin):
@@ -33,6 +33,22 @@ class DataList(ListViewMixin):
     def get_context_data(self, **kwargs):
         context = {
             'filter_form': forms.DateFilterForm(self.request.GET or None),
+        }
+        return super().get_context_data(**kwargs) | context
+
+
+class YearProgress(TemplateViewMixin):
+    template_name = 'reports/table.html'
+
+    def get_context_data(self, **kwargs):
+        year = self.kwargs.get('year')
+        data = ProgressData(year)
+        obj = Progress(data)
+        context = {
+            'year': year,
+            'e': obj.extremums().get(year),
+            'season': obj.season_progress(),
+            'month': obj.month_stats(),
         }
         return super().get_context_data(**kwargs) | context
 
@@ -125,29 +141,6 @@ def insert_data(request):
             context={'message': msg}
         )
     return redirect(reverse('reports:data_empty'))
-
-@login_required()
-def table(request, year):
-    goal = list(
-        Goal.objects
-        .items()
-        .filter(year=year)
-        .values_list('goal', flat=True)
-    )
-    goal = goal[0] if goal else 0
-
-    obj = Progress(year)
-
-    return render(
-        request,
-        'reports/table.html',
-        {
-            'year': year,
-            'e': obj.extremums().get(year),
-            'season': obj.season_progress(goal=goal),
-            'month': obj.month_stats(),
-        }
-    )
 
 
 def overall(request):

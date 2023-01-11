@@ -32,5 +32,5 @@ urlpatterns = [
     ),
 
     path('reports/overall/', views.overall, name='overall'),
-    path('reports/<int:year>/', views.table, name='reports_table'),
+    path('reports/<int:year>/', views.YearProgress.as_view(), name='year_progress'),
 ]
