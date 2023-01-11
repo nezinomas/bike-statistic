@@ -124,7 +124,7 @@ def insert_data(request):
             template_name='reports/data_insert.html',
             context={'message': msg}
         )
-    return redirect(reverse('reports:data_empty'))
+    return redirect(reverse('reports:index'))
 
 
 def overall(request):
