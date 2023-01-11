@@ -111,7 +111,6 @@ def data_update(request, start_date, end_date, pk):
 def insert_data(request):
     try:
         SyncWithGarmin().insert_data_current_user()
-        msg = '<p>OK</p>'
     except Exception as ex:
         msg = (
             f'<p>{ex}</p>'
