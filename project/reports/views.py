@@ -27,8 +27,8 @@ class DataList(ListViewMixin):
 
     def get_template_names(self):
         if self.request.htmx:
-            return 'reports/includes/partial_data_list.html'
-        return 'reports/data_list.html'
+            return ['reports/includes/partial_data_list.html']
+        return ['reports/data_list.html']
 
     def get_context_data(self, **kwargs):
         context = {
