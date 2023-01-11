@@ -1,21 +1,37 @@
 import calendar
+from dataclasses import dataclass, field
 from datetime import date
 
 import pandas as pd
 from django.db.models import F
 
+from ...goals.models import Goal
 from ..models import Data
 
 
-class Progress():
-    def __init__(self, year=None):
-        self._year = year
-        self._df = self._build_df(year)
+@dataclass
+class ProgressData:
+    year: int
+    goal: int = field(init=False, default=0)
+    data: list = field(init=False, default_factory=list)
 
-    def _build_df(self, year):
-        qs = (
+    def __post_init__(self):
+        self.goal = self._get_goal()
+        self.data = self._get_data()
+
+    def _get_goal(self):
+        goal = list(
+            Goal.objects
+            .items()
+            .filter(year=self.year)
+            .values_list('goal', flat=True)
+        )
+        return goal[0] if goal else 0
+
+    def _get_data(self):
+        return (
             Data.objects
-            .items(year=year)
+            .items(year=self.year)
             .values(
                 'date',
                 'distance',
@@ -25,10 +41,19 @@ class Progress():
                 temp=F('temperature'),
             ))
 
-        if not qs:
+
+class Progress():
+    def __init__(self, data: ProgressData):
+        self._year = data.year
+        self._goal = data.goal
+
+        self._df = self._build_df(data.data)
+
+    def _build_df(self, data):
+        if not data:
             return pd.DataFrame()
 
-        df = pd.DataFrame(qs)
+        df = pd.DataFrame(data)
 
         df['date'] = pd.to_datetime(df['date'])
         df['distance'] = df['distance'].astype(float)
@@ -82,16 +107,14 @@ class Progress():
 
         years = df['year'].unique()
 
-        final = dict()
+        final = {}
         for year in years:
             _df = self._filter_df(df, year)
 
             if _df.empty:
                 continue
 
-            final.update({
-                year: {'distance': _df['distance'].sum()}
-            })
+            final[year] = {'distance': _df['distance'].sum()}
 
         return final
 
@@ -103,7 +126,7 @@ class Progress():
 
         years = df['year'].unique()
 
-        final = dict()
+        final = {}
         for year in years:
             _df = self._filter_df(df, year)
 
@@ -117,11 +140,11 @@ class Progress():
                 'speed',
             ]
 
-            d = dict()
+            d = {}
             for column in columns:
-                d.update(self._find_extremums(_df, column))
+                d |= self._find_extremums(_df, column)
 
-            final.update({year: d})
+            final[year] = d
 
         return final
 
@@ -146,7 +169,7 @@ class Progress():
 
         return df.to_dict('index')
 
-    def season_progress(self, goal=0):
+    def season_progress(self):
         df = self._df.copy()
 
         if df.empty or not self._year:
@@ -166,7 +189,7 @@ class Progress():
 
         # calculate goal progress
         year_len = 366 if calendar.isleap(self._year) else 365
-        per_day = goal / year_len
+        per_day = self._goal / year_len
 
         df.loc[:, 'goal_day'] = df['day_nr'] * per_day
         df.loc[:, 'goal_percent'] = (df['season_distance'] * 100) / df['goal_day']
