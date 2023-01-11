@@ -7,3 +7,8 @@ register = template.Library()
 def get_item(dictionary, key):
     if dictionary:
         return dictionary.get(key, 0.0)
+
+
+@register.filter
+def join(var1, var2):
+    return f'{var1}{var2}'
