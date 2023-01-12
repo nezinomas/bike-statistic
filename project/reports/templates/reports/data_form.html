@@ -1,0 +1,32 @@
+{% load crispy_forms_tags %}
+{% load slippers %}
+
+<tr id="data-form">
+    <td colspan="11" class="inner">
+        <form method="post" action="{{ url }}" novalidate>
+            {% csrf_token %}
+            {{ form.media }}
+            <table class="table table-sm table-borderless inner">
+                <tr class="table-warning">
+                    <td class="align-middle py-2">{{ form.bike|as_crispy_field }}</td>
+                    <td class="text-center align-middle w10">{{ form.date|as_crispy_field }}</td>
+                    <td class="text-center align-middle w7">{{ form.distance|as_crispy_field }}</td>
+                    <td class="text-center align-middle w7">{{ form.time|as_crispy_field }}</td>
+                    <td class="text-center align-middle w7">{{ form.temperature|as_crispy_field }}</td>
+                    <td class="text-center align-middle w7">{{ form.ascent|as_crispy_field }}</td>
+                    <td class="text-center align-middle w7">{{ form.descent|as_crispy_field }}</td>
+                    <td class="text-center align-middle w7">{{ form.max_speed|as_crispy_field }}</td>
+                    <td class="text-center align-middle w7">{{ form.heart_rate|as_crispy_field }}</td>
+                    <td class="text-center align-middle w7">
+                        {{ form.cadence|as_crispy_field }}
+                        {{ form.checked }}
+                    </td>
+                    <td class="text-end align-middle w6">
+                        {% save_button %}
+                        {% close_button id='data-form' %}
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </td>
+</tr>
