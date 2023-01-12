@@ -20,7 +20,7 @@
     <td class="text-center w7">{{ obj.cadence|default_if_none:'-' }}</td>
     <td class="text-end w6">
         {% if obj.checked == 'n' %}
-            {% save_button url=url_quick_update target=row_id swap='outerHTML' %}
+            {% quick_save_button url=url_quick_update target=row_id swap='outerHTML' %}
         {% endif %}
         {% edit_button %}
         {% delete_button %}
