@@ -1,9 +1,9 @@
 
-<table class="table table-sm table-striped table-hover align-middle">
+<table class="table table-sm table-bordered table-striped table-hover align-middle">
     <thead class="table-primary">
         <tr>
-            <th width="150rem">Bike</th>
-            <th width="200rem" class="text-center">Date</th>
+            <th>Bike</th>
+            <th class="text-center">Date</th>
             <th class="text-center">Distance</th>
             <th class="text-center">Time</th>
             <th class="text-center">&#8451;</th>
@@ -12,10 +12,10 @@
             <th class="text-center">Max Speed</th>
             <th class="text-center">Heart Rate</th>
             <th class="text-center">Cadense</th>
-            <th width="113rem" class="text-end">Actions</th>
+            <th class="text-end">Actions</th>
         </tr>
     </thead>
-    <tbody class="table-group-divider">
+    <tbody class="table-group-divider" id="data-table-tbody">
         {% for obj in object_list %}
         {% include 'reports/includes/partial_data_row.html' %}
         {% empty %}
