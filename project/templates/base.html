@@ -11,6 +11,7 @@
     <script defer src="https://unpkg.com/alpinejs@3.10.2/dist/cdn.min.js"></script> <!-- Alpine Core -->
     {% include 'core/includes/form_date_scripts.html' %}
     <script type="text/javascript" src="{% static 'js/ajax.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/dialog.js' %}"></script>
 
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'bootstrap_datepicker/css/bootstrap-datetimepicker.min.css' %}" />
@@ -95,6 +96,10 @@
 				</main>
 			</div>
 		</section>
+
+		<div id="modal" class="modal fade">
+			<div id="dialog" class="modal-dialog modal-650" hx-target="this" hx-swap="this"></div>
+		</div>
 	  {% endblock body %}
   </body>
 </html>

@@ -5,3 +5,4 @@ components:
     edit_button: "core/includes/edit_button.html"
     delete_button: "core/includes/delete_button.html"
     close_button: "core/includes/close_button.html"
+    generic_delete_form: "core/includes/generic_delete_form.html"
