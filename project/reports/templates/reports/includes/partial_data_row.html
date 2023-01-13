@@ -3,26 +3,26 @@
 {% load template_filters %}
 
 
-{% url 'reports:data_update' start_date end_date obj.id as url_update %}
-{% url 'reports:data_delete' obj.pk as url_delete %}
-{% url 'reports:data_quick_update' obj.id as url_quick_update %}
-{% var row_id="row-id-"|join:obj.pk %}
-<tr id="{{row_id}}" class="{% if obj.checked == 'n' %}table-info{% endif %}">
-    <td>{{ obj.bike }}</td>
-    <td class="text-center w10">{{ obj.date|date:'Y-m-d' }}<span class="date-align">&nbsp;</span></td>
-    <td class="text-center w7">{{ obj.distance }}</td>
-    <td class="text-center w7">{{ obj.time }}</td>
-    <td class="text-center w7">{{ obj.temperature|default_if_none:'-' }}</td>
-    <td class="text-center w7">{{ obj.ascent|floatformat:0|intcomma }}</td>
-    <td class="text-center w7">{{ obj.descent|floatformat:0|intcomma }}</td>
-    <td class="text-center w7">{{ obj.max_speed|floatformat:1 }}</td>
-    <td class="text-center w7">{{ obj.heart_rate|default_if_none:'-' }}</td>
-    <td class="text-center w7">{{ obj.cadence|default_if_none:'-' }}</td>
+{% url 'reports:data_update' object.id as url_update %}
+{% url 'reports:data_delete' object.pk as url_delete %}
+{% url 'reports:data_quick_update' object.id as url_quick_update %}
+{% var row_id="row-id-"|join:object.pk %}
+<tr id="{{row_id}}" class="{% if object.checked == 'n' %}table-info{% endif %}">
+    <td>{{ object.bike }}</td>
+    <td class="text-center w10">{{ object.date|date:'Y-m-d' }}<span class="date-align">&nbsp;</span></td>
+    <td class="text-center w7">{{ object.distance }}</td>
+    <td class="text-center w7">{{ object.time }}</td>
+    <td class="text-center w7">{{ object.temperature|default_if_none:'-' }}</td>
+    <td class="text-center w7">{{ object.ascent|floatformat:0|intcomma }}</td>
+    <td class="text-center w7">{{ object.descent|floatformat:0|intcomma }}</td>
+    <td class="text-center w7">{{ object.max_speed|floatformat:1 }}</td>
+    <td class="text-center w7">{{ object.heart_rate|default_if_none:'-' }}</td>
+    <td class="text-center w7">{{ object.cadence|default_if_none:'-' }}</td>
     <td class="text-end w6">
-        {% if obj.checked == 'n' %}
+        {% if object.checked == 'n' %}
             {% quick_save_button url=url_quick_update target=row_id swap='outerHTML' %}
         {% endif %}
-        {% edit_button %}
+        {% edit_button url=url_update target=row_id swap='outerHTML' %}
         {% delete_button url=url_delete %}
     </td>
 </tr>

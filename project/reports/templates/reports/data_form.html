@@ -1,7 +1,7 @@
 {% load crispy_forms_tags %}
 {% load slippers %}
 
-<tr id="data-form">
+<tr id="data-form" {% if object %}hx-trigger="reload_after_object_update from:body" hx-get="{% url 'reports:data_detail' object.pk %}" hx-swap="outerHTML" hx-target="#data-form"{% endif %}>
     <td colspan="11" class="inner">
         <form method="post" novalidate>
             {% csrf_token %}
@@ -22,8 +22,7 @@
                         {{ form.checked }}
                     </td>
                     <td class="text-end align-middle w6">
-                        {% url 'reports:data_create' as url_create %}
-                        {% save_button url=url_create target='data-form' swap='outerHTML' %}
+                        {% save_button url=view.url target='data-form' swap='outerHTML' %}
                         {% close_button id='data-form' %}
                     </td>
                 </tr>

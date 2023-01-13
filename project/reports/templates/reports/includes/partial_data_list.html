@@ -16,7 +16,7 @@
         </tr>
     </thead>
     <tbody class="table-group-divider" id="data-table-tbody">
-        {% for obj in object_list %}
+        {% for object in object_list %}
         {% include 'reports/includes/partial_data_row.html' %}
         {% empty %}
         <tr><td class="bg-warning text-center" colspan="11">No records</td></tr>

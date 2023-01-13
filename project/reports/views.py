@@ -1,14 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import render_to_string
+from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 
 from ..bikes.models import Bike
 from ..core.lib import utils
-from ..core.mixins.views import (CreateViewMixin, DetailViewMixin,
-                                 ListViewMixin, TemplateViewMixin,
-                                 UpdateViewMixin, DeleteViewMixin)
+from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
+                                 DetailViewMixin, ListViewMixin,
+                                 TemplateViewMixin, UpdateViewMixin)
 from . import forms, models
 from .helpers import view_data_helper as helper
 from .library.chart import get_color
@@ -53,6 +51,11 @@ class YearProgress(TemplateViewMixin):
         return super().get_context_data(**kwargs) | context
 
 
+class DataDetail(DetailViewMixin):
+    model = models.Data
+    template_name = 'reports/includes/partial_data_row.html'
+
+
 class QuickUpdate(DetailViewMixin):
     model = models.Data
     template_name = 'reports/includes/partial_data_row.html'
@@ -70,10 +73,8 @@ class DataCreate(CreateViewMixin):
     success_url = reverse_lazy('reports:index')
     hx_trigger_django = 'reload'
 
-    def form_valid(self, form, **kwargs):
-        form.instance.checked = 'y'
-        form.save()
-        return super().form_valid(form)
+    def url(self):
+        return reverse_lazy('reports:data_create')
 
 
 class DataDelete(DeleteViewMixin):
@@ -82,20 +83,16 @@ class DataDelete(DeleteViewMixin):
     hx_trigger_django = 'reload'
 
 
-@login_required()
-def data_update(request, start_date, end_date, pk):
-    obj = get_object_or_404(models.Data, pk=pk)
-    form = forms.DataForm(request.POST or None, instance=obj)
-    url = reverse(
-        'reports:data_update',
-        kwargs={
-            'start_date': start_date,
-            'end_date': end_date,
-            'pk': pk
-        }
-    )
-    context = {'url': url}
-    return helper.save_data(request, context, form, start_date, end_date)
+class DataUpdate(UpdateViewMixin):
+    model = models.Data
+    form_class = forms.DataForm
+    hx_trigger_django = 'reload_after_object_update'
+
+    def get_success_url(self):
+        return reverse_lazy('reports:data_update', kwargs={'pk': self.object.pk})
+
+    def url(self):
+        return self.get_success_url()
 
 
 @login_required()
