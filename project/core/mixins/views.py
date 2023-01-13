@@ -31,6 +31,9 @@ def httpHtmxResponse(hx_trigger_name=None, status_code=204):
     )
 
 
+# ---------------------------------------------------------------------------------------
+#                                                                                  Mixins
+# ---------------------------------------------------------------------------------------
 class CreateUpdateMixin:
     hx_trigger_django = None
     hx_trigger_form = None
@@ -90,6 +93,9 @@ class DeleteMixin:
         return HttpResponse()
 
 
+# ---------------------------------------------------------------------------------------
+#                                                                            Views Mixins
+# ---------------------------------------------------------------------------------------
 class CreateViewMixin(LoginRequiredMixin, CreateUpdateMixin, CreateView):
     pass
 
