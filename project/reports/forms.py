@@ -40,6 +40,9 @@ class DataForm(FormMixin, forms.ModelForm):
         self.helper = FormHelper()
         set_field_properties(self, self.helper)
 
+    def save(self, commit=True):
+        self.instance.checked = 'y'
+        return super().save(commit)
 
 class DateFilterForm(forms.Form):
     start_date = forms.DateField(
