@@ -72,7 +72,7 @@ class CreateUpdateMixin:
 
 
 class DeleteMixin:
-    hx_trigger_django = 'reload'
+    hx_trigger_django = None
     hx_redirect = None
 
     def get_hx_trigger_django(self):

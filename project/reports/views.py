@@ -80,7 +80,6 @@ class DataCreate(CreateViewMixin):
 class DataDelete(DeleteViewMixin):
     model = models.Data
     success_url = reverse_lazy('reports:index')
-    hx_trigger_django = 'reload'
 
 
 class DataUpdate(UpdateViewMixin):

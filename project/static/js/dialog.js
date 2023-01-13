@@ -14,6 +14,12 @@ htmx.on("htmx:afterSwap", (e) => {
 
 htmx.on("htmx:beforeSwap", (e) => {
     if (e.detail.target.id == "dialog" && !e.detail.xhr.response) {
+        var subbmiter = e.detail.requestConfig.triggeringEvent.submitter.id;
+        pk = $("#_delete").attr("data-pk");
+        if(subbmiter == '_delete' && pk) {
+            var row = document.getElementById(`row-id-${pk}`);
+            row.parentNode.removeChild(row);
+        }
         $('#modal').modal('hide');
         e.detail.shouldSwap = false;
     }
