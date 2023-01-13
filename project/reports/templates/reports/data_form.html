@@ -3,7 +3,7 @@
 
 <tr id="data-form">
     <td colspan="11" class="inner">
-        <form method="post" action="{{ url }}" novalidate>
+        <form method="post" novalidate>
             {% csrf_token %}
             {{ form.media }}
             <table class="table table-sm table-borderless inner">
