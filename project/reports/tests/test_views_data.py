@@ -76,7 +76,7 @@ def test_data_list_user_items(client_logged, jan_2000):
 #                                                                                   index
 # ---------------------------------------------------------------------------------------
 def test_index_not_loged(client):
-    login_rediretion(client, 'reports:index')
+    login_rediretion(client, 'reports:data_index')
 
 
 @freeze_time("1999-01-15")
@@ -94,7 +94,7 @@ def test_index_func(client):
 
 
 def test_index_no_records(client_logged):
-    url = reverse('reports:index')
+    url = reverse('reports:data_index')
     response = client_logged.get(url, follow=True)
 
     assert '<td class="bg-warning text-center" colspan="11">No records</td>' in str(

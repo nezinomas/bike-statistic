@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<form class="form py-3" method="post" novalidate autocomplete="off" hx-get="{% url 'reports:index' %}" hx-target="#htmx-container">
+<form class="form py-3" method="post" novalidate autocomplete="off" hx-get="{% url 'reports:data_index' %}" hx-target="#htmx-container">
     <div class="row">
         <div class="col-sm-3 align-self-center">{{ filter_form.start_date|as_crispy_field }}</div>
         <div class="col-sm-3 align-self-center">{{ filter_form.end_date|as_crispy_field }}</div>
@@ -16,7 +16,7 @@
     </div>
 </form>
 
-<div id="htmx-container" hx-trigger="reload from:body" hx-get="{% url 'reports:index' %}" hx-target="this">
+<div id="htmx-container" hx-trigger="reload from:body" hx-get="{% url 'reports:data_index' %}" hx-target="this">
     {% include 'reports/includes/partial_data_list.html' %}
 </div>
 

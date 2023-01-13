@@ -15,6 +15,11 @@ from .library.insert_garmin import SyncWithGarmin
 from .library.progress import Progress, ProgressData
 
 
+class DataDetail(DetailViewMixin):
+    model = models.Data
+    template_name = 'reports/includes/partial_data_row.html'
+
+
 class DataList(ListViewMixin):
     model = models.Data
 
@@ -35,15 +40,10 @@ class DataList(ListViewMixin):
         return super().get_context_data(**kwargs) | context
 
 
-class DataDetail(DetailViewMixin):
-    model = models.Data
-    template_name = 'reports/includes/partial_data_row.html'
-
-
 class DataCreate(CreateViewMixin):
     model = models.Data
     form_class = forms.DataForm
-    success_url = reverse_lazy('reports:index')
+    success_url = reverse_lazy('reports:data_index')
     hx_trigger_django = 'reload'
 
     def url(self):
@@ -75,7 +75,7 @@ class QuickUpdate(DetailViewMixin):
 
 class DataDelete(DeleteViewMixin):
     model = models.Data
-    success_url = reverse_lazy('reports:index')
+    success_url = reverse_lazy('reports:data_index')
 
 
 class YearProgress(TemplateViewMixin):
@@ -110,7 +110,7 @@ def insert_data(request):
             template_name='reports/data_insert.html',
             context={'message': msg}
         )
-    return redirect(reverse('reports:index'))
+    return redirect(reverse('reports:data_index'))
 
 
 def overall(request):
