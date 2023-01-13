@@ -22,7 +22,8 @@
                         {{ form.checked }}
                     </td>
                     <td class="text-end align-middle w6">
-                        {% save_button %}
+                        {% url 'reports:data_create' as url_create %}
+                        {% save_button url=url_create target='data-form' swap='outerHTML' %}
                         {% close_button id='data-form' %}
                     </td>
                 </tr>

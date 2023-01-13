@@ -16,7 +16,7 @@
     </div>
 </form>
 
-<div id="htmx-container">
+<div id="htmx-container" hx-trigger="reload from:body" hx-get="{% url 'reports:index' %}" hx-target="this">
     {% include 'reports/includes/partial_data_list.html' %}
 </div>
 

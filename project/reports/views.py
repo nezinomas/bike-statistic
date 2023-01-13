@@ -7,15 +7,14 @@ from django.urls import reverse, reverse_lazy
 from ..bikes.models import Bike
 from ..core.lib import utils
 from ..core.mixins.views import (DetailViewMixin, ListViewMixin,
-                                 TemplateViewMixin, UpdateViewMixin,
-                                 rendered_content)
+                                 TemplateViewMixin, UpdateViewMixin, CreateViewMixin)
 from . import forms, models
 from .helpers import view_data_helper as helper
 from .library.chart import get_color
 from .library.distance_summary import DistanceSummary
 from .library.insert_garmin import SyncWithGarmin
 from .library.progress import Progress, ProgressData
-
+from django.http import HttpResponseRedirect
 
 class DataList(ListViewMixin):
     model = models.Data
@@ -64,15 +63,16 @@ class QuickUpdate(DetailViewMixin):
         return super().get_context_data(**kwargs) | context
 
 
-@login_required()
-def data_create(request, start_date, end_date):
-    form = forms.DataForm(request.POST or None)
-    url = reverse(
-        'reports:data_create',
-        kwargs={'start_date': start_date, 'end_date': end_date}
-    )
-    context = {'url': url}
-    return helper.save_data(request, context, form, start_date, end_date)
+class DataCreate(CreateViewMixin):
+    model = models.Data
+    form_class = forms.DataForm
+    success_url = reverse_lazy('reports:index')
+    hx_trigger_django = 'reload'
+
+    def form_valid(self, form, **kwargs):
+        form.instance.checked = 'y'
+        form.save()
+        return super().form_valid(form)
 
 
 @login_required
