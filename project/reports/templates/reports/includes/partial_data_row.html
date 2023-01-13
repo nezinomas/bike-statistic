@@ -7,7 +7,7 @@
 {% url 'reports:data_delete' object.pk as url_delete %}
 {% url 'reports:data_quick_update' object.id as url_quick_update %}
 {% var row_id="row-id-"|join:object.pk %}
-<tr id="{{row_id}}" class="{% if object.checked == 'n' %}table-info{% endif %}">
+<tr id="{{row_id}}" class="{% if object.checked == 'n' %}table-info{% endif %}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{{url_update}}">
     <td>{{ object.bike }}</td>
     <td class="text-center w10">{{ object.date|date:'Y-m-d' }}<span class="date-align">&nbsp;</span></td>
     <td class="text-center w7">{{ object.distance }}</td>
