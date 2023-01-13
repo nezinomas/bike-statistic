@@ -12,6 +12,14 @@ htmx.on("htmx:afterSwap", (e) => {
 })
 
 
+htmx.on("htmx:beforeSwap", (e) => {
+    if (e.detail.target.id == "dialog" && !e.detail.xhr.response) {
+        $('#modal').modal('hide');
+        e.detail.shouldSwap = false;
+    }
+})
+
+
 $(document).on('hidden.bs.modal', '#modal', function () {
     var form = $('.form');
     var trigger_name = form.attr("data-hx-trigger-form");
