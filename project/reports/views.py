@@ -6,15 +6,16 @@ from django.urls import reverse, reverse_lazy
 
 from ..bikes.models import Bike
 from ..core.lib import utils
-from ..core.mixins.views import (DetailViewMixin, ListViewMixin,
-                                 TemplateViewMixin, UpdateViewMixin, CreateViewMixin)
+from ..core.mixins.views import (CreateViewMixin, DetailViewMixin,
+                                 ListViewMixin, TemplateViewMixin,
+                                 UpdateViewMixin, DeleteViewMixin)
 from . import forms, models
 from .helpers import view_data_helper as helper
 from .library.chart import get_color
 from .library.distance_summary import DistanceSummary
 from .library.insert_garmin import SyncWithGarmin
 from .library.progress import Progress, ProgressData
-from django.http import HttpResponseRedirect
+
 
 class DataList(ListViewMixin):
     model = models.Data
@@ -75,20 +76,10 @@ class DataCreate(CreateViewMixin):
         return super().form_valid(form)
 
 
-@login_required
-def data_delete(request, start_date, end_date, pk):
-    obj = get_object_or_404(models.Data, pk=pk)
-    data = {}
-
-    if request.method == 'POST':
-        obj.delete()
-        helper.form_valid(data, start_date, end_date)
-    else:
-        context = {'object': obj, 'start_date': start_date, 'end_date': end_date}
-        data['html_form'] = render_to_string(
-            'reports/includes/partial_data_delete.html', context, request)
-
-    return JsonResponse(data)
+class DataDelete(DeleteViewMixin):
+    model = models.Data
+    success_url = reverse_lazy('reports:index')
+    hx_trigger_django = 'reload'
 
 
 @login_required()

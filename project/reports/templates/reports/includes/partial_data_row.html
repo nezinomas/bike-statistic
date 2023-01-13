@@ -4,7 +4,7 @@
 
 
 {% url 'reports:data_update' start_date end_date obj.id as url_update %}
-{% url 'reports:data_delete' start_date end_date obj.id as url_delete %}
+{% url 'reports:data_delete' obj.pk as url_delete %}
 {% url 'reports:data_quick_update' obj.id as url_quick_update %}
 {% var row_id="row-id-"|join:obj.pk %}
 <tr id="{{row_id}}" class="{% if obj.checked == 'n' %}table-info{% endif %}">
@@ -23,6 +23,6 @@
             {% quick_save_button url=url_quick_update target=row_id swap='outerHTML' %}
         {% endif %}
         {% edit_button %}
-        {% delete_button %}
+        {% delete_button url=url_delete %}
     </td>
 </tr>

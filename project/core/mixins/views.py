@@ -3,7 +3,8 @@ import json
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django_htmx.http import HttpResponseClientRedirect, trigger_client_event
-from vanilla import CreateView, DetailView, ListView, TemplateView, UpdateView
+from vanilla import (CreateView, DeleteView, DetailView, ListView,
+                     TemplateView, UpdateView)
 
 
 def rendered_content(request, view_class, **kwargs):
@@ -30,7 +31,7 @@ def httpHtmxResponse(hx_trigger_name=None, status_code=204):
     )
 
 
-class CreateUpdateMixin():
+class CreateUpdateMixin:
     hx_trigger_django = None
     hx_trigger_form = None
     hx_redirect = None
@@ -67,11 +68,37 @@ class CreateUpdateMixin():
         return response
 
 
+class DeleteMixin:
+    hx_trigger_django = 'reload'
+    hx_redirect = None
+
+    def get_hx_trigger_django(self):
+        return self.hx_trigger_django
+
+    def get_hx_redirect(self):
+        return self.hx_redirect
+
+    def post(self, *args, **kwargs):
+        if self.get_object():
+            super().post(*args, **kwargs)
+
+            if hx_redirect := self.get_hx_redirect():
+                return HttpResponseClientRedirect(hx_redirect)
+
+            return httpHtmxResponse(self.get_hx_trigger_django())
+
+        return HttpResponse()
+
+
 class CreateViewMixin(LoginRequiredMixin, CreateUpdateMixin, CreateView):
     pass
 
 
 class UpdateViewMixin(LoginRequiredMixin, CreateUpdateMixin, UpdateView):
+    pass
+
+
+class DeleteViewMixin(LoginRequiredMixin, DeleteMixin, DeleteView):
     pass
 
 
