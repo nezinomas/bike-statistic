@@ -35,6 +35,49 @@ class DataList(ListViewMixin):
         return super().get_context_data(**kwargs) | context
 
 
+class DataDetail(DetailViewMixin):
+    model = models.Data
+    template_name = 'reports/includes/partial_data_row.html'
+
+
+class DataCreate(CreateViewMixin):
+    model = models.Data
+    form_class = forms.DataForm
+    success_url = reverse_lazy('reports:index')
+    hx_trigger_django = 'reload'
+
+    def url(self):
+        return reverse_lazy('reports:data_create')
+
+
+class DataUpdate(UpdateViewMixin):
+    model = models.Data
+    form_class = forms.DataForm
+    hx_trigger_django = 'reload_after_object_update'
+
+    def get_success_url(self):
+        return reverse_lazy('reports:data_update', kwargs={'pk': self.object.pk})
+
+    def url(self):
+        return self.get_success_url()
+
+
+class QuickUpdate(DetailViewMixin):
+    model = models.Data
+    template_name = 'reports/includes/partial_data_row.html'
+
+    def get_context_data(self, **kwargs):
+        self.object.checked = 'y'
+        self.object.save()
+        context = {'obj': self.object}
+        return super().get_context_data(**kwargs) | context
+
+
+class DataDelete(DeleteViewMixin):
+    model = models.Data
+    success_url = reverse_lazy('reports:index')
+
+
 class YearProgress(TemplateViewMixin):
     template_name = 'reports/table.html'
 
@@ -49,49 +92,6 @@ class YearProgress(TemplateViewMixin):
             'month': obj.month_stats(),
         }
         return super().get_context_data(**kwargs) | context
-
-
-class DataDetail(DetailViewMixin):
-    model = models.Data
-    template_name = 'reports/includes/partial_data_row.html'
-
-
-class QuickUpdate(DetailViewMixin):
-    model = models.Data
-    template_name = 'reports/includes/partial_data_row.html'
-
-    def get_context_data(self, **kwargs):
-        self.object.checked = 'y'
-        self.object.save()
-        context = {'obj': self.object}
-        return super().get_context_data(**kwargs) | context
-
-
-class DataCreate(CreateViewMixin):
-    model = models.Data
-    form_class = forms.DataForm
-    success_url = reverse_lazy('reports:index')
-    hx_trigger_django = 'reload'
-
-    def url(self):
-        return reverse_lazy('reports:data_create')
-
-
-class DataDelete(DeleteViewMixin):
-    model = models.Data
-    success_url = reverse_lazy('reports:index')
-
-
-class DataUpdate(UpdateViewMixin):
-    model = models.Data
-    form_class = forms.DataForm
-    hx_trigger_django = 'reload_after_object_update'
-
-    def get_success_url(self):
-        return reverse_lazy('reports:data_update', kwargs={'pk': self.object.pk})
-
-    def url(self):
-        return self.get_success_url()
 
 
 @login_required()
