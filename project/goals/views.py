@@ -11,15 +11,15 @@ from ..reports.library.progress import Progress
 def form_valid(data):
     goals = Goal.objects.items()
 
-    obj = Progress()
-    stats = obj.extremums()
-    distances = obj.distances()
+    # obj = Progress()
+    # stats = obj.extremums()
+    # distances = obj.distances()
 
     data['form_is_valid'] = True
-    data['html_list'] = render_to_string(
-        'goals/includes/partial_goals_list.html',
-        {'goals': goals, 'stats': stats, 'distances': distances}
-    )
+    # data['html_list'] = render_to_string(
+    #     'goals/includes/partial_goals_list.html',
+    #     {'goals': goals, 'stats': stats, 'distances': distances}
+    # )
 
 
 def save_data(request, context, form):

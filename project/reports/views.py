@@ -1,154 +1,103 @@
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import render_to_string
+from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 
 from ..bikes.models import Bike
 from ..core.lib import utils
-from ..goals.models import Goal
+from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
+                                 DetailViewMixin, ListViewMixin,
+                                 TemplateViewMixin, UpdateViewMixin)
 from . import forms, models
 from .helpers import view_data_helper as helper
 from .library.chart import get_color
 from .library.distance_summary import DistanceSummary
 from .library.insert_garmin import SyncWithGarmin
-from .library.progress import Progress
+from .library.progress import Progress, ProgressData
 
 
-@login_required()
-def index(request):
-    return redirect(reverse('reports:data_empty'))
+class DataDetail(DetailViewMixin):
+    model = models.Data
+    template_name = 'reports/includes/partial_data_row.html'
 
 
-@login_required()
-def data_empty(request):
-    return redirect(
-        reverse(
-            'reports:data_list',
-            kwargs={
-                'start_date': helper.format_date(),
-                'end_date': helper.format_date('last'),
-            }
-        )
-    )
+class DataList(ListViewMixin):
+    model = models.Data
 
+    def get_queryset(self):
+        start_date = self.request.GET.get('start_date') or helper.format_date(day=1)
+        end_date = self.request.GET.get('end_date') or helper.format_date()
+        return self.model.objects.items().filter(date__range=(start_date, end_date))
 
-@login_required()
-def data_partial(request, start_date):
-    return redirect(
-        reverse(
-            'reports:data_list',
-            kwargs={
-                'start_date': start_date,
-                'end_date': helper.format_date('last'),
-            }
-        )
-    )
+    def get_template_names(self):
+        if self.request.htmx:
+            return ['reports/includes/partial_data_list.html']
+        return ['reports/data_list.html']
 
-
-@login_required()
-def data_list(request, start_date, end_date):
-    # paspaustas filter mygtukas
-    if 'date_filter' in request.POST:
-        filter_form = forms.DateFilterForm(request.POST)
-
-        if filter_form.is_valid():
-            data = filter_form.cleaned_data
-            kwargs = {'start_date': data['start_date'], 'end_date': data['end_date']}
-            url = reverse_lazy('reports:data_list', kwargs=kwargs)
-            return redirect(url)
-
-    objects = (
-        models.Data.objects.items()
-        .filter(date__range=(start_date, end_date))
-    )
-    filter_form = forms.DateFilterForm(
-        initial={'start_date': start_date, 'end_date': end_date}
-    )
-    context = {
-        'objects': objects,
-        'filter_form': filter_form,
-        'start_date': start_date,
-        'end_date': end_date
-    }
-    return render(request, 'reports/data_list.html', context)
-
-
-@login_required()
-def data_create(request, start_date, end_date):
-    form = forms.DataForm(request.POST or None)
-    url = reverse(
-        'reports:data_create',
-        kwargs={'start_date': start_date, 'end_date': end_date}
-    )
-    context = {'url': url}
-    return helper.save_data(request, context, form, start_date, end_date)
-
-
-@login_required
-def data_delete(request, start_date, end_date, pk):
-    obj = get_object_or_404(models.Data, pk=pk)
-    data = {}
-
-    if request.method == 'POST':
-        obj.delete()
-        helper.form_valid(data, start_date, end_date)
-    else:
-        context = {'object': obj, 'start_date': start_date, 'end_date': end_date}
-        data['html_form'] = render_to_string(
-            'reports/includes/partial_data_delete.html', context, request)
-
-    return JsonResponse(data)
-
-
-@login_required()
-def data_update(request, start_date, end_date, pk):
-    obj = get_object_or_404(models.Data, pk=pk)
-    form = forms.DataForm(request.POST or None, instance=obj)
-    url = reverse(
-        'reports:data_update',
-        kwargs={
-            'start_date': start_date,
-            'end_date': end_date,
-            'pk': pk
+    def get_context_data(self, **kwargs):
+        context = {
+            'filter_form': forms.DateFilterForm(self.request.GET or None),
         }
-    )
-    context = {'url': url}
-    return helper.save_data(request, context, form, start_date, end_date)
+        return super().get_context_data(**kwargs) | context
 
 
-@login_required()
-def data_quick_update(request, start_date, end_date, pk):
-    obj = get_object_or_404(models.Data, pk=pk)
-    obj.checked = 'y'
-    obj.save()
+class DataCreate(CreateViewMixin):
+    model = models.Data
+    form_class = forms.DataForm
+    success_url = reverse_lazy('reports:data_index')
+    hx_trigger_django = 'reload'
 
-    objects = (
-        models.Data.objects.items()
-        .filter(date__range=(start_date, end_date))
-    )
+    def url(self):
+        return reverse_lazy('reports:data_create')
 
-    context = {
-        'objects': objects,
-        'start_date': start_date,
-        'end_date': end_date
-    }
 
-    data = {
-        'html_list': render_to_string(
-            'reports/includes/partial_data_list.html',
-            context=context,
-            request=request,
-        )
-    }
-    return JsonResponse(data)
+class DataUpdate(UpdateViewMixin):
+    model = models.Data
+    form_class = forms.DataForm
+    hx_trigger_django = 'reload_after_object_update'
+
+    def get_success_url(self):
+        return reverse_lazy('reports:data_update', kwargs={'pk': self.object.pk})
+
+    def url(self):
+        return self.get_success_url()
+
+
+class QuickUpdate(DetailViewMixin):
+    model = models.Data
+    template_name = 'reports/includes/partial_data_row.html'
+
+    def get_context_data(self, **kwargs):
+        self.object.checked = 'y'
+        self.object.save()
+        context = {'obj': self.object}
+        return super().get_context_data(**kwargs) | context
+
+
+class DataDelete(DeleteViewMixin):
+    model = models.Data
+    success_url = reverse_lazy('reports:data_index')
+
+
+class YearProgress(TemplateViewMixin):
+    template_name = 'reports/table.html'
+
+    def get_context_data(self, **kwargs):
+        year = self.kwargs.get('year')
+        data = ProgressData(year)
+        obj = Progress(data)
+        context = {
+            'year': year,
+            'e': obj.extremums().get(year),
+            'season': obj.season_progress(),
+            'month': obj.month_stats(),
+        }
+        return super().get_context_data(**kwargs) | context
 
 
 @login_required()
 def insert_data(request):
     try:
         SyncWithGarmin().insert_data_current_user()
-        msg = '<p>OK</p>'
     except Exception as ex:
         msg = (
             f'<p>{ex}</p>'
@@ -161,30 +110,7 @@ def insert_data(request):
             template_name='reports/data_insert.html',
             context={'message': msg}
         )
-    return redirect(reverse('reports:data_empty'))
-
-@login_required()
-def table(request, year):
-    goal = list(
-        Goal.objects
-        .items()
-        .filter(year=year)
-        .values_list('goal', flat=True)
-    )
-    goal = goal[0] if goal else 0
-
-    obj = Progress(year)
-
-    return render(
-        request,
-        'reports/table.html',
-        {
-            'year': year,
-            'e': obj.extremums().get(year),
-            'season': obj.season_progress(goal=goal),
-            'month': obj.month_stats(),
-        }
-    )
+    return redirect(reverse('reports:data_index'))
 
 
 def overall(request):

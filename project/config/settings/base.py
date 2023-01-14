@@ -13,8 +13,8 @@ PROJECT_ROOT = os.path.dirname(SITE_ROOT)
 
 
 # ================   SITE CONFIGURATION
-LOGOUT_REDIRECT_URL = 'reports:index'
-LOGIN_REDIRECT_URL = 'reports:index'
+LOGOUT_REDIRECT_URL = 'reports:data_index'
+LOGIN_REDIRECT_URL = 'reports:data_index'
 LOGIN_URL = 'users:login'
 
 
@@ -95,6 +95,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'crequest.middleware.CrequestMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
 ]
 
 
@@ -107,6 +108,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.humanize',
     'django.contrib.staticfiles',
+    'django_htmx',
     'bootstrap_datepicker_plus',
     'crispy_forms',
     'crispy_bootstrap5',

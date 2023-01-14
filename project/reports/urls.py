@@ -2,46 +2,20 @@ from django.urls import path, register_converter
 
 from ..core import converters
 from . import views
+from .apps import App_name
 
-app_name = 'reports'
+app_name = App_name
 
 register_converter(converters.DateConverter, 'date')
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('data/', views.data_empty, name='data_empty'),
-    path('data/insert/', views.insert_data, name='insert_data'),
-    path(
-        'data/<date:start_date>/',
-        views.data_partial,
-        name='data_partial'
-    ),
-    path(
-        'data/<date:start_date>/<date:end_date>/',
-        views.data_list,
-        name='data_list'
-    ),
-    path(
-        'api/data/<date:start_date>/<date:end_date>/create/',
-        views.data_create,
-        name='data_create'
-    ),
-    path(
-        'api/data/<date:start_date>/<date:end_date>/update/<int:pk>/',
-        views.data_update,
-        name='data_update'
-    ),
-    path(
-        'api/data/<date:start_date>/<date:end_date>/quick_update/<int:pk>/',
-        views.data_quick_update,
-        name='data_quick_update'
-    ),
-    path(
-        'api/data/<date:start_date>/<date:end_date>/delete/<int:pk>/',
-        views.data_delete,
-        name='data_delete'
-    ),
-
+    path('', views.DataList.as_view(), name='data_index'),
+    path('data/insert/', views.insert_data, name='data_insert'),
+    path('data/create/', views.DataCreate.as_view(), name='data_create'),
+    path('data/detail/<int:pk>/', views.DataDetail.as_view(), name='data_detail'),
+    path('data/update/<int:pk>/', views.DataUpdate.as_view(), name='data_update'),
+    path('data/quick_update/<int:pk>/', views.QuickUpdate.as_view(), name='data_quick_update'),
+    path('data/delete/<int:pk>/', views.DataDelete.as_view(), name='data_delete'),
     path('reports/overall/', views.overall, name='overall'),
-    path('reports/<int:year>/', views.table, name='reports_table'),
+    path('reports/<int:year>/', views.YearProgress.as_view(), name='year_progress'),
 ]

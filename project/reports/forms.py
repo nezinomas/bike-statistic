@@ -1,6 +1,4 @@
-from datetime import date
-
-from bootstrap_datepicker_plus.widgets import DatePickerInput, MonthPickerInput
+from bootstrap_datepicker_plus.widgets import DatePickerInput
 from crispy_forms.helper import FormHelper
 from django import forms
 
@@ -8,6 +6,7 @@ from ..bikes.models import Bike
 from ..core.helpers.form_helpers import set_field_properties
 from ..core.mixins.form_mixin import FormMixin
 from . import models
+from .helpers import view_data_helper as helper
 
 
 class DataForm(FormMixin, forms.ModelForm):
@@ -39,6 +38,9 @@ class DataForm(FormMixin, forms.ModelForm):
         self.helper = FormHelper()
         set_field_properties(self, self.helper)
 
+    def save(self, commit=True):
+        self.instance.checked = 'y'
+        return super().save(commit)
 
 class DateFilterForm(forms.Form):
     start_date = forms.DateField(
@@ -51,17 +53,8 @@ class DateFilterForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.fields['start_date'].initial = helper.format_date(day=1)
+        self.fields['end_date'].initial = helper.format_date()
+
         self.helper = FormHelper()
         set_field_properties(self, self.helper)
-
-    def clean(self):
-        cleaned_data = super().clean()
-
-        start = cleaned_data.get("start_date")
-        end = cleaned_data.get("end_date")
-
-        if not isinstance(start, date) or not isinstance(end, date):
-            raise forms.ValidationError('Invalid start or end date.')
-
-        if start > end:
-            raise forms.ValidationError('End date is greater than start date.')

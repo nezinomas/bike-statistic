@@ -13,15 +13,12 @@ class DataQuerySet(models.QuerySet):
         user = utils.get_user()
         return (
             self
-            .select_related('user')
+            .select_related('user', 'bike')
             .filter(user=user)
         )
 
     def _filter_by_year(self, year):
-        if year:
-            return self.filter(date__year=year)
-
-        return self
+        return self.filter(date__year=year) if year else self
 
     def items(self, year=None):
         return self.related()._filter_by_year(year)

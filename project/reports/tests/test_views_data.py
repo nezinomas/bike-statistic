@@ -73,56 +73,10 @@ def test_data_list_user_items(client_logged, jan_2000):
 
 
 # ---------------------------------------------------------------------------------------
-#                                                                            data_partial
-# ---------------------------------------------------------------------------------------
-def test_data_partial_not_loged(client):
-    login_rediretion(
-        client,
-        'reports:data_partial',
-        kwargs={'start_date': '2000-01-01'}
-    )
-
-
-@freeze_time("1999-01-15")
-def test_data_partial_redirection(client, login):
-    response = client.get('/data/1999-01-01/', follow=True)
-
-    assert response.status_code == 200
-    assert response.resolver_match.url_name == 'data_list'
-
-
-@freeze_time("1999-01-15")
-def test_data_partial_func(client):
-    view = resolve('/data/1999-01-01/')
-    assert views.data_partial is view.func
-
-
-# ---------------------------------------------------------------------------------------
-#                                                                              data_empty
-# ---------------------------------------------------------------------------------------
-def test_data_empty_not_loged(client):
-    login_rediretion(client, 'reports:data_empty')
-
-
-@freeze_time("1999-01-15")
-def test_data_empty_redirection(client, login):
-    response = client.get('/data/', follow=True)
-
-    assert response.status_code == 200
-    assert response.resolver_match.url_name == 'data_list'
-
-
-@freeze_time("1999-01-15")
-def test_data_empty_func(client):
-    view = resolve('/data/')
-    assert views.data_empty is view.func
-
-
-# ---------------------------------------------------------------------------------------
 #                                                                                   index
 # ---------------------------------------------------------------------------------------
 def test_index_not_loged(client):
-    login_rediretion(client, 'reports:index')
+    login_rediretion(client, 'reports:data_index')
 
 
 @freeze_time("1999-01-15")
@@ -140,7 +94,7 @@ def test_index_func(client):
 
 
 def test_index_no_records(client_logged):
-    url = reverse('reports:index')
+    url = reverse('reports:data_index')
     response = client_logged.get(url, follow=True)
 
     assert '<td class="bg-warning text-center" colspan="11">No records</td>' in str(

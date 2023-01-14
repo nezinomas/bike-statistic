@@ -11,6 +11,7 @@
     <script defer src="https://unpkg.com/alpinejs@3.10.2/dist/cdn.min.js"></script> <!-- Alpine Core -->
     {% include 'core/includes/form_date_scripts.html' %}
     <script type="text/javascript" src="{% static 'js/ajax.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/dialog.js' %}"></script>
 
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'bootstrap_datepicker/css/bootstrap-datetimepicker.min.css' %}" />
@@ -33,10 +34,10 @@
 						<h6 class="side-bar"> Data </h6>
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'reports:data_empty' %}"> View </a>
+								<a class="nav-link" href="{% url 'reports:data_index' %}"> View </a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'reports:insert_data' %}"> Update </a>
+								<a class="nav-link" href="{% url 'reports:data_insert' %}"> Update </a>
 							</li>
 						</ul>
 						<!-- Charts -->
@@ -52,7 +53,7 @@
 							{% for item in years %}
 							{% if forloop.counter < 6 %}
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'reports:reports_table' item %}"> {{ item }} </a>
+								<a class="nav-link" href="{% url 'reports:year_progress' item %}"> {{ item }} </a>
 							</li>
 							{% endif %}
 							{% endfor %}
@@ -95,6 +96,10 @@
 				</main>
 			</div>
 		</section>
+
+		<div id="modal" class="modal fade">
+			<div id="dialog" class="modal-dialog modal-650" hx-target="this" hx-swap="this"></div>
+		</div>
 	  {% endblock body %}
   </body>
 </html>

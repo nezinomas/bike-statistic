@@ -1,24 +1,23 @@
-{% extends "category_data.html" %}
-{% load static %}
+{% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load slippers %}
 
-
 {% block content %}
 
-<form class="filter" method="post">
-    {% csrf_token %}
-    <div class="row my-3">
-        <div class="col-sm-3 pr-0 mr-0">{{ filter_form.start_date|as_crispy_field }}</div>
-        <div class="col-sm-3 pr-0 mr-0">{{ filter_form.end_date|as_crispy_field }}</div>
-        <div class="col-sm-1 pr-0 mr-0"><input type="submit" name="date_filter" value="Filter" class="btn btn-secondary btn-sm" id="submit-id-date_filter"></div>
-        <div class="col text-right">
-            {% url 'reports:data_create' start_date end_date as url_create %}
-            {% new_button url=url_create label='New row' tbl='0' width="35%" %}
+<form class="form py-3" method="post" novalidate autocomplete="off" hx-get="{% url 'reports:data_index' %}" hx-target="#htmx-container">
+    <div class="row">
+        <div class="col-sm-3 align-self-center">{{ filter_form.start_date|as_crispy_field }}</div>
+        <div class="col-sm-3 align-self-center">{{ filter_form.end_date|as_crispy_field }}</div>
+        <div class="col-sm-1 align-self-center"><input type="submit" value="Filter" class="btn btn-secondary btn-sm py-1 px-5 align-self-center"></div>
+        <div class="col text-end align-self-center">
+            {% url 'reports:data_create' as url_create %}
+            {% new_button url=url_create target="data-table-tbody" swap="afterbegin" label='New row' width="35%" css_class="py-1" %}
         </div>
     </div>
 </form>
 
-{% include "reports/includes/partial_data_list.html" %}
+<div id="htmx-container" hx-trigger="reload from:body" hx-get="{% url 'reports:data_index' %}" hx-target="this">
+    {% include 'reports/includes/partial_data_list.html' %}
+</div>
 
 {% endblock content %}
