@@ -19,7 +19,7 @@ def test_view_table_200(client, login):
 
 
 def test_view_table_func():
-    view = resolve('/reports/2000/')
+    view = resolve('/data/2000/')
 
     assert view.func == views.table
 

@@ -42,7 +42,7 @@ MIGRATION_MODULES = {
     'bikes': None,
     'core': None,
     'goals': None,
-    'reports': None,
+    'data': None,
 }
 
 

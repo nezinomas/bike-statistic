@@ -19,17 +19,17 @@ def current_month_range():
     )
 
 
-@patch('project.reports.views.SyncWithGarmin.insert_data_current_user', return_value=True)
+@patch('project.data.views.SyncWithGarmin.insert_data_current_user', return_value=True)
 @pytest.mark.django_db
 def test_insert_view_status_code_200(mocked, client, login):
-    url = reverse('reports:data_insert')
+    url = reverse('data:data_insert')
     response = client.get(url, follow=True)
 
     assert 200 == response.status_code
 
     start_date, end_date = current_month_range()
     assert response.redirect_chain[1][0] == reverse(
-        'reports:data_list',
+        'data:data_list',
         kwargs={'start_date': start_date, 'end_date': end_date}
     )
 
@@ -42,22 +42,22 @@ def test_view_func():
 
 @pytest.mark.django_db
 def test_insert_data_redirection_if_user_not_logged(client):
-    login_rediretion(client, 'reports:data_insert')
+    login_rediretion(client, 'data:data_insert')
 
 
-@patch('project.reports.views.SyncWithGarmin.insert_data_current_user', return_value=True)
+@patch('project.data.views.SyncWithGarmin.insert_data_current_user', return_value=True)
 @pytest.mark.django_db
 def test_insert_data_no_errors(mocked, client, login):
-    url = reverse('reports:data_insert')
+    url = reverse('data:data_insert')
     response = client.get(url)
 
-    assert response.url == reverse('reports:data_index')
+    assert response.url == reverse('index')
 
 
-@patch('project.reports.views.SyncWithGarmin.insert_data_current_user', side_effect=Exception('Error X'))
+@patch('project.data.views.SyncWithGarmin.insert_data_current_user', side_effect=Exception('Error X'))
 @pytest.mark.django_db
 def test_insert_data_exception_occurs(mocked, client, login):
-    url = reverse('reports:data_insert')
+    url = reverse('data:data_insert')
     response = client.get(url)
 
     assert '<p>Error X</p>' in str(response.content)
