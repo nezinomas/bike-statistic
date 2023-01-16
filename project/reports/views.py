@@ -1,15 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from django.template.response import TemplateResponse
-from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
-from django.template.loader import render_to_string
+
 from ..bikes.models import Bike
 from ..core.lib import utils
 from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
                                  DetailViewMixin, ListViewMixin,
-                                 TemplateViewMixin, UpdateViewMixin,
-                                 rendered_content)
+                                 TemplateViewMixin, UpdateViewMixin)
 from . import forms, models
 from .helpers import view_data_helper as helper
 from .library.chart import get_color
