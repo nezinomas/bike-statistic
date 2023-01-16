@@ -1,5 +1,9 @@
 import os
+
+import environ
+
 from ..secrets import get_secret
+
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -10,6 +14,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE_ROOT = os.path.dirname(BASE_DIR)
 # ..\project_catalog
 PROJECT_ROOT = os.path.dirname(SITE_ROOT)
+
+# Take environment variables from .env file
+env = environ.Env()
+environ.Env.read_env(os.path.join(PROJECT_ROOT, '.env'))
 
 
 # ================   SITE CONFIGURATION
@@ -23,7 +31,7 @@ CASH_ROOT = os.path.join(PROJECT_ROOT, 'cash')
 
 
 # ================   MEDIA CONFIGURATION
-MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media/')
+MEDIA_ROOT = env('MEDIA_ROOT', default=os.path.join(PROJECT_ROOT, 'media'))
 MEDIA_URL = "/media/"
 
 
@@ -38,7 +46,7 @@ TEMPLATE_DEBUG = DEBUG
 
 
 # ================   SECRET CONFIGURATION
-SECRET_KEY = get_secret("SECRET_KEY")
+SECRET_KEY = env('SECRET_KEY')
 
 
 # ================   project CONFIGURATION
