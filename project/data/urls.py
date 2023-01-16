@@ -10,6 +10,7 @@ register_converter(converters.DateConverter, 'date')
 
 urlpatterns = [
     path('insert/', views.insert_data, name='data_insert'),
+    path('list/', views.DataList.as_view(), name='data_list'),
     path('create/', views.DataCreate.as_view(), name='data_create'),
     path('detail/<int:pk>/', views.DataDetail.as_view(), name='data_detail'),
     path('update/<int:pk>/', views.DataUpdate.as_view(), name='data_update'),

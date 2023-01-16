@@ -87,4 +87,4 @@ def insert_data(request):
             template_name='data/data_insert.html',
             context={'message': msg}
         )
-    return redirect(reverse('index'))
+    return redirect(reverse('data:data_list'))
