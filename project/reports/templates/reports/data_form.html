@@ -1,9 +1,9 @@
 {% load crispy_forms_tags %}
 {% load slippers %}
 
-<tr id="data-form" {% if object %}hx-trigger="reload_after_object_update from:body" hx-get="{% url 'reports:data_detail' object.pk %}" hx-swap="outerHTML" hx-target="#data-form"{% endif %}>
+<tr id="data-form">
     <td colspan="11" class="inner">
-        <form method="post" novalidate>
+        <form method="post" novalidate hx-target="#data-form" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-post="{{view.url}}">
             {% csrf_token %}
             {{ form.media }}
             <table class="table table-sm table-borderless inner">
