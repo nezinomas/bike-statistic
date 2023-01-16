@@ -6,7 +6,7 @@ import pandas as pd
 from django.db.models import F
 
 from ...goals.models import Goal
-from ..models import Data
+from ...data.models import Data
 
 
 @dataclass

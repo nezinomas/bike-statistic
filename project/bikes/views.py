@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.template.loader import render_to_string
 
-from ..reports.models import Data
+from ..data.models import Data
 from .forms import (BikeForm, BikeInfoForm, ComponentForm,
                     ComponentStatisticForm)
 from .lib.component_wear import ComponentWear

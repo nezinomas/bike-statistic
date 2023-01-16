@@ -2,8 +2,8 @@ from datetime import date
 
 import pytest
 
-from ...reports.factories import DataFactory
-from ...reports.models import Data
+from ...data.factories import DataFactory
+from ...data.models import Data
 from ..factories import (BikeFactory, ComponentFactory,
                          ComponentStatisticFactory)
 from ..lib.component_wear import ComponentWear

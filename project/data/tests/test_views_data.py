@@ -5,7 +5,7 @@ from django.urls import resolve, reverse
 from freezegun import freeze_time
 
 from ...core.helpers.test_helpers import login_rediretion
-from ...reports.factories import DataFactory
+from ...data.factories import DataFactory
 from ...users.factories import UserFactory
 from ..factories import DataFactory
 from ..models import Data
@@ -22,11 +22,11 @@ def last_id():
 #                                                                               data_list
 # ---------------------------------------------------------------------------------------
 def test_data_list_not_loged(client, jan_2000):
-    login_rediretion(client, 'reports:data_list', kwargs=jan_2000)
+    login_rediretion(client, 'data:data_list', kwargs=jan_2000)
 
 
 def test_data_list_valid_date(client, login, jan_2000):
-    url = reverse('reports:data_list', kwargs=jan_2000)
+    url = reverse('data:data_list', kwargs=jan_2000)
     response = client.get(url)
 
     assert '<form class="filter"' in str(response.content)
@@ -43,7 +43,7 @@ def test_data_list_not_valid_date_02(client):
 
 
 def test_data_list_date_filter_redirection(client, login, jan_2000):
-    url = reverse('reports:data_list', kwargs=jan_2000)
+    url = reverse('data:data_list', kwargs=jan_2000)
     data_ = {**jan_2000, 'date_filter': True}
     response = client.post(url, data=data_, follow=True)
 
@@ -64,7 +64,7 @@ def test_data_list_user_items(client_logged, jan_2000):
     DataFactory()
     DataFactory(user=UserFactory(username='xxx'))
 
-    url = reverse('reports:data_list', kwargs=jan_2000)
+    url = reverse('data:data_list', kwargs=jan_2000)
     data_ = {**jan_2000, 'date_filter': True}
     response = client_logged.post(url, data=data_, follow=True)
 
@@ -76,7 +76,7 @@ def test_data_list_user_items(client_logged, jan_2000):
 #                                                                                   index
 # ---------------------------------------------------------------------------------------
 def test_index_not_loged(client):
-    login_rediretion(client, 'reports:data_index')
+    login_rediretion(client, 'data:data_index')
 
 
 @freeze_time("1999-01-15")
@@ -94,7 +94,7 @@ def test_index_func(client):
 
 
 def test_index_no_records(client_logged):
-    url = reverse('reports:data_index')
+    url = reverse('data:data_index')
     response = client_logged.get(url, follow=True)
 
     assert '<td class="bg-warning text-center" colspan="11">No records</td>' in str(
@@ -105,11 +105,11 @@ def test_index_no_records(client_logged):
 #                                                                             data_create
 # ---------------------------------------------------------------------------------------
 def test_data_create_not_loged(client, jan_2000):
-    login_rediretion(client, 'reports:data_create', kwargs=jan_2000)
+    login_rediretion(client, 'data:data_create', kwargs=jan_2000)
 
 
 def test_data_create_form_valid(client, login, post_data, jan_2000):
-    url = reverse('reports:data_create', kwargs=jan_2000)
+    url = reverse('data:data_create', kwargs=jan_2000)
     response = client.post(url, data=post_data)
     actual = json.loads(response.content)
     content = actual['html_list']
@@ -131,7 +131,7 @@ def test_data_create_form_valid(client, login, post_data, jan_2000):
 
 
 def test_data_create_form_invalid(client, login, jan_2000):
-    url = reverse('reports:data_create', kwargs=jan_2000)
+    url = reverse('data:data_create', kwargs=jan_2000)
     response = client.post(url, data={})
     actual = json.loads(response.content)
 
@@ -142,13 +142,13 @@ def test_data_create_form_invalid(client, login, jan_2000):
 #                                                                             data_delete
 # ---------------------------------------------------------------------------------------
 def test_data_delete_not_loged(client, jan_2000):
-    login_rediretion(client, 'reports:data_delete', kwargs={**jan_2000, 'pk': 99})
+    login_rediretion(client, 'data:data_delete', kwargs={**jan_2000, 'pk': 99})
 
 
 def test_data_delete(client, login, jan_2000, get_user):
     obj = DataFactory()
 
-    url = reverse('reports:data_delete', kwargs={**jan_2000, 'pk': obj.pk})
+    url = reverse('data:data_delete', kwargs={**jan_2000, 'pk': obj.pk})
     response = client.post(url)
 
     actual = json.loads(response.content)
@@ -158,7 +158,7 @@ def test_data_delete(client, login, jan_2000, get_user):
 
 
 def test_data_delete_404(client, login, jan_2000):
-    url = reverse('reports:data_delete', kwargs={**jan_2000, 'pk': 99})
+    url = reverse('data:data_delete', kwargs={**jan_2000, 'pk': 99})
     response = client.post(url)
 
     assert response.status_code == 404
@@ -166,7 +166,7 @@ def test_data_delete_404(client, login, jan_2000):
 
 def test_data_delete_load_confirm_form(client, login, jan_2000):
     obj = DataFactory()
-    url = reverse('reports:data_delete', kwargs={**jan_2000, 'pk': obj.pk})
+    url = reverse('data:data_delete', kwargs={**jan_2000, 'pk': obj.pk})
     response = client.get(url)
 
     actual = json.loads(response.content)
@@ -184,14 +184,14 @@ def test_data_delete_load_confirm_form(client, login, jan_2000):
 def test_data_update_not_loged(client, jan_2000):
     login_rediretion(
         client,
-        'reports:data_update',
+        'data:data_update',
         kwargs={**jan_2000, 'pk': 99}
     )
 
 
 def test_data_update(client, login, post_data, jan_2000):
     obj = DataFactory()
-    url = reverse('reports:data_update', kwargs={**jan_2000, 'pk': obj.pk})
+    url = reverse('data:data_update', kwargs={**jan_2000, 'pk': obj.pk})
     response = client.post(url, data=post_data)
 
     actual = json.loads(response.content)
@@ -214,7 +214,7 @@ def test_data_update(client, login, post_data, jan_2000):
 
 def test_data_update_loaded_form(client, login, jan_2000):
     obj = DataFactory()
-    url = reverse('reports:data_update', kwargs={**jan_2000, 'pk': obj.pk})
+    url = reverse('data:data_update', kwargs={**jan_2000, 'pk': obj.pk})
     response = client.get(url)
 
     actual = json.loads(response.content)
@@ -234,7 +234,7 @@ def test_data_update_loaded_form(client, login, jan_2000):
 
 
 def test_data_update_object_not_found(client, login, jan_2000):
-    url = reverse('reports:data_update', kwargs={**jan_2000, 'pk': 99})
+    url = reverse('data:data_update', kwargs={**jan_2000, 'pk': 99})
     response = client.get(url)
 
     assert response.status_code == 404
@@ -244,7 +244,7 @@ def test_data_update_object_not_found(client, login, jan_2000):
 #                                                                       data_quick_update
 # ---------------------------------------------------------------------------------------
 def test_data_quick_update_not_loged(client, jan_2000):
-    login_rediretion(client, 'reports:data_quick_update', kwargs={**jan_2000, 'pk': 99})
+    login_rediretion(client, 'data:data_quick_update', kwargs={**jan_2000, 'pk': 99})
 
 
 def test_data_quick_update(client, login, jan_2000):
@@ -253,11 +253,11 @@ def test_data_quick_update(client, login, jan_2000):
     assert obj.checked == 'n'
 
     url_quick_update = reverse(
-        'reports:data_quick_update',
+        'data:data_quick_update',
         kwargs={**jan_2000, 'pk': obj.pk}
     )
     url_update = reverse(
-        'reports:data_update',
+        'data:data_update',
         kwargs={**jan_2000, 'pk': obj.pk}
     )
     response = client.get(url_quick_update)
@@ -270,7 +270,7 @@ def test_data_quick_update(client, login, jan_2000):
 
 def test_data_quick_update_404(client, login, jan_2000):
     url_quick_update = reverse(
-        'reports:data_quick_update',
+        'data:data_quick_update',
         kwargs={**jan_2000, 'pk': 99}
     )
     response = client.get(url_quick_update)
@@ -283,7 +283,7 @@ def test_data_quick_update_user_items(client_logged, jan_2000):
     DataFactory(user=UserFactory(username='xxx'))
 
     url_quick_update = reverse(
-        'reports:data_quick_update',
+        'data:data_quick_update',
         kwargs={**jan_2000, 'pk': obj.pk}
     )
 

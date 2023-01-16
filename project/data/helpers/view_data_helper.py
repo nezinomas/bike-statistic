@@ -24,7 +24,7 @@ def form_valid(data, start_date, end_date):
         .filter(date__range=(start_date, end_date))
     )
     data['html_list'] = render_to_string(
-        'reports/includes/partial_data_list.html',
+        'data/includes/partial_data_list.html',
         {
             'objects': objects,
             'start_date': start_date,
@@ -49,6 +49,6 @@ def save_data(request, context, form, start_date, end_date):
 
     context['form'] = form
     data['html_form'] = render_to_string(
-        'reports/includes/partial_data_update.html', context, request)
+        'data/includes/partial_data_update.html', context, request)
 
     return JsonResponse(data)
