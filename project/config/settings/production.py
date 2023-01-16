@@ -4,7 +4,8 @@ from .base import *
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['bike.unknownbug.net']
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
+
 
 INSTALLED_APPS += [
     'django_crontab',
