@@ -51,7 +51,7 @@ def test_insert_data_no_errors(mocked, client, login):
     url = reverse('data:data_insert')
     response = client.get(url)
 
-    assert response.url == reverse('data:data_index')
+    assert response.url == reverse('index')
 
 
 @patch('project.data.views.SyncWithGarmin.insert_data_current_user', side_effect=Exception('Error X'))

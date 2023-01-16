@@ -4,13 +4,15 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.defaults import (page_not_found, permission_denied,
                                    server_error)
+from ..data.views import DataList as IndexView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', IndexView.as_view(), name='index'),
     path('', include('project.users.urls')),
     path('', include('project.bikes.urls')),
     path('', include('project.goals.urls')),
-    path('', include('project.data.urls')),
+    path('data/', include('project.data.urls')),
     path('reports/', include('project.reports.urls')),
 ]
 

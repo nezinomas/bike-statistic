@@ -13,8 +13,8 @@ PROJECT_ROOT = os.path.dirname(SITE_ROOT)
 
 
 # ================   SITE CONFIGURATION
-LOGOUT_REDIRECT_URL = 'data:data_index'
-LOGIN_REDIRECT_URL = 'data:data_index'
+LOGOUT_REDIRECT_URL = 'index'
+LOGIN_REDIRECT_URL = 'index'
 LOGIN_URL = 'users:login'
 
 

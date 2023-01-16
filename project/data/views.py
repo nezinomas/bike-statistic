@@ -37,7 +37,7 @@ class DataList(ListViewMixin):
 class DataCreate(CreateViewMixin):
     model = models.Data
     form_class = forms.DataForm
-    success_url = reverse_lazy('data:data_index')
+    success_url = reverse_lazy('index')
     hx_trigger_django = 'reload'
 
     def url(self):
@@ -47,7 +47,7 @@ class DataCreate(CreateViewMixin):
 class DataUpdate(UpdateViewMixin):
     model = models.Data
     form_class = forms.DataForm
-    success_url = reverse_lazy('data:data_index')
+    success_url = reverse_lazy('index')
     detail_template_name = 'data/includes/partial_data_row.html'
 
     def url(self):
@@ -67,7 +67,7 @@ class QuickUpdate(DetailViewMixin):
 
 class DataDelete(DeleteViewMixin):
     model = models.Data
-    success_url = reverse_lazy('data:data_index')
+    success_url = reverse_lazy('index')
 
 
 @login_required()
@@ -86,4 +86,4 @@ def insert_data(request):
             template_name='data/data_insert.html',
             context={'message': msg}
         )
-    return redirect(reverse('data:data_index'))
+    return redirect(reverse('index'))
