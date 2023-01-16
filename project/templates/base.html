@@ -44,7 +44,7 @@
 						<h6 class="side-bar"> Charts </h6>
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'data:overall' %}"> Overall </a>
+								<a class="nav-link" href="{% url 'reports:overall' %}"> Overall </a>
 							</li>
 						</ul>
 						<!-- Stats and Goals -->
@@ -53,7 +53,7 @@
 							{% for item in years %}
 							{% if forloop.counter < 6 %}
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'data:year_progress' item %}"> {{ item }} </a>
+								<a class="nav-link" href="{% url 'reports:year_progress' item %}"> {{ item }} </a>
 							</li>
 							{% endif %}
 							{% endfor %}

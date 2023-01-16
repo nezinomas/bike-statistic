@@ -23,20 +23,20 @@ def _data():
 
 
 def test_overall_func():
-    view = resolve('/data/overall/')
+    view = resolve('/reports/overall/')
 
     assert views.overall is view.func
 
 
 def test_overall_200_no_data(client, get_user):
-    url = reverse('data:overall')
+    url = reverse('reports:overall')
     response = client.get(url)
 
     assert response.status_code == 200
 
 
 def test_overall_200(client, get_user, _data):
-    url = reverse('data:overall')
+    url = reverse('reports:overall')
     response = client.get(url)
 
     assert response.status_code == 200
@@ -46,7 +46,7 @@ def test_overall_200(client, get_user, _data):
 def test_overall_context_years(client, get_user):
     get_user.date_joined = datetime(1998, 1, 1, tzinfo=timezone.utc)
 
-    url = reverse('data:overall')
+    url = reverse('reports:overall')
     response = client.get(url)
 
     actual = response.context['year_list']
@@ -55,7 +55,7 @@ def test_overall_context_years(client, get_user):
 
 
 def test_overall_context_bikes(client, get_user, _data):
-    url = reverse('data:overall')
+    url = reverse('reports:overall')
     response = client.get(url)
 
     actual = response.context['bikes']
@@ -65,7 +65,7 @@ def test_overall_context_bikes(client, get_user, _data):
 
 @freeze_time('2001-01-01')
 def test_overall_context_data_table(client, get_user, _data):
-    url = reverse('data:overall')
+    url = reverse('reports:overall')
     response = client.get(url)
 
     table = [
@@ -84,7 +84,7 @@ def test_overall_context_data_table(client, get_user, _data):
 
 @freeze_time('2001-01-01')
 def test_overall_context_total_value(client, get_user, _data):
-    url = reverse('data:overall')
+    url = reverse('reports:overall')
     response = client.get(url)
 
     actual = response.context['total']
@@ -94,7 +94,7 @@ def test_overall_context_total_value(client, get_user, _data):
 
 @freeze_time('2001-01-01')
 def test_overall_context_chart_data(client, get_user, _data):
-    url = reverse('data:overall')
+    url = reverse('reports:overall')
     response = client.get(url)
 
     expect = [

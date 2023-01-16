@@ -16,6 +16,4 @@ urlpatterns = [
     path('data/update/<int:pk>/', views.DataUpdate.as_view(), name='data_update'),
     path('data/quick_update/<int:pk>/', views.QuickUpdate.as_view(), name='data_quick_update'),
     path('data/delete/<int:pk>/', views.DataDelete.as_view(), name='data_delete'),
-    path('data/overall/', views.overall, name='overall'),
-    path('data/<int:year>/', views.YearProgress.as_view(), name='year_progress'),
 ]

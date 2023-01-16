@@ -7,12 +7,12 @@ from ..factories import DataFactory
 
 
 def test_view_table_not_loged(client):
-    login_rediretion(client, 'data:year_progress', kwargs={'year': 2000})
+    login_rediretion(client, 'reports:year_progress', kwargs={'year': 2000})
 
 
 @pytest.mark.django_db
 def test_view_table_200(client, login):
-    url = reverse('data:year_progress', kwargs={'year': 2000})
+    url = reverse('reports:year_progress', kwargs={'year': 2000})
     response = client.get(url)
 
     assert response.status_code == 200
@@ -26,7 +26,7 @@ def test_view_table_func():
 
 @pytest.mark.django_db
 def test_view_table_no_records_top_table(client, login):
-    url = reverse('data:year_progress', kwargs={'year': 2000})
+    url = reverse('reports:year_progress', kwargs={'year': 2000})
     response = client.get(url)
 
     assert '<td class="bg-warning text-center" colspan="10">No records</td>' in str(
@@ -35,7 +35,7 @@ def test_view_table_no_records_top_table(client, login):
 
 @pytest.mark.django_db
 def test_view_table_no_records(client, login):
-    url = reverse('data:year_progress', kwargs={'year': 2000})
+    url = reverse('reports:year_progress', kwargs={'year': 2000})
     response = client.get(url)
 
     assert '<td class="bg-warning text-center" colspan="20">No records</td>' in str(
@@ -44,15 +44,15 @@ def test_view_table_no_records(client, login):
 
 @pytest.mark.django_db
 def test_view_table_template(client, login):
-    url = reverse('data:year_progress', kwargs={'year': 2000})
+    url = reverse('reports:year_progress', kwargs={'year': 2000})
     response = client.get(url)
 
-    assert response.templates[0].name == 'data/table.html'
+    assert response.templates[0].name == 'reports/table.html'
 
 
 @pytest.mark.django_db
 def test_view_table_context_has_items(client, login):
-    url = reverse('data:year_progress', kwargs={'year': 2000})
+    url = reverse('reports:year_progress', kwargs={'year': 2000})
     response = client.get(url)
 
     assert 'season' in response.context
@@ -66,5 +66,5 @@ def test_view_table_queries(get_user, client, login, django_assert_num_queries):
     DataFactory()
 
     with django_assert_num_queries(5):
-        url = reverse('data:year_progress', kwargs={'year': 2000})
+        url = reverse('reports:year_progress', kwargs={'year': 2000})
         client.get(url)

@@ -11,6 +11,7 @@ urlpatterns = [
     path('', include('project.bikes.urls')),
     path('', include('project.goals.urls')),
     path('', include('project.data.urls')),
+    path('reports/', include('project.reports.urls')),
 ]
 
 urlpatterns += [

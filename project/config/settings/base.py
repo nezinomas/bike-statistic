@@ -119,6 +119,7 @@ INSTALLED_APPS = [
     'project.bikes',
     'project.goals',
     'project.data',
+    'project.reports',
     'project.users'
 ]
 
