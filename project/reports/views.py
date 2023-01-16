@@ -1,12 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.template.response import TemplateResponse
+from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
-
+from django.template.loader import render_to_string
 from ..bikes.models import Bike
 from ..core.lib import utils
 from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
                                  DetailViewMixin, ListViewMixin,
-                                 TemplateViewMixin, UpdateViewMixin)
+                                 TemplateViewMixin, UpdateViewMixin,
+                                 rendered_content)
 from . import forms, models
 from .helpers import view_data_helper as helper
 from .library.chart import get_color
@@ -53,13 +56,11 @@ class DataCreate(CreateViewMixin):
 class DataUpdate(UpdateViewMixin):
     model = models.Data
     form_class = forms.DataForm
-    hx_trigger_django = 'reload_after_object_update'
-
-    def get_success_url(self):
-        return reverse_lazy('reports:data_update', kwargs={'pk': self.object.pk})
+    success_url = reverse_lazy('reports:data_index')
+    detail_template_name = 'reports/includes/partial_data_row.html'
 
     def url(self):
-        return self.get_success_url()
+        return reverse_lazy('reports:data_update', kwargs={'pk': self.object.pk})
 
 
 class QuickUpdate(DetailViewMixin):
