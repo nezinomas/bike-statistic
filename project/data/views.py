@@ -3,7 +3,8 @@ from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 
 from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
-                                 DetailViewMixin, ListViewMixin, UpdateViewMixin)
+                                 DetailViewMixin, ListViewMixin,
+                                 UpdateViewMixin)
 from . import forms, models
 from .helpers import view_data_helper as helper
 from .library.insert_garmin import SyncWithGarmin
@@ -37,8 +38,8 @@ class DataList(ListViewMixin):
 class DataCreate(CreateViewMixin):
     model = models.Data
     form_class = forms.DataForm
+    detail_template_name = 'data/includes/partial_data_row.html'
     success_url = reverse_lazy('index')
-    hx_trigger_django = 'reload'
 
     def url(self):
         return reverse_lazy('data:data_create')
@@ -47,8 +48,8 @@ class DataCreate(CreateViewMixin):
 class DataUpdate(UpdateViewMixin):
     model = models.Data
     form_class = forms.DataForm
-    success_url = reverse_lazy('index')
     detail_template_name = 'data/includes/partial_data_row.html'
+    success_url = reverse_lazy('index')
 
     def url(self):
         return reverse_lazy('data:data_update', kwargs={'pk': self.object.pk})
