@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-App_name = 'reports'
+App_name = 'data'
 
 
 class CoreConfig(AppConfig):

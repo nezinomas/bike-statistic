@@ -8,7 +8,7 @@ from ..library.insert_garmin import SyncWithGarmin as Sync
 pytestmark = pytest.mark.django_db
 
 
-@patch('project.reports.library.insert_garmin.Temperature.temperature', new_callable=PropertyMock)
+@patch('project.data.library.insert_garmin.Temperature.temperature', new_callable=PropertyMock)
 def test_get_bike_with_main(mck, get_user):
     u = UserFactory()
     BikeFactory(main=True, full_name='X')
@@ -18,7 +18,7 @@ def test_get_bike_with_main(mck, get_user):
     assert actual.full_name == 'X'
 
 
-@patch('project.reports.library.insert_garmin.Temperature.temperature', new_callable=PropertyMock)
+@patch('project.data.library.insert_garmin.Temperature.temperature', new_callable=PropertyMock)
 def test_get_bike_no_main(mck, get_user):
     u = UserFactory()
     BikeFactory(full_name='ZZZ', short_name='zzz')

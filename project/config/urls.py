@@ -10,7 +10,7 @@ urlpatterns = [
     path('', include('project.users.urls')),
     path('', include('project.bikes.urls')),
     path('', include('project.goals.urls')),
-    path('', include('project.reports.urls')),
+    path('', include('project.data.urls')),
 ]
 
 urlpatterns += [

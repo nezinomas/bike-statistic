@@ -24,7 +24,7 @@
                     <td class="text-end align-middle w6">
                         {% save_button url=view.url target='data-form' swap='outerHTML' %}
                         {% if object %}
-                        {% url 'reports:data_detail' object.pk as url_detail %}
+                        {% url 'data:data_detail' object.pk as url_detail %}
                         {% close_button url=url_detail target='data-form' swap='outerHTML' %}
                         {% else %}
                         {% close_new_form_button id='data-form' %}

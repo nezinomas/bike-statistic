@@ -1,5 +1,5 @@
 {% load slippers %}
 
-{% url 'reports:data_delete' object.pk as url_delete %}
+{% url 'data:data_delete' object.pk as url_delete %}
 
 {% generic_delete_form csrf_token=csrf_token title='Duomenų trinimas' url=url_delete object=object %}

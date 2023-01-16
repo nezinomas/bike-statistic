@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from .models import Goal
 from .forms import GoalForm
 
-from ..reports.library.progress import Progress
+from ..data.library.progress import Progress
 
 def form_valid(data):
     goals = Goal.objects.items()
