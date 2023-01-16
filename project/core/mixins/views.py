@@ -2,6 +2,7 @@ import json
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
+from django.template.loader import render_to_string
 from django_htmx.http import HttpResponseClientRedirect, trigger_client_event
 from vanilla import (CreateView, DeleteView, DetailView, ListView,
                      TemplateView, UpdateView)
@@ -34,7 +35,7 @@ def httpHtmxResponse(hx_trigger_name=None, status_code=204):
 # ---------------------------------------------------------------------------------------
 #                                                                                  Mixins
 # ---------------------------------------------------------------------------------------
-class CreateUpdateMixin:
+class CreateMixin:
     hx_trigger_django = None
     hx_trigger_form = None
     hx_redirect = None
@@ -71,6 +72,18 @@ class CreateUpdateMixin:
         return response
 
 
+class UpdateMixin:
+    detail_template_name = None
+
+    def form_valid(self, form, **kwargs):
+        response = super().form_valid(form)
+        if not self.detail_template_name:
+            return response
+
+        rendered = render_to_string(self.detail_template_name, {'object': self.object}, self.request)
+        return HttpResponse(rendered)
+
+
 class DeleteMixin:
     hx_trigger_django = None
     hx_redirect = None
@@ -96,11 +109,11 @@ class DeleteMixin:
 # ---------------------------------------------------------------------------------------
 #                                                                            Views Mixins
 # ---------------------------------------------------------------------------------------
-class CreateViewMixin(LoginRequiredMixin, CreateUpdateMixin, CreateView):
+class CreateViewMixin(LoginRequiredMixin, CreateMixin, CreateView):
     pass
 
 
-class UpdateViewMixin(LoginRequiredMixin, CreateUpdateMixin, UpdateView):
+class UpdateViewMixin(LoginRequiredMixin, UpdateMixin, UpdateView):
     pass
 
 
