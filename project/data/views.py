@@ -1,10 +1,9 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 
 from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
                                  DetailViewMixin, ListViewMixin,
-                                 UpdateViewMixin)
+                                 TemplateViewMixin, UpdateViewMixin)
 from . import forms, models
 from .helpers import view_data_helper as helper
 from .library.insert_garmin import SyncWithGarmin
@@ -71,20 +70,25 @@ class DataDelete(DeleteViewMixin):
     success_url = reverse_lazy('index')
 
 
-@login_required()
-def insert_data(request):
-    try:
-        SyncWithGarmin().insert_data_current_user()
-    except Exception as ex:
-        msg = (
+class DataInsert(TemplateViewMixin):
+    template_name = 'data/data_insert.html'
+
+    def get(self, *args, **kwargs):
+        try:
+            SyncWithGarmin().insert_data_current_user()
+        except Exception as ex:
+            self.kwargs['exception'] = ex
+            return super().get(self.request, *args, **kwargs)
+        else:
+            return redirect(reverse('data:data_list'))
+
+    def get_context_data(self, **kwargs):
+        ex = self.kwargs.get('exception')
+        context = {
+            'message': (
             f'<p>{ex}</p>'
             f'<p>{"-"*120}</p>'
             f'<p>Type: {type(ex).__name__}</p>'
             f'<p>Args: {ex.args}</p>'
-        )
-        return render(
-            request,
-            template_name='data/data_insert.html',
-            context={'message': msg}
-        )
-    return redirect(reverse('data:data_list'))
+        )}
+        return super().get_context_data(**kwargs) | context

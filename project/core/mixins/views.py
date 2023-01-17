@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django_htmx.http import HttpResponseClientRedirect
 from vanilla import (CreateView, DeleteView, DetailView, ListView,
-                     RedirectView, TemplateView, UpdateView)
+                     TemplateView, UpdateView)
 
 
 def rendered_content(request, view_class, **kwargs):
@@ -95,8 +95,4 @@ class ListViewMixin(LoginRequiredMixin, ListView):
 
 
 class TemplateViewMixin(LoginRequiredMixin, TemplateView):
-    pass
-
-
-class RedirectViewMixin(LoginRequiredMixin, RedirectView):
     pass
