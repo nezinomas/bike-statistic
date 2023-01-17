@@ -63,3 +63,8 @@
 li.nav-item:last-child {
   margin-bottom: 1rem;
 }
+
+input.numberinput, input.textinput {
+  margin-top: .15rem!important;
+  text-align: center;
+}
