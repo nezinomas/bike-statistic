@@ -25,29 +25,32 @@ class YearProgress(TemplateViewMixin):
         return super().get_context_data(**kwargs) | context
 
 
-def overall(request):
-    years = utils.years()
-    bikes = Bike.objects.items().values_list(
-        'short_name', flat=True).order_by('date')
-    data = models.Data.objects.bike_summary()
+class ChartOverall(TemplateViewMixin):
+    template_name = 'reports/overall.html'
 
-    obj = DistanceSummary(years=years, bikes=bikes, data=data)
+    def get_context_data(self, **kwargs):
+        years = utils.years()
+        bikes = Bike.objects.items().values_list('short_name', flat=True).order_by('date')
+        data = models.Data.objects.bike_summary()
 
-    # update chart_data with bar color, border color, border_width
-    chart_data = obj.chart_data
-    for i, dt in enumerate(chart_data):
-        dt.update({
-            'color': get_color(i, 0.35),
-            'borderColor': get_color(i, 1),
-            'borderWidth': '0.5',
-        })
+        obj = DistanceSummary(years=years, bikes=bikes, data=data)
 
-    context = {
-        'year_list': years,
-        'chart_data': chart_data[::-1],
-        'bikes': bikes,
-        'table_data': list(zip(obj.table, obj.total_column)),
-        'total_row': obj.total_row,
-        'total': sum(obj.total_row.values())
-    }
-    return render(request, template_name='reports/overall.html', context=context)
+        # update chart_data with bar color, border color, border_width
+        chart_data = obj.chart_data
+        for i, dt in enumerate(chart_data):
+            dt.update({
+                'color': get_color(i, 0.35),
+                'borderColor': get_color(i, 1),
+                'borderWidth': '0.5',
+            })
+
+        context = {
+            'year_list': years,
+            'chart_data': chart_data[::-1],
+            'bikes': bikes,
+            'table_data': list(zip(obj.table, obj.total_column)),
+            'total_row': obj.total_row,
+            'total': sum(obj.total_row.values())
+        }
+
+        return super().get_context_data(**kwargs) | context

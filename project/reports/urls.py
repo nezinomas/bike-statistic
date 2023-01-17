@@ -9,6 +9,6 @@ app_name = App_name
 register_converter(converters.DateConverter, 'date')
 
 urlpatterns = [
-    path('overall/', views.overall, name='overall'),
+    path('overall/', views.ChartOverall.as_view(), name='chart_overall'),
     path('<int:year>/', views.YearProgress.as_view(), name='year_progress'),
 ]
