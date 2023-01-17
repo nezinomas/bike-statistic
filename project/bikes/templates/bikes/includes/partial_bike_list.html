@@ -6,7 +6,7 @@
             <th width="300rem">Date</th>
             <th width="300rem"><span class="empty"></span> Full Name</th>
             <th width="300rem">Short Name</th>
-            <th class="text-right">Actions</th>
+            <th class="text-end">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -22,7 +22,7 @@
                 {{ item.full_name }}
             </td>
             <td><a href="{% url 'bikes:info_list' item.slug %}">{{ item.short_name }}</a></td>
-            <td class="text-right last">
+            <td class="text-end last">
                 {% edit_button url=url_update label='True' %}
                 {% delete_button url=url_delete label='True' %}
             </td>

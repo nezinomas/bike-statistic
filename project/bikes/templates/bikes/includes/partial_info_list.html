@@ -5,7 +5,7 @@
         <tr>
             <th width="12%">Component</th>
             <th>Description</th>
-            <th width="10%" class="text-right pe-3">Actions</th>
+            <th width="10%" class="text-end pe-3">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -15,7 +15,7 @@
         <tr id="row_id_{{ item.id }}" data-pk="{{ item.id }}" data-url="{{ url_update }}" data-tbl="0">
             <td>{{ item.component }}</td>
             <td>{{ item.description }}</td>
-            <td class="text-right last">
+            <td class="text-end last">
                 {% edit_button url=url_update %}
                 {% delete_button url=url_delete %}
             </td>

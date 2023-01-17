@@ -12,7 +12,7 @@
                 {% if not forloop.last %}<span class="navbar-text">|</span>{% endif %}{% endfor %}
             </nav>
         </div>
-        <div class="col-sm-2 text-right">
+        <div class="col-sm-2 text-end">
             {% url 'bikes:stats_create' bike_slug component.pk as url_create %}
             {% new_button url=url_create label='New Component' width='70%' %}
         </div>

@@ -8,7 +8,7 @@
         {% for key, value in stats.items %}
         <span class="me-4">{{ key }}: {{ value|floatformat:0|intcomma }} km</span>{% endfor %}
     </div>
-    <div class="col text-right">
+    <div class="col text-end">
         Total <b>{{ bike_slug|title }}</b>: {{ total|floatformat:0|intcomma }}km
     </div>
 </div>
@@ -20,8 +20,8 @@
             <th width="20%">End date</th>
             <th width="15%">Price</th>
             <th>Brand</th>
-            <th class="text-right" width="10%">Actions</th>
-            <th width="15%" class="km pe-1 text-right">km</th>
+            <th class="text-end" width="10%">Actions</th>
+            <th width="15%" class="km pe-1 text-end">km</th>
         </tr>
     </thead>
     <tbody>
@@ -33,11 +33,11 @@
             <td>{% if item.end_date %}{{ item.end_date|date:"Y-m-d" }}{% else %}{% now "Y-m-d" %}{% endif %}</td>
             <td>{{ item.price|default_if_none:'-' }}</td>
             <td>{{ item.brand }}</td>
-            <td class="text-right">
+            <td class="text-end">
                 {% edit_button url=url_update %}
                 {% delete_button url_delete %}
             </td>
-            <td class="km pe-1 text-right">
+            <td class="km pe-1 text-end">
                 {% with km|get_item:item.id as km %}{{ km|floatformat:0|intcomma }}{% endwith %}</td>
         </tr>
         {% empty %}

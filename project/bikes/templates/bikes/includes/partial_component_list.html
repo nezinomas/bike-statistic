@@ -15,7 +15,7 @@
         <tr id="row_id_{{ component.pk }}" data-pk="{{ component.pk }}" data-url="{{ url_update }}" data-tbl="0">
             <td class="py-1">{{ component.id }}</td>
             <td class="py-1">{{ component.name }}</td>
-            <td class="py-1 text-right">
+            <td class="py-1 text-end">
                 {% edit_button label=True url=url_update %}
                 {% delete_button label=True url=url_delete %}
             </td>

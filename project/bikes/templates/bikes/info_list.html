@@ -11,7 +11,7 @@
             {% endfor %}
         </nav>
     </div>
-    <div class="col text-right">
+    <div class="col text-end">
         {% url 'bikes:info_create' bike_slug as url_create %}
         {% new_button url=url_create label='New Record' width='38%' %}
     </div>

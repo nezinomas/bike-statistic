@@ -64,7 +64,7 @@
         <tr>
             <th>Bike</th>
             <th class="text-center">Date</th>
-            <th class="text-right">&#8451;</th>
+            <th class="text-end">&#8451;</th>
             <th class="text-center b-left">Dist</th>
             <th class="text-center">Time</th>
             <th class="text-center">Speed</th>
@@ -94,7 +94,7 @@
         <tr>
             <td>{{ row.bikes }}</td>
             <td class="text-center">{{ row.date|date:'Y-m-d' }}</td>
-            <td class="text-right">{% with row.temp|floatformat:0 as r %}{% if r != 'nan' %}{{ r }}{% else %}-{% endif %}{% endwith %}</td>
+            <td class="text-end">{% with row.temp|floatformat:0 as r %}{% if r != 'nan' %}{{ r }}{% else %}-{% endif %}{% endwith %}</td>
             <td class="text-center b-left">{{ row.distance|floatformat:2 }}</td>
             <td class="text-center">{{ row.seconds|duration }}</td>
             <td class="text-center">{{ row.speed|floatformat:1 }}</td>
@@ -122,8 +122,8 @@
     </tbody>
 </table>
 <script>
- 
+
     $('.sticky-table').stickyTableHeaders();
- 
+
   </script>
 {% endblock content %}
