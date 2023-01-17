@@ -2,9 +2,6 @@ import os
 
 import environ
 
-from ..secrets import get_secret
-
-
 AUTH_USER_MODEL = 'users.User'
 
 # ================   PATH CONFIGURATION

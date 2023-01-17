@@ -6,8 +6,7 @@ from typing import List
 
 from crequest.middleware import CrequestMiddleware
 from cryptography.fernet import Fernet
-
-from ...config.secrets import get_secret
+from django.conf import settings
 
 
 def get_user():
@@ -18,7 +17,7 @@ def get_user():
 def encrypt(txt):
     try:
         txt = str(txt)
-        key = get_secret('ENCRYPT_KEY').encode()
+        key = settings.env('ENCRYPT_KEY').encode()
 
         cipher_suite = Fernet(key)  # key should be byte
         # input should be byte, so convert the text to byte
@@ -33,7 +32,7 @@ def encrypt(txt):
 
 def decrypt(txt):
     try:
-        key = get_secret('ENCRYPT_KEY').encode()
+        key = settings.env('ENCRYPT_KEY').encode()
 
         # base64 decode
         txt = base64.urlsafe_b64decode(txt)
