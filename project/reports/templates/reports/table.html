@@ -1,8 +1,12 @@
-{% extends "category_goals.html" %}
-{% load static %}{% load humanize %}{% load filters %}{% load dictionary_row %}
+{% extends "base.html" %}
+
+{% load static %}
+{% load humanize %}
+{% load filters %}
+{% load dictionary_row %}
 
 
-{% block head %}{{ block.super }}
+{% block head %}
 <script src="https://unpkg.com/sticky-table-headers"></script>
     <style>
         .lr-sticky-header {
@@ -14,36 +18,36 @@
 
 {% block content %}
 
-<table class="table table-sm table-striped table-hover">
-    <thead class="thead-light">
+<table class="table table-sm table-bordered">
+    <thead class="table-primary">
         <tr>
             <th colspan="2" class="text-center">Max T, &#8451;</th>
-            <th colspan="2" class="text-center b-left">Min T, &#8451;</th>
-            <th colspan="2" class="text-center b-left">Max Ascent, m</th>
-            <th colspan="2" class="text-center b-left">Max Speed, km/h</th>
-            <th colspan="2" class="text-center b-left">Max Distance, km</th>
+            <th colspan="2" class="text-center">Min T, &#8451;</th>
+            <th colspan="2" class="text-center">Max Ascent, m</th>
+            <th colspan="2" class="text-center">Max Speed, km/h</th>
+            <th colspan="2" class="text-center">Max Distance, km</th>
         </tr>
         <tr>
             <th class="text-center">Date</th>
             <th class="text-center">Value</th>
             {% for i in i|rjust:4 %}
-            <th class="text-center b-left">Date</th>
+            <th class="text-center">Date</th>
             <th class="text-center">Value</th>
             {% endfor %}
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-group-divider">
         {% if e %}
         <tr>
             <td class="text-center">{{ e.temp_max_date|date:"Y-m-d" }}</td>
             <td class="text-center">{{ e.temp_max_value|floatformat:0 }}</td>
-            <td class="text-center b-left">{{ e.temp_min_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ e.temp_min_date|date:"Y-m-d" }}</td>
             <td class="text-center">{{ e.temp_min_value|floatformat:0 }}</td>
-            <td class="text-center b-left">{{ e.ascent_max_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ e.ascent_max_date|date:"Y-m-d" }}</td>
             <td class="text-center">{{ e.ascent_max_value|floatformat:0 }}</td>
-            <td class="text-center b-left">{{ e.speed_max_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ e.speed_max_date|date:"Y-m-d" }}</td>
             <td class="text-center">{{ e.speed_max_value|floatformat:1 }}</td>
-            <td class="text-center b-left">{{ e.distance_max_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ e.distance_max_date|date:"Y-m-d" }}</td>
             <td class="text-center">{{ e.distance_max_value|floatformat:1 }}</td>
         </tr>
         {% else %}
@@ -52,39 +56,39 @@
     </tbody>
 </table>
 
-<table class="table table-sm table-hover table-striped sticky-table">
-    <thead class="thead-light">
+<table class="table table-sm table-bordered table-hover table-striped sticky-table">
+    <thead class="table-primary">
         <tr>
             <th colspan="3"> </th>
-            <th colspan="4" class="text-center b-left">Workout Stats</th>
-            <th colspan="5" class="text-center b-left">Month Stats</th>
-            <th colspan="5" class="text-center b-left">Season Stats</th>
-            <th colspan="3" class="text-center b-left">Goals</th>
+            <th colspan="4" class="text-center">Workout Stats</th>
+            <th colspan="5" class="text-center">Month Stats</th>
+            <th colspan="5" class="text-center">Season Stats</th>
+            <th colspan="3" class="text-center">Goals</th>
         </tr>
         <tr>
             <th>Bike</th>
             <th class="text-center">Date</th>
             <th class="text-end">&#8451;</th>
-            <th class="text-center b-left">Dist</th>
+            <th class="text-center">Dist</th>
             <th class="text-center">Time</th>
             <th class="text-center">Speed</th>
             <th class="text-center">Ascent</th>
-            <th class="text-center b-left">Dist</th>
-            <th class="text-center">Time</th>
-            <th class="text-center">Speed</th>
-            <th class="text-center">Per day</th>
-            <th class="text-center">Ascent</th>
-            <th class="text-center b-left">Dist</th>
+            <th class="text-center">Dist</th>
             <th class="text-center">Time</th>
             <th class="text-center">Speed</th>
             <th class="text-center">Per day</th>
             <th class="text-center">Ascent</th>
-            <th class="text-center b-left">Goal</th>
+            <th class="text-center">Dist</th>
+            <th class="text-center">Time</th>
+            <th class="text-center">Speed</th>
+            <th class="text-center">Per day</th>
+            <th class="text-center">Ascent</th>
+            <th class="text-center">Goal</th>
             <th class="text-center">%</th>
             <th class="text-center">Delta</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-group-divider">
         {% for row in season  %}
         {% ifchanged row.year_month %}<tr>
             {% if not forloop.first %}
@@ -95,22 +99,22 @@
             <td>{{ row.bikes }}</td>
             <td class="text-center">{{ row.date|date:'Y-m-d' }}</td>
             <td class="text-end">{% with row.temp|floatformat:0 as r %}{% if r != 'nan' %}{{ r }}{% else %}-{% endif %}{% endwith %}</td>
-            <td class="text-center b-left">{{ row.distance|floatformat:2 }}</td>
+            <td class="text-center">{{ row.distance|floatformat:2 }}</td>
             <td class="text-center">{{ row.seconds|duration }}</td>
             <td class="text-center">{{ row.speed|floatformat:1 }}</td>
             <td class="text-center">{{ row.ascent|floatformat:0 }}</td>
             {% ifchanged row.year_month %}{% get_row month row.year_month as m_row %}{% endifchanged %}
-            <td class="text-center b-left">{{ m_row.distance|floatformat:0 }}</td>
+            <td class="text-center">{{ m_row.distance|floatformat:0 }}</td>
             <td class="text-center">{{ m_row.seconds|duration }}</td>
             <td class="text-center">{{ m_row.speed|floatformat:1 }}</td>
             <td class="text-center">{{ m_row.distance_per_day|floatformat:1 }}</td>
             <td class="text-center">{{ m_row.ascent|floatformat:0|intcomma }}</td>
-            <td class="text-center b-left">{{ row.season_distance|floatformat:0|intcomma }}</td>
+            <td class="text-center">{{ row.season_distance|floatformat:0|intcomma }}</td>
             <td class="text-center">{{ row.season_seconds|duration }}</td>
             <td class="text-center">{{ row.season_speed|floatformat:1 }}</td>
             <td class="text-center">{{ row.season_per_day|floatformat:1 }}</td>
             <td class="text-center">{{ row.season_ascent|floatformat:0|intcomma }}</td>
-            <td class="text-center b-left">{{ row.goal_day|floatformat:0|intcomma }}</td>
+            <td class="text-center">{{ row.goal_day|floatformat:0|intcomma }}</td>
             <td class="text-center">{{ row.goal_percent|floatformat:1 }}</td>
             <td class="text-center">{{ row.goal_delta|floatformat:0|intcomma }}</td>
         </tr>
@@ -121,9 +125,7 @@
         {% endfor %}
     </tbody>
 </table>
-<script>
 
-    $('.sticky-table').stickyTableHeaders();
+<script>$('.sticky-table').stickyTableHeaders();</script>
 
-  </script>
 {% endblock content %}
