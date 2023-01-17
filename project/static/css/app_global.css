@@ -46,3 +46,20 @@
 .w10 {
   width: 10rem!important;
 }
+
+
+.sidebar h6 {
+  font-size: .9rem;
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.nav {
+    --bs-nav-link-padding-x: .5rem;
+    --bs-nav-link-padding-y: .25rem;
+}
+
+li.nav-item:last-child {
+  margin-bottom: 1rem;
+}
