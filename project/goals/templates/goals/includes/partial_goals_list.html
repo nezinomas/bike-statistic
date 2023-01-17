@@ -6,20 +6,20 @@
     <thead class="table-primary">
         <tr>
             <th colspan="3"></th>
-            <th class="b-left"></th>
-            <th colspan="2" class="text-center b-left">Max T, &#8451;</th>
-            <th colspan="2" class="text-center b-left">Min T, &#8451;</th>
-            <th colspan="2" class="text-center b-left">Max Ascent, m</th>
-            <th colspan="2" class="text-center b-left">Max Speed, km/h</th>
-            <th colspan="2" class="text-center b-left">Max Distance, km</th>
+            <th></th>
+            <th colspan="2" class="text-center">Max T, &#8451;</th>
+            <th colspan="2" class="text-center">Min T, &#8451;</th>
+            <th colspan="2" class="text-center">Max Ascent, m</th>
+            <th colspan="2" class="text-center">Max Speed, km/h</th>
+            <th colspan="2" class="text-center">Max Distance, km</th>
         </tr>
         <tr>
             <th width="100rem">Year</th>
             <th width="100rem">Goal, km</th>
             <th class="text-end" width="80rem">Actions</th>
-            <th class="text-end pe-2 b-left" width="90rem">Distance</th>
+            <th class="text-end pe-2" width="90rem">Distance</th>
             {% for i in i|rjust:5 %}
-            <th class="text-center b-left">Date</th>
+            <th class="text-center">Date</th>
             <th class="text-center">Value</th>
             {% endfor %}
         </tr>
@@ -36,18 +36,18 @@
                 {% delete_button url=url_delete %}
             </td>
             {% with distances|get_item:goal.year as d %}
-            <td class="pe-2 text-end b-left {% if d.distance >= goal.goal %}table-success{% else %}table-danger{% endif %}" width="120rem">{{ d.distance|floatformat:0|intcomma }}</td>
+            <td class="pe-2 text-end {% if d.distance >= goal.goal %}table-success{% else %}table-danger{% endif %}" width="120rem">{{ d.distance|floatformat:0|intcomma }}</td>
             {% endwith %}
             {% with stats|get_item:goal.year as s %}
-            <td class="text-center b-left">{{ s.temp_max_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ s.temp_max_date|date:"Y-m-d" }}</td>
             <td class="text-center">{{ s.temp_max_value|floatformat:0 }}</td>
-            <td class="text-center b-left">{{ s.temp_min_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ s.temp_min_date|date:"Y-m-d" }}</td>
             <td class="text-center">{{ s.temp_min_value|floatformat:0 }}</td>
-            <td class="text-center b-left">{{ s.ascent_max_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ s.ascent_max_date|date:"Y-m-d" }}</td>
             <td class="text-center">{{ s.ascent_max_value|floatformat:0 }}</td>
-            <td class="text-center b-left">{{ s.speed_max_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ s.speed_max_date|date:"Y-m-d" }}</td>
             <td class="text-center">{{ s.speed_max_value|floatformat:1 }}</td>
-            <td class="text-center b-left">{{ s.distance_max_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ s.distance_max_date|date:"Y-m-d" }}</td>
             <td class="text-center">{{ s.distance_max_value|floatformat:1 }}</td>
             {% endwith %}
         </tr>
