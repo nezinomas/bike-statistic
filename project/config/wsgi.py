@@ -7,10 +7,10 @@ from django.core.wsgi import get_wsgi_application
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Take environment variables from .env file
-env = environ.Env()
+ENV = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
-os.environ["DJANGO_SETTINGS_MODULE"] = env("DJANGO_SETTINGS_MODULE")
+os.environ["DJANGO_SETTINGS_MODULE"] = ENV("DJANGO_SETTINGS_MODULE")
 
 application = get_wsgi_application()

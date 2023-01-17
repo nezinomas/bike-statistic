@@ -13,9 +13,8 @@ SITE_ROOT = os.path.dirname(BASE_DIR)
 PROJECT_ROOT = os.path.dirname(SITE_ROOT)
 
 # Take environment variables from .env file
-env = environ.Env()
+ENV = environ.Env()
 environ.Env.read_env(os.path.join(PROJECT_ROOT, '.env'))
-
 
 # ================   SITE CONFIGURATION
 LOGOUT_REDIRECT_URL = 'index'
@@ -28,7 +27,7 @@ CASH_ROOT = os.path.join(PROJECT_ROOT, 'cash')
 
 
 # ================   MEDIA CONFIGURATION
-MEDIA_ROOT = env('MEDIA_ROOT', default=os.path.join(PROJECT_ROOT, 'media'))
+MEDIA_ROOT = ENV('MEDIA_ROOT', default=os.path.join(PROJECT_ROOT, 'media'))
 MEDIA_URL = "/media/"
 
 
@@ -43,7 +42,7 @@ TEMPLATE_DEBUG = DEBUG
 
 
 # ================   SECRET CONFIGURATION
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = ENV('SECRET_KEY')
 
 
 # ================   project CONFIGURATION

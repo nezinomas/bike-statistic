@@ -13,9 +13,8 @@ if __name__ == "__main__":
     environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
     # set settings file develop/productions/test
-    env = environ.Env()
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE",
-                          env("DJANGO_SETTINGS_MODULE"))
+    ENV = environ.Env()
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", ENV("DJANGO_SETTINGS_MODULE"))
 
     try:
         from django.core.management import execute_from_command_line
