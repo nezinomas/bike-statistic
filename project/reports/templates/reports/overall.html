@@ -60,34 +60,34 @@
 </div>
 
 <div class="row mt-2">
-    <div class="col-12 col-lg-6 data-table-px">
-            <table class="table table-striped table-hover table-md mt-2">
-                <thead class="thead-light">
+    <div class="col-12 col-lg-6">
+            <table class="table table-sm table-striped table-hover align-middle">
+                <thead class="table-primary">
                     <tr>
                         <th>Metai</th>
-                        {% for bike in bikes %}<th class="text-right me-1">{{ bike }}</th>{% endfor %}
-                        <th class="text-right">Total</th>
+                        {% for bike in bikes %}<th class="text-end">{{ bike }}</th>{% endfor %}
+                        <th class="text-end">Total</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="table-group-divider">
                     {% for row, total in table_data %}
                     <tr>
                         <td>{{ row.year|floatformat:0 }}</td>
                         {% for bike in bikes %}
                         {% with row|get_item:bike as value %}
-                        <td class="text-right me-1">{% if value %}{{ value|floatformat:0|intcomma }}{% else %}-{% endif %}</td>
+                        <td class="text-end">{% if value %}{{ value|floatformat:0|intcomma }}{% else %}-{% endif %}</td>
                         {% endwith %}{% endfor %}
-                        <td class="text-right">{{ total.total|floatformat:0|intcomma }}</td>
+                        <td class="text-end">{{ total.total|floatformat:0|intcomma }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
-                <tfoot>
+                <tfoot class="table-secondary table-group-divider">
                     <th>Total</th>
                     {% for bike in bikes %}
                     {% with total_row|get_item:bike as value %}
-                    <th class="text-right">{{ value|floatformat:0|intcomma }}</th>
+                    <th class="text-end">{{ value|floatformat:0|intcomma }}</th>
                     {% endwith %}{% endfor %}
-                    <th class="text-right">{{ total|floatformat:0|intcomma }}</th>
+                    <th class="text-end">{{ total|floatformat:0|intcomma }}</th>
                 </tfoot>
             </table>
     </div>
