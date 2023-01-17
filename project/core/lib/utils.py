@@ -1,4 +1,5 @@
 import base64
+import contextlib
 import logging
 import traceback
 from datetime import datetime
@@ -6,8 +7,7 @@ from typing import List
 
 from crequest.middleware import CrequestMiddleware
 from cryptography.fernet import Fernet
-
-from ...config.secrets import get_secret
+from django.conf import settings
 
 
 def get_user():
@@ -18,7 +18,7 @@ def get_user():
 def encrypt(txt):
     try:
         txt = str(txt)
-        key = get_secret('ENCRYPT_KEY').encode()
+        key = settings.env('ENCRYPT_KEY').encode()
 
         cipher_suite = Fernet(key)  # key should be byte
         # input should be byte, so convert the text to byte
@@ -26,21 +26,20 @@ def encrypt(txt):
         # encode to urlsafe base64 format
         encrypted_text = base64.urlsafe_b64encode(encrypted_text).decode("ascii")
         return encrypted_text
-    except Exception as e:
+    except Exception:
         logging.getLogger("error_logger").error(traceback.format_exc())
         return None
 
 
 def decrypt(txt):
     try:
-        key = get_secret('ENCRYPT_KEY').encode()
+        key = settings.env('ENCRYPT_KEY').encode()
 
         # base64 decode
         txt = base64.urlsafe_b64decode(txt)
         cipher_suite = Fernet(key)
-        decoded_text = cipher_suite.decrypt(txt).decode("ascii")
-        return decoded_text
-    except Exception as e:
+        return cipher_suite.decrypt(txt).decode("ascii")
+    except Exception:
         logging.getLogger("error_logger").error(traceback.format_exc())
         return None
 
@@ -49,11 +48,7 @@ def years() -> List[int]:
     now = datetime.now().year
     start = now
 
-    try:
+    with contextlib.suppress(AttributeError):
         start = get_user().date_joined.year
-    except AttributeError:
-        pass
 
-    _years = [x for x in range(start, now + 1)]
-
-    return _years
+    return list(range(start, now + 1))
