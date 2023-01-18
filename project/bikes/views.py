@@ -309,12 +309,10 @@ class ComponentWearIndex(RedirectViewMixin):
         except Component.DoesNotExist:
             return reverse('bikes:component_list')
         else:
-            print(f'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> {self.kwargs=}')
             bike_slug = self.kwargs['bike_slug']
             return reverse(
-            'bikes:stats_list',
-            kwargs={'bike_slug': bike_slug, 'component_pk': component.pk}
-        )
+                'bikes:stats_list',
+                kwargs={'bike_slug': bike_slug, 'component_pk': component.pk})
 
 
 class ComponentWearList(ListViewMixin):
@@ -327,7 +325,6 @@ class ComponentWearList(ListViewMixin):
         return Component.objects.items()
 
     def get_context_data(self, **kwargs):
-        print(f'------------------- {self.kwargs=}')
         bike_slug = self.kwargs['bike_slug']
         component = Component.objects.get(pk=self.kwargs['component_pk'])
         data = (
