@@ -10,8 +10,8 @@ urlpatterns = [
     path('component/update/<int:pk>/', views.component_update, name='component_update'),
     path('component/delete/<int:pk>/', views.component_delete, name='component_delete'),
 
-    path('<slug:bike_slug>/component/', views.bike_stats_index, name='stats_index'),
-    path('<slug:bike_slug>/component/<int:component_pk>/', views.bike_stats_lists, name='stats_list'),
+    path('<slug:bike_slug>/component/', views.ComponentWearIndex.as_view(), name='stats_index'),
+    path('<slug:bike_slug>/component/<int:component_pk>/', views.ComponentWearList.as_view(), name='stats_list'),
     path('<slug:bike_slug>/component/<int:component_pk>/create/', views.bike_stats_create, name='stats_create'),
     path('<slug:bike_slug>/component/<int:stats_pk>/update/', views.bike_stats_update, name='stats_update'),
     path('<slug:bike_slug>/component/<int:stats_pk>/delete/', views.bike_stats_delete, name='stats_delete'),

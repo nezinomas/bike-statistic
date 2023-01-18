@@ -3,6 +3,10 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.template.loader import render_to_string
 
+from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
+                                 DetailViewMixin, ListViewMixin,
+                                 RedirectViewMixin, TemplateViewMixin,
+                                 UpdateViewMixin)
 from ..data.models import Data
 from .forms import (BikeForm, BikeInfoForm, ComponentForm,
                     ComponentStatisticForm)
@@ -298,55 +302,56 @@ def bike_stats_save_data(request, context, form, bike_slug, pk):
     return JsonResponse(data)
 
 
-@login_required()
-def bike_stats_index(request, bike_slug):
-    qs = Component.objects.items().first()
-
-    if qs:
-        url = reverse(
+class ComponentWearIndex(RedirectViewMixin):
+    def get_redirect_url(self, *args, **kwargs):
+        try:
+            component = Component.objects.items().first()
+        except Component.DoesNotExist:
+            return reverse('bikes:component_list')
+        else:
+            print(f'>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> {self.kwargs=}')
+            bike_slug = self.kwargs['bike_slug']
+            return reverse(
             'bikes:stats_list',
-            kwargs={'bike_slug': bike_slug, 'component_pk': qs.pk}
+            kwargs={'bike_slug': bike_slug, 'component_pk': component.pk}
         )
-    else:
-        url = reverse('bikes:component_list')
-
-    return redirect(url)
 
 
-@login_required()
-def bike_stats_lists(request, bike_slug, component_pk):
-    component = Component.objects.filter(pk=component_pk)[:1]
-    if not component:
-        return redirect(reverse('bikes:component_list'))
+class ComponentWearList(ListViewMixin):
+    def get_template_names(self):
+        if self.request.htmx:
+            return ['bikes/includes/partial_component_wear_list.html']
+        return ['bikes/component_wear_list.html']
 
-    components = Component.objects.items()
-    data = (
-        Data.objects
-        .items()
-        .filter(bike__slug=bike_slug)
-        .values()
-    )
-    component_statistic = (
-        ComponentStatistic.objects
-        .items()
-        .filter(bike__slug=bike_slug, component__pk=component_pk)
-        .values()
-    )
+    def get_queryset(self):
+        return Component.objects.items()
 
-    obj = ComponentWear(components=component_statistic, data=data)
-
-    return render(
-        request,
-        'bikes/stats_list.html', {
-            'component': component[0],
-            'components': components,
+    def get_context_data(self, **kwargs):
+        print(f'------------------- {self.kwargs=}')
+        bike_slug = self.kwargs['bike_slug']
+        component = Component.objects.get(pk=self.kwargs['component_pk'])
+        data = (
+            Data.objects
+            .items()
+            .filter(bike__slug=bike_slug)
+            .values()
+        )
+        component_statistic = (
+            ComponentStatistic.objects
+            .items()
+            .filter(bike__slug=bike_slug, component__pk=component.pk)
+            .values()
+        )
+        obj = ComponentWear(components=component_statistic, data=data)
+        context = {
+            'component': component,
             'component_statistic': component_statistic,
             'km': obj.component_km,
             'stats': obj.component_stats,
             'total': obj.bike_km,
             'bike_slug': bike_slug,
         }
-    )
+        return super().get_context_data(**kwargs) | context
 
 
 @login_required()
