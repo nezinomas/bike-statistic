@@ -4,7 +4,7 @@
 {% block content %}
 
 <div class="row my-2">
-    <div class="col text-left">
+    <div class="col">
         <nav class="nav">
             {% for bike in bike_list %}
             <a href="{% url 'bikes:info_list' bike_slug=bike.slug %}" class="nav-link {% if bike.slug == bike_slug %}active disabled{% endif %}">{{ bike.short_name }}</a>{% if not forloop.last %}<span class="navbar-text">|</span>{% endif %}
