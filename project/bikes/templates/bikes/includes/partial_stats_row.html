@@ -2,8 +2,8 @@
 {% load template_filters %}
 {% load slippers %}
 
-{% url 'bikes:stats_update' bike_slug item.id as url_update %}
-{% url 'bikes:stats_delete' bike_slug item.id as url_delete %}
+{% url 'bikes:stats_update' bike.slug item.id as url_update %}
+{% url 'bikes:stats_delete' bike.slug item.id as url_delete %}
 <tr id="row_id_{{ item.id }}" data-pk="{{ item.id }}" data-url="{{ url_update }}">
     <td>{{ item.start_date|date:"Y-m-d" }}</td>
     <td>{% if item.end_date %}{{ item.end_date|date:"Y-m-d" }}{% else %}{% now "Y-m-d" %}{% endif %}</td>

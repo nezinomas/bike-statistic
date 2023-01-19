@@ -4,7 +4,7 @@
     <div>{% for key, value in stats.items %}
         {{ key }}: {{ value|floatformat:0|intcomma }} km
         {% endfor %}</div>
-    <div>{{bike_slug|title}} / <strong>{{component.name}}</strong></div>
+    <div>{{bike}} / <strong>{{component.name}}</strong></div>
     <div> Total: {{ total|floatformat:0|intcomma }}km</div>
 </div>
 
@@ -14,14 +14,14 @@
             <th>Start date</th>
             <th>End date</th>
             <th class="w7">Price</th>
-            <th class="w7">Brand</th>
+            <th class="w10">Brand</th>
             <th class="text-end w7">km</th>
             <th class="text-end w6">Actions</th>
         </tr>
     </thead>
-    <tbody class="table-group-divider">
+    <tbody class="table-group-divider" id="stats-table-tbody">
         {% for item in component_statistic %}
-        {% include 'bikes/includes/partial_component_wear_row.html' %}
+        {% include 'bikes/includes/partial_stats_row.html' %}
         {% empty %}
         <tr><td class="bg-warning text-center" colspan="6">No records</td></tr>
         {% endfor %}
