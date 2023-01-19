@@ -25,16 +25,23 @@ class ComponentStatisticForm(forms.ModelForm):
     class Meta:
         model = ComponentStatistic
         fields = '__all__'
-        widgets = {
-            'bike': forms.HiddenInput(),
-            'component': forms.HiddenInput()
-        }
 
     def __init__(self, *args, **kwargs):
+        bike_slug = kwargs.pop('bike_slug')
+        component_pk = kwargs.pop('component_pk')
+
         super().__init__(*args, **kwargs)
+
+        self.fields['bike'].initial = Bike.objects.related().get(slug=bike_slug)
+        self.fields['component'].initial = Component.objects.related().get(pk=component_pk)
+        # self.fields['bike'].disabled = True
+        # self.fields['bike'].widged = forms.HiddenInput()
+        # self.fields['bike'].disabled = True
+        # self.fields['bike'].widged = forms.HiddenInput()
 
         self.helper = FormHelper()
         set_field_properties(self, self.helper)
+
 
 
 class BikeForm(FormMixin, forms.ModelForm):

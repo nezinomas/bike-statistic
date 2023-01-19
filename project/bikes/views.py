@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.template.loader import render_to_string
+from django.urls import reverse_lazy
 
 from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
                                  DetailViewMixin, ListViewMixin,
@@ -250,7 +251,7 @@ def component_delete(request, pk):
 
 
 # ---------------------------------------------------------------------------------------
-#                                                                          Component Wear
+#                                                         Bike Component Statistic (Wear)
 # ---------------------------------------------------------------------------------------
 def bike_stats_form_valid(data, bike_slug, component_pk):
     components = Component.objects.items()
@@ -302,56 +303,57 @@ def bike_stats_save_data(request, context, form, bike_slug, pk):
     return JsonResponse(data)
 
 
-class ComponentWearIndex(RedirectViewMixin):
+class StatsIndex(RedirectViewMixin):
     def get_redirect_url(self, *args, **kwargs):
         try:
             component = Component.objects.items().first()
         except Component.DoesNotExist:
             return reverse('bikes:component_list')
         else:
-            bike_slug = self.kwargs['bike_slug']
-            return reverse(
-                'bikes:stats_list',
-                kwargs={'bike_slug': bike_slug, 'component_pk': component.pk})
+            kwargs = {
+                'bike_slug': self.kwargs['bike_slug'],
+                'component_pk': component.pk,}
+            return reverse('bikes:stats_list', kwargs=kwargs)
 
 
-class ComponentWearDetail(DetailViewMixin):
+class StatsDetail(DetailViewMixin):
     model = ComponentStatistic
-    template_name = 'data/includes/partial_component_wear_row.html'
+    # lookup_field = 'pk'
+    template_name = 'data/includes/partial_stats_row.html'
 
 
-class ComponentWearList(ListViewMixin):
+class StatsList(ListViewMixin):
     def get_template_names(self):
         if self.request.htmx:
-            return ['bikes/includes/partial_component_wear_list.html']
-        return ['bikes/component_wear_list.html']
+            return ['bikes/includes/partial_stats_list.html']
+        return ['bikes/stats_list.html']
 
     def get_queryset(self):
         return Component.objects.items()
 
     def get_context_data(self, **kwargs):
-        bike_slug = self.kwargs['bike_slug']
-        component = Component.objects.get(pk=self.kwargs['component_pk'])
+        bike = Bike.objects.related().get(slug=self.kwargs['bike_slug'])
+        component = Component.objects.related().get(pk=self.kwargs['component_pk'])
         data = (
             Data.objects
             .items()
-            .filter(bike__slug=bike_slug)
+            .filter(bike=bike)
             .values()
         )
         component_statistic = (
             ComponentStatistic.objects
             .items()
-            .filter(bike__slug=bike_slug, component__pk=component.pk)
+            .filter(bike=bike, component=component)
             .values()
         )
         obj = ComponentWear(components=component_statistic, data=data)
         context = {
+            'bike': bike,
             'component': component,
             'component_statistic': component_statistic,
             'km': obj.component_km,
             'stats': obj.component_stats,
             'total': obj.bike_km,
-            'bike_slug': bike_slug,
         }
         return super().get_context_data(**kwargs) | context
 
