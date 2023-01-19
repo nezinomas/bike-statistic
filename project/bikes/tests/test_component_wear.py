@@ -6,7 +6,7 @@ from ...data.factories import DataFactory
 from ...data.models import Data
 from ..factories import (BikeFactory, ComponentFactory,
                          ComponentStatisticFactory)
-from ..lib.component_wear import ComponentWear
+from ..lib.stats import ComponentWear
 from ..models import ComponentStatistic
 
 pytestmark = pytest.mark.django_db
