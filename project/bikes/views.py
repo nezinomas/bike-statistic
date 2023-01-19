@@ -356,21 +356,17 @@ class ComponentWearList(ListViewMixin):
         return super().get_context_data(**kwargs) | context
 
 
-@login_required()
-def bike_stats_create(request, bike_slug, component_pk):
-    bike_object = get_object_or_404(Bike, slug=bike_slug)
-    component_object = get_object_or_404(Component, pk=component_pk)
+class StatsCreate(CreateViewMixin):
+    model = ComponentStatistic
+    template_name = 'bikes/stats_form.html'
+    detail_template_name = 'bikes/includes/partial_stats_row.html'
 
-    form = ComponentStatisticForm(
-        request.POST or None,
-        initial={'bike': bike_object, 'component': component_object}
-    )
-    url = reverse(
-        'bikes:stats_create',
-        kwargs={'bike_slug': bike_slug, 'component_pk': component_pk}
-    )
-    context = {'url': url}
-    return bike_stats_save_data(request, context, form, bike_slug, component_pk)
+    def url(self):
+        return reverse_lazy('bikes:stats_create', kwargs={'bike_slug': self.kwargs['bike_slug'], 'component_pk': self.kwargs['component_pk']})
+
+    def get_form(self, data=None, files=None, **kwargs):
+        # pass bike_slug and component_pk from self.kwargs to form
+        return ComponentStatisticForm(data, files, **kwargs | self.kwargs)
 
 
 @login_required()
