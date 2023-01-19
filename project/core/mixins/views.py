@@ -60,15 +60,16 @@ class DeleteMixin:
         return self.hx_redirect
 
     def post(self, *args, **kwargs):
-        if self.get_object():
-            super().post(*args, **kwargs)
+        if not self.get_object():
+            return HttpResponse()
 
-            if hx_redirect := self.get_hx_redirect():
-                return HttpResponseClientRedirect(hx_redirect)
+        super().post(*args, **kwargs)
 
-            return httpHtmxResponse(self.get_hx_trigger_django())
+        if hx_redirect := self.get_hx_redirect():
+            return HttpResponseClientRedirect(hx_redirect)
 
-        return HttpResponse()
+        return httpHtmxResponse(self.get_hx_trigger_django())
+
 
 
 # ---------------------------------------------------------------------------------------
