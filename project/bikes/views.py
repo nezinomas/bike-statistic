@@ -249,9 +249,9 @@ def component_delete(request, pk):
     return JsonResponse(data)
 
 
-# ---------------------------------------------------------------------------- Bike Stats
-
-
+# ---------------------------------------------------------------------------------------
+#                                                                          Component Wear
+# ---------------------------------------------------------------------------------------
 def bike_stats_form_valid(data, bike_slug, component_pk):
     components = Component.objects.items()
     data1 = (
