@@ -1,7 +1,4 @@
 {% load humanize %}
-{% load template_filters %}
-{% load slippers %}
-
 
 <div class="alert alert-info d-flex justify-content-between" role="alert">
     <div>{% for key, value in stats.items %}
@@ -24,21 +21,7 @@
     </thead>
     <tbody class="table-group-divider">
         {% for item in component_statistic %}
-        {% url 'bikes:stats_update' bike_slug item.id as url_update %}
-        {% url 'bikes:stats_delete' bike_slug item.id as url_delete %}
-        <tr id="row_id_{{ item.id }}" data-pk="{{ item.id }}" data-url="{{ url_update }}">
-            <td>{{ item.start_date|date:"Y-m-d" }}</td>
-            <td>{% if item.end_date %}{{ item.end_date|date:"Y-m-d" }}{% else %}{% now "Y-m-d" %}{% endif %}</td>
-            <td>{{ item.price|default_if_none:'-' }}</td>
-            <td>{{ item.brand }}</td>
-            <td class="text-end">
-                {% with km|get_item:item.id as km %}{{ km|floatformat:0|intcomma }}{% endwith %}
-            </td>
-            <td class="text-end">
-                {% edit_button url=url_update %}
-                {% delete_button url_delete %}
-            </td>
-        </tr>
+        {% include 'bikes/includes/partial_component_wear_row.html' %}
         {% empty %}
         <tr><td class="bg-warning text-center" colspan="6">No records</td></tr>
         {% endfor %}

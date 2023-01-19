@@ -315,6 +315,11 @@ class ComponentWearIndex(RedirectViewMixin):
                 kwargs={'bike_slug': bike_slug, 'component_pk': component.pk})
 
 
+class ComponentWearDetail(DetailViewMixin):
+    model = ComponentStatistic
+    template_name = 'data/includes/partial_component_wear_row.html'
+
+
 class ComponentWearList(ListViewMixin):
     def get_template_names(self):
         if self.request.htmx:
