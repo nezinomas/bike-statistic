@@ -1,3 +1,4 @@
+from django.urls import reverse_lazy
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
 from django.utils.text import slugify
@@ -168,3 +169,8 @@ class ComponentStatistic(models.Model):
 
     def __str__(self):
         return f'{self.bike} / {self.component} / {self.start_date} ... {self.end_date}'
+
+    def get_absolute_url(self):
+        return reverse_lazy(
+            "bikes:stats_detail",
+            kwargs={"bike_slug": self.bike.slug, "stats_pk": self.pk})
