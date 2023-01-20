@@ -1,3 +1,8 @@
-<button type="button" class="btn btn-sm  btn-danger" hx-target="#dialog" {% if url %}hx-get="{{url}}"{% endif %} hx-swap="innerHTML">
+<button
+    type="button"
+    class="btn btn-sm btn-danger"
+    {% if url %}hx-get="{{url}}"{% endif %}
+    hx-target="#dialog"
+    hx-swap="innerHTML">
     <i class="bi bi-trash"></i> {% if label %} Delete {% endif %}
 </button>
