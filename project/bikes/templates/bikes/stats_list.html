@@ -1,21 +1,22 @@
-{% extends 'category_wear.html' %}
-{% load humanize %}
+{% extends 'base.html' %}
+
 {% load slippers %}
 
 
 {% block content %}
     <div class="row my-2">
-        <div class="col text-left">
-            <nav class="nav">
-                {% for item in components %}
-                <a href="{% url 'bikes:stats_list' bike_slug item.id %}" class="nav-link {% if item.id == component.pk %}active disabled{% endif %}">{{ item.name }}</a>
-                {% if not forloop.last %}<span class="navbar-text">|</span>{% endif %}{% endfor %}
-            </nav>
+        <div class="col">
+                {% for item in object_list %}
+                <a role="button" href="{% url 'bikes:stats_list' bike.slug item.id %}" class="btn btn-sm {% if item.id == component.pk %}btn-primary{% else %}btn-secondary{% endif %}">{{ item.name }}</a>
+                {% endfor %}
         </div>
         <div class="col-sm-2 text-end">
-            {% url 'bikes:stats_create' bike_slug component.pk as url_create %}
-            {% new_button url=url_create label='New Component' width='70%' %}
+            {% url 'bikes:stats_create' bike.slug component.pk as url_create %}
+            {% new_button url=url_create label='New Component' width='70%' url=url_create target="stats-table-tbody" swap="afterbegin" %}
         </div>
     </div>
-    {% include 'bikes/includes/partial_stats_list.html' %}
+
+    <div id="htmx-container" hx-trigger="reload from:body" hx-get="{% url 'bikes:stats_list' bike.slug component.pk %}" hx-target="this">
+        {% include 'bikes/includes/partial_stats_list.html' %}
+    </div>
 {% endblock content %}

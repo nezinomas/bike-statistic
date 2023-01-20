@@ -68,3 +68,8 @@ li.nav-item:last-child {
   margin-top: .15rem!important;
   text-align: center;
 }
+
+.alert-info {
+  margin-top: 1rem;
+  padding: 0.5rem;
+}

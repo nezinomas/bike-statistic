@@ -24,17 +24,34 @@ class ComponentForm(FormMixin, forms.ModelForm):
 class ComponentStatisticForm(forms.ModelForm):
     class Meta:
         model = ComponentStatistic
-        fields = '__all__'
+        fields = ['start_date', 'end_date', 'price', 'brand']
+
         widgets = {
-            'bike': forms.HiddenInput(),
-            'component': forms.HiddenInput()
+            'start_date': DatePickerInput(format='%Y-%m-%d'),
+            'end_date': DatePickerInput(format='%Y-%m-%d'),
         }
 
     def __init__(self, *args, **kwargs):
+        self._bike_slug = kwargs.pop('bike_slug', None)
+        self._component_pk = kwargs.pop('component_pk', None)
+
         super().__init__(*args, **kwargs)
 
+        self.fields['start_date'].initial = datetime.now()
         self.helper = FormHelper()
         set_field_properties(self, self.helper)
+
+    def save(self, *args, **kwargs):
+        instance = super().save(commit=False)
+
+        if self._bike_slug:
+            instance.bike = Bike.objects.related().get(slug=self._bike_slug)
+        if self._component_pk:
+            instance.component = Component.objects.related().get(pk=self._component_pk)
+
+        instance.save()
+
+        return instance
 
 
 class BikeForm(FormMixin, forms.ModelForm):

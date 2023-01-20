@@ -1,45 +1,27 @@
 {% load humanize %}
-{% load template_filters %}
-{% load slippers %}
 
-<div class="row mb-2 me-0 px-1 py-2 wear-stats">
-    <div class="col-1-sm ml-3">{{ component.name }}:</div>
-    <div class="col">
-        {% for key, value in stats.items %}
-        <span class="me-4">{{ key }}: {{ value|floatformat:0|intcomma }} km</span>{% endfor %}
-    </div>
-    <div class="col text-end">
-        Total <b>{{ bike_slug|title }}</b>: {{ total|floatformat:0|intcomma }}km
-    </div>
+<div class="alert alert-info d-flex justify-content-between" role="alert">
+    <div>{% for key, value in stats.items %}
+        {{ key }}: {{ value|floatformat:0|intcomma }} km
+        {% endfor %}</div>
+    <div><strong>{{bike}}</strong> / {{component.name}}</div>
+    <div> Total: {{ total|floatformat:0|intcomma }}km</div>
 </div>
 
-<table class="table table-striped table-hover table-sm mb-5 tbl-js" id="tbl-0">
+<table class="table table-striped table-bordered table-hover table-sm">
     <thead>
         <tr class="table-primary">
-            <th width="20%">Start date</th>
-            <th width="20%">End date</th>
-            <th width="15%">Price</th>
-            <th>Brand</th>
-            <th class="text-end" width="10%">Actions</th>
-            <th width="15%" class="km pe-1 text-end">km</th>
+            <th>Start date</th>
+            <th>End date</th>
+            <th class="w7">Price</th>
+            <th class="w10">Brand</th>
+            <th class="text-end w7">km</th>
+            <th class="text-end w6">Actions</th>
         </tr>
     </thead>
-    <tbody>
-        {% for item in component_statistic %}
-        {% url 'bikes:stats_update' bike_slug item.id as url_update %}
-        {% url 'bikes:stats_delete' bike_slug item.id as url_delete %}
-        <tr id="row_id_{{ item.id }}" data-pk="{{ item.id }}" data-url="{{ url_update }}">
-            <td>{{ item.start_date|date:"Y-m-d" }}</td>
-            <td>{% if item.end_date %}{{ item.end_date|date:"Y-m-d" }}{% else %}{% now "Y-m-d" %}{% endif %}</td>
-            <td>{{ item.price|default_if_none:'-' }}</td>
-            <td>{{ item.brand }}</td>
-            <td class="text-end">
-                {% edit_button url=url_update %}
-                {% delete_button url_delete %}
-            </td>
-            <td class="km pe-1 text-end">
-                {% with km|get_item:item.id as km %}{{ km|floatformat:0|intcomma }}{% endwith %}</td>
-        </tr>
+    <tbody class="table-group-divider" id="stats-table-tbody">
+        {% for object in component_statistic %}
+        {% include 'bikes/includes/partial_stats_row.html' %}
         {% empty %}
         <tr><td class="bg-warning text-center" colspan="6">No records</td></tr>
         {% endfor %}

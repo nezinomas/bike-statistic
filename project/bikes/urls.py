@@ -1,8 +1,10 @@
 from django.urls import path
 
 from . import views
+from .apps import App_name
 
-app_name = 'bikes'
+
+app_name = App_name
 
 urlpatterns = [
     path('component/', views.component_lists, name='component_list'),
@@ -10,11 +12,12 @@ urlpatterns = [
     path('component/update/<int:pk>/', views.component_update, name='component_update'),
     path('component/delete/<int:pk>/', views.component_delete, name='component_delete'),
 
-    path('<slug:bike_slug>/component/', views.bike_stats_index, name='stats_index'),
-    path('<slug:bike_slug>/component/<int:component_pk>/', views.bike_stats_lists, name='stats_list'),
-    path('<slug:bike_slug>/component/<int:component_pk>/create/', views.bike_stats_create, name='stats_create'),
-    path('<slug:bike_slug>/component/<int:stats_pk>/update/', views.bike_stats_update, name='stats_update'),
-    path('<slug:bike_slug>/component/<int:stats_pk>/delete/', views.bike_stats_delete, name='stats_delete'),
+    path('stats/<slug:bike_slug>/', views.StatsIndex.as_view(), name='stats_index'),
+    path('stats/<slug:bike_slug>/<int:component_pk>/', views.StatsList.as_view(), name='stats_list'),
+    path('stats/<slug:bike_slug>/<int:component_pk>/create/', views.StatsCreate.as_view(), name='stats_create'),
+    path('stats/<slug:bike_slug>/detail/<int:stats_pk>/', views.StatsDetail.as_view(), name='stats_detail'),
+    path('stats/<slug:bike_slug>/update/<int:stats_pk>/', views.StatsUpdate.as_view(), name='stats_update'),
+    path('stats/<slug:bike_slug>/delete/<int:stats_pk>/', views.StatsDelete.as_view(), name='stats_delete'),
 
     path('bike/', views.bike_lists, name='bike_list'),
     path('bike/create/', views.bike_create, name='bike_create'),
@@ -22,8 +25,8 @@ urlpatterns = [
     path('bike/delete/<int:pk>/', views.bike_delete, name='bike_delete'),
 
     path('info/', views.bike_info_index, name='info_index'),
-    path('<slug:bike_slug>/info/', views.bike_info_lists, name='info_list'),
-    path('<slug:bike_slug>/info/create/', views.bike_info_create, name='info_create'),
-    path('<slug:bike_slug>/info/update/<int:pk>/', views.bike_info_update, name='info_update'),
-    path('<slug:bike_slug>/info/delete/<int:pk>/', views.bike_info_delete, name='info_delete'),
+    path('info/<slug:bike_slug>/', views.bike_info_lists, name='info_list'),
+    path('info/<slug:bike_slug>/create/', views.bike_info_create, name='info_create'),
+    path('info/<slug:bike_slug>/update/<int:pk>/', views.bike_info_update, name='info_update'),
+    path('info/<slug:bike_slug>/delete/<int:pk>/', views.bike_info_delete, name='info_delete'),
 ]
