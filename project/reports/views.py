@@ -1,5 +1,3 @@
-from django.shortcuts import render
-
 from ..bikes.models import Bike
 from ..core.lib import utils
 from ..core.mixins.views import TemplateViewMixin

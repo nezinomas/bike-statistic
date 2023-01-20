@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404, redirect, render, reverse
 import json
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -36,16 +37,16 @@ def httpHtmxResponse(hx_trigger_name=None, status_code=204):
 #                                                                                  Mixins
 # ---------------------------------------------------------------------------------------
 class CreateUpdateMixin:
-    detail_template_name = None
+    detail_view = None
 
     def form_valid(self, form, **kwargs):
         response = super().form_valid(form)
 
-        if not self.detail_template_name:
+        if not self.detail_view:
             return response
 
         rendered = render_to_string(
-            self.detail_template_name, {'object': self.object}, self.request)
+            self.detail_view.template_name, {'object': self.object}, self.request)
         return HttpResponse(rendered)
 
 
@@ -60,15 +61,16 @@ class DeleteMixin:
         return self.hx_redirect
 
     def post(self, *args, **kwargs):
-        if self.get_object():
-            super().post(*args, **kwargs)
+        if not self.get_object():
+            return HttpResponse()
 
-            if hx_redirect := self.get_hx_redirect():
-                return HttpResponseClientRedirect(hx_redirect)
+        super().post(*args, **kwargs)
 
-            return httpHtmxResponse(self.get_hx_trigger_django())
+        if hx_redirect := self.get_hx_redirect():
+            return HttpResponseClientRedirect(hx_redirect)
 
-        return HttpResponse()
+        return httpHtmxResponse(self.get_hx_trigger_django())
+
 
 
 # ---------------------------------------------------------------------------------------
