@@ -20,7 +20,7 @@
         </tr>
     </thead>
     <tbody class="table-group-divider" id="stats-table-tbody">
-        {% for item in component_statistic %}
+        {% for object in component_statistic %}
         {% include 'bikes/includes/partial_stats_row.html' %}
         {% empty %}
         <tr><td class="bg-warning text-center" colspan="6">No records</td></tr>

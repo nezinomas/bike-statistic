@@ -24,24 +24,34 @@ class ComponentForm(FormMixin, forms.ModelForm):
 class ComponentStatisticForm(forms.ModelForm):
     class Meta:
         model = ComponentStatistic
-        fields = '__all__'
+        fields = ['start_date', 'end_date', 'price', 'brand']
+
+        widgets = {
+            'start_date': DatePickerInput(format='%Y-%m-%d'),
+            'end_date': DatePickerInput(format='%Y-%m-%d'),
+        }
 
     def __init__(self, *args, **kwargs):
-        bike_slug = kwargs.pop('bike_slug')
-        component_pk = kwargs.pop('component_pk')
+        self._bike_slug = kwargs.pop('bike_slug')
+        self._component_pk = kwargs.pop('component_pk')
 
         super().__init__(*args, **kwargs)
 
-        self.fields['bike'].initial = Bike.objects.related().get(slug=bike_slug)
-        self.fields['component'].initial = Component.objects.related().get(pk=component_pk)
-        # self.fields['bike'].disabled = True
-        # self.fields['bike'].widged = forms.HiddenInput()
-        # self.fields['bike'].disabled = True
-        # self.fields['bike'].widged = forms.HiddenInput()
-
+        self.fields['start_date'].initial = datetime.now()
         self.helper = FormHelper()
         set_field_properties(self, self.helper)
 
+    def save(self, *args, **kwargs):
+        instance = super().save(commit=False)
+
+        bike = Bike.objects.related().get(slug=self._bike_slug)
+        component = Component.objects.related().get(pk=self._component_pk)
+
+        instance.bike = bike
+        instance.component = component
+        instance.save()
+
+        return instance
 
 
 class BikeForm(FormMixin, forms.ModelForm):

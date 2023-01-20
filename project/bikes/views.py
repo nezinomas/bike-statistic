@@ -305,21 +305,20 @@ def bike_stats_save_data(request, context, form, bike_slug, pk):
 
 class StatsIndex(RedirectViewMixin):
     def get_redirect_url(self, *args, **kwargs):
-        try:
-            component = Component.objects.items().first()
-        except Component.DoesNotExist:
+        component = Component.objects.items()[:1]
+        if not component.exists():
             return reverse('bikes:component_list')
-        else:
-            kwargs = {
-                'bike_slug': self.kwargs['bike_slug'],
-                'component_pk': component.pk,}
-            return reverse('bikes:stats_list', kwargs=kwargs)
+
+        kwargs = {
+            'bike_slug': self.kwargs['bike_slug'],
+            'component_pk': component[0].pk,}
+        return reverse('bikes:stats_list', kwargs=kwargs)
 
 
 class StatsDetail(DetailViewMixin):
     model = ComponentStatistic
-    # lookup_field = 'pk'
-    template_name = 'data/includes/partial_stats_row.html'
+    lookup_url_kwarg = 'stats_pk'
+    template_name = 'bikes/includes/partial_stats_row.html'
 
 
 class StatsList(ListViewMixin):
@@ -361,7 +360,7 @@ class StatsList(ListViewMixin):
 class StatsCreate(CreateViewMixin):
     model = ComponentStatistic
     template_name = 'bikes/stats_form.html'
-    detail_template_name = 'bikes/includes/partial_stats_row.html'
+    detail_view = StatsDetail
 
     def url(self):
         return reverse_lazy('bikes:stats_create', kwargs={'bike_slug': self.kwargs['bike_slug'], 'component_pk': self.kwargs['component_pk']})
