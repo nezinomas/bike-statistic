@@ -32,8 +32,8 @@ class ComponentStatisticForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        self._bike_slug = kwargs.pop('bike_slug')
-        self._component_pk = kwargs.pop('component_pk')
+        self._bike_slug = kwargs.pop('bike_slug', None)
+        self._component_pk = kwargs.pop('component_pk', None)
 
         super().__init__(*args, **kwargs)
 
@@ -44,11 +44,11 @@ class ComponentStatisticForm(forms.ModelForm):
     def save(self, *args, **kwargs):
         instance = super().save(commit=False)
 
-        bike = Bike.objects.related().get(slug=self._bike_slug)
-        component = Component.objects.related().get(pk=self._component_pk)
+        if self._bike_slug:
+            instance.bike = Bike.objects.related().get(slug=self._bike_slug)
+        if self._component_pk:
+            instance.component = Component.objects.related().get(pk=self._component_pk)
 
-        instance.bike = bike
-        instance.component = component
         instance.save()
 
         return instance

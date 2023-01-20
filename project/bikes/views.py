@@ -9,8 +9,7 @@ from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
                                  RedirectViewMixin, TemplateViewMixin,
                                  UpdateViewMixin)
 from ..data.models import Data
-from .forms import (BikeForm, BikeInfoForm, ComponentForm,
-                    ComponentStatisticForm)
+from . import forms
 from .lib.component_wear import ComponentWear
 from .models import Bike, BikeInfo, Component, ComponentStatistic
 
@@ -333,18 +332,12 @@ class StatsList(ListViewMixin):
     def get_context_data(self, **kwargs):
         bike = Bike.objects.related().get(slug=self.kwargs['bike_slug'])
         component = Component.objects.related().get(pk=self.kwargs['component_pk'])
-        data = (
-            Data.objects
-            .items()
-            .filter(bike=bike)
-            .values()
-        )
-        component_statistic = (
-            ComponentStatistic.objects
-            .items()
+        data = Data.objects.items().filter(bike=bike).values()
+        component_statistic = \
+            ComponentStatistic.objects \
+            .items() \
             .filter(bike=bike, component=component)
-            .values()
-        )
+
         obj = ComponentWear(components=component_statistic, data=data)
         context = {
             'bike': bike,
@@ -367,19 +360,18 @@ class StatsCreate(CreateViewMixin):
 
     def get_form(self, data=None, files=None, **kwargs):
         # pass bike_slug and component_pk from self.kwargs to form
-        return ComponentStatisticForm(data, files, **kwargs | self.kwargs)
+        return forms.ComponentStatisticForm(data, files, **kwargs | self.kwargs)
 
 
-@login_required()
-def bike_stats_update(request, bike_slug, stats_pk):
-    obj = get_object_or_404(ComponentStatistic, pk=stats_pk)
-    form = ComponentStatisticForm(request.POST or None, instance=obj)
-    url = reverse(
-        'bikes:stats_update',
-        kwargs={'bike_slug': bike_slug, 'stats_pk': stats_pk}
-    )
-    context = {'url': url}
-    return bike_stats_save_data(request, context, form, bike_slug, obj.component.pk)
+class StatsUpdate(UpdateViewMixin):
+    model = ComponentStatistic
+    form_class = forms.ComponentStatisticForm
+    template_name = 'bikes/stats_form.html'
+    lookup_url_kwarg = 'stats_pk'
+    detail_view = StatsDetail
+
+    def url(self):
+        return reverse_lazy('bikes:stats_update', kwargs={'bike_slug': self.kwargs['bike_slug'], 'stats_pk': self.kwargs['stats_pk']})
 
 
 @login_required()

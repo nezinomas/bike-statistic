@@ -44,6 +44,12 @@ def test_stats_create_func():
     assert views.StatsCreate is view.func.view_class
 
 
+def test_stats_update_func():
+    view = resolve('/stats/bike/update/7/')
+
+    assert views.StatsUpdate is view.func.view_class
+
+
 def test_stats_index_no_component(client_logged):
     bike = BikeFactory()
     url = reverse('bikes:stats_index', kwargs={'bike_slug': bike.slug})
@@ -107,6 +113,27 @@ def test_stats_list_with_data(client_logged):
     assert '1999-01-31' in content
     assert '1.11' in content
     assert 'Brand' in content
+
+
+def test_stats_list_with_data_links(client_logged):
+    bike = BikeFactory()
+    component = ComponentFactory()
+    stats = ComponentStatisticFactory()
+
+    url = reverse('bikes:stats_list', kwargs={'bike_slug': bike.slug, 'component_pk': component.pk})
+    response = client_logged.get(url)
+    actual = clean_content(response.content)
+
+    row_id = f'row-id-{stats.pk}'
+    url_update = reverse('bikes:stats_update', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    url_delete = reverse('bikes:stats_delete', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+
+    # table row
+    assert f'<tr id="{row_id}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
+    # edit button
+    assert f'<button type="button" class="btn btn-sm btn-warning" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
+    # delete button
+    assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#dialog" hx-swap="innerHTML">' in actual
 
 
 def test_stats_detail_rendered_context(client_logged):
@@ -184,3 +211,66 @@ def test_stats_create_save_no_start_date(client_logged):
 
     assert not form.is_valid()
     assert 'start_date' in form.errors
+
+
+def test_stats_update_load_form(client_logged):
+    bike = BikeFactory()
+    stats = ComponentStatisticFactory()
+
+    url = reverse('bikes:stats_update', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    response = client_logged.get(url)
+    form = response.context['form'].as_p()
+
+    assert '1999-01-01' in form
+    assert '1999-01-31' in form
+    assert '1.11' in form
+    assert 'Brand' in form
+
+
+def test_stats_update_load_form_close_button(client_logged):
+    bike = BikeFactory()
+    stats = ComponentStatisticFactory()
+
+    url = reverse('bikes:stats_detail', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    response = client_logged.get(url)
+    actual = clean_content(response.content)
+
+    url_close = reverse('bikes:stats_update', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    assert f'hx-get="{url_close}"' in actual
+
+
+def test_stats_update_start_date(client_logged):
+    bike = BikeFactory()
+    stats = ComponentStatisticFactory()
+
+    data = {
+        'start_date': '1999-1-30',
+        'end_date': str(stats.end_date),
+        'price': stats.price,
+        'brand': stats.brand
+    }
+
+    url = reverse('bikes:stats_update', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    client_logged.post(url, data)
+
+    actual = models.ComponentStatistic.objects.get(pk=stats.pk)
+
+    assert actual.start_date == date(1999, 1, 30)
+
+
+def test_stats_update_end_date(client_logged):
+    bike = BikeFactory()
+    stats = ComponentStatisticFactory()
+
+    data = {
+        'start_date': str(stats.start_date),
+        'price': stats.price,
+        'brand': stats.brand
+    }
+
+    url = reverse('bikes:stats_update', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    client_logged.post(url, data)
+
+    actual = models.ComponentStatistic.objects.get(pk=stats.pk)
+
+    assert not actual.end_date
