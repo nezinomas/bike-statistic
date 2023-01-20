@@ -252,56 +252,6 @@ def component_delete(request, pk):
 # ---------------------------------------------------------------------------------------
 #                                                         Bike Component Statistic (Wear)
 # ---------------------------------------------------------------------------------------
-def bike_stats_form_valid(data, bike_slug, component_pk):
-    components = Component.objects.items()
-    data1 = (
-        Data.objects
-        .items()
-        .filter(bike__slug=bike_slug)
-        .values()
-    )
-    component_statistic = (
-        ComponentStatistic.objects
-        .items()
-        .filter(bike__slug=bike_slug, component__pk=component_pk)
-        .values()
-    )
-
-    obj = ComponentWear(components=component_statistic, data=data1)
-
-    data['form_is_valid'] = True
-    data['html_list'] = render_to_string(
-        'bikes/includes/partial_stats_list.html',
-        {
-            'components': components,
-            'component_statistic': component_statistic,
-            'km': obj.component_km,
-            'stats': obj.component_stats,
-            'total': obj.bike_km,
-            'bike_slug': bike_slug,
-        }
-    )
-
-
-def bike_stats_save_data(request, context, form, bike_slug, pk):
-    data = {}
-
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            bike_stats_form_valid(data, bike_slug, pk)
-        else:
-            data['form_is_valid'] = False
-
-    context['form'] = form
-    data['html_form'] = render_to_string(
-        template_name='bikes/includes/partial_stats_update.html',
-        context=context,
-        request=request
-    )
-    return JsonResponse(data)
-
-
 class StatsIndex(RedirectViewMixin):
     def get_redirect_url(self, *args, **kwargs):
         component = Component.objects.items()[:1]
@@ -374,18 +324,7 @@ class StatsUpdate(UpdateViewMixin):
         return reverse_lazy('bikes:stats_update', kwargs={'bike_slug': self.kwargs['bike_slug'], 'stats_pk': self.kwargs['stats_pk']})
 
 
-@login_required()
-def bike_stats_delete(request, bike_slug, stats_pk):
-    obj = get_object_or_404(ComponentStatistic, pk=stats_pk)
-    data = {}
-    if request.method == 'POST':
-        obj.delete()
-        bike_stats_form_valid(data, bike_slug, obj.component.pk)
-    else:
-        context = {'component': obj, 'bike_slug': bike_slug}
-        data['html_form'] = render_to_string(
-            'bikes/includes/partial_stats_delete.html',
-            context,
-            request
-        )
-    return JsonResponse(data)
+class StatsDelete(DeleteViewMixin):
+    model = ComponentStatistic
+    lookup_url_kwarg = 'stats_pk'
+    success_url = '/'

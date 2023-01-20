@@ -1,3 +1,4 @@
+import re
 from datetime import date
 
 import pytest
@@ -48,6 +49,12 @@ def test_stats_update_func():
     view = resolve('/stats/bike/update/7/')
 
     assert views.StatsUpdate is view.func.view_class
+
+
+def test_stats_delete_func():
+    view = resolve('/stats/bike/delete/7/')
+
+    assert views.StatsDelete is view.func.view_class
 
 
 def test_stats_index_no_component(client_logged):
@@ -274,3 +281,35 @@ def test_stats_update_end_date(client_logged):
     actual = models.ComponentStatistic.objects.get(pk=stats.pk)
 
     assert not actual.end_date
+
+
+def test_stats_delete_200(client_logged):
+    bike = BikeFactory()
+    stats = ComponentStatisticFactory()
+    url = reverse('bikes:stats_delete', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+
+    response = client_logged.get(url)
+
+    assert response.status_code == 200
+
+
+def test_stats_delete_load_form(client_logged):
+    bike = BikeFactory()
+    stats = ComponentStatisticFactory()
+    url = reverse('bikes:stats_delete', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+
+    response = client_logged.get(url)
+    content = clean_content(response.content)
+
+    res = re.findall(fr'<form.+hx-post="({url})"', content)
+    assert res[0] == url
+
+
+def test_stats_delete(client_logged):
+    bike = BikeFactory()
+    stats = ComponentStatisticFactory()
+    url = reverse('bikes:stats_delete', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+
+    client_logged.post(url, {})
+
+    assert models.ComponentStatistic.objects.all().count() == 0

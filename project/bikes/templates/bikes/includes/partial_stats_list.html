@@ -4,7 +4,7 @@
     <div>{% for key, value in stats.items %}
         {{ key }}: {{ value|floatformat:0|intcomma }} km
         {% endfor %}</div>
-    <div>{{bike}} / <strong>{{component.name}}</strong></div>
+    <div><strong>{{bike}}</strong> / {{component.name}}</div>
     <div> Total: {{ total|floatformat:0|intcomma }}km</div>
 </div>
 
