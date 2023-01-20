@@ -326,5 +326,6 @@ class StatsUpdate(UpdateViewMixin):
 
 class StatsDelete(DeleteViewMixin):
     model = ComponentStatistic
+    template_name = 'bikes/stats_confirm_delete.html'
     lookup_url_kwarg = 'stats_pk'
     success_url = '/'
