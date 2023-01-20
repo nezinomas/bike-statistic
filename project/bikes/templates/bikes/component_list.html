@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load slippers %}
+
+
+{% block breadcrumb %}{{ block.super }}
+    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="#">Components</a>
+{% endblock %}
+
+
+{% block content %}
+<p class="text-right my-2">
+    {% url 'bikes:component_create' as url_create %}
+    {% new_button url=url_create label='New Component' tbl='0' width='19%' %}
+</p>
+{% include "bikes/includes/partial_component_list.html" %}
+
+{% endblock content %}
