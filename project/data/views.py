@@ -37,7 +37,7 @@ class DataList(ListViewMixin):
 class DataCreate(CreateViewMixin):
     model = models.Data
     form_class = forms.DataForm
-    detail_template_name = 'data/includes/partial_data_row.html'
+    detail_view = DataDetail
     success_url = reverse_lazy('index')
 
     def url(self):
@@ -47,7 +47,7 @@ class DataCreate(CreateViewMixin):
 class DataUpdate(UpdateViewMixin):
     model = models.Data
     form_class = forms.DataForm
-    detail_template_name = 'data/includes/partial_data_row.html'
+    detail_view = DataDetail
     success_url = reverse_lazy('index')
 
     def url(self):
