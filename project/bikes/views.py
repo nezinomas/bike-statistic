@@ -14,6 +14,9 @@ from .lib.component_wear import ComponentWear
 from .models import Bike, BikeInfo, Component, ComponentStatistic
 
 
+# ---------------------------------------------------------------------------------------
+#                                                                                   Bikes
+# ---------------------------------------------------------------------------------------
 def form_valid1(data):
     objects = Bike.objects.items()
     data['form_is_valid'] = True
@@ -42,17 +45,14 @@ def bike_save_data(request, context, form):
     return JsonResponse(data)
 
 
-@login_required()
-def bike_lists(request):
-    obj = Bike.objects.items()
-    # reikia, nes kitaip pirma karta paspaudus ant date picker jis neveikia
-    form_media = BikeForm(None).media
-    rendered = render(
-        request,
-        'bikes/bike_list.html',
-        {'objects': obj, 'form_media': form_media}
-    )
-    return rendered
+class BikeList(ListViewMixin):
+    def get_template_names(self):
+        if self.request.htmx:
+            return ['bikes/includes/partial_bike_list.html']
+        return ['bikes/bike_list.html']
+
+    def get_queryset(self):
+        return Bike.objects.items()
 
 
 @login_required()

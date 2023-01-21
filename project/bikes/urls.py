@@ -19,7 +19,7 @@ urlpatterns = [
     path('stats/<slug:bike_slug>/update/<int:stats_pk>/', views.StatsUpdate.as_view(), name='stats_update'),
     path('stats/<slug:bike_slug>/delete/<int:stats_pk>/', views.StatsDelete.as_view(), name='stats_delete'),
 
-    path('bike/', views.bike_lists, name='bike_list'),
+    path('bike/', views.BikeList.as_view(), name='bike_list'),
     path('bike/create/', views.bike_create, name='bike_create'),
     path('bike/update/<int:pk>/', views.bike_update, name='bike_update'),
     path('bike/delete/<int:pk>/', views.bike_delete, name='bike_delete'),
