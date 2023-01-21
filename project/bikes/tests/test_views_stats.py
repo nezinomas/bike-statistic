@@ -6,19 +6,10 @@ from django.urls import resolve, reverse
 
 from ...bikes.factories import (BikeFactory, ComponentFactory,
                                 ComponentStatisticFactory)
+from ...core.lib.tests_utils import clean_content
 from .. import models, views
 
 pytestmark = pytest.mark.django_db
-
-
-def clean_content(content):
-    content = content.decode('utf-8')
-    content = content.replace('\n', '')
-    content = content.replace('\t', '')
-    while '  ' in content:
-        content = content.replace('  ', ' ')
-
-    return content
 
 
 def test_stats_index_func():
