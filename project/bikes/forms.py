@@ -84,7 +84,6 @@ class BikeForm(FormMixin, forms.ModelForm):
         self.fields['retired'].label = 'Retired'
 
 
-
     def clean_main(self):
         _main = self.cleaned_data.get('main')
 
