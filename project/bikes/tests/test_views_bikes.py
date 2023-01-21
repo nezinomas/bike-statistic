@@ -1,10 +1,12 @@
+import re
 from datetime import date
 
 import pytest
 from django.urls import resolve, reverse
-from ...users.factories import UserFactory
+
 from ...bikes.factories import BikeFactory
 from ...core.lib.tests_utils import clean_content
+from ...users.factories import UserFactory
 from .. import models, views
 
 pytestmark = pytest.mark.django_db
@@ -32,6 +34,12 @@ def test_bike_update_func():
     view = resolve('/bike/update/1/')
 
     assert views.BikeUpdate is view.func.view_class
+
+
+def test_bike_delete_func():
+    view = resolve('/bike/delete/1/')
+
+    assert views.BikeDelete is view.func.view_class
 
 
 def test_bike_list_200(client_logged):
@@ -271,3 +279,32 @@ def test_bike_update_retired(client_logged):
     assert actual.short_name == bike.short_name
     assert actual.main == bike.main
     assert actual.retired is True
+
+
+def test_bike_delete_200(client_logged):
+    bike = BikeFactory()
+    url = reverse('bikes:bike_delete', kwargs={'pk': bike.pk})
+
+    response = client_logged.get(url)
+
+    assert response.status_code == 200
+
+
+def test_bike_delete_load_form(client_logged):
+    bike = BikeFactory()
+    url = reverse('bikes:bike_delete', kwargs={'pk': bike.pk})
+
+    response = client_logged.get(url)
+    content = clean_content(response.content)
+
+    res = re.findall(fr'<form.+hx-post="({url})"', content)
+    assert res[0] == url
+
+
+def test_bike_delete(client_logged):
+    bike = BikeFactory()
+    url = reverse('bikes:bike_delete', kwargs={'pk': bike.pk})
+
+    client_logged.post(url, {})
+
+    assert models.Bike.objects.all().count() == 0

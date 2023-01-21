@@ -17,34 +17,6 @@ from .models import Bike, BikeInfo, Component, ComponentStatistic
 # ---------------------------------------------------------------------------------------
 #                                                                                   Bikes
 # ---------------------------------------------------------------------------------------
-def form_valid1(data):
-    objects = Bike.objects.items()
-    data['form_is_valid'] = True
-    data['html_list'] = render_to_string(
-        'bikes/includes/partial_bike_list.html',
-        {'objects': objects}
-    )
-
-
-def bike_save_data(request, context, form):
-    data = {}
-
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            form_valid1(data)
-        else:
-            data['form_is_valid'] = False
-
-    context['form'] = form
-    data['html_form'] = render_to_string(
-        template_name='bikes/includes/partial_bike_update.html',
-        context=context,
-        request=request
-    )
-    return JsonResponse(data)
-
-
 class BikeDetail(DetailViewMixin):
     model = Bike
     template_name = 'bikes/includes/partial_bike_row.html'
@@ -80,22 +52,10 @@ class BikeUpdate(UpdateViewMixin):
         return reverse_lazy('bikes:bike_update', kwargs={'pk': self.kwargs['pk']})
 
 
-@login_required()
-def bike_delete(request, pk):
-    obj = get_object_or_404(Bike, pk=pk)
-    data = {}
-
-    if request.method == 'POST':
-        obj.delete()
-        form_valid1(data)
-    else:
-        context = {'object': obj}
-        data['html_form'] = render_to_string(
-            'bikes/includes/partial_bike_delete.html',
-            context,
-            request
-        )
-    return JsonResponse(data)
+class BikeDelete(DeleteViewMixin):
+    model = Bike
+    template_name = 'bikes/bike_confirm_delete.html'
+    success_url = '/'
 
 
 # ----------------------------------------------------------------------------- Bike Info

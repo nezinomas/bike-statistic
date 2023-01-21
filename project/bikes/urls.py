@@ -23,7 +23,7 @@ urlpatterns = [
     path('bike/create/', views.BikeCreate.as_view(), name='bike_create'),
     path('bike/detail/<int:pk>/', views.BikeDetail.as_view(), name='bike_detail'),
     path('bike/update/<int:pk>/', views.BikeUpdate.as_view(), name='bike_update'),
-    path('bike/delete/<int:pk>/', views.bike_delete, name='bike_delete'),
+    path('bike/delete/<int:pk>/', views.BikeDelete.as_view(), name='bike_delete'),
 
     path('info/', views.bike_info_index, name='info_index'),
     path('info/<slug:bike_slug>/', views.bike_info_lists, name='info_list'),
