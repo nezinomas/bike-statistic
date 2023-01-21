@@ -69,17 +69,6 @@ def test_stats_index_redirected(client_logged):
     assert response.resolver_match.func.view_class is views.StatsList
 
 
-def test_stats_detail(client_logged):
-    bike = BikeFactory()
-    stats = ComponentStatisticFactory()
-
-    url = reverse('bikes:stats_detail', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
-    response = client_logged.get(url)
-
-    actual = response.context['object']
-    assert actual == stats
-
-
 def test_stats_list_200(client_logged):
     bike = BikeFactory()
     component = ComponentFactory()
@@ -132,6 +121,17 @@ def test_stats_list_with_data_links(client_logged):
     assert f'<button type="button" class="btn btn-sm btn-warning" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
     # delete button
     assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#dialog" hx-swap="innerHTML">' in actual
+
+
+def test_stats_detail(client_logged):
+    bike = BikeFactory()
+    stats = ComponentStatisticFactory()
+
+    url = reverse('bikes:stats_detail', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    response = client_logged.get(url)
+
+    actual = response.context['object']
+    assert actual == stats
 
 
 def test_stats_detail_rendered_context(client_logged):

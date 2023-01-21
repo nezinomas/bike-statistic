@@ -21,6 +21,7 @@ urlpatterns = [
 
     path('bike/', views.BikeList.as_view(), name='bike_list'),
     path('bike/create/', views.bike_create, name='bike_create'),
+    path('bike/detail/<int:pk>/', views.BikeDetail.as_view(), name='bike_detail'),
     path('bike/update/<int:pk>/', views.bike_update, name='bike_update'),
     path('bike/delete/<int:pk>/', views.bike_delete, name='bike_delete'),
 

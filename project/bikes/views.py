@@ -45,6 +45,11 @@ def bike_save_data(request, context, form):
     return JsonResponse(data)
 
 
+class BikeDetail(DetailViewMixin):
+    model = Bike
+    template_name = 'bikes/includes/partial_bike_row.html'
+
+
 class BikeList(ListViewMixin):
     def get_template_names(self):
         if self.request.htmx:
