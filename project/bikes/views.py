@@ -70,13 +70,14 @@ class BikeCreate(CreateViewMixin):
         return reverse_lazy('bikes:bike_create')
 
 
-@login_required()
-def bike_update(request, pk):
-    obj = get_object_or_404(Bike, pk=pk)
-    form = BikeForm(request.POST or None, instance=obj)
-    url = reverse('bikes:bike_update', kwargs={'pk': pk})
-    context = {'url': url}
-    return bike_save_data(request, context, form)
+class BikeUpdate(UpdateViewMixin):
+    model = Bike
+    form_class = forms.BikeForm
+    template_name = 'bikes/bike_form.html'
+    detail_view = BikeDetail
+
+    def url(self):
+        return reverse_lazy('bikes:bike_update', kwargs={'pk': self.kwargs['pk']})
 
 
 @login_required()

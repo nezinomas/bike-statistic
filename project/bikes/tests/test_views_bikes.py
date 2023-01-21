@@ -28,6 +28,12 @@ def test_bike_create_func():
     assert views.BikeCreate is view.func.view_class
 
 
+def test_bike_update_func():
+    view = resolve('/bike/update/1/')
+
+    assert views.BikeUpdate is view.func.view_class
+
+
 def test_bike_list_200(client_logged):
     url = reverse('bikes:bike_list')
     response = client_logged.get(url)
@@ -127,3 +133,141 @@ def test_bike_create_save_form_errors(client_logged):
     assert not form.is_valid()
     assert 'date' in form.errors
     assert 'short_name' in form.errors
+
+
+def test_bike_update_load_form(client_logged):
+    bike = BikeFactory()
+
+    url = reverse('bikes:bike_update', kwargs={'pk': bike.pk})
+    response = client_logged.get(url)
+    form = response.context['form'].as_p()
+
+    assert '1999-01-01' in form
+    assert 'Full Name' in form
+    assert 'Short Name' in form
+
+
+def test_bike_update_load_form_close_button(client_logged):
+    bike = BikeFactory()
+
+    url = reverse('bikes:bike_detail', kwargs={'pk': bike.pk})
+    response = client_logged.get(url)
+    actual = clean_content(response.content)
+
+    url_close = reverse('bikes:bike_update', kwargs={'pk': bike.pk})
+    assert f'hx-get="{url_close}"' in actual
+
+
+def test_bike_update_date(client_logged):
+    bike = BikeFactory()
+
+    data = {
+        'date': '1999-1-30',
+        'full_name': bike.full_name,
+        'short_name': bike.short_name,
+        'main': bike.main,
+        'retired': bike.retired,
+    }
+
+    url = reverse('bikes:bike_update', kwargs={'pk': bike.pk})
+    client_logged.post(url, data)
+
+    actual = models.Bike.objects.get(pk=bike.pk)
+
+    assert actual.date == date(1999, 1, 30)
+    assert actual.full_name == bike.full_name
+    assert actual.short_name == bike.short_name
+    assert actual.main == bike.main
+    assert actual.retired == bike.retired
+
+
+def test_bike_update_full_name(client_logged):
+    bike = BikeFactory()
+
+    data = {
+        'date': str(bike.date),
+        'full_name': 'XXX',
+        'short_name': bike.short_name,
+        'main': bike.main,
+        'retired': bike.retired,
+    }
+
+    url = reverse('bikes:bike_update', kwargs={'pk': bike.pk})
+    client_logged.post(url, data)
+
+    actual = models.Bike.objects.get(pk=bike.pk)
+
+    assert actual.date == bike.date
+    assert actual.full_name == 'XXX'
+    assert actual.short_name == bike.short_name
+    assert actual.main == bike.main
+    assert actual.retired == bike.retired
+
+
+def test_bike_update_short_name(client_logged):
+    bike = BikeFactory()
+
+    data = {
+        'date': str(bike.date),
+        'full_name': bike.full_name,
+        'short_name': 'xxx',
+        'main': bike.main,
+        'retired': bike.retired,
+    }
+
+    url = reverse('bikes:bike_update', kwargs={'pk': bike.pk})
+    client_logged.post(url, data)
+
+    actual = models.Bike.objects.get(pk=bike.pk)
+
+    assert actual.date == bike.date
+    assert actual.full_name == bike.full_name
+    assert actual.short_name == 'xxx'
+    assert actual.main == bike.main
+    assert actual.retired == bike.retired
+
+
+def test_bike_update_main(client_logged):
+    bike = BikeFactory()
+
+    data = {
+        'date': str(bike.date),
+        'full_name': bike.full_name,
+        'short_name': bike.short_name,
+        'main': True,
+        'retired': bike.retired,
+    }
+
+    url = reverse('bikes:bike_update', kwargs={'pk': bike.pk})
+    client_logged.post(url, data)
+
+    actual = models.Bike.objects.get(pk=bike.pk)
+
+    assert actual.date == bike.date
+    assert actual.full_name == bike.full_name
+    assert actual.short_name == bike.short_name
+    assert actual.main is True
+    assert actual.retired == bike.retired
+
+
+def test_bike_update_retired(client_logged):
+    bike = BikeFactory()
+
+    data = {
+        'date': str(bike.date),
+        'full_name': bike.full_name,
+        'short_name': bike.short_name,
+        'main': bike.main,
+        'retired': True,
+    }
+
+    url = reverse('bikes:bike_update', kwargs={'pk': bike.pk})
+    client_logged.post(url, data)
+
+    actual = models.Bike.objects.get(pk=bike.pk)
+
+    assert actual.date == bike.date
+    assert actual.full_name == bike.full_name
+    assert actual.short_name == bike.short_name
+    assert actual.main == bike.main
+    assert actual.retired is True
