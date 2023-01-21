@@ -77,12 +77,13 @@ class BikeForm(FormMixin, forms.ModelForm):
         set_field_properties(self, self.helper)
 
         self.helper.form_show_labels = True
-
         self.fields['date'].label = ''
         self.fields['full_name'].label = ''
         self.fields['short_name'].label = ''
-        self.fields['main'].label = 'Pagrindinis'
-        self.fields['retired'].label = 'Parduotas'
+        self.fields['main'].label = 'Main'
+        self.fields['retired'].label = 'Retired'
+
+
 
     def clean_main(self):
         _main = self.cleaned_data.get('main')
@@ -94,7 +95,7 @@ class BikeForm(FormMixin, forms.ModelForm):
             qs = qs.exclude(pk=self.instance.pk)
 
         if _main and qs.count() > 0:
-            raise forms.ValidationError('Gali būti tik vienas pagrindinis dviratis!')
+            raise forms.ValidationError('There can be only one main bike.')
 
         return _main
 
@@ -103,7 +104,7 @@ class BikeForm(FormMixin, forms.ModelForm):
         _retired = self.cleaned_data.get('retired')
 
         if _main and _retired:
-            raise forms.ValidationError('Pagrindio dviračio negalima žymėti kaip Parduotas!')
+            raise forms.ValidationError('The main bike cannot be marked as Retired!')
 
         return _retired
 
