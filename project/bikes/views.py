@@ -14,79 +14,48 @@ from .lib.component_wear import ComponentWear
 from .models import Bike, BikeInfo, Component, ComponentStatistic
 
 
-def form_valid1(data):
-    objects = Bike.objects.items()
-    data['form_is_valid'] = True
-    data['html_list'] = render_to_string(
-        'bikes/includes/partial_bike_list.html',
-        {'objects': objects}
-    )
+# ---------------------------------------------------------------------------------------
+#                                                                                   Bikes
+# ---------------------------------------------------------------------------------------
+class BikeDetail(DetailViewMixin):
+    model = Bike
+    template_name = 'bikes/includes/partial_bike_row.html'
 
 
-def bike_save_data(request, context, form):
-    data = {}
+class BikeList(ListViewMixin):
+    def get_template_names(self):
+        if self.request.htmx:
+            return ['bikes/includes/partial_bike_list.html']
+        return ['bikes/bike_list.html']
 
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            form_valid1(data)
-        else:
-            data['form_is_valid'] = False
-
-    context['form'] = form
-    data['html_form'] = render_to_string(
-        template_name='bikes/includes/partial_bike_update.html',
-        context=context,
-        request=request
-    )
-    return JsonResponse(data)
+    def get_queryset(self):
+        return Bike.objects.items()
 
 
-@login_required()
-def bike_lists(request):
-    obj = Bike.objects.items()
-    # reikia, nes kitaip pirma karta paspaudus ant date picker jis neveikia
-    form_media = BikeForm(None).media
-    rendered = render(
-        request,
-        'bikes/bike_list.html',
-        {'objects': obj, 'form_media': form_media}
-    )
-    return rendered
+class BikeCreate(CreateViewMixin):
+    model = Bike
+    form_class = forms.BikeForm
+    template_name = 'bikes/bike_form.html'
+    detail_view = BikeDetail
+
+    def url(self):
+        return reverse_lazy('bikes:bike_create')
 
 
-@login_required()
-def bike_create(request):
-    form = BikeForm(request.POST or None)
-    context = {'url': reverse('bikes:bike_create')}
-    return bike_save_data(request, context, form)
+class BikeUpdate(UpdateViewMixin):
+    model = Bike
+    form_class = forms.BikeForm
+    template_name = 'bikes/bike_form.html'
+    detail_view = BikeDetail
+
+    def url(self):
+        return reverse_lazy('bikes:bike_update', kwargs={'pk': self.kwargs['pk']})
 
 
-@login_required()
-def bike_update(request, pk):
-    obj = get_object_or_404(Bike, pk=pk)
-    form = BikeForm(request.POST or None, instance=obj)
-    url = reverse('bikes:bike_update', kwargs={'pk': pk})
-    context = {'url': url}
-    return bike_save_data(request, context, form)
-
-
-@login_required()
-def bike_delete(request, pk):
-    obj = get_object_or_404(Bike, pk=pk)
-    data = {}
-
-    if request.method == 'POST':
-        obj.delete()
-        form_valid1(data)
-    else:
-        context = {'object': obj}
-        data['html_form'] = render_to_string(
-            'bikes/includes/partial_bike_delete.html',
-            context,
-            request
-        )
-    return JsonResponse(data)
+class BikeDelete(DeleteViewMixin):
+    model = Bike
+    template_name = 'bikes/bike_confirm_delete.html'
+    success_url = '/'
 
 
 # ----------------------------------------------------------------------------- Bike Info

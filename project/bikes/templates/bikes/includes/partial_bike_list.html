@@ -1,43 +1,19 @@
 {% load slippers %}
 
-<table class="table table-sm table-striped table-hover">
+<table class="table table-striped table-bordered table-hover table-sm">
     <thead class="table-primary">
         <tr>
-            <th width="300rem">Date</th>
-            <th width="300rem"><span class="empty"></span> Full Name</th>
-            <th width="300rem">Short Name</th>
-            <th class="text-end">Actions</th>
+            <th class="w20"> Date </th>
+            <th class="w20"> Full Name </th>
+            <th> Short Name </th>
+            <th class="text-end w10"> Actions </th>
         </tr>
     </thead>
-    <tbody>
-        {% for item in objects %}
-        {% url 'bikes:bike_update' item.id as url_update %}
-        {% url 'bikes:bike_delete' item.id as url_delete %}
-        <tr id="row_id_{{ item.id }}" data-pk="{{ item.id }}" data-url="{{ url_update }}" data-tbl="0">
-            <td>{{ item.date|date:'Y-m-d' }}</td>
-            <td>
-                {% if item.main %}<span style="color:rgb(4, 196, 4)"><i class="bi bi-star"></i></span>{% endif %}
-                {% if item.retired %}<span style="color:rgb(230, 1, 1)"><i class="bi bi-dash-circle"></i></span>{% endif %}
-                {% if not item.main and not item.retired %}<span class="empty"></span>{% endif %}
-                {{ item.full_name }}
-            </td>
-            <td><a href="{% url 'bikes:info_list' item.slug %}">{{ item.short_name }}</a></td>
-            <td class="text-end last">
-                {% edit_button url=url_update label='True' %}
-                {% delete_button url=url_delete label='True' %}
-            </td>
-        </tr>
+    <tbody class="table-group-divider" id="bike-table-tbody">
+        {% for object in object_list %}
+        {% include 'bikes/includes/partial_bike_row.html' %}
         {% empty %}
         <tr><td class="bg-warning text-center" colspan="4">No records</td></tr>
         {% endfor %}
     </tbody>
 </table>
-<style>
-    #div_id_main, #div_id_retired {
-        padding-top: .2rem;
-        margin-left: 2rem;
-    }
-    .empty {
-        padding-left: 14px;
-    }
-</style>

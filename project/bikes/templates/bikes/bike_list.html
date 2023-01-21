@@ -1,12 +1,17 @@
-{% extends "category_settings.html" %}
+{% extends "base.html" %}
+
 {% load slippers %}
 
 {% block content %}
+<div class="row my-2">
+    <div class="col text-end">
+        {% url 'bikes:bike_create' as url_create %}
+        {% new_button url=url_create label='New Bike' width='19%' target="bike-table-tbody" swap="afterbegin" %}
+    </div>
+</div>
 
-<p class="text-end my-2">
-    {% url 'bikes:bike_create' as url_create %}
-    {% new_button url=url_create label='New Bike' width='19%' %}
-</p>
-{% include "bikes/includes/partial_bike_list.html" %}
+<div id="htmx-container" hx-trigger="reload from:body" hx-get="{% url 'bikes:bike_list' %}" hx-target="this">
+    {% include "bikes/includes/partial_bike_list.html" %}
+</div>
 
 {% endblock content %}

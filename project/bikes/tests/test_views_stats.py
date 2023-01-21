@@ -6,19 +6,10 @@ from django.urls import resolve, reverse
 
 from ...bikes.factories import (BikeFactory, ComponentFactory,
                                 ComponentStatisticFactory)
+from ...core.lib.tests_utils import clean_content
 from .. import models, views
 
 pytestmark = pytest.mark.django_db
-
-
-def clean_content(content):
-    content = content.decode('utf-8')
-    content = content.replace('\n', '')
-    content = content.replace('\t', '')
-    while '  ' in content:
-        content = content.replace('  ', ' ')
-
-    return content
 
 
 def test_stats_index_func():
@@ -78,17 +69,6 @@ def test_stats_index_redirected(client_logged):
     assert response.resolver_match.func.view_class is views.StatsList
 
 
-def test_stats_detail(client_logged):
-    bike = BikeFactory()
-    stats = ComponentStatisticFactory()
-
-    url = reverse('bikes:stats_detail', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
-    response = client_logged.get(url)
-
-    actual = response.context['object']
-    assert actual == stats
-
-
 def test_stats_list_200(client_logged):
     bike = BikeFactory()
     component = ComponentFactory()
@@ -141,6 +121,17 @@ def test_stats_list_with_data_links(client_logged):
     assert f'<button type="button" class="btn btn-sm btn-warning" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
     # delete button
     assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#dialog" hx-swap="innerHTML">' in actual
+
+
+def test_stats_detail(client_logged):
+    bike = BikeFactory()
+    stats = ComponentStatisticFactory()
+
+    url = reverse('bikes:stats_detail', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    response = client_logged.get(url)
+
+    actual = response.context['object']
+    assert actual == stats
 
 
 def test_stats_detail_rendered_context(client_logged):
