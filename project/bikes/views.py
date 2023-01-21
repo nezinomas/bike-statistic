@@ -60,11 +60,14 @@ class BikeList(ListViewMixin):
         return Bike.objects.items()
 
 
-@login_required()
-def bike_create(request):
-    form = BikeForm(request.POST or None)
-    context = {'url': reverse('bikes:bike_create')}
-    return bike_save_data(request, context, form)
+class BikeCreate(CreateViewMixin):
+    model = Bike
+    form_class = forms.BikeForm
+    template_name = 'bikes/bike_form.html'
+    detail_view = BikeDetail
+
+    def url(self):
+        return reverse_lazy('bikes:bike_create')
 
 
 @login_required()

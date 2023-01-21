@@ -54,6 +54,9 @@ class Bike(models.Model):
 
         super().save(*args, **kwargs)
 
+    def get_absolute_url(self):
+        return reverse_lazy("bikes:bike_detail", kwargs={"pk": self.pk})
+
 
 class BikeInfoQuerySet(models.QuerySet):
     def related(self):
