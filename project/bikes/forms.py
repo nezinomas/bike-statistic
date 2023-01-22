@@ -111,13 +111,22 @@ class BikeForm(FormMixin, forms.ModelForm):
 class BikeInfoForm(forms.ModelForm):
     class Meta:
         model = BikeInfo
-        fields = '__all__'
-        widgets = {
-            'bike': forms.HiddenInput(),
-        }
+        fields = ['component', 'description']
 
     def __init__(self, *args, **kwargs):
+        self._bike_slug = kwargs.pop('bike_slug', None)
+
         super().__init__(*args, **kwargs)
 
         self.helper = FormHelper()
         set_field_properties(self, self.helper)
+
+    def save(self, *args, **kwargs):
+        instance = super().save(commit=False)
+
+        if self._bike_slug:
+            instance.bike = Bike.objects.related().get(slug=self._bike_slug)
+
+        instance.save()
+
+        return instance

@@ -6,8 +6,7 @@ from django.urls import reverse_lazy
 
 from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
                                  DetailViewMixin, ListViewMixin,
-                                 RedirectViewMixin, TemplateViewMixin,
-                                 UpdateViewMixin)
+                                 RedirectViewMixin, UpdateViewMixin)
 from ..data.models import Data
 from . import forms
 from .lib.component_wear import ComponentWear
@@ -58,7 +57,9 @@ class BikeDelete(DeleteViewMixin):
     success_url = '/'
 
 
-# ----------------------------------------------------------------------------- Bike Info
+# ---------------------------------------------------------------------------------------
+#                                                                               Bike Info
+# ---------------------------------------------------------------------------------------
 def form_valid2(data, bike_slug):
     objects = BikeInfo.objects.items().filter(bike__slug=bike_slug)
     data['form_is_valid'] = True
@@ -87,26 +88,41 @@ def bike_info_save_data(request, context, form, bike_slug):
     return JsonResponse(data)
 
 
-@login_required()
-def bike_info_index(request):
-    bike = Bike.objects.items().first()
+class BikeInfoIndex(RedirectViewMixin):
+    def get_redirect_url(self, *args, **kwargs):
+        info = BikeInfo.objects.items()[:1]
+        if not info.exists():
+            return reverse('bikes:bike_list')
 
-    bike_slug = 'no_bike'
-    if bike:
-        bike_slug = bike.slug
-
-    return redirect(reverse('bikes:info_list', kwargs={'bike_slug': bike_slug}))
+        return reverse('bikes:info_list', kwargs={'bike_slug': info[0].bike.slug})
 
 
-@login_required()
-def bike_info_lists(request, bike_slug):
-    obj = BikeInfo.objects.items().filter(bike__slug=bike_slug)
-    rendered = render(
-        request,
-        'bikes/info_list.html',
-        {'objects': obj, 'bike_slug': bike_slug}
-    )
-    return rendered
+class BikeInfoList(ListViewMixin):
+    def get_template_names(self):
+        if self.request.htmx:
+            return ['bikes/includes/partial_info_list.html']
+        return ['bikes/info_list.html']
+
+    def get_queryset(self):
+        return BikeInfo.objects.items().filter(bike__slug=self.kwargs['bike_slug'])
+
+
+class BikeInfoDetail(DetailViewMixin):
+    model = BikeInfo
+    template_name = 'bikes/includes/partial_info_row.html'
+
+
+class BikeInfoCreate(CreateViewMixin):
+    model = BikeInfo
+    template_name = 'bikes/info_form.html'
+    detail_view = BikeInfoDetail
+
+    def url(self):
+        return reverse_lazy('bikes:info_create', kwargs={'bike_slug': self.kwargs['bike_slug']})
+
+    def get_form(self, data=None, files=None, **kwargs):
+        # pass bike_slug and component_pk from self.kwargs to form
+        return forms.BikeInfoForm(data, files, **kwargs | self.kwargs)
 
 
 @login_required()
