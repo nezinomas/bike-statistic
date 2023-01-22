@@ -293,6 +293,7 @@ def test_stats_delete_load_form(client_logged):
 
     res = re.findall(fr'<form.+hx-post="({url})"', content)
     assert res[0] == url
+    assert f'<button type="submit" id="_delete" data-pk="{stats.pk}"' in content
 
 
 def test_stats_delete(client_logged):

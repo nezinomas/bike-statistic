@@ -171,8 +171,8 @@ def test_component_delete_func():
 
 
 def test_component_delete_200(client_logged):
-    bike = ComponentFactory()
-    url = reverse('bikes:component_delete', kwargs={'pk': bike.pk})
+    comp = ComponentFactory()
+    url = reverse('bikes:component_delete', kwargs={'pk': comp.pk})
 
     response = client_logged.get(url)
 
@@ -180,19 +180,20 @@ def test_component_delete_200(client_logged):
 
 
 def test_component_delete_load_form(client_logged):
-    bike = ComponentFactory()
-    url = reverse('bikes:component_delete', kwargs={'pk': bike.pk})
+    comp = ComponentFactory()
+    url = reverse('bikes:component_delete', kwargs={'pk': comp.pk})
 
     response = client_logged.get(url)
     content = clean_content(response.content)
 
     res = re.findall(fr'<form.+hx-post="({url})"', content)
     assert res[0] == url
+    assert f'<button type="submit" id="_delete" data-pk="{comp.pk}"' in content
 
 
 def test_component_delete(client_logged):
-    bike = ComponentFactory()
-    url = reverse('bikes:component_delete', kwargs={'pk': bike.pk})
+    comp = ComponentFactory()
+    url = reverse('bikes:component_delete', kwargs={'pk': comp.pk})
 
     client_logged.post(url, {})
 
