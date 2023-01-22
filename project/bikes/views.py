@@ -187,11 +187,14 @@ class ComponentList(ListViewMixin):
         return Component.objects.items()
 
 
-@login_required()
-def component_create(request):
-    form = ComponentForm(request.POST or None)
-    context = {'url': reverse('bikes:component_create')}
-    return save_component(request, context, form)
+class ComponentCreate(CreateViewMixin):
+    model = Component
+    form_class = forms.ComponentForm
+    template_name = 'bikes/component_form.html'
+    detail_view = ComponentDetail
+
+    def url(self):
+        return reverse_lazy('bikes:component_create')
 
 
 @login_required()
