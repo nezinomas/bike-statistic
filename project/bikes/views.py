@@ -94,18 +94,17 @@ class BikeInfoIndex(RedirectViewMixin):
         if not info.exists():
             return reverse('bikes:bike_list')
 
-        return reverse('bikes:info_list', kwargs={'bike_slug': self.kwargs['bike_slug']})
+        return reverse('bikes:info_list', kwargs={'bike_slug': info[0].bike.slug})
 
 
-@login_required()
-def bike_info_lists(request, bike_slug):
-    obj = BikeInfo.objects.items().filter(bike__slug=bike_slug)
-    rendered = render(
-        request,
-        'bikes/info_list.html',
-        {'objects': obj, 'bike_slug': bike_slug}
-    )
-    return rendered
+class BikeInfoList(ListViewMixin):
+    def get_template_names(self):
+        if self.request.htmx:
+            return ['bikes/includes/partial_info_list.html']
+        return ['bikes/info_list.html']
+
+    def get_queryset(self):
+        return BikeInfo.objects.items().filter(bike__slug=self.kwargs['bike_slug'])
 
 
 @login_required()

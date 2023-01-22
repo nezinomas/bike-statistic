@@ -1,22 +1,24 @@
-{% extends "category_settings.html" %}
+{% extends "base.html" %}
+
 {% load slippers %}
 
 {% block content %}
 
-<div class="row my-2">
+<div class="row">
     <div class="col">
-        <nav class="nav">
-            {% for bike in bike_list %}
-            <a href="{% url 'bikes:info_list' bike_slug=bike.slug %}" class="nav-link {% if bike.slug == bike_slug %}active disabled{% endif %}">{{ bike.short_name }}</a>{% if not forloop.last %}<span class="navbar-text">|</span>{% endif %}
-            {% endfor %}
-        </nav>
+        {% for bike in bike_list %}
+        <a role="button" href="{% url 'bikes:info_list' bike_slug=bike.slug %}" class="btn btn-sm px-3 {% if bike.slug == request.resolver_match.kwargs.bike_slug %}btn-primary{% else %}btn-secondary{% endif %}">{{ bike.short_name }}</a>
+        {% endfor %}
     </div>
-    <div class="col text-end">
+    <div class="col-2 text-end">
         {% url 'bikes:info_create' bike.slug as url_create %}
-        {% new_button url=url_create label='New Record' width='38%' %}
+        {% new_button url=url_create label='New Record' width="100%" %}
     </div>
 </div>
 
-{% include "bikes/includes/partial_info_list.html" %}
+<div id="htmx-container" class="mt-2" hx-trigger="reload from:body" hx-get="{% url 'bikes:bike_list' %}" hx-target="this">
+    {% include "bikes/includes/partial_info_list.html" %}
+</div>
+
 
 {% endblock content %}
