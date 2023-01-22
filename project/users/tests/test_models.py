@@ -1,6 +1,5 @@
 import pytest
 
-from ...core.lib import utils
 from ..factories import UserFactory
 from ..models import User
 

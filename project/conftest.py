@@ -48,7 +48,7 @@ def login(client, user):
 
 @pytest.fixture()
 def encrypt_key(monkeypatch):
-    mock_func = 'project.core.lib.utils.get_secret'
+    mock_func = 'django.conf.settings.ENV'
     monkeypatch.setattr(mock_func, lambda x: "YodhMSc34G6kF-HKTGTwuUapn0IkbPr080Hh3a7tW8k=")
 
 
