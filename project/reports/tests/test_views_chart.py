@@ -12,8 +12,8 @@ from ...data.factories import DataFactory
 pytestmark = pytest.mark.django_db
 
 
-@pytest.fixture()
-def _data():
+@pytest.fixture(name="data")
+def fixture_data():
     b1 = BikeFactory(short_name='B1', date=date(2000, 1, 1))
     b2 = BikeFactory(short_name='B2', date=date(1999, 1, 1))
 
@@ -23,40 +23,40 @@ def _data():
 
 
 def test_chart_overall_func():
-    view = resolve('/reports/chart_overall/')
+    view = resolve('/reports/overall/')
 
-    assert views.chart_overall is view.func
+    assert views.ChartOverall is view.func.view_class
 
 
-def test_chart_overall_200_no_data(client, get_user):
+def test_chart_overall_200_no_data(client_logged):
     url = reverse('reports:chart_overall')
-    response = client.get(url)
+    response = client_logged.get(url)
 
     assert response.status_code == 200
 
 
-def test_chart_overall_200(client, get_user, _data):
+def test_chart_overall_200(client_logged, data):
     url = reverse('reports:chart_overall')
-    response = client.get(url)
+    response = client_logged.get(url)
 
     assert response.status_code == 200
 
 
 @freeze_time('2002-12-31')
-def test_chart_overall_context_years(client, get_user):
+def test_chart_overall_context_years(get_user, client_logged):
     get_user.date_joined = datetime(1998, 1, 1, tzinfo=timezone.utc)
 
     url = reverse('reports:chart_overall')
-    response = client.get(url)
+    response = client_logged.get(url)
 
     actual = response.context['year_list']
 
     assert actual == [1998, 1999, 2000, 2001, 2002]
 
 
-def test_chart_overall_context_bikes(client, get_user, _data):
+def test_chart_overall_context_bikes(client_logged, data):
     url = reverse('reports:chart_overall')
-    response = client.get(url)
+    response = client_logged.get(url)
 
     actual = response.context['bikes']
 
@@ -64,9 +64,9 @@ def test_chart_overall_context_bikes(client, get_user, _data):
 
 
 @freeze_time('2001-01-01')
-def test_chart_overall_context_data_table(client, get_user, _data):
+def test_chart_overall_context_data_table(client_logged, data):
     url = reverse('reports:chart_overall')
-    response = client.get(url)
+    response = client_logged.get(url)
 
     table = [
         {'year': 2000, 'B1': 10.0, 'B2': 20.0},
@@ -83,9 +83,9 @@ def test_chart_overall_context_data_table(client, get_user, _data):
 
 
 @freeze_time('2001-01-01')
-def test_chart_overall_context_total_value(client, get_user, _data):
+def test_chart_overall_context_total_value(client_logged, data):
     url = reverse('reports:chart_overall')
-    response = client.get(url)
+    response = client_logged.get(url)
 
     actual = response.context['total']
 
@@ -93,9 +93,9 @@ def test_chart_overall_context_total_value(client, get_user, _data):
 
 
 @freeze_time('2001-01-01')
-def test_chart_overall_context_chart_data(client, get_user, _data):
+def test_chart_overall_context_chart_data(client_logged, data):
     url = reverse('reports:chart_overall')
-    response = client.get(url)
+    response = client_logged.get(url)
 
     expect = [
         {
