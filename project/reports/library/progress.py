@@ -86,67 +86,24 @@ class Progress():
 
         return item
 
-    def _filter_df(self, df, year=None):
-        if year:
-            start = pd.to_datetime(date(year, 1, 1))
-            end = pd.to_datetime(date(year, 12, 31))
-            qte = df['date'] >= start
-            lte = df['date'] <= end
-
-            df = df[qte & lte]  # filter df
-
-            return df
-
-        return df
-
-    def distances(self):
-        df = self._df.copy()
-
-        if df.empty:
-            return {}
-
-        years = df['year'].unique()
-
-        final = {}
-        for year in years:
-            _df = self._filter_df(df, year)
-
-            if _df.empty:
-                continue
-
-            final[year] = {'distance': _df['distance'].sum()}
-
-        return final
-
     def extremums(self):
         df = self._df.copy()
 
         if df.empty:
             return {}
 
-        years = df['year'].unique()
+        columns = [
+            'distance',
+            'temp',
+            'ascent',
+            'speed',
+        ]
 
-        final = {}
-        for year in years:
-            _df = self._filter_df(df, year)
+        d = {}
+        for column in columns:
+            d |= self._find_extremums(df, column)
 
-            if _df.empty:
-                continue
-
-            columns = [
-                'distance',
-                'temp',
-                'ascent',
-                'speed',
-            ]
-
-            d = {}
-            for column in columns:
-                d |= self._find_extremums(_df, column)
-
-            final[year] = d
-
-        return final
+        return d
 
     def month_stats(self):
         df = self._df.copy()
@@ -171,9 +128,9 @@ class Progress():
 
     def season_progress(self):
         df = self._df.copy()
-
         if df.empty or not self._year:
             return {}
+        df = df.sort_values(by='date', ascending=False)
 
         # metu diena, int
         first = pd.to_datetime(date(self._year, 1, 1))
@@ -195,4 +152,5 @@ class Progress():
         df.loc[:, 'goal_percent'] = (df['season_distance'] * 100) / df['goal_day']
         df.loc[:, 'goal_delta'] = df['season_distance'] - df['goal_day']
 
+        print(f'after calc ------------------------------->\n{df}\n')
         return df.to_dict(orient='records')

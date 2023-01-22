@@ -1,184 +1,90 @@
 from datetime import date, datetime, timedelta
+from types import SimpleNamespace
 
 import pytest
 
-from ...data.factories import DataFactory
-from ...users.factories import UserFactory
 from ..library.progress import Progress
 
 pytestmark = pytest.mark.django_db
 
 
-@pytest.fixture()
-def _data(get_user):
-    DataFactory(
-        date=date(2000, 1, 1),
-        distance=10.0,
-        time=timedelta(seconds=1000),
-        temperature=10,
-        ascent=100
-    )
-    DataFactory(
-        date=date(2000, 1, 31),
-        distance=20.0,
-        time=timedelta(seconds=2000),
-        temperature=20,
-        ascent=200
-    )
-    DataFactory(
-        date=date(2001, 1, 31),
-        distance=200.0,
-        time=timedelta(seconds=20000),
-        temperature=200,
-        ascent=2000
-    )
+@pytest.fixture(name="data")
+def fixture_data():
+    data = [
+        {'date': date(2000, 1, 1), 'distance': 10, 'time': timedelta(seconds=1000), 'ascent': 100, 'bikes': 'Short Name', 'temp': 10},
+        {'date': date(2000, 1, 2), 'distance': 20, 'time': timedelta(seconds=2000), 'ascent': 200, 'bikes': 'Short Name', 'temp': 20} ,
+        {'date': date(2000, 1, 31), 'distance': 200, 'time': timedelta(seconds=20000), 'ascent': 2000, 'bikes': 'Short Name', 'temp': 200},
+    ]
+
+    return SimpleNamespace(year=2000, goal=1000, data=data)
+
+
+@pytest.fixture(name="no_data")
+def fixture_no_data():
+
+    return SimpleNamespace(year=2000, goal=0, data=[])
 
 
 # ---------------------------------------------------------------------------------------
 #                                                                               extremums
 # ---------------------------------------------------------------------------------------
-def test_extremums_no_data(get_user):
-    actual = Progress(2000).extremums()
+def test_extremums_no_data(no_data):
+    actual = Progress(no_data).extremums()
 
     assert not actual
 
 
-def test_extremums_different_user(get_user):
-    DataFactory(user=UserFactory(username='xxx'))
+def test_extremums_distance(data):
+    actual = Progress(data).extremums()
 
-    actual = Progress(2000).extremums()
-
-    assert not actual
-
-
-def test_extremums_distance_one_season(get_user):
-    DataFactory()
-    DataFactory(date=date(2000, 1, 10), distance=25.0)
-    DataFactory(date=date(3000, 1, 10), distance=35.0)
-
-    actual = Progress(2000).extremums()
-
-    actual = actual.get(2000)
-
-    assert actual['distance_max_value'] == 25.0
-    assert actual['distance_max_date'] == date(2000, 1, 10)
+    assert actual['distance_max_value'] == 200.0
+    assert actual['distance_max_date'] == date(2000, 1, 31)
 
     assert actual['distance_min_value'] == 10.0
     assert actual['distance_min_date'] == date(2000, 1, 1)
 
 
-def test_data_extremums_distance_all_seasons(get_user):
-    DataFactory()
-    DataFactory(date=date(2000, 1, 10), distance=25.0)
-    DataFactory(date=date(2010, 1, 10), distance=35.0)
+def test_extremums_temperature(data):
+    actual = Progress(data).extremums()
 
-    actual = Progress().extremums()
-
-    # year 3000
-    assert actual[2010]['distance_max_date'] == date(2010, 1, 10)
-    assert actual[2010]['distance_max_value'] == 35.0
-
-    assert actual[2010]['distance_min_date'] == date(2010, 1, 10)
-    assert actual[2010]['distance_min_value'] == 35.0
-
-    # year 2000
-    assert actual[2000]['distance_max_date'] == date(2000, 1, 10)
-    assert actual[2000]['distance_max_value'] == 25.0
-
-    assert actual[2000]['distance_min_date'] == date(2000, 1, 1)
-    assert actual[2000]['distance_min_value'] == 10.0
-
-
-def test_data_extremums_temperature_one_season(get_user):
-    DataFactory(temperature=-1)
-    DataFactory(date=date(2000, 1, 10), temperature=25.0)
-    DataFactory(date=date(2010, 1, 10), temperature=35.0)
-
-
-    actual = Progress(2000).extremums()
-    actual = actual[2000]
-
-    assert actual['temp_max_date'] == date(2000, 1, 10)
-    assert actual['temp_max_value'] == 25.0
+    assert actual['temp_max_date'] == date(2000, 1, 31)
+    assert actual['temp_max_value'] == 200
 
     assert actual['temp_min_date'] == date(2000, 1, 1)
-    assert actual['temp_min_value'] == -1.0
+    assert actual['temp_min_value'] == 10.0
 
 
-def test_data_extremums_ascent_one_season(get_user):
-    DataFactory()
-    DataFactory(date=date(2000, 1, 10), ascent=250)
-    DataFactory(date=date(2010, 1, 10), ascent=350)
+def test_extremums_ascent(data):
+    actual = Progress(data).extremums()
 
-    actual = Progress(2000).extremums()
-    actual = actual[2000]
-
-    assert actual['ascent_max_date'] == date(2000, 1, 10)
-    assert actual['ascent_max_value'] == 250
+    assert actual['ascent_max_date'] == date(2000, 1, 31)
+    assert actual['ascent_max_value'] == 2000
 
 
-def test_data_extremums_speed_one_season(get_user):
-    DataFactory()
-    DataFactory(date=date(2000, 1, 10), distance=25.0)
-    DataFactory(date=date(3000, 1, 10), distance=35.0)
+def test_extremums_speed(data):
+    actual = Progress(data).extremums()
 
-    actual = Progress(2000).extremums()
-    actual = actual[2000]
-
-    assert actual['speed_max_date'] == date(2000, 1, 10)
-    assert actual['speed_max_value'] == 90.0
+    assert actual['speed_max_date'] == date(2000, 1, 1)
+    assert actual['speed_max_value'] == 36.0
 
 
-# ---------------------------------------------------------------------------------------
-#                                                                               distances
-# ---------------------------------------------------------------------------------------
-def test_distances_one_season(get_user):
-    DataFactory()
-    DataFactory(date=date(2000, 1, 10), distance=25.0)
-    DataFactory(date=date(3000, 1, 10), distance=35.0)
-
-    actual = Progress(2000).distances()
-
-    assert len(actual) == 1
-    assert actual[2000]['distance'] == 35.0
-
-
-
-def test_data_distances_all_seasons(get_user):
-    DataFactory()
-    DataFactory(date=date(2000, 1, 10), distance=30.0)
-    DataFactory(date=date(2010, 1, 10), distance=35.0)
-
-    actual = Progress().distances()
-
-    assert len(actual) == 2
-    assert actual[2010]['distance'] == 35.0
-    assert actual[2000]['distance'] == 40.0
-
-
-# ---------------------------------------------------------------------------------------
-#                                                                             month stats
-# ---------------------------------------------------------------------------------------
-def test_month_stats(_data):
-    actual = Progress(2000).month_stats()
+def test_month_stats(data):
+    actual = Progress(data).month_stats()
 
     assert len(actual) == 1
 
     actual = actual['2000-01']
 
-    assert actual['distance'] == 30.0
-    assert actual['ascent'] == 300
-    assert round(actual['seconds'], 1) == 3000
+    assert actual['distance'] == 230.0
+    assert actual['ascent'] == 2300
+    assert round(actual['seconds'], 1) == 23000
     assert round(actual['speed'], 1) == 36.0
     assert actual['monthlen'] == 31
-    assert round(actual['distance_per_day'], 4) == 0.9677
+    assert round(actual['distance_per_day'], 2) == 7.42
 
 
-# ---------------------------------------------------------------------------------------
-#                                                                         season progress
-# ---------------------------------------------------------------------------------------
-def test_season_progress_keys(_data):
-    actual = Progress(2000).season_progress(goal=1000)
+def test_season_progress_keys(data):
+    actual = Progress(data).season_progress()
 
     assert 'date' in actual[0]
     assert 'bikes' in actual[0]
@@ -200,90 +106,97 @@ def test_season_progress_keys(_data):
     assert 'goal_delta' in actual[0]
 
 
-def test_season_progress_no_year(_data):
-    actual = Progress().season_progress()
-
-    assert actual == {}
-
-
-def test_season_progress_sorting(_data):
-    actual = Progress(2000).season_progress(goal=1000)
+def test_season_progress_sorting(data):
+    actual = Progress(data).season_progress()
 
     assert datetime(2000, 1, 31) == actual[0]['date']
-    assert datetime(2000, 1, 1) == actual[1]['date']
+    assert datetime(2000, 1, 2) == actual[1]['date']
+    assert datetime(2000, 1, 1) == actual[2]['date']
 
 
-def test_season_progress_distance_cumulative_sum(_data):
-    actual = Progress(2000).season_progress(goal=1000)
+def test_season_progress_distance_cumulative_sum(data):
+    actual = Progress(data).season_progress()
 
-    assert actual[0]['season_distance'] == 30.0
-    assert actual[1]['season_distance'] == 10.0
-
-
-def test_season_progress_seconds_cumulative_sum(_data):
-    actual = Progress(2000).season_progress(goal=1000)
-
-    assert round(actual[0]['season_seconds'], 1) == 3000
-    assert round(actual[1]['season_seconds'], 1) == 1000
+    assert actual[0]['season_distance'] == 230.0
+    assert actual[1]['season_distance'] == 30.0
+    assert actual[2]['season_distance'] == 10.0
 
 
-def test_season_progress_season_speed(_data):
-    actual = Progress(2000).season_progress(goal=1000)
+def test_season_progress_seconds_cumulative_sum(data):
+    actual = Progress(data).season_progress()
 
-    assert round(actual[0]['season_speed'], 1) == 36.0
-    assert round(actual[1]['season_speed'], 1) == 36.0
-
-
-def test_season_progress_goal_percents(_data):
-    actual = Progress(2000).season_progress(goal=1000)
-
-    assert round(actual[0]['goal_percent'], 1) == 35.4
-    assert round(actual[1]['goal_percent'], 1) == 366.0
+    assert round(actual[0]['season_seconds'], 2) == 23000
+    assert round(actual[1]['season_seconds'], 2) == 3000
+    assert round(actual[2]['season_seconds'], 2) == 1000
 
 
-def test_season_progress_day_goal(_data):
-    actual = Progress(2000).season_progress(goal=1000)
+def test_season_progress_season_speed(data):
+    actual = Progress(data).season_progress()
 
-    assert round(actual[0]['goal_day'], 3) == 84.699
-    assert round(actual[1]['goal_day'], 3) == 2.732
+    assert round(actual[0]['season_speed'], 2) == 36.0
+    assert round(actual[1]['season_speed'], 2) == 36.0
+    assert round(actual[2]['season_speed'], 2) == 36.0
 
 
-def test_season_progress_day_goal_empty(_data):
-    actual = Progress(2000).season_progress()
+def test_season_progress_goal_percents(data):
+    actual = Progress(data).season_progress()
+
+    assert round(actual[0]['goal_percent'], 2) == 271.55
+    assert round(actual[1]['goal_percent'], 2) == 549.0
+    assert round(actual[2]['goal_percent'], 2) == 366.0
+
+
+def test_season_progress_day_goal(data):
+    actual = Progress(data).season_progress()
+
+    assert round(actual[0]['goal_day'], 2) == 84.7
+    assert round(actual[1]['goal_day'], 2) == 5.46
+    assert round(actual[2]['goal_day'], 2) == 2.73
+
+
+def test_season_progress_day_goal_empty(data):
+    data.goal = 0
+    actual = Progress(data).season_progress()
     assert actual[0]['goal_day'] == 0.0
     assert actual[1]['goal_day'] == 0.0
+    assert actual[2]['goal_day'] == 0.0
 
 
-def test_season_progress_km_delta(_data):
-    actual = Progress(2000).season_progress(goal=1000)
+def test_season_progress_km_delta(data):
+    actual = Progress(data).season_progress()
 
-    assert round(actual[0]['goal_delta'], 3) == -54.699
-    assert round(actual[1]['goal_delta'], 3) == 7.268
-
-
-def test_season_progress_per_day_season(_data):
-    actual = Progress(2000).season_progress(goal=1000)
-
-    assert round(actual[0]['season_per_day'], 3) == 0.968
-    assert round(actual[1]['season_per_day'], 3) == 10.0
+    assert round(actual[0]['goal_delta'], 2) == 145.3
+    assert round(actual[1]['goal_delta'], 2) == 24.54
+    assert round(actual[2]['goal_delta'], 2) == 7.27
 
 
-def test_season_progress_ascent_cumulative_sum(_data):
-    actual = Progress(2000).season_progress(goal=1000)
+def test_season_progress_per_day_season(data):
+    actual = Progress(data).season_progress()
 
-    assert actual[0]['season_ascent'] == 300
-    assert actual[1]['season_ascent'] == 100
-
-
-def test_season_progress_workout_speed(_data):
-    actual = Progress(2000).season_progress(goal=1000)
-
-    assert round(actual[0]['speed'], 1) == 36.0
-    assert round(actual[1]['speed'], 1) == 36.0
+    assert round(actual[0]['season_per_day'], 2) == 7.42
+    assert round(actual[1]['season_per_day'], 2) == 15.0
+    assert round(actual[2]['season_per_day'], 2) == 10.0
 
 
-def test_season_progress_day_num(_data):
-    actual = Progress(2000).season_progress(goal=1000)
+def test_season_progress_ascent_cumulative_sum(data):
+    actual = Progress(data).season_progress()
+
+    assert actual[0]['season_ascent'] == 2300
+    assert actual[1]['season_ascent'] == 300
+    assert actual[2]['season_ascent'] == 100
+
+
+def test_season_progress_workout_speed(data):
+    actual = Progress(data).season_progress()
+
+    assert round(actual[0]['speed'], 2) == 36.0
+    assert round(actual[1]['speed'], 2) == 36.0
+    assert round(actual[2]['speed'], 2) == 36.0
+
+
+def test_season_progress_day_num(data):
+    actual = Progress(data).season_progress()
 
     assert actual[0]['day_nr'] == 31
-    assert actual[1]['day_nr'] == 1
+    assert actual[1]['day_nr'] == 2
+    assert actual[2]['day_nr'] == 1
