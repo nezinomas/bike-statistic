@@ -146,7 +146,9 @@ def bike_info_delete(request, bike_slug, pk):
     return JsonResponse(data)
 
 
-# ------------------------------------------------------------------------ Bike Component
+# ---------------------------------------------------------------------------------------
+#                                                                              Components
+# ---------------------------------------------------------------------------------------
 
 def save_component(request, context, form):
     data = {}
@@ -170,14 +172,14 @@ def save_component(request, context, form):
     return JsonResponse(data)
 
 
-@login_required()
-def component_lists(request):
-    components = Component.objects.items()
-    return render(
-        request,
-        'bikes/component_list.html',
-        {'components': components}
-    )
+class ComponentList(ListViewMixin):
+    def get_template_names(self):
+        if self.request.htmx:
+            return ['bikes/includes/partial_component_list.html']
+        return ['bikes/component_list.html']
+
+    def get_queryset(self):
+        return Component.objects.items()
 
 
 @login_required()

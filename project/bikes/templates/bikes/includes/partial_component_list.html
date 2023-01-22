@@ -1,28 +1,19 @@
 {% load slippers %}
 
-<table class="table table-sm table-striped table-hover">
+<table class="table table-striped table-bordered table-hover table-sm">
     <thead class="table-primary">
         <tr>
-            <th style="width: 10%">#</th>
-            <th>Component</th>
-            <th style="width: 20%"></th>
+            <th class="w7"> # </th>
+            <th> Component </th>
+            <th class="text-end w10"> Actions </th>
         </tr>
     </thead>
-    <tbody id="component-tbody">
-        {% for component in components %}
-        {% url 'bikes:component_update' component.id as url_update %}
-        {% url 'bikes:component_delete' component.id as url_delete %}
-        <tr id="row_id_{{ component.pk }}" data-pk="{{ component.pk }}" data-url="{{ url_update }}" data-tbl="0">
-            <td class="py-1">{{ component.id }}</td>
-            <td class="py-1">{{ component.name }}</td>
-            <td class="py-1 text-end">
-                {% edit_button label=True url=url_update %}
-                {% delete_button label=True url=url_delete %}
-            </td>
-        </tr>
+    <tbody class="table-group-divider" id="table-tbody">
+        {% for object in object_list %}
+        {% include 'bikes/includes/partial_component_row.html' %}
         {% empty %}
         <tr>
-            <td colspan="3" class="text-center bg-warning">No components</td>
+            <td class="text-center bg-warning" colspan="3"> No components </td>
         </tr>
         {% endfor %}
     </tbody>
