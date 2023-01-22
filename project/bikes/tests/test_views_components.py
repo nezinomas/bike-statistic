@@ -162,3 +162,38 @@ def test_component_update_name(client_logged):
     actual = models.Component.objects.get(pk=comp.pk)
 
     assert actual.name == 'XXX'
+
+
+def test_component_delete_func():
+    view = resolve('/component/delete/1/')
+
+    assert views.ComponentDelete is view.func.view_class
+
+
+def test_component_delete_200(client_logged):
+    bike = ComponentFactory()
+    url = reverse('bikes:component_delete', kwargs={'pk': bike.pk})
+
+    response = client_logged.get(url)
+
+    assert response.status_code == 200
+
+
+def test_component_delete_load_form(client_logged):
+    bike = ComponentFactory()
+    url = reverse('bikes:component_delete', kwargs={'pk': bike.pk})
+
+    response = client_logged.get(url)
+    content = clean_content(response.content)
+
+    res = re.findall(fr'<form.+hx-post="({url})"', content)
+    assert res[0] == url
+
+
+def test_component_delete(client_logged):
+    bike = ComponentFactory()
+    url = reverse('bikes:component_delete', kwargs={'pk': bike.pk})
+
+    client_logged.post(url, {})
+
+    assert models.Component.objects.all().count() == 0

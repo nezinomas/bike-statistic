@@ -11,7 +11,7 @@ urlpatterns = [
     path('component/create/', views.ComponentCreate.as_view(), name='component_create'),
     path('component/detail/<int:pk>/', views.ComponentDetail.as_view(), name='component_detail'),
     path('component/update/<int:pk>/', views.ComponentUpdate.as_view(), name='component_update'),
-    path('component/delete/<int:pk>/', views.component_delete, name='component_delete'),
+    path('component/delete/<int:pk>/', views.ComponentDelete.as_view(), name='component_delete'),
 
     path('stats/<slug:bike_slug>/', views.StatsIndex.as_view(), name='stats_index'),
     path('stats/<slug:bike_slug>/<int:component_pk>/', views.StatsList.as_view(), name='stats_list'),

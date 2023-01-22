@@ -149,29 +149,6 @@ def bike_info_delete(request, bike_slug, pk):
 # ---------------------------------------------------------------------------------------
 #                                                                              Components
 # ---------------------------------------------------------------------------------------
-
-def save_component(request, context, form):
-    data = {}
-
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            data['form_is_valid'] = True
-            components = Component.objects.items()
-            data['html_list'] = render_to_string(
-                'bikes/includes/partial_component_list.html', {'components': components})
-        else:
-            data['form_is_valid'] = False
-
-    context['form'] = form
-    data['html_form'] = render_to_string(
-        template_name='bikes/includes/partial_component_update.html',
-        context=context,
-        request=request
-    )
-    return JsonResponse(data)
-
-
 class ComponentDetail(DetailViewMixin):
     model = Component
     template_name = 'bikes/includes/partial_component_row.html'
@@ -207,27 +184,10 @@ class ComponentUpdate(UpdateViewMixin):
         return reverse_lazy('bikes:component_update', kwargs={'pk': self.kwargs['pk']})
 
 
-@login_required()
-def component_delete(request, pk):
-    component = get_object_or_404(Component, pk=pk)
-    data = {}
-
-    if request.method == 'POST':
-        component.delete()
-        data['form_is_valid'] = True
-        components = Component.objects.items()
-        data['html_list'] = render_to_string(
-            'bikes/includes/partial_component_list.html',
-            {'components': components}
-        )
-    else:
-        context = {'component': component}
-        data['html_form'] = render_to_string(
-            'bikes/includes/partial_component_delete.html',
-            context=context,
-            request=request
-        )
-    return JsonResponse(data)
+class ComponentDelete(DeleteViewMixin):
+    model = Component
+    template_name = 'bikes/component_confirm_delete.html'
+    success_url = '/'
 
 
 # ---------------------------------------------------------------------------------------
