@@ -38,7 +38,7 @@ def test_successful_login(client):
 def test_sync_list():
     view = resolve('/profile/sync/')
 
-    assert views.sync_list == view.func
+    assert views.sync_list is view.func
 
 
 def test_sync_list_loging_required(client):
@@ -50,9 +50,9 @@ def test_sync_list_loging_required(client):
 
 
 
-def test_sync_list_200(client, login):
+def test_sync_list_200(client_logged):
     url = reverse('users:sync_list')
-    response = client.get(url)
+    response = client_logged.get(url)
 
     assert response.status_code == 200
 
@@ -63,7 +63,7 @@ def test_sync_list_200(client, login):
 def test_sync_update():
     view = resolve('/profile/sync/update/')
 
-    assert views.sync_update == view.func
+    assert views.sync_update is view.func
 
 
 def test_sync_update_loging_required(client):
@@ -74,8 +74,8 @@ def test_sync_update_loging_required(client):
     assert response.resolver_match.url_name == 'login'
 
 
-def test_sync_update_200(client, login):
+def test_sync_update_200(client_logged):
     url = reverse('users:sync_update')
-    response = client.get(url)
+    response = client_logged.get(url)
 
     assert response.status_code == 200
