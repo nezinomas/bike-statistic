@@ -120,17 +120,15 @@ def test_bike_info_init_fields(get_user):
 
     assert '<input type="text" name="component"' in form
     assert '<input type="text" name="description"' in form
-    assert '<input type="hidden" name="bike"' in form
 
 
 def test_bike_info_valid_data(get_user):
-    b = BikeFactory()
+    bike = BikeFactory()
 
     form = BikeInfoForm(data={
         'component': 'Component',
         'description': 'Description',
-        'bike': b.pk,
-    })
+    }, **{'bike_slug': bike.slug})
 
     assert form.is_valid()
 
@@ -146,8 +144,6 @@ def test_bike_info_blank_data(get_user):
 
     assert not form.is_valid()
 
-    assert len(form.errors) == 3
-    assert 'bike' in form.errors
     assert 'component' in form.errors
     assert 'description' in form.errors
 
@@ -202,8 +198,6 @@ def test_component_statistic_init_fields(get_user):
     assert '<input type="text" name="end_date"' in form
     assert '<input type="number" name="price"' in form
     assert '<input type="text" name="brand"' in form
-    assert '<input type="hidden" name="bike"' in form
-    assert '<input type="hidden" name="component"' in form
 
 
 def test_component_statistic_valid_data(get_user):
@@ -217,7 +211,7 @@ def test_component_statistic_valid_data(get_user):
         'brand': 'Brand',
         'bike': b.pk,
         'component': c.pk,
-    })
+    }, **{'bike_slug': b.slug, 'component_pk': c.pk})
 
     assert form.is_valid()
 
@@ -236,7 +230,4 @@ def test_component_statistic_blank_data(get_user):
 
     assert not form.is_valid()
 
-    assert len(form.errors) == 3
     assert 'start_date' in form.errors
-    assert 'bike' in form.errors
-    assert 'component' in form.errors
