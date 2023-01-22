@@ -107,6 +107,11 @@ class BikeInfoList(ListViewMixin):
         return BikeInfo.objects.items().filter(bike__slug=self.kwargs['bike_slug'])
 
 
+class BikeInfoDetail(DetailViewMixin):
+    model = BikeInfo
+    template_name = 'bikes/includes/partial_info_row.html'
+
+
 @login_required()
 def bike_info_create(request, bike_slug):
     bike = get_object_or_404(Bike, slug=bike_slug)

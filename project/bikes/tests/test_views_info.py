@@ -80,7 +80,7 @@ def test_info_list_with_data(client_logged):
     assert 'Description' in content
 
 
-def test_info_list_with_data(client_logged):
+def test_info_list_two_bikes(client_logged):
     info = BikeInfoFactory()
     BikeInfoFactory(component="XXX", description="YYY", bike=BikeFactory(short_name='z'))
 
@@ -99,6 +99,42 @@ def test_info_list_with_data_links(client_logged):
 
     url = reverse('bikes:info_list', kwargs={'bike_slug': info.bike.slug})
     response = client_logged.get(url)
+    actual = clean_content(response.content)
+
+    row_id = f'row-id-{info.pk}'
+    url_update = reverse('bikes:info_update', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
+    url_delete = reverse('bikes:info_delete', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
+
+    # table row
+    assert f'<tr id="{row_id}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
+    # edit button
+    assert f'<button type="button" class="btn btn-sm btn-warning" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
+    # delete button
+    assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#dialog" hx-swap="innerHTML">' in actual
+
+
+def test_info_detail_func():
+    view = resolve('/info/bike/detail/9/')
+
+    assert views.BikeInfoDetail is view.func.view_class
+
+
+def test_info_detail(client_logged):
+    info = BikeInfoFactory()
+
+    url = reverse('bikes:info_detail', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
+    response = client_logged.get(url)
+
+    actual = response.context['object']
+    assert actual == info
+
+
+def test_info_detail_rendered_context(client_logged):
+    info = BikeInfoFactory()
+
+    url = reverse('bikes:info_detail', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
+    response = client_logged.get(url)
+
     actual = clean_content(response.content)
 
     row_id = f'row-id-{info.pk}'
