@@ -1,7 +1,4 @@
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render, reverse
-from django.template.loader import render_to_string
+from django.shortcuts import reverse
 from django.urls import reverse_lazy
 
 from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
@@ -60,34 +57,6 @@ class BikeDelete(DeleteViewMixin):
 # ---------------------------------------------------------------------------------------
 #                                                                               Bike Info
 # ---------------------------------------------------------------------------------------
-def form_valid2(data, bike_slug):
-    objects = BikeInfo.objects.items().filter(bike__slug=bike_slug)
-    data['form_is_valid'] = True
-    data['html_list'] = render_to_string(
-        'bikes/includes/partial_info_list.html',
-        {'objects': objects, 'bike_slug': bike_slug}
-    )
-
-
-def bike_info_save_data(request, context, form, bike_slug):
-    data = {}
-
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            form_valid2(data, bike_slug)
-        else:
-            data['form_is_valid'] = False
-
-    context['form'] = form
-    data['html_form'] = render_to_string(
-        template_name='bikes/includes/partial_info_update.html',
-        context=context,
-        request=request
-    )
-    return JsonResponse(data)
-
-
 class BikeInfoIndex(RedirectViewMixin):
     def get_redirect_url(self, *args, **kwargs):
         info = BikeInfo.objects.items()[:1]
@@ -125,41 +94,20 @@ class BikeInfoCreate(CreateViewMixin):
         return forms.BikeInfoForm(data, files, **kwargs | self.kwargs)
 
 
-@login_required()
-def bike_info_create(request, bike_slug):
-    bike = get_object_or_404(Bike, slug=bike_slug)
-    form = BikeInfoForm(request.POST or None, initial={'bike': bike})
-    context = {'url': reverse('bikes:info_create', kwargs={
-                              'bike_slug': bike_slug})}
+class BikeInfoUpdate(UpdateViewMixin):
+    model = BikeInfo
+    form_class = forms.BikeInfoForm
+    template_name = 'bikes/info_form.html'
+    detail_view = BikeInfoDetail
 
-    return bike_info_save_data(request, context, form, bike_slug)
-
-
-@login_required()
-def bike_info_update(request, bike_slug, pk):
-    obj = get_object_or_404(BikeInfo, pk=pk)
-    form = BikeInfoForm(request.POST or None, instance=obj)
-    context = {
-        'url': reverse('bikes:info_update', kwargs={'bike_slug': bike_slug, 'pk': pk})
-    }
-    return bike_info_save_data(request, context, form, bike_slug)
+    def url(self):
+        return reverse_lazy('bikes:info_update', kwargs={'bike_slug': self.kwargs['bike_slug'], 'pk': self.kwargs['pk']})
 
 
-@login_required()
-def bike_info_delete(request, bike_slug, pk):
-    obj = get_object_or_404(BikeInfo, pk=pk)
-    data = {}
-    if request.method == 'POST':
-        obj.delete()
-        form_valid2(data, bike_slug)
-    else:
-        context = {'object': obj, 'bike_slug': bike_slug}
-        data['html_form'] = render_to_string(
-            'bikes/includes/partial_info_delete.html',
-            context,
-            request
-        )
-    return JsonResponse(data)
+class BikeInfoDelete(DeleteViewMixin):
+    model = BikeInfo
+    template_name = 'bikes/info_confirm_delete.html'
+    success_url = '/'
 
 
 # ---------------------------------------------------------------------------------------
