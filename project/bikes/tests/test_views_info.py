@@ -192,3 +192,67 @@ def test_info_create_save_form_errors(client_logged):
     assert not form.is_valid()
     assert 'component' in form.errors
     assert 'description' in form.errors
+
+
+def test_info_update_func():
+    view = resolve('/info/bike/update/1/')
+
+    assert views.BikeInfoUpdate is view.func.view_class
+
+
+def test_info_update_load_form(client_logged):
+    info = BikeInfoFactory()
+
+    url = reverse('bikes:info_update', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
+    response = client_logged.get(url)
+    form = response.context['form'].as_p()
+
+    assert 'Component' in form
+    assert 'Description' in form
+
+
+def test_info_update_load_form_close_button(client_logged):
+    info = BikeInfoFactory()
+
+    url = reverse('bikes:info_update', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
+    response = client_logged.get(url)
+    actual = clean_content(response.content)
+
+    url_close = reverse('bikes:info_detail', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
+    assert f'hx-get="{url_close}"' in actual
+
+
+def test_info_update_component(client_logged):
+    info = BikeInfoFactory()
+
+    data = {
+        'component': 'XXX',
+        'description': info.description,
+    }
+
+    url = reverse('bikes:info_update', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
+    client_logged.post(url, data)
+
+    actual = models.BikeInfo.objects.get(pk=info.pk)
+
+    assert actual.component == 'XXX'
+    assert actual.description == info.description
+    assert actual.bike == info.bike
+
+
+def test_info_update_description(client_logged):
+    info = BikeInfoFactory()
+
+    data = {
+        'component': info.component,
+        'description': 'XXX',
+    }
+
+    url = reverse('bikes:info_update', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
+    client_logged.post(url, data)
+
+    actual = models.BikeInfo.objects.get(pk=info.pk)
+
+    assert actual.component == info.component
+    assert actual.description == 'XXX'
+    assert actual.bike == info.bike

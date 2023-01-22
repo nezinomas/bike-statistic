@@ -125,24 +125,14 @@ class BikeInfoCreate(CreateViewMixin):
         return forms.BikeInfoForm(data, files, **kwargs | self.kwargs)
 
 
-@login_required()
-def bike_info_create(request, bike_slug):
-    bike = get_object_or_404(Bike, slug=bike_slug)
-    form = BikeInfoForm(request.POST or None, initial={'bike': bike})
-    context = {'url': reverse('bikes:info_create', kwargs={
-                              'bike_slug': bike_slug})}
+class BikeInfoUpdate(UpdateViewMixin):
+    model = BikeInfo
+    form_class = forms.BikeInfoForm
+    template_name = 'bikes/info_form.html'
+    detail_view = BikeInfoDetail
 
-    return bike_info_save_data(request, context, form, bike_slug)
-
-
-@login_required()
-def bike_info_update(request, bike_slug, pk):
-    obj = get_object_or_404(BikeInfo, pk=pk)
-    form = BikeInfoForm(request.POST or None, instance=obj)
-    context = {
-        'url': reverse('bikes:info_update', kwargs={'bike_slug': bike_slug, 'pk': pk})
-    }
-    return bike_info_save_data(request, context, form, bike_slug)
+    def url(self):
+        return reverse_lazy('bikes:info_update', kwargs={'bike_slug': self.kwargs['bike_slug'], 'pk': self.kwargs['pk']})
 
 
 @login_required()

@@ -73,7 +73,7 @@ urlpatterns = [
     ),
     path(
         "info/<slug:bike_slug>/update/<int:pk>/",
-        views.bike_info_update,
+        views.BikeInfoUpdate.as_view(),
         name="info_update",
     ),
     path(
