@@ -2,10 +2,9 @@ from datetime import date, datetime, timedelta
 
 import pytest
 
+from ...data.factories import DataFactory
 from ...users.factories import UserFactory
-from ..factories import DataFactory
 from ..library.progress import Progress
-
 
 pytestmark = pytest.mark.django_db
 
