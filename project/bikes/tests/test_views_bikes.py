@@ -158,11 +158,11 @@ def test_bike_update_load_form(client_logged):
 def test_bike_update_load_form_close_button(client_logged):
     bike = BikeFactory()
 
-    url = reverse('bikes:bike_detail', kwargs={'pk': bike.pk})
+    url = reverse('bikes:bike_update', kwargs={'pk': bike.pk})
     response = client_logged.get(url)
     actual = clean_content(response.content)
 
-    url_close = reverse('bikes:bike_update', kwargs={'pk': bike.pk})
+    url_close = reverse('bikes:bike_detail', kwargs={'pk': bike.pk})
     assert f'hx-get="{url_close}"' in actual
 
 
