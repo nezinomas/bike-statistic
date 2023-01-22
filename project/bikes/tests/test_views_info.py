@@ -1,15 +1,12 @@
 import pytest
 from django.urls import resolve, reverse
 
-from ...bikes.factories import BikeFactory, ComponentFactory
+from ..factories import BikeFactory, ComponentFactory
 from .. import views
 
 pytestmark = pytest.mark.django_db
 
 
-# ---------------------------------------------------------------------------------------
-#                                                                              info index
-# ---------------------------------------------------------------------------------------
 def test_bike_info_index_func():
     view = resolve('/info/')
 
@@ -31,9 +28,6 @@ def test_bike_info_index_no_records(client_logged):
         response.content)
 
 
-# ---------------------------------------------------------------------------------------
-#                                                                              info list
-# ---------------------------------------------------------------------------------------
 def test_bike_info_list_func():
     view = resolve('/xxx/info/')
 
