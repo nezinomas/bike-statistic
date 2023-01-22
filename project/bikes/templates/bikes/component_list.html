@@ -1,17 +1,19 @@
 {% extends "base.html" %}
+
 {% load slippers %}
 
 
-{% block breadcrumb %}{{ block.super }}
-    <span class="navbar-text">&raquo;</span><a class="nav-link disabled" href="#">Components</a>
-{% endblock %}
-
-
 {% block content %}
-<p class="text-right my-2">
-    {% url 'bikes:component_create' as url_create %}
-    {% new_button url=url_create label='New Component' tbl='0' width='19%' %}
-</p>
-{% include "bikes/includes/partial_component_list.html" %}
+
+<div class="row my-2">
+    <div class="col text-end">
+        {% url 'bikes:component_create' as url_create %}
+        {% new_button url=url_create label='New Component' width='19%' target="table-tbody" swap="afterbegin" %}
+    </div>
+</div>
+
+<div id="htmx-container" hx-trigger="reload from:body" hx-get="{% url 'bikes:component_list' %}" hx-target="this">
+    {% include "bikes/includes/partial_component_list.html" %}
+</div>
 
 {% endblock content %}

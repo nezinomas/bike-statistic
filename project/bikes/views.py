@@ -146,76 +146,48 @@ def bike_info_delete(request, bike_slug, pk):
     return JsonResponse(data)
 
 
-# ------------------------------------------------------------------------ Bike Component
-
-def save_component(request, context, form):
-    data = {}
-
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            data['form_is_valid'] = True
-            components = Component.objects.items()
-            data['html_list'] = render_to_string(
-                'bikes/includes/partial_component_list.html', {'components': components})
-        else:
-            data['form_is_valid'] = False
-
-    context['form'] = form
-    data['html_form'] = render_to_string(
-        template_name='bikes/includes/partial_component_update.html',
-        context=context,
-        request=request
-    )
-    return JsonResponse(data)
+# ---------------------------------------------------------------------------------------
+#                                                                              Components
+# ---------------------------------------------------------------------------------------
+class ComponentDetail(DetailViewMixin):
+    model = Component
+    template_name = 'bikes/includes/partial_component_row.html'
 
 
-@login_required()
-def component_lists(request):
-    components = Component.objects.items()
-    return render(
-        request,
-        'bikes/component_list.html',
-        {'components': components}
-    )
+class ComponentList(ListViewMixin):
+    def get_template_names(self):
+        if self.request.htmx:
+            return ['bikes/includes/partial_component_list.html']
+        return ['bikes/component_list.html']
+
+    def get_queryset(self):
+        return Component.objects.items()
 
 
-@login_required()
-def component_create(request):
-    form = ComponentForm(request.POST or None)
-    context = {'url': reverse('bikes:component_create')}
-    return save_component(request, context, form)
+class ComponentCreate(CreateViewMixin):
+    model = Component
+    form_class = forms.ComponentForm
+    template_name = 'bikes/component_form.html'
+    detail_view = ComponentDetail
+
+    def url(self):
+        return reverse_lazy('bikes:component_create')
 
 
-@login_required()
-def component_update(request, pk):
-    component = get_object_or_404(Component, pk=pk)
-    form = ComponentForm(request.POST or None, instance=component)
-    context = {'url': reverse('bikes:component_update', kwargs={'pk': pk})}
-    return save_component(request, context, form)
+class ComponentUpdate(UpdateViewMixin):
+    model = Component
+    form_class = forms.ComponentForm
+    template_name = 'bikes/component_form.html'
+    detail_view = ComponentDetail
+
+    def url(self):
+        return reverse_lazy('bikes:component_update', kwargs={'pk': self.kwargs['pk']})
 
 
-@login_required()
-def component_delete(request, pk):
-    component = get_object_or_404(Component, pk=pk)
-    data = {}
-
-    if request.method == 'POST':
-        component.delete()
-        data['form_is_valid'] = True
-        components = Component.objects.items()
-        data['html_list'] = render_to_string(
-            'bikes/includes/partial_component_list.html',
-            {'components': components}
-        )
-    else:
-        context = {'component': component}
-        data['html_form'] = render_to_string(
-            'bikes/includes/partial_component_delete.html',
-            context=context,
-            request=request
-        )
-    return JsonResponse(data)
+class ComponentDelete(DeleteViewMixin):
+    model = Component
+    template_name = 'bikes/component_confirm_delete.html'
+    success_url = '/'
 
 
 # ---------------------------------------------------------------------------------------
