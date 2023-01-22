@@ -7,7 +7,7 @@ from freezegun import freeze_time
 
 from ...bikes.factories import BikeFactory
 from .. import views
-from ..factories import DataFactory
+from ...data.factories import DataFactory
 
 pytestmark = pytest.mark.django_db
 
