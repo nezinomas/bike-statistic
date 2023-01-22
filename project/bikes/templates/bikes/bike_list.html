@@ -4,14 +4,15 @@
 
 {% block content %}
 
-<div class="row my-2">
-    <div class="col text-end">
+<div class="row">
+    <div class="col"></div>
+    <div class="col-2 text-end">
         {% url 'bikes:bike_create' as url_create %}
-        {% new_button url=url_create label='New Bike' width='19%' target="table-tbody" swap="afterbegin" %}
+        {% new_button url=url_create label='New Bike' width='100%' target="table-tbody" swap="afterbegin" %}
     </div>
 </div>
 
-<div id="htmx-container" hx-trigger="reload from:body" hx-get="{% url 'bikes:bike_list' %}" hx-target="this">
+<div id="htmx-container" class="mt-2" hx-trigger="reload from:body" hx-get="{% url 'bikes:bike_list' %}" hx-target="this">
     {% include "bikes/includes/partial_bike_list.html" %}
 </div>
 
