@@ -172,6 +172,11 @@ def save_component(request, context, form):
     return JsonResponse(data)
 
 
+class ComponentDetail(DetailViewMixin):
+    model = Component
+    template_name = 'bikes/includes/partial_component_row.html'
+
+
 class ComponentList(ListViewMixin):
     def get_template_names(self):
         if self.request.htmx:
