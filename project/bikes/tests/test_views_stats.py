@@ -54,8 +54,7 @@ def test_stats_index_no_component(client_logged):
     response = client_logged.get(url, follow=True)
 
     assert response.status_code == 200
-    # assert response.resolver_match.func.view_class is views.component_lists
-    assert response.resolver_match.func is views.component_lists
+    assert response.resolver_match.func.view_class is views.ComponentList
 
 
 def test_stats_index_redirected(client_logged):
