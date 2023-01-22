@@ -53,7 +53,7 @@ def test_bike_list_no_records(client_logged):
     url = reverse('bikes:bike_list')
     response = client_logged.get(url)
 
-    assert '<td class="bg-warning text-center" colspan="4">No records</td>' in str(
+    assert '<td class="bg-warning text-center" colspan="4"> No records </td>' in str(
         response.content)
 
 
