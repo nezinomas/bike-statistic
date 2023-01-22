@@ -1,8 +1,8 @@
+import re
 import pytest
 from django.urls import resolve, reverse
 
 from ...core.lib.tests_utils import clean_content
-from ...users.factories import UserFactory
 from .. import models, views
 from ..factories import BikeFactory, BikeInfoFactory
 
@@ -256,3 +256,38 @@ def test_info_update_description(client_logged):
     assert actual.component == info.component
     assert actual.description == 'XXX'
     assert actual.bike == info.bike
+
+
+def test_info_delete_func():
+    view = resolve('/info/bike/delete/1/')
+
+    assert views.BikeInfoDelete is view.func.view_class
+
+
+def test_info_delete_200(client_logged):
+    info = BikeInfoFactory()
+    url = reverse('bikes:info_delete', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
+
+    response = client_logged.get(url)
+
+    assert response.status_code == 200
+
+
+def test_info_delete_load_form(client_logged):
+    info = BikeInfoFactory()
+    url = reverse('bikes:info_delete', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
+
+    response = client_logged.get(url)
+    content = clean_content(response.content)
+    res = re.findall(fr'<form.+hx-post="({url})"', content)
+    assert res[0] == url
+    assert f'<button type="submit" id="_delete" data-pk="{info.pk}"' in content
+
+
+def test_info_delete(client_logged):
+    info = BikeInfoFactory()
+    url = reverse('bikes:info_delete', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
+
+    client_logged.post(url, {})
+
+    assert models.BikeInfo.objects.all().count() == 0

@@ -78,7 +78,7 @@ urlpatterns = [
     ),
     path(
         "info/<slug:bike_slug>/delete/<int:pk>/",
-        views.bike_info_delete,
+        views.BikeInfoDelete.as_view(),
         name="info_delete",
     ),
 ]
