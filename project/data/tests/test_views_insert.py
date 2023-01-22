@@ -5,7 +5,8 @@ import pytest
 from django.urls import resolve, reverse
 from mock import patch
 
-from ...core.helpers.test_helpers import login_rediretion
+from ...data.views import DataList
+from ...users.views import CustomLogin
 from .. import views
 
 
@@ -21,44 +22,43 @@ def current_month_range():
 
 @patch('project.data.views.SyncWithGarmin.insert_data_current_user', return_value=True)
 @pytest.mark.django_db
-def test_insert_view_status_code_200(mocked, client, login):
+def test_insert_view_status_code_200(mocked, client_logged):
     url = reverse('data:data_insert')
-    response = client.get(url, follow=True)
+    response = client_logged.get(url, follow=True)
 
     assert 200 == response.status_code
 
-    start_date, end_date = current_month_range()
-    assert response.redirect_chain[1][0] == reverse(
-        'data:data_list',
-        kwargs={'start_date': start_date, 'end_date': end_date}
-    )
+    assert response.resolver_match.func.view_class is DataList
 
 
 def test_view_func():
     view = resolve('/data/insert/')
 
-    assert view.func is views.insert_data
+    assert view.func.view_class is views.DataInsert
 
 
 @pytest.mark.django_db
 def test_insert_data_redirection_if_user_not_logged(client):
-    login_rediretion(client, 'data:data_insert')
+    url = reverse('data:data_insert')
+    response = client.get(url, follow=True)
+
+    assert response.resolver_match.func.view_class is CustomLogin
 
 
 @patch('project.data.views.SyncWithGarmin.insert_data_current_user', return_value=True)
 @pytest.mark.django_db
-def test_insert_data_no_errors(mocked, client, login):
+def test_insert_data_no_errors(mocked, client_logged):
     url = reverse('data:data_insert')
-    response = client.get(url)
+    response = client_logged.get(url)
 
-    assert response.url == reverse('index')
+    assert response.url == reverse('data:data_list')
 
 
 @patch('project.data.views.SyncWithGarmin.insert_data_current_user', side_effect=Exception('Error X'))
 @pytest.mark.django_db
-def test_insert_data_exception_occurs(mocked, client, login):
+def test_insert_data_exception_occurs(mocked, client_logged):
     url = reverse('data:data_insert')
-    response = client.get(url)
+    response = client_logged.get(url)
 
     assert '<p>Error X</p>' in str(response.content)
     assert '<p>Type: Exception</p>' in str(response.content)

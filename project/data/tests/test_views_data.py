@@ -4,12 +4,12 @@ import pytest
 from django.urls import resolve, reverse
 from freezegun import freeze_time
 
-from ...core.helpers.test_helpers import login_rediretion
 from ...data.factories import DataFactory
 from ...users.factories import UserFactory
+from ...users.views import CustomLogin
+from .. import views
 from ..factories import DataFactory
 from ..models import Data
-from .. import views
 
 pytestmark = pytest.mark.django_db
 
@@ -22,7 +22,10 @@ def last_id():
 #                                                                               data_list
 # ---------------------------------------------------------------------------------------
 def test_data_list_not_loged(client, jan_2000):
-    login_rediretion(client, 'data:data_list', kwargs=jan_2000)
+    url = reverse('data:data_list', kwargs=jan_2000)
+    response = client.get(url, follow=True)
+
+    assert response.resolver_match.func.view_class is CustomLogin
 
 
 def test_data_list_valid_date(client, login, jan_2000):
