@@ -61,7 +61,11 @@ urlpatterns = [
     # ......................................................................... Bike Info
     path("info/", views.BikeInfoIndex.as_view(), name="info_index"),
     path("info/<slug:bike_slug>/", views.BikeInfoList.as_view(), name="info_list"),
-    path("info/<slug:bike_slug>/create/", views.bike_info_create, name="info_create"),
+    path(
+        "info/<slug:bike_slug>/create/",
+        views.BikeInfoCreate.as_view(),
+        name="info_create",
+    ),
     path(
         "info/<slug:bike_slug>/detail/<int:pk>/",
         views.BikeInfoDetail.as_view(),

@@ -112,6 +112,19 @@ class BikeInfoDetail(DetailViewMixin):
     template_name = 'bikes/includes/partial_info_row.html'
 
 
+class BikeInfoCreate(CreateViewMixin):
+    model = BikeInfo
+    template_name = 'bikes/info_form.html'
+    detail_view = BikeInfoDetail
+
+    def url(self):
+        return reverse_lazy('bikes:info_create', kwargs={'bike_slug': self.kwargs['bike_slug']})
+
+    def get_form(self, data=None, files=None, **kwargs):
+        # pass bike_slug and component_pk from self.kwargs to form
+        return forms.BikeInfoForm(data, files, **kwargs | self.kwargs)
+
+
 @login_required()
 def bike_info_create(request, bike_slug):
     bike = get_object_or_404(Bike, slug=bike_slug)

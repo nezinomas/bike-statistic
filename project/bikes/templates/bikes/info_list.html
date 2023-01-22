@@ -11,8 +11,8 @@
         {% endfor %}
     </div>
     <div class="col-2 text-end">
-        {% url 'bikes:info_create' bike.slug as url_create %}
-        {% new_button url=url_create label='New Record' width="100%" %}
+        {% url 'bikes:info_create' request.resolver_match.kwargs.bike_slug as url_create %}
+        {% new_button url=url_create label='New Record' width="100%" target="table-tbody" swap="afterbegin"%}
     </div>
 </div>
 

@@ -2,6 +2,7 @@ import pytest
 from django.urls import resolve, reverse
 
 from ...core.lib.tests_utils import clean_content
+from ...users.factories import UserFactory
 from .. import models, views
 from ..factories import BikeFactory, BikeInfoFactory
 
@@ -147,3 +148,47 @@ def test_info_detail_rendered_context(client_logged):
     assert f'<button type="button" class="btn btn-sm btn-warning" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
     # delete button
     assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#dialog" hx-swap="innerHTML">' in actual
+
+
+def test_info_create_func():
+    view = resolve('/info/bike/create/')
+
+    assert views.BikeInfoCreate is view.func.view_class
+
+
+def test_info_create_load_form(client_logged):
+    bike = BikeFactory()
+    url = reverse('bikes:info_create', kwargs={'bike_slug': bike.slug})
+    response = client_logged.get(url)
+    content = clean_content(response.content)
+
+    assert response.status_code == 200
+
+
+def test_info_create_save_with_valid_data(client_logged):
+    bike = BikeFactory()
+
+    data = {
+        'component': 'Component',
+        'description': 'Description',
+    }
+
+    url = reverse('bikes:info_create', kwargs={'bike_slug': bike.slug})
+    client_logged.post(url, data)
+    actual = models.BikeInfo.objects.first()
+
+    assert actual.component == 'Component'
+    assert actual.description == 'Description'
+    assert actual.bike == bike
+
+
+def test_info_create_save_form_errors(client_logged):
+    bike = BikeFactory()
+    data = {}
+    url = reverse('bikes:info_create', kwargs={'bike_slug': bike.slug})
+    response = client_logged.post(url, data)
+    form = response.context['form']
+
+    assert not form.is_valid()
+    assert 'component' in form.errors
+    assert 'description' in form.errors
