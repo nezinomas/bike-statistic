@@ -10,7 +10,7 @@ urlpatterns = [
     path('component/', views.ComponentList.as_view(), name='component_list'),
     path('component/create/', views.ComponentCreate.as_view(), name='component_create'),
     path('component/detail/<int:pk>/', views.ComponentDetail.as_view(), name='component_detail'),
-    path('component/update/<int:pk>/', views.component_update, name='component_update'),
+    path('component/update/<int:pk>/', views.ComponentUpdate.as_view(), name='component_update'),
     path('component/delete/<int:pk>/', views.component_delete, name='component_delete'),
 
     path('stats/<slug:bike_slug>/', views.StatsIndex.as_view(), name='stats_index'),

@@ -197,12 +197,14 @@ class ComponentCreate(CreateViewMixin):
         return reverse_lazy('bikes:component_create')
 
 
-@login_required()
-def component_update(request, pk):
-    component = get_object_or_404(Component, pk=pk)
-    form = ComponentForm(request.POST or None, instance=component)
-    context = {'url': reverse('bikes:component_update', kwargs={'pk': pk})}
-    return save_component(request, context, form)
+class ComponentUpdate(UpdateViewMixin):
+    model = Component
+    form_class = forms.ComponentForm
+    template_name = 'bikes/component_form.html'
+    detail_view = ComponentDetail
+
+    def url(self):
+        return reverse_lazy('bikes:component_update', kwargs={'pk': self.kwargs['pk']})
 
 
 @login_required()

@@ -125,3 +125,40 @@ def test_component_create_save_form_errors(client_logged):
     form = response.context['form']
     assert not form.is_valid()
     assert 'name' in form.errors
+
+
+def test_component_update_func():
+    view = resolve('/component/update/1/')
+
+    assert views.ComponentUpdate is view.func.view_class
+
+
+def test_component_update_load_form(client_logged):
+    comp = ComponentFactory()
+
+    url = reverse('bikes:component_update', kwargs={'pk': comp.pk})
+    response = client_logged.get(url)
+    form = clean_content(response.content)
+
+    assert 'Component' in form
+
+    save_button = re.findall(fr'hx-post="({url})" hx-target="(.*?)"', form)
+    assert save_button[0][0] == url
+    assert save_button[0][1] == '#form-row'
+
+    url_detail = url = reverse('bikes:component_detail', kwargs={'pk': comp.pk})
+    close_button = re.findall(fr'hx-get="({url_detail})" hx-target="(.*?)"', form)
+    assert close_button[0][0] == url
+    assert close_button[0][1] == '#form-row'
+
+
+def test_component_update_name(client_logged):
+    comp = ComponentFactory()
+    data = {'name': 'XXX'}
+
+    url = reverse('bikes:component_update', kwargs={'pk': comp.pk})
+    client_logged.post(url, data)
+
+    actual = models.Component.objects.get(pk=comp.pk)
+
+    assert actual.name == 'XXX'
