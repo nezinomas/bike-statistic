@@ -4,15 +4,15 @@
 
 
 {% block content %}
-    <div class="row my-2">
+    <div class="row">
         <div class="col">
                 {% for item in object_list %}
                 <a role="button" href="{% url 'bikes:stats_list' bike.slug item.id %}" class="btn btn-sm {% if item.id == component.pk %}btn-primary{% else %}btn-secondary{% endif %}">{{ item.name }}</a>
                 {% endfor %}
         </div>
-        <div class="col-sm-2 text-end">
+        <div class="col-2 text-end">
             {% url 'bikes:stats_create' bike.slug component.pk as url_create %}
-            {% new_button url=url_create label='New Component' width='70%' url=url_create target="stats-table-tbody" swap="afterbegin" %}
+            {% new_button url=url_create label='New Component' url=url_create target="stats-table-tbody" swap="afterbegin" width="100%" %}
         </div>
     </div>
 
