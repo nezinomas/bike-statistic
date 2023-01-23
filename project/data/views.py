@@ -38,7 +38,7 @@ class DataCreate(CreateViewMixin):
     model = models.Data
     form_class = forms.DataForm
     detail_view = DataDetail
-    success_url = reverse_lazy('data_list')
+    success_url = reverse_lazy('data:data_list')
 
     def url(self):
         return reverse_lazy('data:data_create')
@@ -48,7 +48,7 @@ class DataUpdate(UpdateViewMixin):
     model = models.Data
     form_class = forms.DataForm
     detail_view = DataDetail
-    success_url = reverse_lazy('data_list')
+    success_url = reverse_lazy('data:data_list')
 
     def url(self):
         return reverse_lazy('data:data_update', kwargs={'pk': self.object.pk})
@@ -67,7 +67,7 @@ class QuickUpdate(DetailViewMixin):
 
 class DataDelete(DeleteViewMixin):
     model = models.Data
-    success_url = reverse_lazy('data_list')
+    success_url = reverse_lazy('data:data_list')
 
 
 class DataInsert(TemplateViewMixin):
