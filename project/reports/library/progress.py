@@ -152,5 +152,4 @@ class Progress():
         df.loc[:, 'goal_percent'] = (df['season_distance'] * 100) / df['goal_day']
         df.loc[:, 'goal_delta'] = df['season_distance'] - df['goal_day']
 
-        print(f'after calc ------------------------------->\n{df}\n')
         return df.to_dict(orient='records')
