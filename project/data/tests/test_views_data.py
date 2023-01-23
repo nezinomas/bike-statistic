@@ -114,7 +114,6 @@ def test_data_create_data_valid(client_logged):
         'max_speed': 110,
         'cadence': 120,
         'heart_rate': 200,
-        'checked': 'n'
     }
     url = reverse('data:data_create')
     response = client_logged.post(url, data=data)
@@ -240,7 +239,6 @@ def test_data_update_loaded_form(client_logged):
     assert '<input type="number" name="max_speed" value="15.0"' in content
     assert '<input type="number" name="heart_rate" value="140"' in content
     assert '<input type="number" name="cadence" value="85"' in content
-    assert '<input type="hidden" name="checked" value="n"' in content
 
 
 def test_data_update(client_logged):

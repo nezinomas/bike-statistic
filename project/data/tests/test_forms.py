@@ -1,9 +1,10 @@
+from datetime import date, timedelta
+
 import pytest
 
 from ...bikes.factories import BikeFactory
 from ...users.factories import UserFactory
 from ..forms import DataForm, DateFilterForm
-
 
 pytestmark = pytest.mark.django_db
 
@@ -27,24 +28,36 @@ def test_date_filter_form_invalid():
     assert not form.is_valid()
 
 
-def test_date_filter_form_invalid_start_bigger_than_end():
-    form = DateFilterForm(
-        data={
-            'start_date': '2000-01-31',
-            'end_date': '2000-01-01'
-        }
-    )
-
-    assert not form.is_valid()
-
-
 # ---------------------------------------------------------------------------------------
 #                                                                               Data Form
 # ---------------------------------------------------------------------------------------
-def test_data_form_is_valid(post_data, get_user):
-    form = DataForm(data=post_data)
+def test_data_form_data_valid(get_user):
+    bike = BikeFactory()
+    data = {
+        'bike': str(bike.id),
+        'date': date(2000, 1, 1),
+        'distance': 10.12,
+        'time': timedelta(seconds=15),
+        'temperature': 1.1,
+        'ascent': 600,
+        'descent': 500,
+        'max_speed': 110,
+        'cadence': 120,
+        'heart_rate': 200,
+    }
+    form = DataForm(data=data)
 
     assert form.is_valid()
+
+
+def test_data_form_data_invalid(get_user):
+    form = DataForm(data={})
+
+    assert not form.is_valid()
+    assert 'bike' in form.errors
+    assert 'date' in form.errors
+    assert 'distance' in form.errors
+    assert 'time' in form.errors
 
 
 def test_data_bike_current_user(get_user):

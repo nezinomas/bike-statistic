@@ -23,11 +23,9 @@ class DataForm(FormMixin, forms.ModelForm):
             'max_speed',
             'cadence',
             'heart_rate',
-            'checked',
         ]
         widgets = {
             'date': DatePickerInput(format='%Y-%m-%d'),
-            'checked': forms.HiddenInput(),
         }
 
     def __init__(self, *args, **kwargs):
