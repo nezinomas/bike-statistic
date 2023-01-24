@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from datetime import date
 
 import pandas as pd
+import polars as pl
 from django.db.models import F
 
 from ...goals.models import Goal
@@ -53,21 +54,14 @@ class Progress():
         if not data:
             return pd.DataFrame()
 
-        df = pd.DataFrame(data)
+        df = pl.DataFrame(data)
 
-        df['date'] = pd.to_datetime(df['date'])
-        df['distance'] = df['distance'].astype(float)
-        df['ascent'] = df['ascent'].astype(int)
-        df['time'] = pd.to_timedelta(df['time'], unit='s')
-        df['seconds'] = df['time'].dt.total_seconds().astype(int)
-        df['speed'] = self._speed(df['distance'], df['seconds'])
-
-        df['year'] = df['date'].dt.year
-
+        df = df.with_columns([
+                pl.col('time').dt.seconds().alias('seconds'),
+            ]).with_columns(
+                self._speed('distance', 'seconds').alias('speed')
+            )
         return df
-
-    def _speed(self, distance, seconds):
-        return distance / (seconds / 3600)
 
     def _find_extremums(self, df, column):
         functions = {
@@ -105,51 +99,53 @@ class Progress():
 
         return d
 
-    def month_stats(self):
-        df = self._df.copy()
-
-        if df.empty:
-            return {}
-
-        df.index = df['date']
-        df = df.resample('M').sum() # group_by month and get sum of groups
-
-        df['year_month'] = df.index.to_period('M')
-        df.loc[:, 'monthlen'] = df.index.day
-        df.loc[:, 'distance_per_day'] = df['distance'] / df['monthlen']
-        df.loc[:, 'speed'] = self._speed(df['distance'], df['seconds'])
-
-        # make df index year_month
-        df.reset_index()
-        df.index = df['year_month']
-        df.index = df.index.astype(str)
-
-        return df.to_dict('index')
+    def _speed(self, distance_km, time_seconds):
+        return pl.col(distance_km) / (pl.col(time_seconds) / 3600)
 
     def season_progress(self):
-        df = self._df.copy()
-        if df.empty or not self._year:
+        df = self._df
+
+        if df.is_empty() or not self._year:
             return {}
-        df = df.sort_values(by='date', ascending=False)
 
-        # metu diena, int
-        first = pd.to_datetime(date(self._year, 1, 1))
-        df.loc[:, 'day_nr'] = (df['date'] - first).dt.days + 1
-        df.loc[:, 'year_month'] = df['date'].dt.to_period('M').astype(str)
-
-        # season stats
-        df.loc[:, 'season_distance'] = df['distance'][::-1].cumsum()
-        df.loc[:, 'season_seconds'] = df['seconds'][::-1].cumsum()
-        df.loc[:, 'season_ascent'] = df['ascent'][::-1].cumsum()
-        df.loc[:, 'season_per_day'] = df['season_distance'] / df['day_nr']
-        df.loc[:, 'season_speed'] = self._speed(df['season_distance'], df['season_seconds'])
-
-        # calculate goal progress
         year_len = 366 if calendar.isleap(self._year) else 365
         per_day = self._goal / year_len
 
-        df.loc[:, 'goal_day'] = df['day_nr'] * per_day
-        df.loc[:, 'goal_percent'] = (df['season_distance'] * 100) / df['goal_day']
-        df.loc[:, 'goal_delta'] = df['season_distance'] - df['goal_day']
+        df = (
+            df.lazy()
+            .sort("date")
+            .with_columns([
+                pl.col('distance').cumsum().alias('season_distance'),
+                pl.col('seconds').cumsum().alias('season_seconds'),
+                pl.col('ascent').cumsum().alias('season_ascent'),
+            ])
+            .with_columns([
+                (pl.col('season_distance') / pl.col('date').dt.day()).alias('season_per_day'),
+                self._speed('season_distance', 'season_seconds').alias('season_speed'),
+            ])
+            .with_column(
+                (pl.col('date').dt.day() * per_day).alias('goal_day')
+            )
+            .with_columns([
+                ((pl.col('season_distance') * 100) / pl.col('goal_day')).alias('goal_percent'),
+                (pl.col('season_distance') - pl.col('goal_day')).alias('goal_delta'),
+            ])
+            .with_columns([
+                pl.col('date').dt.month().apply(
+                    lambda x: calendar.monthrange(2000, x)[1]).alias('monthlen'),
+                pl.col('date').dt.month().alias('month'),
+            ])
+            .with_columns([
+                pl.col('time').sum().over('month').alias('month_time'),
+                pl.col('seconds').sum().over('month').alias('month_seconds'),
+                pl.col('distance').sum().over('month').alias('month_distance'),
+                pl.col('ascent').sum().over('month').alias('month_ascent'),
+            ])
+            .with_columns([
+                self._speed('month_distance', 'month_seconds').over('month').alias('month_speed'),
+                (pl.col('month_distance') / pl.col('monthlen')).alias('month_per_day')
+            ])
+            .sort("date", reverse=True)
+        ).collect()
 
-        return df.to_dict(orient='records')
+        return df.to_dicts()
