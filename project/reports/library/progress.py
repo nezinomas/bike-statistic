@@ -49,27 +49,6 @@ class Progress():
 
         self._df = self._build_df(data.data)
 
-    def _build_df(self, data):
-        df = pl.DataFrame(data)
-        if df.is_empty():
-            return df
-
-        df = df.with_columns([
-                pl.col('time').dt.seconds().alias('seconds'),
-            ]).with_columns(
-                self._speed('distance', 'seconds').alias('speed')
-        )
-        df = df.drop('time')
-        return df
-
-    def _agg_min_max(self, col: str) -> pl.Expr:
-        return (
-            pl.col(col).sort_by(col).last().alias(f'max_{col}'),
-            pl.col('date').sort_by(col).last().alias(f'max_{col}_date'),
-            pl.col(col).sort_by(col).first().alias(f'min_{col}'),
-            pl.col('date').sort_by(col).first().alias(f'min_{col}_date'),
-        )
-
     def extremums(self):
         if self._df.is_empty():
             return {}
@@ -87,9 +66,6 @@ class Progress():
         dicts = df.to_dicts()
 
         return dicts[0] if self._year else dicts
-
-    def _speed(self, distance_km, time_seconds):
-        return pl.col(distance_km) / (pl.col(time_seconds) / 3600)
 
     def season_progress(self):
         df = self._df
@@ -136,3 +112,27 @@ class Progress():
             .sort("date", reverse=True)
         ).collect()
         return df.to_dicts()
+
+    def _build_df(self, data):
+        df = pl.DataFrame(data)
+        if df.is_empty():
+            return df
+
+        df = df.with_columns([
+            pl.col('time').dt.seconds().alias('seconds'),
+        ]).with_columns(
+            self._speed('distance', 'seconds').alias('speed')
+        )
+        df = df.drop('time')
+        return df
+
+    def _speed(self, distance_km, time_seconds):
+        return pl.col(distance_km) / (pl.col(time_seconds) / 3600)
+
+    def _agg_min_max(self, col: str) -> pl.Expr:
+        return (
+            pl.col(col).sort_by(col).last().alias(f'max_{col}'),
+            pl.col('date').sort_by(col).last().alias(f'max_{col}_date'),
+            pl.col(col).sort_by(col).first().alias(f'min_{col}'),
+            pl.col('date').sort_by(col).first().alias(f'min_{col}_date'),
+        )
