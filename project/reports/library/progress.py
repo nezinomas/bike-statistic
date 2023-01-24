@@ -18,7 +18,7 @@ class ProgressData:
 
     def __post_init__(self):
         self.goal = self._get_goal()
-        self.data = self._get_data()
+        self.data = list(self._get_data())
 
     def _get_goal(self):
         goal = list(
@@ -60,7 +60,8 @@ class Progress():
                 pl.col('time').dt.seconds().alias('seconds'),
             ]).with_columns(
                 self._speed('distance', 'seconds').alias('speed')
-            )
+        )
+        df = df.drop('time')
         return df
 
     def _find_extremums(self, df, column):
@@ -136,7 +137,6 @@ class Progress():
                 pl.col('date').dt.month().alias('month'),
             ])
             .with_columns([
-                pl.col('time').sum().over('month').alias('month_time'),
                 pl.col('seconds').sum().over('month').alias('month_seconds'),
                 pl.col('distance').sum().over('month').alias('month_distance'),
                 pl.col('ascent').sum().over('month').alias('month_ascent'),
@@ -147,5 +147,4 @@ class Progress():
             ])
             .sort("date", reverse=True)
         ).collect()
-
         return df.to_dicts()

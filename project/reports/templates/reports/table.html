@@ -3,7 +3,6 @@
 {% load static %}
 {% load humanize %}
 {% load filters %}
-{% load dictionary_row %}
 
 
 {% block head %}
@@ -89,34 +88,28 @@
         </tr>
     </thead>
     <tbody class="table-group-divider">
-        {% for row in season  %}
-        {% ifchanged row.year_month %}<tr>
-            {% if not forloop.first %}
-            <td colspan="20" class="row-spacer"></td>
-            {% endif %}
-        </tr>{% endifchanged %}
-        <tr>
-            <td>{{ row.bikes }}</td>
-            <td class="text-center">{{ row.date|date:'Y-m-d' }}</td>
-            <td class="text-end">{% with row.temp|floatformat:0 as r %}{% if r != 'nan' %}{{ r }}{% else %}-{% endif %}{% endwith %}</td>
-            <td class="text-center">{{ row.distance|floatformat:2 }}</td>
-            <td class="text-center">{{ row.seconds|duration }}</td>
-            <td class="text-center">{{ row.speed|floatformat:1 }}</td>
-            <td class="text-center">{{ row.ascent|floatformat:0 }}</td>
-            {% ifchanged row.year_month %}{% get_row month row.year_month as m_row %}{% endifchanged %}
-            <td class="text-center">{{ m_row.distance|floatformat:0 }}</td>
-            <td class="text-center">{{ m_row.seconds|duration }}</td>
-            <td class="text-center">{{ m_row.speed|floatformat:1 }}</td>
-            <td class="text-center">{{ m_row.distance_per_day|floatformat:1 }}</td>
-            <td class="text-center">{{ m_row.ascent|floatformat:0|intcomma }}</td>
-            <td class="text-center">{{ row.season_distance|floatformat:0|intcomma }}</td>
-            <td class="text-center">{{ row.season_seconds|duration }}</td>
-            <td class="text-center">{{ row.season_speed|floatformat:1 }}</td>
-            <td class="text-center">{{ row.season_per_day|floatformat:1 }}</td>
-            <td class="text-center">{{ row.season_ascent|floatformat:0|intcomma }}</td>
-            <td class="text-center">{{ row.goal_day|floatformat:0|intcomma }}</td>
-            <td class="text-center">{{ row.goal_percent|floatformat:1 }}</td>
-            <td class="text-center">{{ row.goal_delta|floatformat:0|intcomma }}</td>
+        {% for object in object_list  %}
+        <tr {% ifchanged object.month %}{% if not forloop.first %}class="divider"{% endif %}{% endifchanged %}>
+            <td>{{ object.bikes }}</td>
+            <td class="text-center">{{ object.date|date:'Y-m-d' }}</td>
+            <td class="text-end">{{ object.temp|floatformat:0|default:'-' }}</td>
+            <td class="text-center">{{ object.distance|floatformat:2 }}</td>
+            <td class="text-center">{{ object.seconds|duration }}</td>
+            <td class="text-center">{{ object.speed|floatformat:1 }}</td>
+            <td class="text-center">{{ object.ascent|floatformat:0 }}</td>
+            <td class="text-center">{{ object.month_distance|floatformat:0 }}</td>
+            <td class="text-center">{{ object.month_seconds|duration }}</td>
+            <td class="text-center">{{ object.month_speed|floatformat:1 }}</td>
+            <td class="text-center">{{ object.month_per_day|floatformat:1 }}</td>
+            <td class="text-center">{{ object.month_ascent|floatformat:0|intcomma }}</td>
+            <td class="text-center">{{ object.season_distance|floatformat:0|intcomma }}</td>
+            <td class="text-center">{{ object.season_seconds|duration }}</td>
+            <td class="text-center">{{ object.season_speed|floatformat:1 }}</td>
+            <td class="text-center">{{ object.season_per_day|floatformat:1 }}</td>
+            <td class="text-center">{{ object.season_ascent|floatformat:0|intcomma }}</td>
+            <td class="text-center">{{ object.goal_day|floatformat:0|intcomma }}</td>
+            <td class="text-center">{{ object.goal_percent|floatformat:1 }}</td>
+            <td class="text-center">{{ object.goal_delta|floatformat:0|intcomma }}</td>
         </tr>
         {% empty %}
         <tr>

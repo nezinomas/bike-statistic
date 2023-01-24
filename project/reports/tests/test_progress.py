@@ -75,7 +75,6 @@ def test_season_progress_keys(data):
     assert 'bikes' in actual[0]
     assert 'distance' in actual[0]
     assert 'temp' in actual[0]
-    assert 'time' in actual[0]
     assert 'ascent' in actual[0]
     assert 'seconds' in actual[0]
     assert 'speed' in actual[0]
@@ -89,7 +88,6 @@ def test_season_progress_keys(data):
     assert 'goal_delta' in actual[0]
     assert 'month' in actual[0]
     assert 'monthlen' in actual[0]
-    assert 'month_time' in actual[0]
     assert 'month_seconds' in actual[0]
     assert 'month_distance' in actual[0]
     assert 'month_speed' in actual[0]
@@ -107,12 +105,6 @@ def test_progress_month(data):
     actual = Progress(data).season_progress()
 
     assert actual[0]['month'] == actual[1]['month'] == actual[2]['month'] == 1
-
-
-def test_progress_month_time(data):
-    actual = Progress(data).season_progress()
-
-    assert actual[0]['month_time'] == actual[1]['month_time'] == actual[2]['month_time'] == timedelta(seconds=6000)
 
 
 def test_progress_month_seconds(data):

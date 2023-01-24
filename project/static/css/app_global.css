@@ -77,3 +77,8 @@ li.nav-item:last-child {
   margin-top: 1rem;
   padding: 0.5rem;
 }
+
+.divider {
+  border-top-width: 15px!important;
+  border-top-color: rgb(207, 226, 255);
+}
