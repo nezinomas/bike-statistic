@@ -8,6 +8,7 @@ from django.db.models import F
 from ...data.models import Data
 from ...goals.models import Goal
 
+pl.Config.with_columns_kwargs = True
 
 @dataclass
 class ProgressData:
@@ -53,7 +54,9 @@ class Progress():
         if self._df.is_empty():
             return {}
 
-        _agg = [self._agg_min_max(col) for col in ['distance', 'temp', 'ascent', 'speed']]
+        _agg = [
+            self._agg_min_max(col) for col in ['distance', 'temp', 'ascent', 'speed']
+        ]
 
         df = (
             self._df
@@ -79,36 +82,36 @@ class Progress():
         df = (
             df.lazy()
             .sort("date")
-            .with_columns([
-                pl.col('distance').cumsum().alias('season_distance'),
-                pl.col('seconds').cumsum().alias('season_seconds'),
-                pl.col('ascent').cumsum().alias('season_ascent'),
-            ])
-            .with_columns([
-                (pl.col('season_distance') / pl.col('date').dt.day()).alias('season_per_day'),
-                self._speed('season_distance', 'season_seconds').alias('season_speed'),
-            ])
-            .with_column(
-                (pl.col('date').dt.day() * per_day).alias('goal_day')
+            .with_columns(
+                season_distance=pl.col('distance').cumsum(),
+                season_seconds=pl.col('seconds').cumsum(),
+                season_ascent=pl.col('ascent').cumsum(),
             )
-            .with_columns([
-                ((pl.col('season_distance') * 100) / pl.col('goal_day')).alias('goal_percent'),
-                (pl.col('season_distance') - pl.col('goal_day')).alias('goal_delta'),
-            ])
-            .with_columns([
-                pl.col('date').dt.month().apply(
-                    lambda x: calendar.monthrange(2000, x)[1]).alias('monthlen'),
-                pl.col('date').dt.month().alias('month'),
-            ])
-            .with_columns([
-                pl.col('seconds').sum().over('month').alias('month_seconds'),
-                pl.col('distance').sum().over('month').alias('month_distance'),
-                pl.col('ascent').sum().over('month').alias('month_ascent'),
-            ])
-            .with_columns([
-                self._speed('month_distance', 'month_seconds').over('month').alias('month_speed'),
-                (pl.col('month_distance') / pl.col('monthlen')).alias('month_per_day')
-            ])
+            .with_columns(
+                season_per_day=pl.col('season_distance') / pl.col('date').dt.day(),
+                season_speed=self._speed('season_distance', 'season_seconds'),
+            )
+            .with_columns(
+                goal_day=pl.col('date').dt.day() * per_day
+            )
+            .with_columns(
+                goal_percent=(pl.col('season_distance') * 100) / pl.col('goal_day'),
+                goal_delta=pl.col('season_distance') - pl.col('goal_day'),
+            )
+            .with_columns(
+                monthlen=pl.col('date').dt.month().apply(
+                    lambda x: calendar.monthrange(2000, x)[1]),
+                month=pl.col('date').dt.month(),
+            )
+            .with_columns(
+                month_seconds=pl.col('seconds').sum().over('month'),
+                month_distance=pl.col('distance').sum().over('month'),
+                month_ascent=pl.col('ascent').sum().over('month'),
+            )
+            .with_columns(
+                month_speed=self._speed('month_distance', 'month_seconds').over('month'),
+                month_per_day=pl.col('month_distance') / pl.col('monthlen'),
+            )
             .sort("date", reverse=True)
         ).collect()
         return df.to_dicts()
