@@ -1,13 +1,11 @@
 import calendar
 from dataclasses import dataclass, field
-from datetime import date
 
-import pandas as pd
 import polars as pl
 from django.db.models import F
 
-from ...goals.models import Goal
 from ...data.models import Data
+from ...goals.models import Goal
 
 
 @dataclass
@@ -51,10 +49,9 @@ class Progress():
         self._df = self._build_df(data.data)
 
     def _build_df(self, data):
-        if not data:
-            return pd.DataFrame()
-
         df = pl.DataFrame(data)
+        if df.is_empty():
+            return df
 
         df = df.with_columns([
                 pl.col('time').dt.seconds().alias('seconds'),
@@ -64,41 +61,35 @@ class Progress():
         df = df.drop('time')
         return df
 
-    def _find_extremums(self, df, column):
-        functions = {
-            'max': df.loc[df[column].idxmax()],
-            'min': df.loc[df[column].idxmin()]
-        }
-
-        item = {}
-        for func_name, row in functions.items():
-            if row is not None:
-                date_column = f'{column}_{func_name}_date'
-                value_column = f'{column}_{func_name}_value'
-
-                item[date_column] = row['date']
-                item[value_column] = row[column]
-
-        return item
-
     def extremums(self):
-        df = self._df.copy()
-
-        if df.empty:
+        if self._df.is_empty():
             return {}
 
-        columns = [
-            'distance',
-            'temp',
-            'ascent',
-            'speed',
-        ]
+        df = (
+            self._df
+            .select(['date', 'ascent', 'temp', 'speed', 'distance'])
+            .with_column((pl.col('date').dt.year()).alias("year"))
+            .groupby('year')
+            .agg([
+                pl.col('distance').sort_by('distance').last().alias('max_distance'),
+                pl.col('date').sort_by('distance').last().alias('max_distance_date'),
+                pl.col('distance').sort_by('distance').first().alias('min_distance'),
+                pl.col('date').sort_by('distance').first().alias('min_distance_date'),
+                pl.col('temp').sort_by('temp').last().alias('max_temp'),
+                pl.col('date').sort_by('temp').last().alias('max_temp_date'),
+                pl.col('temp').sort_by('temp').first().alias('min_temp'),
+                pl.col('date').sort_by('temp').first().alias('min_temp_date'),
+                pl.col('ascent').sort_by('ascent').last().alias('max_ascent'),
+                pl.col('date').sort_by('ascent').last().alias('max_ascent_date'),
+                pl.col('speed').sort_by('speed').last().alias('max_speed'),
+                pl.col('date').sort_by('speed').last().alias('max_speed_date'),
+            ])
+            .sort(pl.col('year'), reverse=True)
+        )
+        dicts = df.to_dicts()
 
-        d = {}
-        for column in columns:
-            d |= self._find_extremums(df, column)
+        return dicts[0] if self._year else dicts
 
-        return d
 
     def _speed(self, distance_km, time_seconds):
         return pl.col(distance_km) / (pl.col(time_seconds) / 3600)

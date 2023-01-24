@@ -36,18 +36,18 @@
         </tr>
     </thead>
     <tbody class="table-group-divider">
-        {% if e %}
+        {% if extremums %}
         <tr>
-            <td class="text-center">{{ e.temp_max_date|date:"Y-m-d" }}</td>
-            <td class="text-center">{{ e.temp_max_value|floatformat:0 }}</td>
-            <td class="text-center">{{ e.temp_min_date|date:"Y-m-d" }}</td>
-            <td class="text-center">{{ e.temp_min_value|floatformat:0 }}</td>
-            <td class="text-center">{{ e.ascent_max_date|date:"Y-m-d" }}</td>
-            <td class="text-center">{{ e.ascent_max_value|floatformat:0 }}</td>
-            <td class="text-center">{{ e.speed_max_date|date:"Y-m-d" }}</td>
-            <td class="text-center">{{ e.speed_max_value|floatformat:1 }}</td>
-            <td class="text-center">{{ e.distance_max_date|date:"Y-m-d" }}</td>
-            <td class="text-center">{{ e.distance_max_value|floatformat:1 }}</td>
+            <td class="text-center">{{ extremums.max_temp_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ extremums.max_temp|floatformat:0 }}</td>
+            <td class="text-center">{{ extremums.min_temp_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ extremums.min_temp|floatformat:0 }}</td>
+            <td class="text-center">{{ extremums.max_ascent_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ extremums.max_ascent|floatformat:0 }}</td>
+            <td class="text-center">{{ extremums.max_speed_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ extremums.max_speed|floatformat:1 }}</td>
+            <td class="text-center">{{ extremums.max_distance_date|date:"Y-m-d" }}</td>
+            <td class="text-center">{{ extremums.max_distance|floatformat:1 }}</td>
         </tr>
         {% else %}
         <tr><td class="bg-warning text-center" colspan="10">No records</td></tr>
