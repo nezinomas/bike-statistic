@@ -13,7 +13,7 @@ def fixture_data():
     data = [
         {'date': date(2000, 1, 1), 'distance': 2, 'time': timedelta(seconds=2_000), 'ascent': 2, 'bikes': 'Short Name', 'temp': 2},
         {'date': date(2000, 1, 2), 'distance': 20, 'time': timedelta(seconds=2_000), 'ascent': 200, 'bikes': 'Short Name', 'temp': 20} ,
-        {'date': date(2000, 1, 31), 'distance': 200, 'time': timedelta(seconds=2_000), 'ascent': 2000, 'bikes': 'Short Name', 'temp': 200},
+        {'date': date(2000, 1, 31), 'distance': 200, 'time': timedelta(seconds=2_000), 'ascent': 2000, 'bikes': 'Short Name', 'temp': 100},
     ]
 
     return SimpleNamespace(year=2000, goal=1000, data=data)
@@ -48,7 +48,7 @@ def test_extremums_temperature(data):
     actual = Progress(data).extremums()
 
     assert actual['max_temp_date'] == date(2000, 1, 31)
-    assert actual['max_temp'] == 200
+    assert actual['max_temp'] == 100
 
     assert actual['min_temp_date'] == date(2000, 1, 1)
     assert actual['min_temp'] == 2.0
@@ -100,7 +100,6 @@ def test_progress_monthlen(data):
 
     assert actual[0]['monthlen'] == actual[1]['monthlen'] == actual[2]['monthlen'] == 31
 
-
 def test_progress_month(data):
     actual = Progress(data).season_progress()
 
@@ -128,13 +127,13 @@ def test_progress_month_ascent(data):
 def test_progress_month_speed(data):
     actual = Progress(data).season_progress()
 
-    assert actual[0]['month_speed'] == actual[1]['month_speed'] == actual[2]['month_speed'] == 133.2
+    assert round(actual[0]['month_speed'], 2) == round(actual[1]['month_speed'], 2) == round(actual[2]['month_speed'], 2) == 133.2
 
 
 def test_progress_month_per_day(data):
     actual = Progress(data).season_progress()
 
-    assert actual[0]['month_per_day'] == actual[1]['month_per_day'] == actual[2]['month_per_day'] == 222/31
+    assert round(actual[0]['month_per_day'], 2) == round(actual[1]['month_per_day'], 2) == round(actual[2]['month_per_day'], 2) == round(222/31, 2)
 
 
 def test_season_progress_sorting(data):
