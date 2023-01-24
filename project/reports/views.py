@@ -16,9 +16,8 @@ class YearProgress(TemplateViewMixin):
         obj = Progress(data)
         context = {
             'year': year,
-            'e': obj.extremums(),
-            'season': obj.season_progress(),
-            'month': obj.month_stats(),
+            'extremums': obj.extremums(),
+            'object_list': obj.season_progress(),
         }
         return super().get_context_data(**kwargs) | context
 

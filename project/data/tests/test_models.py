@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import date, datetime
 
 import pytest
 
@@ -9,9 +9,7 @@ from ..models import Data
 
 pytestmark = pytest.mark.django_db
 
-# ---------------------------------------------------------------------------------------
-#                                                                                    Data
-# ---------------------------------------------------------------------------------------
+
 def test_data_str():
     obj = DataFactory.build()
 
