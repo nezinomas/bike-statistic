@@ -99,8 +99,7 @@ class Progress():
                 goal_delta=pl.col('season_distance') - pl.col('goal_day'),
             )
             .with_columns(
-                monthlen=pl.col('date').dt.month().apply(
-                    lambda x: calendar.monthrange(2000, x)[1]),
+                monthlen=pl.col('date').dt.month().apply(lambda x: calendar.monthrange(2000, x)[1]),
                 month=pl.col('date').dt.month(),
             )
             .with_columns(
@@ -112,25 +111,38 @@ class Progress():
                 month_speed=self._speed('month_distance', 'month_seconds').over('month'),
                 month_per_day=pl.col('month_distance') / pl.col('monthlen'),
             )
-            .with_columns([
-                pl.col('season_seconds').cast(pl.Int32),
-                pl.col('season_speed').cast(pl.Float32),
-                pl.col('season_per_day').cast(pl.Float32),
-                pl.col('season_ascent').cast(pl.Int32),
-                pl.col('goal_day').cast(pl.Float32),
-                pl.col('goal_percent').cast(pl.Float32),
-                pl.col('goal_delta').cast(pl.Float32),
-                pl.col('monthlen').cast(pl.Int8),
-                pl.col('month').cast(pl.Int8),
-                pl.col('month_distance').cast(pl.Float32),
-                pl.col('month_seconds').cast(pl.Int32),
-                pl.col('month_speed').cast(pl.Float32),
-                pl.col('month_per_day').cast(pl.Float32),
-                pl.col('month_ascent').cast(pl.Int32),
-            ])
+            .with_columns(self._progress_dtypes())
             .sort("date", reverse=True)
         ).collect()
         return df.to_dicts()
+
+    def _progress_dtypes(self) -> pl.Expr:
+        return [
+            pl.col('season_seconds').cast(pl.Int32),
+            pl.col('season_speed').cast(pl.Float32),
+            pl.col('season_per_day').cast(pl.Float32),
+            pl.col('season_ascent').cast(pl.Int32),
+            pl.col('goal_day').cast(pl.Float32),
+            pl.col('goal_percent').cast(pl.Float32),
+            pl.col('goal_delta').cast(pl.Float32),
+            pl.col('monthlen').cast(pl.Int8),
+            pl.col('month').cast(pl.Int8),
+            pl.col('month_distance').cast(pl.Float32),
+            pl.col('month_seconds').cast(pl.Int32),
+            pl.col('month_speed').cast(pl.Float32),
+            pl.col('month_per_day').cast(pl.Float32),
+            pl.col('month_ascent').cast(pl.Int32),
+        ]
+
+    def _build_dtypes(self) -> pl.Expr:
+        return [
+            pl.col('bikes').cast(pl.Categorical),
+            pl.col('distance').cast(pl.Float32),
+            pl.col('seconds').cast(pl.Int16),
+            pl.col('speed').cast(pl.Float32),
+            pl.col('ascent').cast(pl.Int16),
+            pl.col('temp').cast(pl.Float32)
+        ]
 
     def _build_df(self, data):
         df = pl.DataFrame(data)
@@ -143,13 +155,7 @@ class Progress():
                 pl.col('time').dt.seconds().alias('seconds')])
             .with_columns([
                 self._speed('distance', 'seconds').alias('speed')])
-            .with_columns([
-                pl.col('bikes').cast(pl.Categorical),
-                pl.col('distance').cast(pl.Float32),
-                pl.col('seconds').cast(pl.Int16),
-                pl.col('speed').cast(pl.Float32),
-                pl.col('ascent').cast(pl.Int16),
-                pl.col('temp').cast(pl.Float32)])
+            .with_columns(self._build_dtypes())
         )
         df = df.drop('time')
         return df
