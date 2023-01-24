@@ -1,4 +1,5 @@
 import calendar
+import itertools as it
 from dataclasses import dataclass, field
 
 import polars as pl
@@ -61,35 +62,31 @@ class Progress():
         df = df.drop('time')
         return df
 
+    def _agg_min_max(self, col: str) -> pl.Expr:
+        return (
+            pl.col(col).sort_by(col).last().alias(f'max_{col}'),
+            pl.col('date').sort_by(col).last().alias(f'max_{col}_date'),
+            pl.col(col).sort_by(col).first().alias(f'min_{col}'),
+            pl.col('date').sort_by(col).first().alias(f'min_{col}_date'),
+        )
+
     def extremums(self):
         if self._df.is_empty():
             return {}
+
+        _agg = [self._agg_min_max(col) for col in ['distance', 'temp', 'ascent', 'speed']]
 
         df = (
             self._df
             .select(['date', 'ascent', 'temp', 'speed', 'distance'])
             .with_column((pl.col('date').dt.year()).alias("year"))
             .groupby('year')
-            .agg([
-                pl.col('distance').sort_by('distance').last().alias('max_distance'),
-                pl.col('date').sort_by('distance').last().alias('max_distance_date'),
-                pl.col('distance').sort_by('distance').first().alias('min_distance'),
-                pl.col('date').sort_by('distance').first().alias('min_distance_date'),
-                pl.col('temp').sort_by('temp').last().alias('max_temp'),
-                pl.col('date').sort_by('temp').last().alias('max_temp_date'),
-                pl.col('temp').sort_by('temp').first().alias('min_temp'),
-                pl.col('date').sort_by('temp').first().alias('min_temp_date'),
-                pl.col('ascent').sort_by('ascent').last().alias('max_ascent'),
-                pl.col('date').sort_by('ascent').last().alias('max_ascent_date'),
-                pl.col('speed').sort_by('speed').last().alias('max_speed'),
-                pl.col('date').sort_by('speed').last().alias('max_speed_date'),
-            ])
+            .agg(list(it.chain.from_iterable(_agg)))
             .sort(pl.col('year'), reverse=True)
         )
         dicts = df.to_dicts()
 
         return dicts[0] if self._year else dicts
-
 
     def _speed(self, distance_km, time_seconds):
         return pl.col(distance_km) / (pl.col(time_seconds) / 3600)
