@@ -74,12 +74,19 @@ class Progress():
         if self._df.is_empty() or not self._year:
             return self._df
 
-        year_len = 366 if calendar.isleap(self._year) else 365
-        per_day = self._goal / year_len
-
         df = (
             self._df.lazy()
             .sort("date")
+            .pipe(self._progress_season)
+            .pipe(self._progress_goals)
+            .pipe(self._progress_month)
+            .with_columns(self._progress_dtypes())
+            .sort("date", reverse=True)
+        ).collect()
+        return df.to_dicts()
+
+    def _progress_season(self, df) -> pl.Expr:
+        return (df
             .with_columns(
                 season_distance=pl.col('distance').cumsum(),
                 season_seconds=pl.col('seconds').cumsum(),
@@ -87,17 +94,13 @@ class Progress():
             )
             .with_columns(
                 season_per_day=pl.col('season_distance') / pl.col('date').dt.day(),
-                season_speed=self._speed('season_distance', 'season_seconds'),
-            )
+                season_speed=self._speed('season_distance', 'season_seconds')))
+
+    def _progress_month(self, df):
+        return (df
             .with_columns(
-                goal_day=pl.col('date').dt.day() * per_day
-            )
-            .with_columns(
-                goal_percent=(pl.col('season_distance') * 100) / pl.col('goal_day'),
-                goal_delta=pl.col('season_distance') - pl.col('goal_day'),
-            )
-            .with_columns(
-                monthlen=pl.col('date').dt.month().apply(lambda x: calendar.monthrange(2000, x)[1]),
+                monthlen=pl.col('date').dt.month().apply(
+                    lambda x: calendar.monthrange(2000, x)[1]),
                 month=pl.col('date').dt.month(),
             )
             .with_columns(
@@ -106,13 +109,21 @@ class Progress():
                 month_ascent=pl.col('ascent').sum().over('month'),
             )
             .with_columns(
-                month_speed=self._speed('month_distance', 'month_seconds').over('month'),
-                month_per_day=pl.col('month_distance') / pl.col('monthlen'),
+                month_speed=self._speed(
+                    'month_distance', 'month_seconds').over('month'),
+                month_per_day=pl.col('month_distance') / pl.col('monthlen')))
+
+    def _progress_goals(self, df):
+        year_len = 366 if calendar.isleap(self._year) else 365
+        per_day = self._goal / year_len
+        return (df
+            .with_columns(
+                goal_day=pl.col('date').dt.day() * per_day
             )
-            .with_columns(self._progress_dtypes())
-            .sort("date", reverse=True)
-        ).collect()
-        return df.to_dicts()
+            .with_columns(
+                goal_percent=(pl.col('season_distance') * 100) /
+                pl.col('goal_day'),
+                goal_delta=pl.col('season_distance') - pl.col('goal_day')))
 
     def _progress_dtypes(self) -> pl.Expr:
         return [
