@@ -51,12 +51,16 @@ class Progress():
         self._df = self._build_df(data.data)
 
     def extremums(self):
+        if self._df.is_empty():
+            return self._df
+
         _agg = [
             self._agg_min_max(col) for col in ['distance', 'temp', 'ascent', 'speed']
         ]
 
         df = (
             self._df
+            .lazy()
             .select(['date', 'ascent', 'temp', 'speed', 'distance'])
             .with_column((pl.col('date').dt.year()).alias("year"))
             .groupby('year')
@@ -64,12 +68,11 @@ class Progress():
             .sort(pl.col('year'), reverse=True)
         ).collect()
         dicts = df.to_dicts()
-        print(f'------------------------------->\n{dicts}\n')
         return dicts[0] if self._year else dicts
 
     def season_progress(self):
-        if not self._year:
-            return {}
+        if self._df.is_empty() or not self._year:
+            return self._df
 
         year_len = 366 if calendar.isleap(self._year) else 365
         per_day = self._goal / year_len
@@ -133,14 +136,14 @@ class Progress():
         return [
             pl.col('bikes').cast(pl.Categorical),
             pl.col('distance').cast(pl.Float32),
-            pl.col('seconds').cast(pl.Int16),
-            pl.col('speed').cast(pl.Float32),
             pl.col('ascent').cast(pl.Int16),
-            pl.col('temp').cast(pl.Float32)
+            pl.col('temp').cast(pl.Float32),
+            pl.col('seconds').cast(pl.Int32),
+            pl.col('speed').cast(pl.Float32),
         ]
 
     def _build_df(self, data):
-        df = pl.DataFrame(data=data, schema_overrides={'date': pl.Date, 'time': pl.Duration, 'seconds': pl.Int32, 'distance': pl.Float32, 'speed': pl.Float32, 'ascent': pl.Int16, 'temp': pl.Float32})
+        df = pl.DataFrame(data=data)
         if df.is_empty():
             return df
 
@@ -150,8 +153,9 @@ class Progress():
                 pl.col('time').dt.seconds().alias('seconds')])
             .with_columns([
                 self._speed('distance', 'seconds').alias('speed')])
-            # .with_columns(self._build_dtypes())
-        )
+            .with_columns(self._build_dtypes())
+        ).collect()
+
         df = df.drop('time')
         return df
 

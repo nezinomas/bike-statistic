@@ -31,7 +31,7 @@ def fixture_no_data():
 def test_extremums_no_data(no_data):
     actual = Progress(no_data).extremums()
 
-    assert not actual
+    assert actual.is_empty()
 
 
 def test_extremums_distance(data):
