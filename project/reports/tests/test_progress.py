@@ -83,7 +83,7 @@ def test_season_progress_keys(data):
     assert 'season_ascent' in actual[0]
     assert 'season_speed' in actual[0]
     assert 'season_per_day' in actual[0]
-    assert 'goal_day' in actual[0]
+    assert 'goal_per_day' in actual[0]
     assert 'goal_percent' in actual[0]
     assert 'goal_delta' in actual[0]
     assert 'month' in actual[0]
@@ -179,17 +179,17 @@ def test_season_progress_goal_percents(data):
 def test_season_progress_day_goal(data):
     actual = Progress(data).season_progress()
 
-    assert round(actual[0]['goal_day'], 2) == 84.7
-    assert round(actual[1]['goal_day'], 2) == 5.46
-    assert round(actual[2]['goal_day'], 2) == 2.73
+    assert round(actual[0]['goal_per_day'], 2) == 84.7
+    assert round(actual[1]['goal_per_day'], 2) == 5.46
+    assert round(actual[2]['goal_per_day'], 2) == 2.73
 
 
 def test_season_progress_day_goal_empty(data):
     data.goal = 0
     actual = Progress(data).season_progress()
-    assert actual[0]['goal_day'] == 0.0
-    assert actual[1]['goal_day'] == 0.0
-    assert actual[2]['goal_day'] == 0.0
+    assert actual[0]['goal_per_day'] == 0.0
+    assert actual[1]['goal_per_day'] == 0.0
+    assert actual[2]['goal_per_day'] == 0.0
 
 
 def test_season_progress_km_delta(data):

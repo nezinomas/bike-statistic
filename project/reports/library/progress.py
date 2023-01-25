@@ -111,13 +111,13 @@ class Progress:
     def _progress_goals(self, df):
         year_len = 366 if calendar.isleap(self._year) else 365
         per_day = self._goal / year_len
-        percent = (pl.col("season_distance") * 100) / pl.col("goal_day")
+        percent = (pl.col("season_distance") * 100) / pl.col("goal_per_day")
         return (df
             .with_columns(
-                goal_day=pl.col("date").dt.day() * per_day)
+                goal_per_day=pl.col("date").dt.day() * per_day)
             .with_columns(
                 goal_percent=percent,
-                goal_delta=pl.col("season_distance") - pl.col("goal_day")))
+                goal_delta=pl.col("season_distance") - pl.col("goal_per_day")))
 
     def _progress_dtypes(self) -> pl.Expr:
         return [
@@ -125,7 +125,7 @@ class Progress:
             pl.col("season_speed").cast(pl.Float32),
             pl.col("season_per_day").cast(pl.Float32),
             pl.col("season_ascent").cast(pl.Int32),
-            pl.col("goal_day").cast(pl.Float32),
+            pl.col("goal_per_day").cast(pl.Float32),
             pl.col("goal_percent").cast(pl.Float32),
             pl.col("goal_delta").cast(pl.Float32),
             pl.col("monthlen").cast(pl.Int8),
