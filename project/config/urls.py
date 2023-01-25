@@ -11,7 +11,7 @@ urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('', include('project.users.urls')),
     path('', include('project.bikes.urls')),
-    path('', include('project.goals.urls')),
+    path('goals/', include('project.goals.urls')),
     path('data/', include('project.data.urls')),
     path('reports/', include('project.reports.urls')),
 ]

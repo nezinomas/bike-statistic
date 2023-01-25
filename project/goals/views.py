@@ -2,7 +2,9 @@ from django.shortcuts import reverse, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.http import JsonResponse
-
+from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
+                                 DetailViewMixin, ListViewMixin,
+                                 RedirectViewMixin, UpdateViewMixin)
 from .models import Goal
 from .forms import GoalForm
 
@@ -41,20 +43,14 @@ def save_data(request, context, form):
     return JsonResponse(data)
 
 
-@login_required()
-def goals_list(request):
-    goals = Goal.objects.items()
+class GoalsList(ListViewMixin):
+    def get_template_names(self):
+        if self.request.htmx:
+            return ['goals/includes/partial_goal_list.html']
+        return ['goals/goal_list.html']
 
-    obj = Progress()
-    stats = obj.extremums()
-    distances = obj.distances()
-
-    rendered = render(
-        request,
-        'goals/goals_list.html',
-        {'goals': goals, 'stats': stats, 'distances': distances}
-    )
-    return rendered
+    def get_queryset(self):
+        return Goal.objects.items()
 
 
 @login_required()

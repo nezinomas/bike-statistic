@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load slippers %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col"></div>
+    <div class="col-2 text-end">
+        {% url 'goals:goal_create' as url_create %}
+        {% new_button url=url_create label='New Goal' width='100%' target="table-tbody" swap="afterbegin" %}
+    </div>
+</div>
+
+<div id="htmx-container" class="mt-2" hx-trigger="reload from:body" hx-get="{% url 'goals:goal_list' %}" hx-target="this">
+    {% include "goals/includes/partial_goal_list.html" %}
+</div>
+
+{% endblock content %}
