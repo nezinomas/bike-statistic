@@ -72,9 +72,9 @@ class Progress:
             self._df.lazy()
             .sort("date")
             .pipe(self._progress_season)
-            .pipe(self._progress_goals)
             .pipe(self._progress_month)
-            .with_columns(self._progress_dtypes())
+            .pipe(self._progress_goals)
+            .pipe(self._progress_dtypes)
             .sort("date", reverse=True)
         ).collect()
         return df.to_dicts()
@@ -121,8 +121,8 @@ class Progress:
                 goal_percent=percent,
                 goal_delta=pl.col("season_distance") - pl.col("goal_per_day")))
 
-    def _progress_dtypes(self) -> pl.Expr:
-        return [
+    def _progress_dtypes(self, df) -> pl.Expr:
+        return (df.with_columns([
             pl.col("season_seconds").cast(pl.Int32),
             pl.col("season_speed").cast(pl.Float32),
             pl.col("season_per_day").cast(pl.Float32),
@@ -136,8 +136,8 @@ class Progress:
             pl.col("month_seconds").cast(pl.Int32),
             pl.col("month_speed").cast(pl.Float32),
             pl.col("month_per_day").cast(pl.Float32),
-            pl.col("month_ascent").cast(pl.Int32),
-        ]
+            pl.col("month_ascent").cast(pl.Int32)
+        ]))
 
     def _build_dtypes(self) -> pl.Expr:
         return [
