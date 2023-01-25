@@ -60,8 +60,8 @@ class Progress:
             .groupby("year")
             .agg(list(it.chain.from_iterable(_agg)))
             .sort(pl.col("year"), reverse=True)
-        ).collect()
-        dicts = df.to_dicts()
+        )
+        dicts = df.collect().to_dicts()
         return dicts[0] if self._year else dicts
 
     def season_progress(self):
@@ -76,8 +76,8 @@ class Progress:
             .pipe(self._progress_goals)
             .pipe(self._progress_dtypes)
             .sort("date", reverse=True)
-        ).collect()
-        return df.to_dicts()
+        )
+        return df.collect().to_dicts()
 
     def _progress_season(self, df) -> pl.Expr:
         day_of_year = pl.col("date").dt.day()
