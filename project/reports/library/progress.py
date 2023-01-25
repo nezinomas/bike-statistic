@@ -80,12 +80,13 @@ class Progress:
         return df.to_dicts()
 
     def _progress_season(self, df) -> pl.Expr:
+        day_of_year = pl.col("date").dt.day()
         return df.with_columns(
             season_distance=pl.col("distance").cumsum(),
             season_seconds=pl.col("seconds").cumsum(),
             season_ascent=pl.col("ascent").cumsum(),
         ).with_columns(
-            season_per_day=pl.col("season_distance") / pl.col("date").dt.day(),
+            season_per_day=pl.col("season_distance") / day_of_year,
             season_speed=self._speed("season_distance", "season_seconds"),
         )
 
@@ -109,12 +110,13 @@ class Progress:
         )
 
     def _progress_goals(self, df):
+        day_of_year = pl.col("date").dt.day()
         year_len = 366 if calendar.isleap(self._year) else 365
         per_day = self._goal / year_len
         percent = (pl.col("season_distance") * 100) / pl.col("goal_per_day")
         return (df
             .with_columns(
-                goal_per_day=pl.col("date").dt.day() * per_day)
+                goal_per_day=day_of_year * per_day)
             .with_columns(
                 goal_percent=percent,
                 goal_delta=pl.col("season_distance") - pl.col("goal_per_day")))
