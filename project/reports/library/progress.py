@@ -1,6 +1,7 @@
 import calendar
 import itertools as it
 from dataclasses import dataclass, field
+from typing import Union
 
 import polars as pl
 from django.db.models import F
@@ -45,7 +46,7 @@ class Progress:
 
         self._df = self._build_df(data.data)
 
-    def extremums(self):
+    def extremums(self) -> Union[dict, list[dict]]:
         if self._df.is_empty():
             return self._df
 
@@ -64,7 +65,7 @@ class Progress:
         dicts = df.collect().to_dicts()
         return dicts[0] if self._year else dicts
 
-    def season_progress(self):
+    def season_progress(self) -> list[dict]:
         if self._df.is_empty() or not self._year:
             return self._df
 
@@ -79,7 +80,7 @@ class Progress:
         )
         return df.collect().to_dicts()
 
-    def _progress_season(self, df) -> pl.Expr:
+    def _progress_season(self, df: pl.DataFrame) -> pl.Expr:
         day_of_year = pl.col("date").dt.day()
         return df.with_columns(
             season_distance=pl.col("distance").cumsum(),
@@ -90,7 +91,7 @@ class Progress:
             season_speed=self._speed("season_distance", "season_seconds"),
         )
 
-    def _progress_month(self, df):
+    def _progress_month(self, df: pl.DataFrame) -> pl.Expr:
         month = pl.col("date").dt.month()
         speed = self._speed("month_distance", "month_seconds")
         return (
@@ -109,7 +110,7 @@ class Progress:
             )
         )
 
-    def _progress_goals(self, df):
+    def _progress_goals(self, df: pl.DataFrame) -> pl.Expr:
         day_of_year = pl.col("date").dt.day()
         year_len = 366 if calendar.isleap(self._year) else 365
         per_day = self._goal / year_len
@@ -121,7 +122,7 @@ class Progress:
                 goal_percent=percent,
                 goal_delta=pl.col("season_distance") - pl.col("goal_per_day")))
 
-    def _progress_dtypes(self, df) -> pl.Expr:
+    def _progress_dtypes(self, df: pl.DataFrame) -> pl.Expr:
         return (df.with_columns([
             pl.col("season_seconds").cast(pl.Int32),
             pl.col("season_speed").cast(pl.Float32),
@@ -149,7 +150,7 @@ class Progress:
             pl.col("speed").cast(pl.Float32),
         ]
 
-    def _build_df(self, data):
+    def _build_df(self, data: list[dict]) -> pl.DataFrame:
         df = pl.DataFrame(data=data)
         if df.is_empty():
             return df
@@ -164,7 +165,7 @@ class Progress:
         df = df.drop("time")
         return df
 
-    def _speed(self, distance_km, time_seconds):
+    def _speed(self, distance_km: str, time_seconds: str) -> pl.Expr:
         return pl.col(distance_km) / (pl.col(time_seconds) / 3600)
 
     def _agg_min_max(self, col: str) -> pl.Expr:
