@@ -5,6 +5,7 @@ from crispy_forms.helper import FormHelper
 from django import forms
 
 from ..core.helpers.form_helpers import set_field_properties
+from ..core.lib import utils
 from ..core.mixins.form_mixin import FormMixin
 from .models import Goal
 
@@ -20,7 +21,13 @@ class GoalForm(FormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['year'].initial = datetime.now()
+        self.fields['year'].initial = datetime.now().year
 
         self.helper = FormHelper()
         set_field_properties(self, self.helper)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        utils.clean_year_picker_input("year", self.data, cleaned_data, self.errors)
+
+        return cleaned_data
