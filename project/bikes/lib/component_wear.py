@@ -16,10 +16,10 @@ class ComponentWear:
         return dicts[0] if dicts else []
 
     def _make_df(self):
-        # convert stats into dataframe, fill empty end_date and convert back to list[dict]
         if self._stats.is_empty():
             return pl.DataFrame()
 
+        # fill empty end_date and convert back to list[dict]
         stats = (
             self._stats
             .with_column(
