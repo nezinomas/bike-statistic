@@ -63,7 +63,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # ================   GENERAL CONFIGURATION
 LANGUAGE_CODE = 'lt-LT'
-TIME_ZONE = 'VilUTC'
+TIME_ZONE = 'Europe/Vilnius'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
