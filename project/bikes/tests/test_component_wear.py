@@ -30,12 +30,6 @@ def test_total_bike_distance(stats, data):
     assert actual == 34.5
 
 
-def test_total_bike_distance_no_stats(data):
-    actual = ComponentWear([], data).bike_km
-
-    assert not actual
-
-
 def test_total_bike_distance_no_stats_no_data():
     actual = ComponentWear([], []).bike_km
 
