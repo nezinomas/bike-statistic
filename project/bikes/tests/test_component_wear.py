@@ -1,94 +1,76 @@
 from datetime import date
+from decimal import Decimal
 
 import pytest
 
-from ...data.factories import DataFactory
-from ...data.models import Data
-from ..factories import (BikeFactory, ComponentFactory,
-                         ComponentStatisticFactory)
 from ..lib.component_wear import ComponentWear
-from ..models import ComponentStatistic
 
 pytestmark = pytest.mark.django_db
 
 
-@pytest.fixture()
-def _stats(get_user):
-    b = BikeFactory()
-    c = ComponentFactory()
+@pytest.fixture(name="data")
+def fixture_data():
+    return [
+        {'date': date(1999, 1, 1), 'distance': Decimal('10.5')},
+        {'date': date(1999, 1, 31), 'distance': Decimal('11.5')},
+        {'date': date(2000, 1, 31), 'distance': Decimal('12.5')},
+    ]
 
-    ComponentStatisticFactory()
-    ComponentStatisticFactory(
-        start_date=date(2000, 1, 1),
-        end_date=None,
-        price=100,
-        brand='whatewer'
-    )
-    ComponentStatisticFactory(
-        bike=BikeFactory(short_name='XXX')
-    )
-
-    qs = (
-        ComponentStatistic.objects
-        .items()
-        .filter(bike__slug=b.slug, component__pk=c.pk)
-    )
-
-    return qs
+@pytest.fixture(name="stats")
+def fixture_stats():
+    return [
+        {'start_date': date(1999, 1, 1), 'end_date': date(1999, 1, 31), 'pk': 1},
+        {'start_date': date(2000, 1, 1), 'end_date': None, 'pk': 2},
+    ]
 
 
-@pytest.fixture()
-def _data(get_user):
-    b = BikeFactory()
-
-    DataFactory(date=date(1999, 1, 1), distance=10.5)
-    DataFactory(date=date(1999, 1, 31), distance=11.5)
-    DataFactory(date=date(2000, 1, 31), distance=12.5)
-
-    qs = (
-        Data.objects
-        .items()
-        .filter(bike__slug=b.slug)
-    )
-
-    return qs
-
-
-def test_total_bike_distance(_stats, _data):
-    actual = ComponentWear(_stats, _data).bike_km
+def test_total_bike_distance(stats, data):
+    actual = ComponentWear(stats, data).bike_km
 
     assert actual == 34.5
 
 
-def test_component_distance(_stats, _data):
-    expect = {1: 22.0, 2: 12.5}
-    actual = ComponentWear(_stats, _data).component_km
+def test_total_bike_distance_no_stats(data):
+    actual = ComponentWear([], data).bike_km
+
+    assert not actual
+
+
+def test_total_bike_distance_no_stats_no_data():
+    actual = ComponentWear([], []).bike_km
+
+    assert not actual
+
+
+def test_component_distance(stats, data):
+    expect = {'1': 22.0, '2': 12.5}
+    actual = ComponentWear(stats, data).component_km
 
     assert expect == actual
 
 
-def test_component_distance_no_data(_stats):
-    expect = {1: 0, 2: 0}
-    actual = ComponentWear(_stats, []).component_km
+def test_component_distance_no_data(stats):
+    expect = {'1': 0, '2': 0}
+    actual = ComponentWear(stats, []).component_km
 
     assert expect == actual
 
 def test_component_distance_no_components():
-    expect = {}
+    expect = []
     actual = ComponentWear([], []).component_km
 
     assert expect == actual
 
 
-def test_component_stats(_stats, _data):
-    actual = ComponentWear(_stats, _data).component_stats
+def test_component_stats(stats, data):
+    actual = ComponentWear(stats, data).component_stats
 
     assert actual['avg'] == 17.25
     assert actual['median'] == 17.25
 
 
-def test_component_stats_no_datea(_stats):
-    actual = ComponentWear(_stats, []).component_stats
+def test_component_stats_no_data(stats):
+    actual = ComponentWear(stats, []).component_stats
 
     assert actual['avg'] == 0
     assert actual['median'] == 0
