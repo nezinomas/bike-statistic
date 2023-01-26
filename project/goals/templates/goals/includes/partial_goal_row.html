@@ -2,8 +2,8 @@
 {% load humanize%}
 {% load template_filters %}
 
-{% url 'goals:goals_update' object.year as url_update %}
-{% url 'goals:goals_delete' object.year as url_delete %}
+{% url 'goals:goal_update' object.pk as url_update %}
+{% url 'goals:goal_delete' object.pk as url_delete %}
 {% var row_id="row-id-"|join:object.pk %}
 <tr id="{{row_id}}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{{url_update}}">
     <td>{{ object.year }}</td>

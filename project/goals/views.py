@@ -43,6 +43,11 @@ def save_data(request, context, form):
     return JsonResponse(data)
 
 
+class GoalDetail(DetailViewMixin):
+    model = Goal
+    template_name = 'goals/includes/partial_goal_row.html'
+
+
 class GoalsList(ListViewMixin):
     def get_template_names(self):
         if self.request.htmx:
