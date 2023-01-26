@@ -25,7 +25,7 @@ class DataForm(FormMixin, forms.ModelForm):
             'heart_rate',
         ]
         widgets = {
-            'date': DatePickerInput(format='%Y-%m-%d'),
+            'date': DatePickerInput(),
         }
 
     def __init__(self, *args, **kwargs):

@@ -14,12 +14,7 @@ class GoalForm(FormMixin, forms.ModelForm):
         model = Goal
         fields = ['year', 'goal']
         widgets = {
-            'year': YearPickerInput(
-                options={
-                    "format": "YYYY",
-                    "locale": "lt",
-                }
-            ),
+            'year': YearPickerInput(),
         }
 
     def __init__(self, *args, **kwargs):

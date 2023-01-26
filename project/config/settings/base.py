@@ -156,3 +156,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # ================   CRISPY FORMS
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+BOOTSTRAP_DATEPICKER_PLUS = {
+    "variant_options": {
+        "date": {
+            "format": "YYYY-MM-DD",
+        },
+        "year": {
+            "format": "YYYY",
+        },
+    }
+}
