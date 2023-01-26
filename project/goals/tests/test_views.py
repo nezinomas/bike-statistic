@@ -2,16 +2,18 @@ import pytest
 from django.urls import resolve, reverse
 
 from ...core.lib.tests_utils import clean_content
-from .. import views
-from ..factories import GoalFactory
+from ...users.factories import UserFactory
 from ...users.views import CustomLogin
+from .. import models, views
+from ..factories import GoalFactory
+
 pytestmark = pytest.mark.django_db
 
 
 def test_goal_list_func():
     view = resolve('/goals/')
 
-    assert views.GoalsList == view.func.view_class
+    assert views.GoalList == view.func.view_class
 
 
 def test_goal_list_302(client):
@@ -78,7 +80,7 @@ def test_goal_detail_links(client_logged):
     response = client_logged.get(url)
 
     actual = clean_content(response.content)
-    print(f'------------------------------->\n{actual}\n')
+
     row_id = f'row-id-{goal.pk}'
     url_update = reverse('goals:goal_update', kwargs={'pk': goal.pk})
     url_delete = reverse('goals:goal_delete', kwargs={'pk': goal.pk})
@@ -89,3 +91,43 @@ def test_goal_detail_links(client_logged):
     assert f'<button type="button" class="btn btn-sm btn-warning" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
     # delete button
     assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#dialog" hx-swap="innerHTML">' in actual
+
+
+def test_goal_create_func():
+    view = resolve('/goals/create/')
+
+    assert views.GoalCreate is view.func.view_class
+
+
+@pytest.mark.freeze_time('2000-2-2')
+def test_goal_create_load_form(client_logged):
+    url = reverse('goals:goal_create')
+    response = client_logged.get(url)
+    content = clean_content(response.content)
+
+    assert response.status_code == 200
+    assert '<input type="text" name="year" value="2000"' in content
+
+
+def test_goal_create_save_with_valid_data(client_logged):
+    user = UserFactory()
+
+    data = {'year': '2000', 'goal': '666'}
+
+    url = reverse('goals:goal_create')
+    client_logged.post(url, data)
+    actual = models.Goal.objects.first()
+
+    assert actual.year == 2000
+    assert actual.goal == 666
+    assert actual.user == user
+
+
+def test_goal_create_save_form_errors(client_logged):
+    data = {}
+    url = reverse('goals:goal_create')
+    response = client_logged.post(url, data)
+    form = response.context['form']
+    assert not form.is_valid()
+    assert 'year' in form.errors
+    assert 'goal' in form.errors

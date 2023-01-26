@@ -1,5 +1,6 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.urls import reverse_lazy
 
 from ..users.models import User
 from . import managers
@@ -26,3 +27,6 @@ class Goal(models.Model):
 
     def __str__(self):
         return str(self.year)
+
+    def get_absolute_url(self):
+        return reverse_lazy("goals:goal_detail", kwargs={"pk": self.pk})

@@ -1,3 +1,4 @@
+from django.urls import reverse_lazy
 from django.shortcuts import reverse, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
@@ -5,13 +6,12 @@ from django.http import JsonResponse
 from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
                                  DetailViewMixin, ListViewMixin,
                                  RedirectViewMixin, UpdateViewMixin)
-from .models import Goal
-from .forms import GoalForm
+from . import models, forms
 
 from ..reports.library.progress import Progress
 
 def form_valid(data):
-    goals = Goal.objects.items()
+    goals = models.Goal.objects.items()
 
     # obj = Progress()
     # stats = obj.extremums()
@@ -44,25 +44,28 @@ def save_data(request, context, form):
 
 
 class GoalDetail(DetailViewMixin):
-    model = Goal
+    model = models.Goal
     template_name = 'goals/includes/partial_goal_row.html'
 
 
-class GoalsList(ListViewMixin):
+class GoalList(ListViewMixin):
     def get_template_names(self):
         if self.request.htmx:
             return ['goals/includes/partial_goal_list.html']
         return ['goals/goal_list.html']
 
     def get_queryset(self):
-        return Goal.objects.items()
+        return models.Goal.objects.items()
 
 
-@login_required()
-def goals_create(request):
-    form = GoalForm(request.POST or None)
-    context = {'url': reverse('goals:goals_create')}
-    return save_data(request, context, form)
+class GoalCreate(CreateViewMixin):
+    model = models.Goal
+    form_class = forms.GoalForm
+    template_name = 'goals/goal_form.html'
+    detail_view = GoalDetail
+
+    def url(self):
+        return reverse_lazy('goals:goal_create')
 
 
 @login_required()
