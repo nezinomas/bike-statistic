@@ -45,13 +45,17 @@ def test_extremums_distance(data):
 
 
 def test_extremums_temperature(data):
+    data.data.extend([
+        {'date': date(2000, 3, 1), 'distance': 2, 'time': timedelta(seconds=2_000), 'ascent': 2, 'bikes': 'Short Name', 'temp': None},
+        {'date': date(2000, 4, 1), 'distance': 2, 'time': timedelta(seconds=2_000), 'ascent': 2, 'bikes': 'Short Name', 'temp': -22},
+    ])
     actual = Progress(data).extremums()
 
     assert actual['max_temp_date'] == date(2000, 1, 31)
     assert actual['max_temp'] == 100
 
-    assert actual['min_temp_date'] == date(2000, 1, 1)
-    assert actual['min_temp'] == 2.0
+    assert actual['min_temp_date'] == date(2000, 4, 1)
+    assert actual['min_temp'] == -22
 
 
 def test_extremums_ascent(data):

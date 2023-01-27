@@ -57,6 +57,7 @@ class Progress:
         df = (
             self._df.lazy()
             .select(["date", "ascent", "temp", "speed", "distance"])
+            .with_column(pl.col('temp').fill_null(0))
             .with_column((pl.col("date").dt.year()).alias("year"))
             .groupby("year")
             .agg(list(it.chain.from_iterable(_agg)))

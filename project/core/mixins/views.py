@@ -1,10 +1,9 @@
-from django.shortcuts import get_object_or_404, redirect, render, reverse
 import json
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from django_htmx.http import HttpResponseClientRedirect
+from django_htmx.http import HttpResponseClientRedirect, trigger_client_event
 from vanilla import (CreateView, DeleteView, DetailView, ListView,
                      RedirectView, TemplateView, UpdateView)
 
@@ -37,17 +36,23 @@ def httpHtmxResponse(hx_trigger_name=None, status_code=204):
 #                                                                                  Mixins
 # ---------------------------------------------------------------------------------------
 class CreateUpdateMixin:
+    hx_trigger_django = None
     detail_view = None
 
     def form_valid(self, form, **kwargs):
         response = super().form_valid(form)
 
-        if not self.detail_view:
+        if self.detail_view:
+            rendered = render_to_string(
+                self.detail_view.template_name, {'object': self.object}, self.request)
+            return HttpResponse(rendered)
+
+        if self.hx_trigger_django:
+            response.status_code = 204
+            trigger_client_event(response=response, name=self.hx_trigger_django, params={})
             return response
 
-        rendered = render_to_string(
-            self.detail_view.template_name, {'object': self.object}, self.request)
-        return HttpResponse(rendered)
+        return response
 
 
 class DeleteMixin:
