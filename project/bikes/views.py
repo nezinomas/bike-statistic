@@ -187,13 +187,15 @@ class StatsList(ListViewMixin):
     def get_context_data(self, **kwargs):
         bike = Bike.objects.related().get(slug=self.kwargs['bike_slug'])
         component = Component.objects.related().get(pk=self.kwargs['component_pk'])
-        data = Data.objects.items().filter(bike=bike).values()
+        data = Data.objects.items().filter(bike=bike).values('date', 'distance')
+
         component_statistic = \
             ComponentStatistic.objects \
             .items() \
             .filter(bike=bike, component=component)
 
-        obj = ComponentWear(components=component_statistic, data=data)
+        obj = ComponentWear(
+            [*component_statistic.values('start_date', 'end_date', 'pk')], [*data])
         context = {
             'bike': bike,
             'component': component,

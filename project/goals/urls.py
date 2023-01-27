@@ -5,8 +5,9 @@ from . import views
 app_name = 'goals'
 
 urlpatterns = [
-    path('goals/', views.goals_list, name='goals_list'),
-    path('api/goals/create/', views.goals_create, name='goals_create'),
-    path('api/goals/update/<int:year>/', views.goals_update, name='goals_update'),
-    path('api/goals/delete/<int:year>/', views.goals_delete, name='goals_delete'),
+    path('', views.GoalList.as_view(), name='goal_list'),
+    path('create/', views.GoalCreate.as_view(), name='goal_create'),
+    path('detail/<int:pk>/', views.GoalDetail.as_view(), name='goal_detail'),
+    path('update/<int:pk>/', views.GoalUpdate.as_view(), name='goal_update'),
+    path('delete/<int:pk>/', views.GoalDelete.as_view(), name='goal_delete'),
 ]

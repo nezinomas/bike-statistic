@@ -1,0 +1,5 @@
+{% load slippers %}
+
+{% url 'goals:goal_delete' object.pk as url_delete %}
+
+{% generic_delete_form csrf_token=csrf_token title='Delete' url=url_delete object=object %}

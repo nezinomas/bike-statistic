@@ -27,8 +27,8 @@ class ComponentStatisticForm(forms.ModelForm):
         fields = ['start_date', 'end_date', 'price', 'brand']
 
         widgets = {
-            'start_date': DatePickerInput(format='%Y-%m-%d'),
-            'end_date': DatePickerInput(format='%Y-%m-%d'),
+            'start_date': DatePickerInput(),
+            'end_date': DatePickerInput(),
         }
 
     def __init__(self, *args, **kwargs):
@@ -65,7 +65,7 @@ class BikeForm(FormMixin, forms.ModelForm):
             'retired',
         ]
         widgets = {
-            'date': DatePickerInput(format='%Y-%m-%d'),
+            'date': DatePickerInput(),
         }
 
     def __init__(self, *args, **kwargs):

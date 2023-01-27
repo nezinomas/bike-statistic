@@ -62,8 +62,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 # ================   GENERAL CONFIGURATION
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'lt-LT'
+TIME_ZONE = 'Europe/Vilnius'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -156,3 +156,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # ================   CRISPY FORMS
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+BOOTSTRAP_DATEPICKER_PLUS = {
+    "variant_options": {
+        "date": {
+            "format": "YYYY-MM-DD",
+        },
+        "year": {
+            "format": "YYYY",
+        },
+    }
+}

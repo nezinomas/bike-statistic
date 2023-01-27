@@ -1,0 +1,21 @@
+{% load humanize %}
+{% load template_filters %}
+{% load slippers %}
+
+<table class="table table-striped table-bordered table-hover table-sm">
+    <thead class="table-primary">
+        <tr>
+            <th width="100rem">Year</th>
+            <th width="100rem">Goal, km</th>
+            <th class="text-end" width="80rem">Actions</th>
+            <th class="text-end pe-2" width="90rem">Distance</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider" id="table-tbody">
+        {% for object in object_list %}
+        {% include 'goals/includes/partial_goal_row.html' %}
+        {% empty %}
+        <tr><td class="bg-warning text-center" colspan="4">No records</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
