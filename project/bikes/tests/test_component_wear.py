@@ -49,6 +49,15 @@ def test_component_distance_no_data(stats):
 
     assert expect == actual
 
+
+def test_component_distance_no_data_stats_one_record_and_no_end_data():
+    stats = [{'start_date': date(2000, 1, 1), 'end_date': None, 'pk': 2}]
+    expect = {'2': 0}
+    actual = ComponentWear(stats, []).component_km
+
+    assert expect == actual
+
+
 def test_component_distance_no_components():
     expect = []
     actual = ComponentWear([], []).component_km
