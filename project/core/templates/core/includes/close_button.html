@@ -1,3 +1,9 @@
-<button type="button" class="btn btn-sm btn-secondary" {% if url %}hx-get="{{url}}"{% endif %} {% if target %}hx-target="#{{target}}"{% endif %} {% if swap %}hx-swap="{{swap}}"{% endif %}>
+<button
+    type="button"
+    class="btn btn-sm btn-secondary"
+    {% if url %}hx-get="{{url}}"{% endif %}
+    {% if target %}hx-target="#{{target}}"{% endif %}
+    {% if swap %}hx-swap="{{swap}}"{% endif %}
+>
     <i class="bi bi-x"></i> {% if label %} Close {% endif %}
 </button>
