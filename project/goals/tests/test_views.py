@@ -1,3 +1,5 @@
+import re
+
 import pytest
 from django.urls import resolve, reverse
 
@@ -193,3 +195,39 @@ def test_goal_update_goal(client_logged):
 
     assert actual.year == goal.year
     assert actual.goal == 1001
+
+
+def test_goal_delete_func():
+    view = resolve('/goals/delete/1/')
+
+    assert views.GoalDelete is view.func.view_class
+
+
+def test_goal_delete_200(client_logged):
+    goal = GoalFactory()
+    url = reverse('goals:goal_delete', kwargs={'pk': goal.pk})
+
+    response = client_logged.get(url)
+
+    assert response.status_code == 200
+
+
+def test_goal_delete_load_form(client_logged):
+    goal = GoalFactory()
+    url = reverse('goals:goal_delete', kwargs={'pk': goal.pk})
+
+    response = client_logged.get(url)
+    content = clean_content(response.content)
+
+    res = re.findall(fr'<form.+hx-post="({url})"', content)
+    assert res[0] == url
+    assert f'<button type="submit" id="_delete" data-pk="{goal.pk}"' in content
+
+
+def test_goal_delete(client_logged):
+    goal = GoalFactory()
+    url = reverse('goals:goal_delete', kwargs={'pk': goal.pk})
+
+    client_logged.post(url, {})
+
+    assert models.Goal.objects.all().count() == 0
