@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div>
+    <table class="table table-sm table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th></th>
+                <th colspan="2" class="text-center">Max T, &#8451;</th>
+                <th colspan="2" class="text-center">Min T, &#8451;</th>
+                <th colspan="2" class="text-center">Max Ascent, m</th>
+                <th colspan="2" class="text-center">Max Speed, km/h</th>
+                <th colspan="2" class="text-center">Max Distance, km</th>
+            </tr>
+            <tr>
+                <th class="text-center">Year</th>
+                <th class="text-center">Date</th>
+                <th class="text-center">Value</th>
+                {% for i in i|rjust:4 %}
+                <th class="text-center">Date</th>
+                <th class="text-center">Value</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for object in object_list %}
+            <tr>
+                <td class="text-center">{{object.max_distance_date|date:"Y"}}</td>
+                <td class="text-center">{{ object.max_temp_date|date:"Y-m-d" }}</td>
+                <td class="text-center">{{ object.max_temp|floatformat:0 }}</td>
+                <td class="text-center">{{ object.min_temp_date|date:"Y-m-d" }}</td>
+                <td class="text-center">{{ object.min_temp|floatformat:0 }}</td>
+                <td class="text-center">{{ object.max_ascent_date|date:"Y-m-d" }}</td>
+                <td class="text-center">{{ object.max_ascent|floatformat:0 }}</td>
+                <td class="text-center">{{ object.max_speed_date|date:"Y-m-d" }}</td>
+                <td class="text-center">{{ object.max_speed|floatformat:1 }}</td>
+                <td class="text-center">{{ object.max_distance_date|date:"Y-m-d" }}</td>
+                <td class="text-center">{{ object.max_distance|floatformat:1 }}</td>
+            </tr>
+            {% empty %}
+            <tr><td class="bg-warning text-center" colspan="11">No records</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock content %}

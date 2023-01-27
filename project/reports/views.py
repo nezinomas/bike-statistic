@@ -51,3 +51,15 @@ class ChartOverall(TemplateViewMixin):
         }
 
         return super().get_context_data(**kwargs) | context
+
+class Extremums(TemplateViewMixin):
+    template_name = 'reports/extremums.html'
+
+    def get_context_data(self, **kwargs):
+        data = ProgressData()
+        obj = Progress(data)
+        print(f'------------------------------->\n{obj.extremums()}\n')
+        context = {
+            'object_list': obj.extremums(),
+        }
+        return super().get_context_data(**kwargs) | context
