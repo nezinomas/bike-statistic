@@ -68,13 +68,14 @@ class GoalCreate(CreateViewMixin):
         return reverse_lazy('goals:goal_create')
 
 
-@login_required()
-def goals_update(request, year):
-    object = get_object_or_404(Goal, year=year)
-    form = GoalForm(request.POST or None, instance=object)
-    url = reverse('goals:goals_update', kwargs={'year': year})
-    context = {'url': url}
-    return save_data(request, context, form)
+class GoalUpdate(UpdateViewMixin):
+    model = models.Goal
+    form_class = forms.GoalForm
+    template_name = 'goals/goal_form.html'
+    detail_view = GoalDetail
+
+    def url(self):
+        return reverse_lazy('goals:goal_update', kwargs={'pk': self.kwargs['pk']})
 
 
 @login_required()

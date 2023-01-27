@@ -131,3 +131,65 @@ def test_goal_create_save_form_errors(client_logged):
     assert not form.is_valid()
     assert 'year' in form.errors
     assert 'goal' in form.errors
+
+
+def test_goal_update_func():
+    view = resolve('/goals/update/1/')
+
+    assert views.GoalUpdate is view.func.view_class
+
+
+def test_goal_update_load_form(client_logged):
+    goal = GoalFactory()
+
+    url = reverse('goals:goal_update', kwargs={'pk': goal.pk})
+    response = client_logged.get(url)
+    form = response.context['form'].as_p()
+
+    assert '2000' in form
+    assert '1000' in form
+
+
+def test_goal_update_load_form_close_button(client_logged):
+    goal = GoalFactory()
+
+    url = reverse('goals:goal_update', kwargs={'pk': goal.pk})
+    response = client_logged.get(url)
+    actual = clean_content(response.content)
+
+    url_close = reverse('goals:goal_detail', kwargs={'pk': goal.pk})
+    assert f'hx-get="{url_close}"' in actual
+
+
+def test_goal_update_year(client_logged):
+    goal = GoalFactory()
+
+    data = {
+        'year': '2002',
+        'goal': '1000',
+    }
+
+    url = reverse('goals:goal_update', kwargs={'pk': goal.pk})
+    client_logged.post(url, data)
+
+    actual = models.Goal.objects.get(pk=goal.pk)
+
+    assert actual.year == 2002
+    assert actual.goal == goal.goal
+
+
+def test_goal_update_goal(client_logged):
+    goal = GoalFactory()
+
+    data = {
+        'year': '2000',
+        'goal': '1001',
+    }
+
+    url = reverse('goals:goal_update', kwargs={'pk': goal.pk})
+    client_logged.post(url, data)
+
+    actual = models.Goal.objects.get(pk=goal.pk)
+
+    assert actual.year == goal.year
+    assert actual.goal == 1001
