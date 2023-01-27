@@ -1,3 +1,5 @@
+from datetime import datetime
+from django.db.models import Sum
 from django.shortcuts import reverse
 from django.urls import reverse_lazy
 
@@ -174,6 +176,22 @@ class StatsDetail(DetailViewMixin):
     lookup_url_kwarg = 'stats_pk'
     template_name = 'bikes/includes/partial_stats_row.html'
 
+    def get_context_data(self, **kwargs):
+        bike_slug = self.kwargs['bike_slug']
+        stats_pk = self.kwargs['stats_pk']
+        start_date = self.object.start_date
+        end_date = self.object.end_date or datetime.now().date
+
+        distance_sum = Data.objects \
+            .filter(
+                bike__slug=bike_slug,
+                date__range=(start_date, end_date)) \
+            .aggregate(Sum('distance'))
+
+        context = {
+            'km': {str(stats_pk): distance_sum.get('distance__sum', 0)},}
+
+        return super().get_context_data(**kwargs) | context
 
 class StatsList(ListViewMixin):
     def get_template_names(self):
@@ -210,7 +228,7 @@ class StatsList(ListViewMixin):
 class StatsCreate(CreateViewMixin):
     model = ComponentStatistic
     template_name = 'bikes/stats_form.html'
-    detail_view = StatsDetail
+    hx_trigger_django = 'reload'
 
     def url(self):
         return reverse_lazy('bikes:stats_create', kwargs={'bike_slug': self.kwargs['bike_slug'], 'component_pk': self.kwargs['component_pk']})
@@ -225,7 +243,7 @@ class StatsUpdate(UpdateViewMixin):
     form_class = forms.ComponentStatisticForm
     template_name = 'bikes/stats_form.html'
     lookup_url_kwarg = 'stats_pk'
-    detail_view = StatsDetail
+    hx_trigger_django = 'reload'
 
     def url(self):
         return reverse_lazy('bikes:stats_update', kwargs={'bike_slug': self.kwargs['bike_slug'], 'stats_pk': self.kwargs['stats_pk']})
@@ -236,3 +254,4 @@ class StatsDelete(DeleteViewMixin):
     template_name = 'bikes/stats_confirm_delete.html'
     lookup_url_kwarg = 'stats_pk'
     success_url = '/'
+    hx_trigger_django = 'reload'
