@@ -36,3 +36,14 @@ class DataQuerySet(models.QuerySet):
                 distance=F('sum'),
             )
         )
+
+    def year_distances(self, year=None):
+        return (
+            self
+            .related()
+            ._filter_by_year(year)
+            .annotate(year=TruncYear('date'))
+            .values('year')
+            .annotate(distance=Sum('distance'))
+            .order_by('year')
+        )
