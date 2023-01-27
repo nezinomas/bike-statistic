@@ -15,7 +15,7 @@ class GoalDetail(DetailViewMixin):
         year = self.object.year
         qs = Data.objects.year_distances(year)
         context = {
-            'distances': {str(year): qs[0]['distance']}
+            'distances': {str(year): qs[0]['distance'] if qs.exists() else 0}
         }
         return super().get_context_data(**kwargs) | context
 

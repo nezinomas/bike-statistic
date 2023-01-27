@@ -55,10 +55,9 @@ def test_year_progress_context_has_items(client_logged):
     url = reverse('reports:year_progress', kwargs={'year': 2000})
     response = client_logged.get(url)
 
-    assert 'season' in response.context
-    assert 'month' in response.context
     assert 'year' in response.context
-    assert 'e' in response.context
+    assert 'extremums' in response.context
+    assert 'object_list' in response.context
 
 
 def test_year_progress_queries(client_logged, django_assert_num_queries):

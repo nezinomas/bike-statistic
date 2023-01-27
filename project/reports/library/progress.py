@@ -48,7 +48,7 @@ class Progress:
 
     def extremums(self) -> Union[dict, list[dict]]:
         if self._df.is_empty():
-            return self._df
+            return []
 
         _agg = [
             self._agg_min_max(col) for col in ["distance", "temp", "ascent", "speed"]
@@ -67,8 +67,8 @@ class Progress:
         return dicts[0] if self._year else dicts
 
     def season_progress(self) -> list[dict]:
-        if self._df.is_empty() or not self._year:
-            return self._df
+        if not self._year or self._df.is_empty():
+            return []
 
         df = (
             self._df.lazy()

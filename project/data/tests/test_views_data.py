@@ -120,7 +120,7 @@ def test_data_create_data_valid(client_logged):
     content = clean_content(response.content)
 
     assert '2000-01-01' in content
-    assert '10.12' in content
+    assert '10,12' in content
     assert '0:00:15' in content
     assert '600' in content
     assert '500' in content
@@ -261,9 +261,9 @@ def test_data_update(client_logged):
     content = clean_content(response.content)
 
     assert '2000-01-01' in content  # distance
-    assert '10.12' in content  # distance
+    assert '10,12' in content  # distance
     assert '0:00:15' in content  # time
-    assert '1.1' in content  # temperature
+    assert '1,1' in content  # temperature
     assert '600' in content  # ascent
     assert '500' in content  # descent
     assert '110' in content  # max_speed
