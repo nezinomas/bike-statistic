@@ -28,6 +28,11 @@ class GoalForm(FormMixin, forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        utils.clean_year_picker_input("year", self.data, cleaned_data, self.errors)
+        cleaned_data = utils.clean_year_picker_input("year", self.data, cleaned_data, self.errors)
+        year = cleaned_data["year"]
+
+        qs = Goal.objects.related().filter(year=year)
+        if qs.exists():
+            self.add_error('year', f"{year} already has a goal.")
 
         return cleaned_data
