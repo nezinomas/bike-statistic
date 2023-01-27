@@ -66,3 +66,14 @@ def test_year_progress_queries(client_logged, django_assert_num_queries):
     with django_assert_num_queries(5):
         url = reverse('reports:year_progress', kwargs={'year': 2000})
         client_logged.get(url)
+
+
+def test_extremums_func():
+    view = resolve('/reports/extremums/')
+    assert view.func.view_class is views.Extremums
+
+
+def test_extremums_200(client_logged):
+    url = reverse('reports:extremums')
+    response = client_logged.get(url)
+    assert response.status_code == 200
