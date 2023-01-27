@@ -70,3 +70,29 @@ def test_data_bike_summary(get_user):
     actual = list(Data.objects.bike_summary())
 
     assert actual == expect
+
+
+def test_distance_sum_all_years(get_user):
+    DataFactory(date=datetime(1999, 1, 1), distance=1)
+    DataFactory(date=datetime(1999, 1, 2), distance=2)
+    DataFactory(date=datetime(2000, 1, 1), distance=10)
+    DataFactory(date=datetime(2000, 1, 2), distance=20)
+
+    actual = list(Data.objects.year_distances())
+
+    assert actual[0]['year'] == date(1999, 1, 1)
+    assert actual[0]['distance'] == 3.0
+    assert actual[1]['year'] == date(2000, 1, 1)
+    assert actual[1]['distance'] == 30.0
+
+
+def test_distance_sum_one_years(get_user):
+    DataFactory(date=datetime(1999, 1, 1), distance=1)
+    DataFactory(date=datetime(1999, 1, 2), distance=2)
+    DataFactory(date=datetime(2000, 1, 1), distance=10)
+    DataFactory(date=datetime(2000, 1, 2), distance=20)
+
+    actual = list(Data.objects.year_distances(1999))
+
+    assert actual[0]['year'] == date(1999, 1, 1)
+    assert actual[0]['distance'] == 3.0

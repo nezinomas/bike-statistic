@@ -13,6 +13,6 @@
         {% delete_button url=url_delete label='True' %}
     </td>
     {% with distances|get_item:object.year as d %}
-    <td class="pe-2 text-end {% if d.distance >= goal.goal %}table-success{% else %}table-danger{% endif %}" width="120rem">{{ d.distance|floatformat:0|intcomma }}</td>
+    <td class="pe-2 text-end {% if d >= object.goal %}table-success{% else %}table-danger{% endif %}" width="120rem">{{ d|floatformat:0|intcomma }}</td>
     {% endwith %}
 </tr>
