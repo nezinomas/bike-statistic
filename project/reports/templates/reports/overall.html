@@ -21,35 +21,35 @@
 
 <div class="row mt-2">
     <div class="col-12 col-lg-6">
-            <table class="table table-sm table-striped table-hover align-middle">
-                <thead class="table-primary">
-                    <tr>
-                        <th>Metai</th>
-                        {% for bike in bikes %}<th class="text-end">{{ bike }}</th>{% endfor %}
-                        <th class="text-end">Total</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    {% for row, total in table_data %}
-                    <tr>
-                        <td>{{ row.year|floatformat:0 }}</td>
-                        {% for bike in bikes %}
-                        {% with row|get_item:bike as value %}
-                        <td class="text-end">{% if value %}{{ value|floatformat:0|intcomma }}{% else %}-{% endif %}</td>
-                        {% endwith %}{% endfor %}
-                        <td class="text-end">{{ total.total|floatformat:0|intcomma }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-                <tfoot class="table-secondary table-group-divider">
-                    <th>Total</th>
+        <table class="table table-sm table-striped table-hover align-middle">
+            <thead class="table-primary">
+                <tr>
+                    <th>Metai</th>
+                    {% for bike in bikes %}<th class="text-end">{{ bike }}</th>{% endfor %}
+                    <th class="text-end">Total</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for row, total in table_data %}
+                <tr>
+                    <td>{{ row.year|floatformat:0 }}</td>
                     {% for bike in bikes %}
-                    {% with total_row|get_item:bike as value %}
-                    <th class="text-end">{{ value|floatformat:0|intcomma }}</th>
+                    {% with row|get_item:bike as value %}
+                    <td class="text-end">{% if value %}{{ value|floatformat:0|intcomma }}{% else %}-{% endif %}</td>
                     {% endwith %}{% endfor %}
-                    <th class="text-end">{{ total|floatformat:0|intcomma }}</th>
-                </tfoot>
-            </table>
+                    <td class="text-end">{{ total.total|floatformat:0|intcomma }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot class="table-secondary table-group-divider">
+                <th>Total</th>
+                {% for bike in bikes %}
+                {% with total_row|get_item:bike as value %}
+                <th class="text-end">{{ value|floatformat:0|intcomma }}</th>
+                {% endwith %}{% endfor %}
+                <th class="text-end">{{ total|floatformat:0|intcomma }}</th>
+            </tfoot>
+        </table>
     </div>
 
     <div class="col-6"></div>
