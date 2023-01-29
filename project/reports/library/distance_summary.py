@@ -46,21 +46,26 @@ class DistanceSummary():
             .to_series()
             .to_list())
 
-    def _build_df(self, years, bikes, data: list[dict]) -> pl.DataFrame:
+    def _build_years_and_bikes_df(self, years: list, bikes: list) -> pl.DataFrame:
         # product years x bikes and make [{'year': year, 'bike': bike_name}]
         arr = [{'year': r[0], 'bike': r[1]} for r in it.product(years, bikes)]
-        # data frame from arr
-        df1 = pl.DataFrame(arr)
-        df1 = df1.with_columns([pl.col('year').cast(pl.Int32)])
-        # data frame from data
-        df2 = pl.DataFrame(list(data))
-        df2 = (
-            df2
+        df = pl.DataFrame(arr)
+        df = df.with_columns([pl.col('year').cast(pl.Int32)])
+        return df
+
+    def _build_data_df(self, data: list[dict]) -> pl.DataFrame:
+        df = pl.DataFrame(list(data))
+        df = (
+            df
             .with_columns([
                 pl.col('date').dt.year().alias('year')
             ])
         )
-        df2 = df2.drop('date')
-        #
+        df = df.drop('date')
+        return df
+
+    def _build_df(self, years, bikes, data: list[dict]) -> pl.DataFrame:
+        df1 = self._build_years_and_bikes_df(years, bikes)
+        df2 = self._build_data_df(data)
         _, df = pl.align_frames(df1, df2, on=["year", "bike"])
         return df.fill_null(0)
