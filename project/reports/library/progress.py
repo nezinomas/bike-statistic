@@ -14,7 +14,7 @@ pl.Config.with_columns_kwargs = True
 
 @dataclass
 class ProgressData:
-    year: int = field(init=False, default=None)
+    year: int = field(init=True, default=None)
     goal: int = field(init=False, default=0)
     data: list = field(init=False, default_factory=list)
 
