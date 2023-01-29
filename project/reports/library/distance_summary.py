@@ -19,9 +19,10 @@ class DistanceSummary():
 
     @property
     def total_column(self):
-        df = self._df
+        if self._df.is_empty():
+            return []
         df = (
-            df
+            self._df
             .groupby('year')
             .agg(pl.col('distance').sum()))
         df = df.rename({'distance': 'total'})
@@ -29,6 +30,8 @@ class DistanceSummary():
 
     @property
     def total_row(self):
+        if self._df.is_empty():
+            return {}
         df = (
             self._df
             .groupby('bike')
@@ -49,6 +52,8 @@ class DistanceSummary():
     def _build_years_and_bikes_df(self, years: list, bikes: list) -> pl.DataFrame:
         # product years x bikes and make [{'year': year, 'bike': bike_name}]
         arr = [{'year': r[0], 'bike': r[1]} for r in it.product(years, bikes)]
+        if not arr:
+            return pl.DataFrame()
         df = pl.DataFrame(arr)
         df = df.with_columns([pl.col('year').cast(pl.Int32)])
         return df
@@ -66,6 +71,8 @@ class DistanceSummary():
 
     def _build_df(self, years, bikes, data: list[dict]) -> pl.DataFrame:
         df1 = self._build_years_and_bikes_df(years, bikes)
+        if df1.is_empty():
+            return df1
         df2 = self._build_data_df(data)
         _, df = pl.align_frames(df1, df2, on=["year", "bike"])
         return df.fill_null(0)
