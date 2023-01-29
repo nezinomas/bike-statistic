@@ -57,8 +57,8 @@ class Progress:
         df = (
             self._df.lazy()
             .select(["date", "ascent", "temp", "speed", "distance"])
-            .with_column(pl.col('temp').fill_null(0))
-            .with_column((pl.col("date").dt.year()).alias("year"))
+            .with_columns(pl.col('temp').fill_null(0))
+            .with_columns((pl.col("date").dt.year()).alias("year"))
             .groupby("year")
             .agg(list(it.chain.from_iterable(_agg)))
             .sort(pl.col("year"), reverse=True)
@@ -159,8 +159,8 @@ class Progress:
 
         df = (
             df.lazy()
-            .with_column(pl.col("time").dt.seconds().alias("seconds"))
-            .with_column(self._speed("distance", "seconds").alias("speed"))
+            .with_columns(pl.col("time").dt.seconds().alias("seconds"))
+            .with_columns(self._speed("distance", "seconds").alias("speed"))
             .with_columns(self._build_dtypes())
         ).collect()
 
