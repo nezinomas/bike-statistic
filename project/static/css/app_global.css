@@ -82,3 +82,7 @@ li.nav-item:last-child {
   border-top-width: 15px!important;
   border-top-color: rgb(207, 226, 255);
 }
+
+.table .right-black-border {
+  border-right: 1.5px solid black !important;
+}

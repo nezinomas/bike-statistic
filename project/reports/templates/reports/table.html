@@ -18,34 +18,38 @@
 {% block content %}
 
 <table class="table table-sm table-bordered">
-    <thead class="table-primary">
-        <tr>
-            <th colspan="2" class="text-center">Max T, &#8451;</th>
-            <th colspan="2" class="text-center">Min T, &#8451;</th>
-            <th colspan="2" class="text-center">Max Ascent, m</th>
-            <th colspan="2" class="text-center">Max Speed, km/h</th>
-            <th colspan="2" class="text-center">Max Distance, km</th>
-        </tr>
-        <tr>
-            <th class="text-center">Date</th>
-            <th class="text-center">Value</th>
-            {% for i in i|rjust:4 %}
-            <th class="text-center">Date</th>
-            <th class="text-center">Value</th>
-            {% endfor %}
-        </tr>
-    </thead>
+        <thead class="table-primary">
+            <tr>
+                <th colspan="2" class="text-center right-black-border">Max T, &#8451;</th>
+                <th colspan="2" class="text-center right-black-border">Min T, &#8451;</th>
+                <th colspan="2" class="text-center right-black-border">Max Ascent, m</th>
+                <th colspan="2" class="text-center right-black-border">Max Speed, km/h</th>
+                <th colspan="2" class="text-center">Max Distance, km</th>
+            </tr>
+            <tr>
+                <th class="text-center">Date</th>
+                <th class="text-center right-black-border">Value</th>
+                <th class="text-center">Date</th>
+                <th class="text-center right-black-border">Value</th>
+                <th class="text-center">Date</th>
+                <th class="text-center right-black-border">Value</th>
+                <th class="text-center">Date</th>
+                <th class="text-center right-black-border">Value</th>
+                <th class="text-center">Date</th>
+                <th class="text-center">Value</th>
+            </tr>
+        </thead>
     <tbody class="table-group-divider">
         {% if extremums %}
         <tr>
             <td class="text-center">{{ extremums.max_temp_date|date:"Y-m-d" }}</td>
-            <td class="text-center">{{ extremums.max_temp|floatformat:0 }}</td>
+            <td class="text-center right-black-border">{{ extremums.max_temp|floatformat:0 }}</td>
             <td class="text-center">{{ extremums.min_temp_date|date:"Y-m-d" }}</td>
-            <td class="text-center">{{ extremums.min_temp|floatformat:0 }}</td>
+            <td class="text-center right-black-border">{{ extremums.min_temp|floatformat:0 }}</td>
             <td class="text-center">{{ extremums.max_ascent_date|date:"Y-m-d" }}</td>
-            <td class="text-center">{{ extremums.max_ascent|floatformat:0 }}</td>
+            <td class="text-center right-black-border">{{ extremums.max_ascent|floatformat:0 }}</td>
             <td class="text-center">{{ extremums.max_speed_date|date:"Y-m-d" }}</td>
-            <td class="text-center">{{ extremums.max_speed|floatformat:1 }}</td>
+            <td class="text-center right-black-border">{{ extremums.max_speed|floatformat:1 }}</td>
             <td class="text-center">{{ extremums.max_distance_date|date:"Y-m-d" }}</td>
             <td class="text-center">{{ extremums.max_distance|floatformat:1 }}</td>
         </tr>
@@ -58,30 +62,30 @@
 <table class="table table-sm table-bordered table-hover table-striped sticky-table">
     <thead class="table-primary">
         <tr>
-            <th colspan="3"> </th>
-            <th colspan="4" class="text-center">Workout Stats</th>
-            <th colspan="5" class="text-center">Month Stats</th>
-            <th colspan="5" class="text-center">Season Stats</th>
+            <th colspan="3" class="right-black-border"> </th>
+            <th colspan="4" class="text-center right-black-border">Workout Stats</th>
+            <th colspan="5" class="text-center right-black-border">Month Stats</th>
+            <th colspan="5" class="text-center right-black-border">Season Stats</th>
             <th colspan="3" class="text-center">Goals</th>
         </tr>
         <tr>
             <th>Bike</th>
             <th class="text-center">Date</th>
-            <th class="text-end">&#8451;</th>
+            <th class="text-end right-black-border">&#8451;</th>
             <th class="text-center">Dist</th>
             <th class="text-center">Time</th>
             <th class="text-center">Speed</th>
-            <th class="text-center">Ascent</th>
-            <th class="text-center">Dist</th>
-            <th class="text-center">Time</th>
-            <th class="text-center">Speed</th>
-            <th class="text-center">Per day</th>
-            <th class="text-center">Ascent</th>
+            <th class="text-center right-black-border">Ascent</th>
             <th class="text-center">Dist</th>
             <th class="text-center">Time</th>
             <th class="text-center">Speed</th>
             <th class="text-center">Per day</th>
-            <th class="text-center">Ascent</th>
+            <th class="text-center right-black-border">Ascent</th>
+            <th class="text-center">Dist</th>
+            <th class="text-center">Time</th>
+            <th class="text-center">Speed</th>
+            <th class="text-center">Per day</th>
+            <th class="text-center right-black-border">Ascent</th>
             <th class="text-center">Goal</th>
             <th class="text-center">%</th>
             <th class="text-center">Delta</th>
@@ -92,21 +96,21 @@
         <tr {% ifchanged object.month %}{% if not forloop.first %}class="divider"{% endif %}{% endifchanged %}>
             <td>{{ object.bikes }}</td>
             <td class="text-center">{{ object.date|date:'Y-m-d' }}</td>
-            <td class="text-end">{{ object.temp|floatformat:0|default:'-' }}</td>
+            <td class="text-end right-black-border">{{ object.temp|floatformat:0|default:'-' }}</td>
             <td class="text-center">{{ object.distance|floatformat:2 }}</td>
             <td class="text-center">{{ object.seconds|duration }}</td>
             <td class="text-center">{{ object.speed|floatformat:1 }}</td>
-            <td class="text-center">{{ object.ascent|floatformat:0 }}</td>
+            <td class="text-center right-black-border">{{ object.ascent|floatformat:0 }}</td>
             <td class="text-center">{{ object.month_distance|floatformat:0 }}</td>
             <td class="text-center">{{ object.month_seconds|duration }}</td>
             <td class="text-center">{{ object.month_speed|floatformat:1 }}</td>
             <td class="text-center">{{ object.month_per_day|floatformat:1 }}</td>
-            <td class="text-center">{{ object.month_ascent|floatformat:0|intcomma }}</td>
+            <td class="text-center right-black-border">{{ object.month_ascent|floatformat:0|intcomma }}</td>
             <td class="text-center">{{ object.season_distance|floatformat:0|intcomma }}</td>
             <td class="text-center">{{ object.season_seconds|duration }}</td>
             <td class="text-center">{{ object.season_speed|floatformat:1 }}</td>
             <td class="text-center">{{ object.season_per_day|floatformat:1 }}</td>
-            <td class="text-center">{{ object.season_ascent|floatformat:0|intcomma }}</td>
+            <td class="text-center right-black-border">{{ object.season_ascent|floatformat:0|intcomma }}</td>
             <td class="text-center">{{ object.goal_per_day|floatformat:0|intcomma }}</td>
             <td class="text-center">{{ object.goal_percent|floatformat:1 }}</td>
             <td class="text-center">{{ object.goal_delta|floatformat:0|intcomma }}</td>
