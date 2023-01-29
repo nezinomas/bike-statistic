@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+
+{% load static %}
 {% load get_index %}
 {% load humanize %}
 {% load template_filters %}
@@ -9,55 +11,9 @@
 
 <div class="row">
     <div class="col-12 col-lg-6">
-        <div id="my-chart"></div>
-        {% if bikes %}
-        <script>
-            Highcharts.setOptions({
-                lang: {
-                    thousandsSep: '.',
-                    decimalPoint: ',',
-                }
-            });
-            Highcharts.chart("my-chart", {
-                chart : { type: 'column'},
-                xAxis: {
-                    categories: {{ year_list }},
-                },
-                margin: 0,
-                title: {
-                    text: ''
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'km, thousants'
-                    },
-                },
-                legend: {
-                    align: 'right',
-                    verticalAlign: 'middle',
-                    shadow: false,
-                    reversed: true,
-                    layout: 'vertical',
-                    itemMarginBottom: 10
-                },
-                tooltip: {
-                    pointFormat: '{point.y:,.0f}',
-                    formatter: function () {
-                        return '<b>' + this.x + '</b><br/>' +
-                            `${this.series.name}: ${Highcharts.numberFormat(this.point.y, 0)}<br/>` +
-                            `Total: ${Highcharts.numberFormat(this.point.stackTotal, 0)}`;
-                    }
-                },
-                plotOptions: {
-                    column: {
-                        stacking: 'normal',
-                    }
-                },
-                series: {{ chart_data|safe }},
-            });
-        </script>
-        {% endif %}
+        <div id="chart-overall"></div>
+        <script src="{% static 'js/chart_overall.js' %}"></script>
+        {{ chart_overall_data|json_script:"chart-overall-data" }}
     </div>
 
     <div class="col-12 col-lg-6"></div>
@@ -65,35 +21,35 @@
 
 <div class="row mt-2">
     <div class="col-12 col-lg-6">
-            <table class="table table-sm table-striped table-hover align-middle">
-                <thead class="table-primary">
-                    <tr>
-                        <th>Metai</th>
-                        {% for bike in bikes %}<th class="text-end">{{ bike }}</th>{% endfor %}
-                        <th class="text-end">Total</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    {% for row, total in table_data %}
-                    <tr>
-                        <td>{{ row.year|floatformat:0 }}</td>
-                        {% for bike in bikes %}
-                        {% with row|get_item:bike as value %}
-                        <td class="text-end">{% if value %}{{ value|floatformat:0|intcomma }}{% else %}-{% endif %}</td>
-                        {% endwith %}{% endfor %}
-                        <td class="text-end">{{ total.total|floatformat:0|intcomma }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-                <tfoot class="table-secondary table-group-divider">
-                    <th>Total</th>
+        <table class="table table-sm table-striped table-hover align-middle">
+            <thead class="table-primary">
+                <tr>
+                    <th>Metai</th>
+                    {% for bike in bikes %}<th class="text-end">{{ bike }}</th>{% endfor %}
+                    <th class="text-end">Total</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for row, total in table_data %}
+                <tr>
+                    <td>{{ row.year|floatformat:0 }}</td>
                     {% for bike in bikes %}
-                    {% with total_row|get_item:bike as value %}
-                    <th class="text-end">{{ value|floatformat:0|intcomma }}</th>
+                    {% with row|get_item:bike as value %}
+                    <td class="text-end">{% if value %}{{ value|floatformat:0|intcomma }}{% else %}-{% endif %}</td>
                     {% endwith %}{% endfor %}
-                    <th class="text-end">{{ total|floatformat:0|intcomma }}</th>
-                </tfoot>
-            </table>
+                    <td class="text-end">{{ total.total|floatformat:0|intcomma }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot class="table-secondary table-group-divider">
+                <th>Total</th>
+                {% for bike in bikes %}
+                {% with total_row|get_item:bike as value %}
+                <th class="text-end">{{ value|floatformat:0|intcomma }}</th>
+                {% endwith %}{% endfor %}
+                <th class="text-end">{{ total|floatformat:0|intcomma }}</th>
+            </tfoot>
+        </table>
     </div>
 
     <div class="col-6"></div>
