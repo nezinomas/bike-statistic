@@ -66,7 +66,7 @@ def test_data_list_not_loged(client):
     assert response.resolver_match.func.view_class is CustomLogin
 
 
-@pytest.mark.freeze_time('2000-01-31')
+@pytest.mark.freeze_time('2000-01-20')
 def test_data_list_user_items(client_logged):
     DataFactory()
     DataFactory(user=UserFactory(username='xxx'))

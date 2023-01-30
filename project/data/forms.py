@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 from crispy_forms.helper import FormHelper
 from django import forms
@@ -6,7 +8,6 @@ from ..bikes.models import Bike
 from ..core.helpers.form_helpers import set_field_properties
 from ..core.mixins.form_mixin import FormMixin
 from . import models
-from .helpers import view_data_helper as helper
 
 
 class DataForm(FormMixin, forms.ModelForm):
@@ -51,8 +52,8 @@ class DateFilterForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['start_date'].initial = helper.format_date(day=1)
-        self.fields['end_date'].initial = helper.format_date()
+        self.fields['start_date'].initial = date.today() - timedelta(20)
+        self.fields['end_date'].initial = date.today()
 
         self.helper = FormHelper()
         set_field_properties(self, self.helper)

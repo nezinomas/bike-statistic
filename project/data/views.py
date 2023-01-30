@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 
@@ -5,7 +7,6 @@ from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
                                  DetailViewMixin, ListViewMixin,
                                  TemplateViewMixin, UpdateViewMixin)
 from . import forms, models
-from .helpers import view_data_helper as helper
 from .library.insert_garmin import SyncWithGarmin
 
 
@@ -18,8 +19,8 @@ class DataList(ListViewMixin):
     model = models.Data
 
     def get_queryset(self):
-        start_date = self.request.GET.get('start_date') or helper.format_date(day=1)
-        end_date = self.request.GET.get('end_date') or helper.format_date()
+        start_date = self.request.GET.get('start_date') or date.today() - timedelta(20)
+        end_date = self.request.GET.get('end_date') or date.today()
         return self.model.objects.items().filter(date__range=(start_date, end_date))
 
     def get_template_names(self):
