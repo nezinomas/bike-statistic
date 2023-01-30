@@ -53,6 +53,7 @@ class ChartOverall(TemplateViewMixin):
 
         return super().get_context_data(**kwargs) | context
 
+
 class Extremums(TemplateViewMixin):
     template_name = 'reports/extremums.html'
 
