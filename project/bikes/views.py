@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 from django.db.models import Sum
 from django.shortcuts import reverse
 from django.urls import reverse_lazy
@@ -180,7 +180,7 @@ class StatsDetail(DetailViewMixin):
         bike_slug = self.kwargs['bike_slug']
         stats_pk = self.kwargs['stats_pk']
         start_date = self.object.start_date
-        end_date = self.object.end_date or datetime.now().date
+        end_date = self.object.end_date or date.today()
 
         distance_sum = Data.objects \
             .filter(
