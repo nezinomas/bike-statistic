@@ -1,14 +1,19 @@
 {% extends 'users/users_base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
-<div class="card mt-5">
+
+<div class="card text-bg-light my-auto">
     <div class="card-body">
         <form method="post" novalidate>
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ next }}">
-            {% include 'core/includes/form.html' %}
-            <button type="submit" class="btn btn-primary btn-block">Log in</button>
+            {% include 'core/includes/form_errors.html' %}
+            {% for field in form %}{{ field|as_crispy_field }}{% endfor %}
+            <button type="submit" class="btn btn-sm btn-primary btn-block">Log in</button>
         </form>
     </div>
 </div>
+
 {% endblock %}
