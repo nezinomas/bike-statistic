@@ -92,6 +92,11 @@
 								<a class="nav-link" href="{% url 'users:sync_update' %}"> Garmin </a>
 							</li>
 						</ul>
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a class="btn btn-sm btn-warning text-start" role="button" href="{% url 'users:logout' %}"> Logout </a>
+							</li>
+						</ul>
 					</nav>
 				</aside>
 				<main class="col">{% block content %}{% endblock content %}
