@@ -2,6 +2,19 @@
 {% load crispy_forms_tags %}
 {% load slippers %}
 
+
+{% block head %}
+
+<style>
+    .table input.numberinput, .table input.textinput {
+    margin-top: .15rem!important;
+    text-align: center;
+    }
+</style>
+
+{% endblock head %}
+
+
 {% block content %}
 
 <form class="form py-3" method="post" novalidate autocomplete="off" hx-get="{% url 'index' %}" hx-target="#htmx-container">
