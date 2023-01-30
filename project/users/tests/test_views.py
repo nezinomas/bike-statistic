@@ -32,36 +32,9 @@ def test_successful_login(client):
     assert response.context['user'].is_authenticated
 
 
-# ---------------------------------------------------------------------------------------
-#                                                                      external user list
-# ---------------------------------------------------------------------------------------
-def test_sync_list():
-    view = resolve('/profile/sync/')
 
-    assert views.sync_list is view.func
-
-
-def test_sync_list_loging_required(client):
-    url = reverse('users:sync_list')
-    response = client.get(url, follow=True)
-
-    assert response.status_code == 200
-    assert response.resolver_match.url_name == 'login'
-
-
-
-def test_sync_list_200(client_logged):
-    url = reverse('users:sync_list')
-    response = client_logged.get(url)
-
-    assert response.status_code == 200
-
-
-# ---------------------------------------------------------------------------------------
-#                                                                    external user update
-# ---------------------------------------------------------------------------------------
 def test_sync_update():
-    view = resolve('/profile/sync/update/')
+    view = resolve('/profile/sync/')
 
     assert views.sync_update is view.func
 
