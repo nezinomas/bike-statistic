@@ -1,29 +1,32 @@
 {% load crispy_forms_tags %}
 {% load slippers %}
 
-<form method="post" action="{% url 'users:sync_update' %}" class="mb-5" novalidate>
-    {% csrf_token %}
-    {{ form.media }}
+<div id="sync-form">
+    <form method="post" class="mb-2" novalidate>
+        {% csrf_token %}
+        {{ form.media }}
 
-    {% if form.non_field_errors %}
-    <div class="alert alert-danger" role="alert">
-        {% for error in form.non_field_errors %}
-        <p {% if forloop.last %} class="mb-0" {% endif %}>{{ error }}</p>
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for error in form.non_field_errors %}
+            <p {% if forloop.last %} class="mb-0" {% endif %}>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% for field in form %}
+        <div class="row mb-4 align-items-center">
+            <div class="col mb-3">{{ field.label_tag }}<br>
+            {{ field|as_crispy_field }}</div>
+        </div>
         {% endfor %}
-    </div>
-    {% endif %}
-
-    {% for field in form %}
-    <div class="row mb-4 align-items-center">
-        <div class="col mb-3">{{ field.label_tag }}<br>
-        {{ field|as_crispy_field }}</div>
-    </div>
-    {% endfor %}
-    <div class="form-group mt-2">{% save_button label='Update' %}</div>
-</form>
-<p>Raw passwords are not stored, so there is no way to see this user's password.</p>
-<p>{% if password %}<b>Encrypted password:</b> {{ password }}******************
-    {% else %}
-    <b>No password</b>
-    {% endif %}
-</p>
+        {% url 'users:sync_update' as url_write %}
+        <div class="form-group mt-2">{% save_button label='Update' url=url_write target='sync-form' swap='outerHTML' %}</div>
+    </form>
+    <p>Raw passwords are not stored, so there is no way to see this user's password.</p>
+    <p>{% if password %}<b>Encrypted password:</b> {{ password }}******************
+        {% else %}
+        <b>No password</b>
+        {% endif %}
+    </p>
+</div>

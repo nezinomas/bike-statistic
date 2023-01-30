@@ -2,7 +2,7 @@ from django.contrib.auth import login
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render, reverse
+from django.shortcuts import render
 
 from .forms import ExternalUserForm
 
@@ -16,34 +16,15 @@ class CustomLogin(auth_views.LoginView):
 
 
 @login_required
-def sync_list(request):
-    form = ExternalUserForm()
-    template = 'users/sync.html'
-    context = {
-        'form': form,
-        'password': request.user.garmin_password[:50],
-    }
-
-    return render(request, template, context)
-
-
-@login_required
 def sync_update(request):
     form = ExternalUserForm(request.POST or None, instance=request.user)
 
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
+    if request.method == 'POST' and form.is_valid():
+        form.save()
 
-            return (
-                redirect(reverse('users:sync_list'))
-            )
-
-    template = 'users/sync.html'
+    template = 'users/includes/sync_form.html' if request.htmx else 'users/sync.html'
     context = {
         'form': form,
         'password': request.user.garmin_password[:50],
     }
-    return (
-        render(request, template, context)
-    )
+    return render(request, template, context)
