@@ -1,6 +1,5 @@
 from datetime import datetime
 
-import numpy as np
 import polars as pl
 
 
@@ -59,7 +58,7 @@ class ComponentWear:
     @property
     def bike_km(self):
         try:
-            km = self._data.select(pl.col('distance').sum()).to_numpy()[0,0]
+            km = self._data.select(pl.col('distance').sum()).to_series().to_list()[0]
         except (AttributeError, pl.exceptions.NotFoundError):
             km = 0
         return km
@@ -68,8 +67,8 @@ class ComponentWear:
     def component_stats(self):
         dicts = {'avg': 0, 'median': 0,}
         if not self._df.is_empty():
-            col = self._df.transpose()
-            dicts['avg'] = np.average(col)
-            dicts['median'] = np.median(col)
+            col = self._df.transpose().to_series()
+            dicts['avg'] = col.mean()
+            dicts['median'] = col.median()
 
         return dicts
