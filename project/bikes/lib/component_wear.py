@@ -58,7 +58,7 @@ class ComponentWear:
     @property
     def bike_km(self):
         try:
-            km = self._data.select(pl.col('distance').sum()).to_series().to_list()[0]
+            km = self._data.select(pl.col('distance').sum())[0,0]
         except (AttributeError, pl.exceptions.NotFoundError):
             km = 0
         return km
