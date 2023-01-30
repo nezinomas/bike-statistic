@@ -24,7 +24,7 @@
         <div class="form-group">{% save_button label='Update' url=url_write target='sync-form' swap='outerHTML' %}</div>
     </form>
     <p class="mt-5">Raw passwords are not stored, so there is no way to see this user's password.</p>
-    <p>{% if password %}<b>Encrypted password:</b> {{ password }}******************
+    <p>{% if password %}<b>Encrypted password:</b> *{{ password }}*
         {% else %}
         <b>No password</b>
         {% endif %}
