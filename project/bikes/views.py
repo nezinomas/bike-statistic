@@ -200,6 +200,7 @@ class StatsDetail(DetailViewMixin):
 
         return super().get_context_data(**kwargs) | context
 
+
 class StatsList(ListViewMixin):
     def get_template_names(self):
         if self.request.htmx:
