@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends request.htmx|yesno:"base_htmx.html,base.html" %}
 
 {% load slippers %}
 
@@ -12,8 +12,26 @@
     </div>
 </div>
 
-<div id="htmx-container" class="mt-2" hx-trigger="reload from:body" hx-get="{% url 'bikes:bike_list' %}" hx-target="this">
-    {% include "bikes/includes/partial_bike_list.html" %}
+<div class="mt-2" hx-get="{% url 'bikes:bike_list' %}" hx-trigger="reload from:body" hx-target="htmx-container">
+    <table class="table table-striped table-bordered table-hover table-sm">
+        <thead class="table-primary">
+            <tr>
+                <th class="w20"> Date </th>
+                <th class="w20"> Full Name </th>
+                <th> Short Name </th>
+                <th class="text-end w10"> Actions </th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider" id="table-tbody">
+            {% for object in object_list %}
+            {% include 'bikes/includes/partial_bike_row.html' %}
+            {% empty %}
+            <tr>
+                <td class="bg-warning text-center" colspan="4"> No records </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 {% endblock content %}

@@ -1,4 +1,5 @@
 from datetime import date
+
 from django.db.models import Sum
 from django.shortcuts import reverse
 from django.urls import reverse_lazy
@@ -21,10 +22,7 @@ class BikeDetail(DetailViewMixin):
 
 
 class BikeList(ListViewMixin):
-    def get_template_names(self):
-        if self.request.htmx:
-            return ['bikes/includes/partial_bike_list.html']
-        return ['bikes/bike_list.html']
+    template_name = 'bikes/bike_list.html'
 
     def get_queryset(self):
         return Bike.objects.items()
