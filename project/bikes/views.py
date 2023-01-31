@@ -30,6 +30,13 @@ class BikeList(ListViewMixin):
         return Bike.objects.items()
 
 
+class BikeMenuList(ListViewMixin):
+    template_name = 'bikes/bike_menu.html'
+
+    def get_queryset(self):
+        return Bike.objects.items()
+
+
 class BikeCreate(CreateViewMixin):
     model = Bike
     form_class = forms.BikeForm

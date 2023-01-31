@@ -54,6 +54,7 @@ urlpatterns = [
     ),
     # .............................................................................. Bike
     path("bike/", views.BikeList.as_view(), name="bike_list"),
+    path("bike/menu/", views.BikeMenuList.as_view(), name="bike_menu"),
     path("bike/create/", views.BikeCreate.as_view(), name="bike_create"),
     path("bike/detail/<int:pk>/", views.BikeDetail.as_view(), name="bike_detail"),
     path("bike/update/<int:pk>/", views.BikeUpdate.as_view(), name="bike_update"),
