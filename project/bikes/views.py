@@ -69,28 +69,27 @@ class BikeDelete(DeleteViewMixin):
 # ---------------------------------------------------------------------------------------
 #                                                                               Bike Info
 # ---------------------------------------------------------------------------------------
-class BikeInfoIndex(RedirectViewMixin):
-    def get_redirect_url(self, *args, **kwargs):
-        info = BikeInfo.objects.items()[:1]
-        if not info.exists():
-            return reverse('bikes:bike_list')
-
-        return reverse('bikes:info_list', kwargs={'bike_slug': info[0].bike.slug})
-
-
 class BikeInfoList(ListViewMixin):
-    def get_template_names(self):
-        if self.request.htmx:
-            return ['bikes/includes/partial_info_list.html']
-        return ['bikes/info_list.html']
+    template_name = 'bikes/info_list.html'
 
     def get_queryset(self):
         return BikeInfo.objects.items().filter(bike__slug=self.kwargs['bike_slug'])
+
+    def get_context_data(self, **kwargs):
+        context = {'bike_list': Bike.objects.items()}
+        return super().get_context_data(**kwargs) | context
 
 
 class BikeInfoDetail(DetailViewMixin):
     model = BikeInfo
     template_name = 'bikes/includes/partial_info_row.html'
+
+
+class BikeInfoDefaultBike(ListViewMixin):
+    template_name = 'bikes/bike_info_default_bike.html'
+
+    def get_queryset(self):
+        return Bike.objects.related().filter(main=True)[:1] or Bike.objects.related().items()[:1]
 
 
 class BikeInfoCreate(CreateViewMixin):

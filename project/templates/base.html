@@ -74,9 +74,7 @@
 							<li class="nav-item">
 								<a class="nav-link" href="{% url 'bikes:bike_list' %}"> Bikes </a>
 							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'bikes:info_index' %}">Bike Info</a>
-							</li>
+							<li class="nav-item" hx-get="{% url 'bikes:info_default' %}" hx-target="this" hx-trigger="load">--</li>
 							<li class="nav-item">
 								<a class="nav-link" href="{% url 'goals:goal_list' %}"> Goals </a>
 							</li>
