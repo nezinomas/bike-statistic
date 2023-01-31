@@ -42,6 +42,7 @@ class BikeCreate(CreateViewMixin):
     form_class = forms.BikeForm
     template_name = 'bikes/bike_form.html'
     detail_view = BikeDetail
+    hx_trigger_django = 'bike_update'
 
     def url(self):
         return reverse_lazy('bikes:bike_create')
@@ -52,6 +53,7 @@ class BikeUpdate(UpdateViewMixin):
     form_class = forms.BikeForm
     template_name = 'bikes/bike_form.html'
     detail_view = BikeDetail
+    hx_trigger_django = 'bike_update'
 
     def url(self):
         return reverse_lazy('bikes:bike_update', kwargs={'pk': self.kwargs['pk']})
@@ -61,6 +63,7 @@ class BikeDelete(DeleteViewMixin):
     model = Bike
     template_name = 'bikes/bike_confirm_delete.html'
     success_url = '/'
+    hx_trigger_django = 'bike_update'
 
 
 # ---------------------------------------------------------------------------------------

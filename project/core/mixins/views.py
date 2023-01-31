@@ -42,15 +42,16 @@ class CreateUpdateMixin:
     def form_valid(self, form, **kwargs):
         response = super().form_valid(form)
 
+        if self.hx_trigger_django:
+            response.status_code = 204
+
         if self.detail_view:
             rendered = render_to_string(
                 self.detail_view.template_name, {'object': self.object}, self.request)
-            return HttpResponse(rendered)
+            response = HttpResponse(rendered)
+            response.status_code = 200
 
-        if self.hx_trigger_django:
-            response.status_code = 204
-            trigger_client_event(response=response, name=self.hx_trigger_django, params={})
-            return response
+        trigger_client_event(response=response, name=self.hx_trigger_django, params={})
 
         return response
 

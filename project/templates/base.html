@@ -62,7 +62,7 @@
 						</ul>
 						<!-- Component wear -->
 						<h6 class="side-bar"> Component wear </h6>
-						<ul class="nav flex-column" hx-get="{% url 'bikes:bike_menu' %}" hx-target="this" hx-trigger="load">
+						<ul class="nav flex-column" hx-get="{% url 'bikes:bike_menu' %}" hx-target="this" hx-trigger="load, bike_update from:body">
 
 						</ul>
 						<!-- Settings -->
