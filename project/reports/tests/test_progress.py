@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 from types import SimpleNamespace
 
 import pytest
@@ -186,6 +186,18 @@ def test_season_progress_day_goal(data):
     assert round(actual[0]['goal_per_day'], 2) == 84.7
     assert round(actual[1]['goal_per_day'], 2) == 5.46
     assert round(actual[2]['goal_per_day'], 2) == 2.73
+
+
+def test_season_progress_day_goal_two_months(data):
+    data.data = [
+        {'date': date(2000, 1, 1), 'distance': 2, 'time': timedelta(seconds=2_000), 'ascent': 2, 'bikes': 'Short Name', 'temp': 2},
+        {'date': date(2000, 2, 1), 'distance': 2, 'time': timedelta(seconds=2_000), 'ascent': 2, 'bikes': 'Short Name', 'temp': 2},
+    ]
+    data.goal = 366
+    actual = Progress(data).season_progress()
+
+    assert round(actual[0]['goal_per_day'], 2) == 32
+    assert round(actual[1]['goal_per_day'], 2) == 1
 
 
 def test_season_progress_day_goal_empty(data):
