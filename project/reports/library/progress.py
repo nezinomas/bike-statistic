@@ -110,7 +110,7 @@ class Progress:
                 month_per_day=pl.col("month_distance") / pl.col("monthlen")))
 
     def _progress_goals(self, df: pl.DataFrame) -> pl.Expr:
-        day_of_year = pl.col("date").dt.day()
+        day_of_year = pl.col("date").dt.ordinal_day()
         year_len = 366 if calendar.isleap(self._year) else 365
         per_day = self._goal / year_len
         percent = (pl.col("season_distance") * 100) / pl.col("goal_per_day")
