@@ -30,11 +30,19 @@ class BikeList(ListViewMixin):
         return Bike.objects.items()
 
 
+class BikeMenuList(ListViewMixin):
+    template_name = 'bikes/bike_menu.html'
+
+    def get_queryset(self):
+        return Bike.objects.items()
+
+
 class BikeCreate(CreateViewMixin):
     model = Bike
     form_class = forms.BikeForm
     template_name = 'bikes/bike_form.html'
     detail_view = BikeDetail
+    hx_trigger_django = 'bike_update'
 
     def url(self):
         return reverse_lazy('bikes:bike_create')
@@ -45,6 +53,7 @@ class BikeUpdate(UpdateViewMixin):
     form_class = forms.BikeForm
     template_name = 'bikes/bike_form.html'
     detail_view = BikeDetail
+    hx_trigger_django = 'bike_update'
 
     def url(self):
         return reverse_lazy('bikes:bike_update', kwargs={'pk': self.kwargs['pk']})
@@ -54,6 +63,7 @@ class BikeDelete(DeleteViewMixin):
     model = Bike
     template_name = 'bikes/bike_confirm_delete.html'
     success_url = '/'
+    hx_trigger_django = 'bike_update'
 
 
 # ---------------------------------------------------------------------------------------
@@ -192,6 +202,7 @@ class StatsDetail(DetailViewMixin):
             'km': {str(stats_pk): distance_sum.get('distance__sum', 0)},}
 
         return super().get_context_data(**kwargs) | context
+
 
 class StatsList(ListViewMixin):
     def get_template_names(self):

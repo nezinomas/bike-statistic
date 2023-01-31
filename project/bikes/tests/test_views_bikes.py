@@ -309,3 +309,27 @@ def test_bike_delete(client_logged):
     client_logged.post(url, {})
 
     assert models.Bike.objects.all().count() == 0
+
+
+def test_bike_menu_func():
+    view = resolve('/bike/menu/')
+
+    assert views.BikeMenuList is view.func.view_class
+
+
+def test_bike_menu_200(client_logged):
+    url = reverse('bikes:bike_menu')
+    response = client_logged.get(url)
+
+    assert response.status_code == 200
+
+
+def test_bike_menu(client_logged):
+    bike = BikeFactory()
+
+    url = reverse('bikes:bike_menu')
+    response = client_logged.get(url)
+    content = clean_content(response.content)
+    stats_url = reverse("bikes:stats_index", kwargs={"bike_slug": bike.slug})
+
+    assert f'href="{stats_url}"> Short Name </a>' in content

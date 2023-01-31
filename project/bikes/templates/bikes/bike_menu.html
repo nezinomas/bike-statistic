@@ -1,0 +1,5 @@
+{% for bike in object_list %}
+<li class="nav-item">
+	<a class="nav-link" href="{% url 'bikes:stats_index' bike.slug %}"> {{ bike.short_name }} </a>
+</li>
+{% endfor %}

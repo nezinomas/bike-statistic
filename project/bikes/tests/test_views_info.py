@@ -60,7 +60,6 @@ def test_info_list_context(client_logged):
     context = response.context
 
     assert 'object_list' in context
-    assert 'bike_list' in context
 
 
 def test_info_list_no_records(client_logged):

@@ -62,12 +62,8 @@
 						</ul>
 						<!-- Component wear -->
 						<h6 class="side-bar"> Component wear </h6>
-						<ul class="nav flex-column">
-							{% for bike in bike_list %}
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'bikes:stats_index' bike.slug %}"> {{ bike.short_name }} </a>
-							</li>
-							{% endfor %}
+						<ul class="nav flex-column" hx-get="{% url 'bikes:bike_menu' %}" hx-target="this" hx-trigger="load, bike_update from:body">
+
 						</ul>
 						<!-- Settings -->
 						<h6 class="side-bar"> Settings </h6>
