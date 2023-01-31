@@ -21,7 +21,7 @@ class DistanceSummary():
     def total_column(self):
         if self._df.is_empty():
             return []
-        print(f'------------------------------->\n{self._df}\n')
+
         df = (
             self._df
             .groupby('year')
