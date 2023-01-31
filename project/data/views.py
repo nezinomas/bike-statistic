@@ -1,7 +1,6 @@
 from datetime import date, timedelta
 
-from django.shortcuts import redirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 
 from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
                                  DetailViewMixin, ListViewMixin,
@@ -78,17 +77,13 @@ class DataInsert(TemplateViewMixin):
             self.kwargs['exception'] = ex
         return super().get(self.request, *args, **kwargs)
 
-
     def get_context_data(self, **kwargs):
-        ex = self.kwargs.get('exception')
-        if ex:
-            context = {
-                'message': (
+        if ex := self.kwargs.get('exception'):
+            message = (
                 f'<p>{ex}</p>'
                 f'<p>{"-"*120}</p>'
                 f'<p>Type: {type(ex).__name__}</p>'
-                f'<p>Args: {ex.args}</p>'
-            )}
+                f'<p>Args: {ex.args}</p>')
         else:
-            context = {'message': rendered_content(self.request, DataList)}
-        return super().get_context_data(**kwargs) | context
+            message = rendered_content(self.request, DataList)
+        return super().get_context_data(**kwargs) | {'message': message}
