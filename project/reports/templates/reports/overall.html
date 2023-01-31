@@ -1,13 +1,14 @@
-{% extends "base.html" %}
+{% extends request.htmx|yesno:"base_htmx.html,base.html" %}
 
 {% load static %}
 {% load get_index %}
 {% load humanize %}
 {% load template_filters %}
 
-{% block head %}<script src="https://code.highcharts.com/highcharts.src.js"></script>{% endblock head %}
 
 {% block content %}
+
+<script src="https://code.highcharts.com/highcharts.src.js"></script>
 
 <div class="row">
     <div class="col-12 col-lg-6">

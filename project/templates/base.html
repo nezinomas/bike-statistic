@@ -36,20 +36,20 @@
 						<h6 class="side-bar"> Data </h6>
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-get="{% url 'index' %}" hx-target="#htmx-container"> View </a>
+								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'index' %}"> View </a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-get="{% url 'data:data_insert' %}" hx-target="#htmx-container" hx-indicator="#indicator"> Update </a>
+								<a class="nav-link" role="button" hx-target="#htmx-container" hx-indicator="#indicator" hx-get="{% url 'data:data_insert' %}"> Update </a>
 							</li>
 						</ul>
 						<!-- Charts -->
 						<h6 class="side-bar"> Statistic </h6>
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'reports:chart_overall' %}"> Charts </a>
+								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'reports:chart_overall' %}"> Charts </a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'reports:extremums' %}"> Extremums </a>
+								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'reports:extremums' %}"> Extremums </a>
 							</li>
 						</ul>
 						<!-- Stats and Goals -->
@@ -58,7 +58,7 @@
 							{% for item in years %}
 							{% if forloop.counter < 6 %}
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'reports:year_progress' item %}"> {{ item }} </a>
+								<a class="nav-link" role="button" hx-target="#htmx-container" hx-indicator="#indicator" hx-get="{% url 'reports:year_progress' item %}"> {{ item }} </a>
 							</li>
 							{% endif %}
 							{% endfor %}
