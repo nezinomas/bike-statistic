@@ -87,3 +87,15 @@ li.nav-item:last-child {
   margin-top: .15rem !important;
   text-align: center;
 }
+
+.htmx-indicator {
+  display: none;
+}
+
+.htmx-request .htmx-indicator {
+  display: inline;
+}
+
+.htmx-request.htmx-indicator {
+  display: inline;
+}
