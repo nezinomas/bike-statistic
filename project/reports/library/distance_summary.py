@@ -21,10 +21,12 @@ class DistanceSummary():
     def total_column(self):
         if self._df.is_empty():
             return []
+        print(f'------------------------------->\n{self._df}\n')
         df = (
             self._df
             .groupby('year')
-            .agg(pl.col('distance').sum()))
+            .agg(pl.col('distance').sum())
+            .sort('year'))
         df = df.rename({'distance': 'total'})
         return df.to_dicts()
 
