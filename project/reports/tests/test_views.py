@@ -63,7 +63,7 @@ def test_year_progress_context_has_items(client_logged):
 def test_year_progress_queries(client_logged, django_assert_num_queries):
     DataFactory()
 
-    with django_assert_num_queries(5):
+    with django_assert_num_queries(4):
         url = reverse('reports:year_progress', kwargs={'year': 2000})
         client_logged.get(url)
 
