@@ -100,7 +100,7 @@ class Progress:
             df
             .with_columns(
                 month=month,
-                monthlen=month.apply(lambda x: calendar.monthrange(2000, x)[1]))
+                monthlen=month.apply(lambda x: calendar.monthrange(self._year, x)[1]))
             .with_columns(
                 month_seconds=pl.col("seconds").sum().over("month"),
                 month_distance=pl.col("distance").sum().over("month"),
