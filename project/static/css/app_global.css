@@ -81,3 +81,9 @@ li.nav-item:last-child {
 .table .right-black-border {
   border-right: 1.5px solid black !important;
 }
+
+#data-table-tbody input.numberinput,
+#data-table-tbody input.textinput {
+  margin-top: .15rem !important;
+  text-align: center;
+}

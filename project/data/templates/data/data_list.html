@@ -1,36 +1,47 @@
-{% extends "base.html" %}
+{% extends request.htmx|yesno:"base_htmx.html,base.html" %}
+
 {% load crispy_forms_tags %}
 {% load slippers %}
 
-
-{% block head %}
-
-<style>
-    .table input.numberinput, .table input.textinput {
-    margin-top: .15rem!important;
-    text-align: center;
-    }
-</style>
-
-{% endblock head %}
-
-
 {% block content %}
 
-<form class="form py-3" method="post" novalidate autocomplete="off" hx-get="{% url 'index' %}" hx-target="#htmx-container">
-    <div class="row">
-        <div class="col-sm-3 align-self-center">{{ filter_form.start_date|as_crispy_field }}</div>
-        <div class="col-sm-3 align-self-center">{{ filter_form.end_date|as_crispy_field }}</div>
-        <div class="col-sm-1 align-self-center"><input type="submit" value="Filter" class="btn btn-secondary btn-sm py-1 px-5 align-self-center"></div>
-        <div class="col text-end align-self-center">
-            {% url 'data:data_create' as url_create %}
-            {% new_button url=url_create target="data-table-tbody" swap="afterbegin" label='New row' width="35%" css_class="py-1" %}
+<div hx-trigger="reload from:body" hx-get="{% url 'index' %}" hx-target="#htmx-container">
+    <form class="form py-3" method="post" novalidate autocomplete="off" hx-get="{% url 'index' %}" hx-target="#htmx-container">
+        <div class="row">
+            <div class="col-sm-3 align-self-center">{{ filter_form.start_date|as_crispy_field }}</div>
+            <div class="col-sm-3 align-self-center">{{ filter_form.end_date|as_crispy_field }}</div>
+            <div class="col-sm-1 align-self-center"><input type="submit" value="Filter" class="btn btn-secondary btn-sm py-1 px-5 align-self-center"></div>
+            <div class="col text-end align-self-center">
+                {% url 'data:data_create' as url_create %}
+                {% new_button url=url_create target="data-table-tbody" swap="afterbegin" label='New row' width="35%" css_class="py-1" %}
+            </div>
         </div>
-    </div>
-</form>
+    </form>
 
-<div id="htmx-container" hx-trigger="reload from:body" hx-get="{% url 'index' %}" hx-target="this">
-    {% include 'data/includes/partial_data_list.html' %}
+    <table class="table table-sm table-bordered table-striped table-hover align-middle">
+        <thead class="table-primary">
+            <tr>
+                <th>Bike</th>
+                <th class="text-center">Date</th>
+                <th class="text-center">Distance</th>
+                <th class="text-center">Time</th>
+                <th class="text-center">&#8451;</th>
+                <th class="text-center">Ascent</th>
+                <th class="text-center">Descent</th>
+                <th class="text-center">Max Speed</th>
+                <th class="text-center">Heart Rate</th>
+                <th class="text-center">Cadense</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider" id="data-table-tbody">
+            {% for object in object_list %}
+            {% include 'data/includes/partial_data_row.html' %}
+            {% empty %}
+            <tr><td class="bg-warning text-center" colspan="11">No records</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 {% endblock content %}
