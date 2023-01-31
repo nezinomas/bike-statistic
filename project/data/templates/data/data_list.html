@@ -5,7 +5,8 @@
 
 {% block content %}
 
-<div hx-trigger="reload from:body" hx-get="{% url 'index' %}" hx-target="#htmx-container">
+<div hx-get="{% url 'index' %}" hx-trigger="reload from:body" hx-target="#htmx-container">
+
     <form class="form py-3" method="post" novalidate autocomplete="off" hx-get="{% url 'index' %}" hx-target="#htmx-container">
         <div class="row">
             <div class="col-sm-3 align-self-center">{{ filter_form.start_date|as_crispy_field }}</div>
