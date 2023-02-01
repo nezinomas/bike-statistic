@@ -4,7 +4,7 @@ from datetime import date
 import pytest
 from django.urls import resolve, reverse
 
-from ...bikes.factories import BikeFactory
+from ...bikes.factories import BikeFactory, ComponentFactory
 from ...core.lib.tests_utils import clean_content
 from ...users.factories import UserFactory
 from .. import models, views
@@ -326,10 +326,11 @@ def test_bike_menu_200(client_logged):
 
 def test_bike_menu(client_logged):
     bike = BikeFactory()
+    component = ComponentFactory()
 
     url = reverse('bikes:bike_menu')
     response = client_logged.get(url)
     content = clean_content(response.content)
-    stats_url = reverse("bikes:stats_index", kwargs={"bike_slug": bike.slug})
+    stats_url = reverse("bikes:stats_list", kwargs={"bike_slug": bike.slug, "component_pk": component.pk})
 
-    assert f'href="{stats_url}"> Short Name </a>' in content
+    assert f'hx-get="{stats_url}"> Short Name </a>' in content

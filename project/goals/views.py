@@ -38,7 +38,7 @@ class GoalCreate(CreateViewMixin):
     model = models.Goal
     form_class = forms.GoalForm
     template_name = 'goals/goal_form.html'
-    detail_view = GoalDetail
+    hx_trigger_django = 'reload'
 
     def url(self):
         return reverse_lazy('goals:goal_create')
@@ -48,7 +48,7 @@ class GoalUpdate(UpdateViewMixin):
     model = models.Goal
     form_class = forms.GoalForm
     template_name = 'goals/goal_form.html'
-    detail_view = GoalDetail
+    hx_trigger_django = 'reload'
 
     def url(self):
         return reverse_lazy('goals:goal_update', kwargs={'pk': self.kwargs['pk']})
@@ -58,3 +58,4 @@ class GoalDelete(DeleteViewMixin):
     model = models.Goal
     template_name = 'goals/goal_confirm_delete.html'
     success_url = '/'
+    hx_trigger_django = 'reload'
