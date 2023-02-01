@@ -177,8 +177,8 @@ class StatsDetail(DetailViewMixin):
     def get_context_data(self, **kwargs):
         bike_slug = self.kwargs['bike_slug']
         stats_pk = self.kwargs['stats_pk']
-        start_date = utils.date_to_datetime(self.object.start_date)
-        end_date = utils.date_to_datetime(self.object.end_date or date.today())
+        start_date = self.object.start_date
+        end_date = self.object.end_date or date.today()
 
         distance_sum = Data.objects \
             .filter(
