@@ -22,7 +22,7 @@ def sync_update(request):
     if request.method == 'POST' and form.is_valid():
         form.save()
 
-    template = 'users/includes/sync_form.html' if request.htmx else 'users/sync.html'
+    template = 'users/sync.html'
     context = {
         'form': form,
         'password': request.user.garmin_password[:50],
