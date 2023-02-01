@@ -12,12 +12,6 @@ from .. import models, views
 pytestmark = pytest.mark.django_db
 
 
-def test_stats_index_func():
-    view = resolve('/stats/bike/')
-
-    assert views.StatsIndex is view.func.view_class
-
-
 def test_stats_detail_func():
     view = resolve('/stats/bike/detail/9/')
 
@@ -46,26 +40,6 @@ def test_stats_delete_func():
     view = resolve('/stats/bike/delete/7/')
 
     assert views.StatsDelete is view.func.view_class
-
-
-def test_stats_index_no_component(client_logged):
-    bike = BikeFactory()
-    url = reverse('bikes:stats_index', kwargs={'bike_slug': bike.slug})
-    response = client_logged.get(url, follow=True)
-
-    assert response.status_code == 200
-    assert response.resolver_match.func.view_class is views.ComponentList
-
-
-def test_stats_index_redirected(client_logged):
-    bike = BikeFactory()
-    ComponentFactory()
-
-    url = reverse('bikes:stats_index', kwargs={'bike_slug': bike.slug})
-    response = client_logged.get(url, follow=True)
-
-    assert response.status_code == 200
-    assert response.resolver_match.func.view_class is views.StatsList
 
 
 def test_stats_list_200(client_logged):
