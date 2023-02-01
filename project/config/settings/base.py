@@ -63,10 +63,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # ================   GENERAL CONFIGURATION
 LANGUAGE_CODE = 'lt-LT'
-TIME_ZONE = 'Europe/Vilnius'
+TIME_ZONE = 'UTC'
 # USE_I18N = True
 # USE_L10N = True
-# USE_TZ = True
+USE_TZ = True
 
 
 # ================   TEMPLATE CONFIGURATION
