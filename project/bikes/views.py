@@ -177,7 +177,7 @@ class StatsDetail(DetailViewMixin):
         bike_slug = self.kwargs['bike_slug']
         stats_pk = self.kwargs['stats_pk']
         start_date = utils.date_to_datetime(self.object.start_date)
-        end_date = utils.date_to_datetime(self.object.end_date or date.today())
+        end_date = utils.date_to_datetime(self.object.end_date or date.today(), 23, 59, 59)
 
         distance_sum = Data.objects \
             .filter(

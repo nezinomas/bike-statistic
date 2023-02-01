@@ -25,7 +25,7 @@ class DataList(ListViewMixin):
         start_date = self.request.GET.get('start_date') or now - timedelta(20)
         start_date = utils.date_to_datetime(start_date)
         end_date = self.request.GET.get('end_date') or now
-        end_date = utils.date_to_datetime(end_date)
+        end_date = utils.date_to_datetime(end_date, 23, 59, 59)
 
         return self.model.objects.items().filter(date__range=(start_date, end_date))
 
