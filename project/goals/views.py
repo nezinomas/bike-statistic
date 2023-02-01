@@ -21,10 +21,7 @@ class GoalDetail(DetailViewMixin):
 
 
 class GoalList(ListViewMixin):
-    def get_template_names(self):
-        if self.request.htmx:
-            return ['goals/includes/partial_goal_list.html']
-        return ['goals/goal_list.html']
+    template_name = 'goals/goal_list.html'
 
     def get_queryset(self):
         return models.Goal.objects.items()

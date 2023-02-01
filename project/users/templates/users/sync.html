@@ -1,18 +1,38 @@
-{% extends "base.html" %}
+{% extends request.htmx|yesno:"base_htmx.html,base.html" %}
 
-{% block head %}
-<style>
-    .mb-3 {
-        margin-bottom: .5rem!important;
-    }
-</style>
-{% endblock head %}
-
+{% load crispy_forms_tags %}
+{% load slippers %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12" id="tbl-0">
-        {% include 'users/includes/sync_form.html' %}
-    </div>
+
+<div id="sync-form">
+    <form method="post" class="mb-2" novalidate>
+        {% csrf_token %}
+        {{ form.media }}
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for error in form.non_field_errors %}
+            <p {% if forloop.last %} class="mb-0" {% endif %}>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% for field in form %}
+        <div class="row mb-3 align-items-center">
+            <div class="col">{{ field.label_tag }}<br>
+            {{ field|as_crispy_field }}</div>
+        </div>
+        {% endfor %}
+        {% url 'users:sync_update' as url_write %}
+        <div class="form-group">{% save_button label='Update' url=url_write target='sync-form' swap='outerHTML' %}</div>
+    </form>
+    <p class="mt-5">Raw passwords are not stored, so there is no way to see this user's password.</p>
+    <p>{% if password %}<b>Encrypted password:</b> *{{ password }}*
+        {% else %}
+        <b>No password</b>
+        {% endif %}
+    </p>
 </div>
+
 {% endblock content %}

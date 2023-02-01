@@ -26,7 +26,6 @@ urlpatterns = [
         name="component_delete",
     ),
     # ............................................................... Component Statistic
-    path("stats/<slug:bike_slug>/", views.StatsIndex.as_view(), name="stats_index"),
     path(
         "stats/<slug:bike_slug>/<int:component_pk>/",
         views.StatsList.as_view(),
@@ -60,7 +59,7 @@ urlpatterns = [
     path("bike/update/<int:pk>/", views.BikeUpdate.as_view(), name="bike_update"),
     path("bike/delete/<int:pk>/", views.BikeDelete.as_view(), name="bike_delete"),
     # ......................................................................... Bike Info
-    path("info/", views.BikeInfoIndex.as_view(), name="info_index"),
+    path("info/", views.BikeInfoDefaultBike.as_view(), name="info_default"),
     path("info/<slug:bike_slug>/", views.BikeInfoList.as_view(), name="info_list"),
     path(
         "info/<slug:bike_slug>/create/",
