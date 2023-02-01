@@ -42,6 +42,7 @@ class DataForm(FormMixin, forms.ModelForm):
         self.instance.checked = 'y'
         return super().save(commit)
 
+
 class DateFilterForm(forms.Form):
     start_date = forms.DateField(
         widget=DatePickerInput(),
