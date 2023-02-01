@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from bootstrap_datepicker_plus.widgets import DatePickerInput
+from bootstrap_datepicker_plus.widgets import DatePickerInput, DateTimePickerInput
 from crispy_forms.helper import FormHelper
 from django import forms
 from django.utils.timezone import make_aware
@@ -27,7 +27,7 @@ class DataForm(FormMixin, forms.ModelForm):
             'heart_rate',
         ]
         widgets = {
-            'date': DatePickerInput(),
+            'date': DateTimePickerInput(),
         }
 
     def __init__(self, *args, **kwargs):

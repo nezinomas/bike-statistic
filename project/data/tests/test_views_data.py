@@ -1,6 +1,5 @@
 import re
-from datetime import date, datetime, timedelta
-from zoneinfo import ZoneInfo
+from datetime import date, datetime, timedelta, timezone
 
 import pytest
 from django.urls import resolve, reverse
@@ -92,21 +91,21 @@ def test_data_create_not_loged(client):
     assert response.resolver_match.func.view_class is CustomLogin
 
 
-@pytest.mark.freeze_time('2000-2-2')
+@pytest.mark.freeze_time('2000-2-2 5:6:7')
 def test_data_create_load_form(client_logged):
     url = reverse('data:data_create')
     response = client_logged.get(url)
     content = clean_content(response.content)
 
     assert response.status_code == 200
-    assert '<input type="text" name="date" value="2000-02-02"' in content
+    assert '<input type="text" name="date" value="2000-02-02 05:06:07"' in content
 
 
 def test_data_create_data_valid(client_logged):
     bike = BikeFactory()
     data = {
         'bike': str(bike.id),
-        'date': datetime(2000, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius')),
+        'date': datetime(2000, 1, 1, 3, 2, 1),
         'distance': 10.12,
         'time': timedelta(seconds=15),
         'temperature': 1.1,
@@ -132,6 +131,38 @@ def test_data_create_data_valid(client_logged):
     assert '<tr id="row-id-1"' in content
     assert 'hx-get="/data/delete/1/" hx-target="#dialog"' in content
     assert 'hx-get="/data/update/1/" hx-target="#row-id-1"' in content
+
+
+def test_data_create_data_valid_db_object(client_logged, get_user):
+    bike = BikeFactory()
+    data = {
+        'bike': str(bike.id),
+        'date': datetime(2000, 1, 1, 3, 2, 1),
+        'distance': 10.12,
+        'time': timedelta(seconds=15),
+        'temperature': 1.1,
+        'ascent': 600,
+        'descent': 500,
+        'max_speed': 110,
+        'cadence': 120,
+        'heart_rate': 200,
+    }
+    url = reverse('data:data_create')
+    client_logged.post(url, data=data)
+
+    actual = Data.objects.first()
+
+    assert actual.user == get_user
+    assert actual.bike == bike
+    assert actual.date == datetime(2000, 1, 1, 3, 2, 1, tzinfo=timezone.utc)
+    assert actual.distance == 10.12
+    assert actual.time == timedelta(seconds=15)
+    assert actual.temperature == 1.1
+    assert actual.ascent == 600
+    assert actual.descent == 500
+    assert actual.max_speed == 110
+    assert actual.cadence == 120
+    assert actual.heart_rate == 200
 
 
 def test_data_create_data_invalid(client_logged):
@@ -231,7 +262,7 @@ def test_data_update_loaded_form(client_logged):
     content = clean_content(response.content)
 
     assert f'<option value="{obj.bike.pk}" selected>Short Name</option>' in content
-    assert '<input type="text" name="date" value="2000-01-01"' in content
+    assert '<input type="text" name="date" value="2000-01-01 03:02:01"' in content
     assert '<input type="number" name="distance" value="10.0"' in content
     assert '<input type="text" name="time" value="00:16:40"' in content
     assert '<input type="number" name="temperature" value="10.0"' in content
@@ -269,7 +300,40 @@ def test_data_update(client_logged):
     assert '500' in content  # descent
     assert '110' in content  # max_speed
     assert '120' in content  # cadence
-    assert '200' in content  # heart rate
+    assert '200' in content  # heart
+
+
+def test_data_update_bike(client_logged):
+    bike = BikeFactory(short_name='xxx')
+    obj = DataFactory()
+
+    data = {
+        'bike': str(bike.id),
+        'date': obj.date,
+        'distance': obj.distance,
+        'time': obj.time,
+        'temperature': obj.temperature,
+        'ascent': obj.ascent,
+        'descent': obj.descent,
+        'max_speed': obj.max_speed,
+        'cadence': obj.cadence,
+        'heart_rate': obj.heart_rate,
+    }
+
+    url = reverse('data:data_update', kwargs={'pk': obj.pk})
+    client_logged.post(url, data=data)
+    actual = Data.objects.first()
+
+    assert actual.bike == bike
+    assert actual.date == datetime(2000, 1, 1, 3, 2, 1, tzinfo=timezone.utc)
+    assert actual.distance == 10.0
+    assert actual.time == timedelta(seconds=1000)
+    assert actual.temperature == 10.0
+    assert actual.ascent == 100
+    assert actual.descent == 0
+    assert actual.max_speed == 15
+    assert actual.cadence == 85
+    assert actual.heart_rate == 140
 
 
 def test_bike_quick_update_func():
