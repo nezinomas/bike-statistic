@@ -1,21 +1,18 @@
+import contextlib
 from datetime import date
 
 from django.db.models import Sum
-from django.shortcuts import reverse
 from django.urls import reverse_lazy
 
 from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
                                  DetailViewMixin, ListViewMixin,
-                                 RedirectViewMixin, UpdateViewMixin)
+                                 UpdateViewMixin)
 from ..data.models import Data
 from . import forms
 from .lib.component_wear import ComponentWear
 from .models import Bike, BikeInfo, Component, ComponentStatistic
 
 
-# ---------------------------------------------------------------------------------------
-#                                                                                   Bikes
-# ---------------------------------------------------------------------------------------
 class BikeDetail(DetailViewMixin):
     model = Bike
     template_name = 'bikes/includes/partial_bike_row.html'
@@ -33,6 +30,13 @@ class BikeMenuList(ListViewMixin):
 
     def get_queryset(self):
         return Bike.objects.items()
+
+    def get_context_data(self, **kwargs):
+        with contextlib.suppress(Component.DoesNotExist):
+            obj = Component.objects.related().first()
+
+        context = {'component': obj or None}
+        return super().get_context_data(**kwargs) | context
 
 
 class BikeCreate(CreateViewMixin):
@@ -166,18 +170,6 @@ class ComponentDelete(DeleteViewMixin):
 # ---------------------------------------------------------------------------------------
 #                                                         Bike Component Statistic (Wear)
 # ---------------------------------------------------------------------------------------
-class StatsIndex(RedirectViewMixin):
-    def get_redirect_url(self, *args, **kwargs):
-        component = Component.objects.items()[:1]
-        if not component.exists():
-            return reverse('bikes:component_list')
-
-        kwargs = {
-            'bike_slug': self.kwargs['bike_slug'],
-            'component_pk': component[0].pk,}
-        return reverse('bikes:stats_list', kwargs=kwargs)
-
-
 class StatsDetail(DetailViewMixin):
     model = ComponentStatistic
     lookup_url_kwarg = 'stats_pk'
@@ -202,10 +194,7 @@ class StatsDetail(DetailViewMixin):
 
 
 class StatsList(ListViewMixin):
-    def get_template_names(self):
-        if self.request.htmx:
-            return ['bikes/includes/partial_stats_list.html']
-        return ['bikes/stats_list.html']
+    template_name = 'bikes/stats_list.html'
 
     def get_queryset(self):
         return Component.objects.items()

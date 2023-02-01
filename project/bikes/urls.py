@@ -26,7 +26,6 @@ urlpatterns = [
         name="component_delete",
     ),
     # ............................................................... Component Statistic
-    path("stats/<slug:bike_slug>/", views.StatsIndex.as_view(), name="stats_index"),
     path(
         "stats/<slug:bike_slug>/<int:component_pk>/",
         views.StatsList.as_view(),
