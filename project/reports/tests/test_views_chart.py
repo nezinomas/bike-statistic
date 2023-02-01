@@ -3,7 +3,6 @@ from zoneinfo import ZoneInfo
 
 import pytest
 from django.urls import resolve, reverse
-from django.utils import timezone
 from freezegun import freeze_time
 
 from ...bikes.factories import BikeFactory

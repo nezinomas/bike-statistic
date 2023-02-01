@@ -1,8 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 
 from django.urls import reverse_lazy
-from django.utils.timezone import make_aware
 
+from ..core.lib import utils
 from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
                                  DetailViewMixin, ListViewMixin,
                                  TemplateViewMixin, UpdateViewMixin,
@@ -21,9 +21,13 @@ class DataList(ListViewMixin):
     template_name = 'data/data_list.html'
 
     def get_queryset(self):
-        now = make_aware(datetime.now())
+        now = date.today()
         start_date = self.request.GET.get('start_date') or now - timedelta(20)
+        start_date = utils.date_to_datetime(start_date)
+
         end_date = self.request.GET.get('end_date') or now
+        end_date = utils.date_to_datetime(end_date)
+
         return self.model.objects.items().filter(date__range=(start_date, end_date))
 
     def get_context_data(self, **kwargs):
