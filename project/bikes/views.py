@@ -1,9 +1,8 @@
 import contextlib
-from datetime import date, datetime
+from datetime import date
 
 from django.db.models import Sum
 from django.urls import reverse_lazy
-from django.utils.timezone import make_aware
 
 from ..core.lib import utils
 from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
@@ -177,8 +176,8 @@ class StatsDetail(DetailViewMixin):
     def get_context_data(self, **kwargs):
         bike_slug = self.kwargs['bike_slug']
         stats_pk = self.kwargs['stats_pk']
-        start_date = self.object.start_date
-        end_date = self.object.end_date or date.today()
+        start_date = utils.date_to_datetime(self.object.start_date)
+        end_date = utils.date_to_datetime(self.object.end_date or date.today())
 
         distance_sum = Data.objects \
             .filter(
