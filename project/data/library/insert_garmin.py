@@ -10,6 +10,7 @@ from ...bikes.models import Bike
 from ...core.lib import utils
 from ...users.models import User
 from ..models import Data
+from . import garmin_exceptions
 
 
 class SyncWithGarmin():
@@ -34,14 +35,14 @@ class SyncWithGarmin():
                     username=user.garmin_user,
                     password=user.garmin_password
                 )
-            except Exception:  # pylint: disable=broad-except
-                continue
+            except Exception as e:  # pylint: disable=broad-except
+                raise e
 
             self._insert_data(client, user)
 
     def _client(self, username, password):
         if not username or not password:
-            raise Exception('No Garmin user/password entered')
+            raise garmin_exceptions.NoUsernameOrPassword
 
         try:
             client = Garmin(username, utils.decrypt(password))
@@ -50,10 +51,9 @@ class SyncWithGarmin():
             GarminConnectAuthenticationError,
             GarminConnectTooManyRequestsError,
         ) as err:
-            raise Exception(f"Error occured during Garmin Connect Client init: {err}")
-        except Exception:  # pylint: disable=broad-except
-            raise Exception(
-                "Unknown error occured during Garmin Connect Client init")
+            raise garmin_exceptions.GarminConnectClientInitError(err)
+        except Exception:
+            raise garmin_exceptions.GarminConnectClientUknownError
 
         try:
             client.login()
@@ -62,10 +62,9 @@ class SyncWithGarmin():
             GarminConnectAuthenticationError,
             GarminConnectTooManyRequestsError,
         ) as err:
-            raise Exception(f"Error occured during Garmin Connect Client login: {err}")
-        except Exception:  # pylint: disable=broad-except
-            raise Exception(
-                "Unknown error occured during Garmin Connect Client login")
+            raise garmin_exceptions.GarminConnectClientLoginError(err)
+        except Exception:
+            raise garmin_exceptions.GarminConnectClientUknownError
 
         return client
 
@@ -106,7 +105,7 @@ class SyncWithGarmin():
         bike = Bike.objects.filter(user=user).order_by('pk')
 
         if not bike.exists():
-            raise Exception('Add at least one Bike.')
+            raise garmin_exceptions.NoBikeError
 
         _bike = bike.filter(main=True)
         return _bike[0] if _bike.count() > 0 else bike[0]
@@ -119,12 +118,9 @@ class SyncWithGarmin():
             GarminConnectAuthenticationError,
             GarminConnectTooManyRequestsError,
         ) as err:
-            raise Exception(
-                f"Error occured during Garmin Connect Client get activities: {err}"
-            )
-        except Exception:  # pylint: disable=broad-except
-            raise Exception(
-                "Unknown error occured during Garmin Connect Client get activities")
+            raise garmin_exceptions.GetActivitiesError(err)
+        except Exception:
+            raise garmin_exceptions.GetActivitiesUnknownError
 
         return workouts
 
@@ -158,7 +154,6 @@ class GarminActivity():
 
         if self._start_time:
             date = datetime.strptime(self._start_time, "%Y-%m-%d %H:%M:%S")
-
         return date
 
     @property

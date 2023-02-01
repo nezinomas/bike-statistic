@@ -11,8 +11,12 @@ pytestmark = pytest.mark.django_db
 # ---------------------------------------------------------------------------------------
 #                                                                             Filter Form
 # ---------------------------------------------------------------------------------------
-def test_date_filter_form_is_valid(jan_2000):
-    form = DateFilterForm(data=jan_2000)
+def test_date_filter_form_is_valid():
+    data = {
+        'start_date': '2000-01-01',
+        'end_date': '2000-01-31'
+    }
+    form = DateFilterForm(data=data)
 
     assert form.is_valid()
 

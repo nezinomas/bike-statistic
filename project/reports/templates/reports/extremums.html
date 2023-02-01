@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends request.htmx|yesno:"base_htmx.html,base.html" %}
 
 {% block content %}
 

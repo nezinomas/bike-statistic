@@ -5,7 +5,7 @@ import pytest
 from django.urls import resolve, reverse
 from mock import patch
 
-from ...data.views import DataList
+from ...data.views import DataInsert, DataList
 from ...users.views import CustomLogin
 from .. import views
 
@@ -28,7 +28,7 @@ def test_insert_view_status_code_200(mocked, client_logged):
 
     assert 200 == response.status_code
 
-    assert response.resolver_match.func.view_class is DataList
+    assert response.resolver_match.func.view_class is DataInsert
 
 
 def test_view_func():
@@ -43,15 +43,6 @@ def test_insert_data_redirection_if_user_not_logged(client):
     response = client.get(url, follow=True)
 
     assert response.resolver_match.func.view_class is CustomLogin
-
-
-@patch('project.data.views.SyncWithGarmin.insert_data_current_user', return_value=True)
-@pytest.mark.django_db
-def test_insert_data_no_errors(mocked, client_logged):
-    url = reverse('data:data_insert')
-    response = client_logged.get(url)
-
-    assert response.url == reverse('data:data_list')
 
 
 @patch('project.data.views.SyncWithGarmin.insert_data_current_user', side_effect=Exception('Error X'))

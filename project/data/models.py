@@ -22,7 +22,7 @@ class Data(models.Model):
         on_delete=models.CASCADE,
         related_name='bike_set'
     )
-    date = models.DateField(default=now)
+    date = models.DateTimeField(default=now)
     distance = models.FloatField()
     time = models.DurationField()
     temperature = models.FloatField(
