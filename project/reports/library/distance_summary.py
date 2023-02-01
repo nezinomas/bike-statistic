@@ -37,7 +37,8 @@ class DistanceSummary():
         df = (
             self._df
             .groupby('bike')
-            .agg(pl.col('distance').sum()))
+            .agg(pl.col('distance').sum())
+            .sort('bike'))
         return {x['bike']: x['distance'] for x in df.to_dicts()}
 
     @property
