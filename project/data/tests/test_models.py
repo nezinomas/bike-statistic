@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from zoneinfo import ZoneInfo
 
 import pytest
 
@@ -63,8 +64,8 @@ def test_data_bike_summary(get_user):
     DataFactory(bike=b1, date=datetime(3000, 1, 10))
 
     expect = [
-        {'date': date(2000, 1, 1), 'bike': 'B1', 'distance': 10},
-        {'date': date(3000, 1, 1), 'bike': 'B1', 'distance': 20},
+        {'date': datetime(2000, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius')), 'bike': 'B1', 'distance': 10},
+        {'date': datetime(3000, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius')), 'bike': 'B1', 'distance': 20},
     ]
 
     actual = list(Data.objects.bike_summary())
@@ -80,9 +81,9 @@ def test_distance_sum_all_years(get_user):
 
     actual = list(Data.objects.year_distances())
 
-    assert actual[0]['year'] == date(1999, 1, 1)
+    assert actual[0]['year'] == datetime(1999, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius'))
     assert actual[0]['distance'] == 3.0
-    assert actual[1]['year'] == date(2000, 1, 1)
+    assert actual[1]['year'] == datetime(2000, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius'))
     assert actual[1]['distance'] == 30.0
 
 
@@ -94,5 +95,5 @@ def test_distance_sum_one_years(get_user):
 
     actual = list(Data.objects.year_distances(1999))
 
-    assert actual[0]['year'] == date(1999, 1, 1)
+    assert actual[0]['year'] == datetime(1999, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius'))
     assert actual[0]['distance'] == 3.0

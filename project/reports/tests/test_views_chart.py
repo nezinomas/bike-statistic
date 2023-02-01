@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from zoneinfo import ZoneInfo
 
 import pytest
 from django.urls import resolve, reverse
@@ -6,8 +7,8 @@ from django.utils import timezone
 from freezegun import freeze_time
 
 from ...bikes.factories import BikeFactory
-from .. import views
 from ...data.factories import DataFactory
+from .. import views
 
 pytestmark = pytest.mark.django_db
 
@@ -17,9 +18,9 @@ def fixture_data():
     b1 = BikeFactory(short_name='B1', date=date(2000, 1, 1))
     b2 = BikeFactory(short_name='B2', date=date(1999, 1, 1))
 
-    DataFactory(date=date(2000, 1, 1), bike=b1, distance=10.0)
-    DataFactory(date=date(2000, 1, 1), bike=b2, distance=20.0)
-    DataFactory(date=date(2001, 1, 1), bike=b2, distance=35.0)
+    DataFactory(date=datetime(2000, 1, 1), bike=b1, distance=10.0)
+    DataFactory(date=datetime(2000, 1, 1), bike=b2, distance=20.0)
+    DataFactory(date=datetime(2001, 1, 1), bike=b2, distance=35.0)
 
 
 def test_chart_overall_func():
@@ -44,7 +45,7 @@ def test_chart_overall_200(client_logged, data):
 
 @freeze_time('2002-12-31')
 def test_chart_overall_context_years(get_user, client_logged):
-    get_user.date_joined = datetime(1998, 1, 1, tzinfo=timezone.utc)
+    get_user.date_joined = datetime(1998, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius'))
 
     url = reverse('reports:chart_overall')
     response = client_logged.get(url)
