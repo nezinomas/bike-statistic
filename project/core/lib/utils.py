@@ -2,12 +2,33 @@ import base64
 import contextlib
 import logging
 import traceback
-from datetime import datetime
-from typing import List
+from datetime import date, datetime
+from typing import List, Optional
 
 from crequest.middleware import CrequestMiddleware
 from cryptography.fernet import Fernet
 from django.conf import settings
+from django.utils.timezone import make_aware
+
+
+def date_to_datetime(
+        dt: date,
+        hour: Optional[int] = 0,
+        minute: Optional[int] = 0,
+        second: Optional[int] = 0) -> datetime:
+
+    if isinstance(dt, str):
+        year = int(dt[:4])
+        month = int(dt[5:7])
+        day = int(dt[8:])
+
+    if isinstance(dt, date):
+        year = dt.year
+        month = dt.month
+        day = dt.day
+
+    date_ = datetime(year, month, day, hour, minute, second)
+    return make_aware(date_)
 
 
 def get_user():

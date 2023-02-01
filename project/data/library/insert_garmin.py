@@ -154,7 +154,6 @@ class GarminActivity():
 
         if self._start_time:
             date = datetime.strptime(self._start_time, "%Y-%m-%d %H:%M:%S")
-
         return date
 
     @property

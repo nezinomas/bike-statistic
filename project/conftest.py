@@ -45,11 +45,3 @@ def client_logged(client):
 def encrypt_key(monkeypatch):
     mock_func = 'django.conf.settings.ENV'
     monkeypatch.setattr(mock_func, lambda x: "YodhMSc34G6kF-HKTGTwuUapn0IkbPr080Hh3a7tW8k=")
-
-
-@pytest.fixture()
-def jan_2000():
-    return {
-        'start_date': '2000-01-01',
-        'end_date': '2000-01-31'
-    }
