@@ -1,5 +1,4 @@
-from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
+from datetime import datetime, timedelta, timezone
 
 import factory
 
@@ -11,7 +10,7 @@ from .models import Data
 class DataFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     bike = factory.SubFactory(BikeFactory)
-    date = datetime(2000, 1, 1, 3, 2, 1, tzinfo=ZoneInfo('Europe/Vilnius'))
+    date = datetime(2000, 1, 1, 3, 2, 1, tzinfo=timezone.utc)
     distance = 10
     time = timedelta(seconds=(1000))
     ascent = 100

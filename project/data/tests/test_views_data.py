@@ -1,6 +1,5 @@
 import re
-from datetime import date, datetime, timedelta
-from zoneinfo import ZoneInfo
+from datetime import date, datetime, timedelta, timezone
 
 import pytest
 from django.urls import resolve, reverse
@@ -92,21 +91,21 @@ def test_data_create_not_loged(client):
     assert response.resolver_match.func.view_class is CustomLogin
 
 
-@pytest.mark.freeze_time('2000-2-2')
+@pytest.mark.freeze_time('2000-2-2 5:6:7')
 def test_data_create_load_form(client_logged):
     url = reverse('data:data_create')
     response = client_logged.get(url)
     content = clean_content(response.content)
 
     assert response.status_code == 200
-    assert '<input type="text" name="date" value="2000-02-02"' in content
+    assert '<input type="text" name="date" value="2000-02-02 05:06:07"' in content
 
 
 def test_data_create_data_valid(client_logged):
     bike = BikeFactory()
     data = {
         'bike': str(bike.id),
-        'date': datetime(2000, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius')),
+        'date': datetime(2000, 1, 1, 3, 2, 1),
         'distance': 10.12,
         'time': timedelta(seconds=15),
         'temperature': 1.1,
@@ -263,7 +262,7 @@ def test_data_update_loaded_form(client_logged):
     content = clean_content(response.content)
 
     assert f'<option value="{obj.bike.pk}" selected>Short Name</option>' in content
-    assert '<input type="text" name="date" value="2000-01-01"' in content
+    assert '<input type="text" name="date" value="2000-01-01 03:02:01"' in content
     assert '<input type="number" name="distance" value="10.0"' in content
     assert '<input type="text" name="time" value="00:16:40"' in content
     assert '<input type="number" name="temperature" value="10.0"' in content
