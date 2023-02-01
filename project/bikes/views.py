@@ -13,13 +13,12 @@ from ..core.mixins.views import (
     UpdateViewMixin,
 )
 from ..data.models import Data
-from . import forms
+from . import forms, models
 from .lib.component_wear import ComponentWear
-from .models import Bike, BikeInfo, Component, ComponentStatistic
 
 
 class BikeDetail(DetailViewMixin):
-    model = Bike
+    model = models.Bike
     template_name = "bikes/includes/partial_bike_row.html"
 
 
@@ -27,25 +26,25 @@ class BikeList(ListViewMixin):
     template_name = "bikes/bike_list.html"
 
     def get_queryset(self):
-        return Bike.objects.items()
+        return models.Bike.objects.items()
 
 
 class BikeMenuList(ListViewMixin):
     template_name = "bikes/bike_menu.html"
 
     def get_queryset(self):
-        return Bike.objects.items()
+        return models.Bike.objects.items()
 
     def get_context_data(self, **kwargs):
-        with contextlib.suppress(Component.DoesNotExist):
-            obj = Component.objects.related().first()
+        with contextlib.suppress(models.Component.DoesNotExist):
+            obj = models.Component.objects.related().first()
 
         context = {"component": obj or None}
         return super().get_context_data(**kwargs) | context
 
 
 class BikeCreate(CreateViewMixin):
-    model = Bike
+    model = models.Bike
     form_class = forms.BikeForm
     template_name = "bikes/bike_form.html"
     detail_view = BikeDetail
@@ -56,7 +55,7 @@ class BikeCreate(CreateViewMixin):
 
 
 class BikeUpdate(UpdateViewMixin):
-    model = Bike
+    model = models.Bike
     form_class = forms.BikeForm
     template_name = "bikes/bike_form.html"
     detail_view = BikeDetail
@@ -67,7 +66,7 @@ class BikeUpdate(UpdateViewMixin):
 
 
 class BikeDelete(DeleteViewMixin):
-    model = Bike
+    model = models.Bike
     template_name = "bikes/bike_confirm_delete.html"
     success_url = "/"
     hx_trigger_django = "bike_update"
@@ -80,15 +79,17 @@ class BikeInfoList(ListViewMixin):
     template_name = "bikes/info_list.html"
 
     def get_queryset(self):
-        return BikeInfo.objects.items().filter(bike__slug=self.kwargs["bike_slug"])
+        return models.BikeInfo.objects.items().filter(
+            bike__slug=self.kwargs["bike_slug"]
+        )
 
     def get_context_data(self, **kwargs):
-        context = {"bike_list": Bike.objects.items()}
+        context = {"bike_list": models.Bike.objects.items()}
         return super().get_context_data(**kwargs) | context
 
 
 class BikeInfoDetail(DetailViewMixin):
-    model = BikeInfo
+    model = models.BikeInfo
     template_name = "bikes/includes/partial_info_row.html"
 
 
@@ -97,13 +98,13 @@ class BikeInfoDefaultBike(ListViewMixin):
 
     def get_queryset(self):
         return (
-            Bike.objects.related().filter(main=True)[:1]
-            or Bike.objects.related().items()[:1]
+            models.Bike.objects.related().filter(main=True)[:1]
+            or models.Bike.objects.related().items()[:1]
         )
 
 
 class BikeInfoCreate(CreateViewMixin):
-    model = BikeInfo
+    model = models.BikeInfo
     template_name = "bikes/info_form.html"
     detail_view = BikeInfoDetail
 
@@ -118,7 +119,7 @@ class BikeInfoCreate(CreateViewMixin):
 
 
 class BikeInfoUpdate(UpdateViewMixin):
-    model = BikeInfo
+    model = models.BikeInfo
     form_class = forms.BikeInfoForm
     template_name = "bikes/info_form.html"
     detail_view = BikeInfoDetail
@@ -131,7 +132,7 @@ class BikeInfoUpdate(UpdateViewMixin):
 
 
 class BikeInfoDelete(DeleteViewMixin):
-    model = BikeInfo
+    model = models.BikeInfo
     template_name = "bikes/info_confirm_delete.html"
     success_url = "/"
 
@@ -140,7 +141,7 @@ class BikeInfoDelete(DeleteViewMixin):
 #                                                                              Components
 # ---------------------------------------------------------------------------------------
 class ComponentDetail(DetailViewMixin):
-    model = Component
+    model = models.Component
     template_name = "bikes/includes/partial_component_row.html"
 
 
@@ -148,11 +149,11 @@ class ComponentList(ListViewMixin):
     template_name = "bikes/component_list.html"
 
     def get_queryset(self):
-        return Component.objects.items()
+        return models.Component.objects.items()
 
 
 class ComponentCreate(CreateViewMixin):
-    model = Component
+    model = models.Component
     form_class = forms.ComponentForm
     template_name = "bikes/component_form.html"
     detail_view = ComponentDetail
@@ -162,7 +163,7 @@ class ComponentCreate(CreateViewMixin):
 
 
 class ComponentUpdate(UpdateViewMixin):
-    model = Component
+    model = models.Component
     form_class = forms.ComponentForm
     template_name = "bikes/component_form.html"
     detail_view = ComponentDetail
@@ -172,7 +173,7 @@ class ComponentUpdate(UpdateViewMixin):
 
 
 class ComponentDelete(DeleteViewMixin):
-    model = Component
+    model = models.Component
     template_name = "bikes/component_confirm_delete.html"
     success_url = "/"
 
@@ -181,7 +182,7 @@ class ComponentDelete(DeleteViewMixin):
 #                                                         Bike Component Statistic (Wear)
 # ---------------------------------------------------------------------------------------
 class StatsDetail(DetailViewMixin):
-    model = ComponentStatistic
+    model = models.ComponentStatistic
     lookup_url_kwarg = "stats_pk"
     template_name = "bikes/includes/partial_stats_row.html"
 
@@ -208,14 +209,16 @@ class StatsList(ListViewMixin):
     template_name = "bikes/stats_list.html"
 
     def get_queryset(self):
-        return Component.objects.items()
+        return models.Component.objects.items()
 
     def get_context_data(self, **kwargs):
-        bike = Bike.objects.related().get(slug=self.kwargs["bike_slug"])
-        component = Component.objects.related().get(pk=self.kwargs["component_pk"])
+        bike = models.Bike.objects.related().get(slug=self.kwargs["bike_slug"])
+        component = models.Component.objects.related().get(
+            pk=self.kwargs["component_pk"]
+        )
         data = Data.objects.items().filter(bike=bike).values("date", "distance")
 
-        component_statistic = ComponentStatistic.objects.items().filter(
+        component_statistic = models.ComponentStatistic.objects.items().filter(
             bike=bike, component=component
         )
 
@@ -234,7 +237,7 @@ class StatsList(ListViewMixin):
 
 
 class StatsCreate(CreateViewMixin):
-    model = ComponentStatistic
+    model = models.ComponentStatistic
     template_name = "bikes/stats_form.html"
     hx_trigger_django = "reload"
 
@@ -253,7 +256,7 @@ class StatsCreate(CreateViewMixin):
 
 
 class StatsUpdate(UpdateViewMixin):
-    model = ComponentStatistic
+    model = models.ComponentStatistic
     form_class = forms.ComponentStatisticForm
     template_name = "bikes/stats_form.html"
     lookup_url_kwarg = "stats_pk"
@@ -270,7 +273,7 @@ class StatsUpdate(UpdateViewMixin):
 
 
 class StatsDelete(DeleteViewMixin):
-    model = ComponentStatistic
+    model = models.ComponentStatistic
     template_name = "bikes/stats_confirm_delete.html"
     lookup_url_kwarg = "stats_pk"
     success_url = "/"
