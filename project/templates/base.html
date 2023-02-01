@@ -74,12 +74,12 @@
 							<li class="nav-item">
 								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'bikes:bike_list' %}"> Bikes </a>
 							</li>
-							<li class="nav-item" hx-get="{% url 'bikes:info_default' %}" hx-target="this" hx-trigger="load">--</li>
+							<li class="nav-item" hx-get="{% url 'bikes:info_default' %}" hx-target="this" hx-trigger="load"></li>
 							<li class="nav-item">
 								<a class="nav-link" href="{% url 'goals:goal_list' %}"> Goals </a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'bikes:component_list' %}">Components</a>
+								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'bikes:component_list' %}">Components</a>
 							</li>
 						</ul>
 						<!-- Profile -->

@@ -132,10 +132,7 @@ class ComponentDetail(DetailViewMixin):
 
 
 class ComponentList(ListViewMixin):
-    def get_template_names(self):
-        if self.request.htmx:
-            return ['bikes/includes/partial_component_list.html']
-        return ['bikes/component_list.html']
+    template_name = 'bikes/component_list.html'
 
     def get_queryset(self):
         return Component.objects.items()
