@@ -1,8 +1,9 @@
-from datetime import date, timedelta
+from datetime import datetime, timedelta
 
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 from crispy_forms.helper import FormHelper
 from django import forms
+from django.utils.timezone import make_aware
 
 from ..bikes.models import Bike
 from ..core.helpers.form_helpers import set_field_properties
@@ -52,8 +53,9 @@ class DateFilterForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['start_date'].initial = date.today() - timedelta(20)
-        self.fields['end_date'].initial = date.today()
+        now = make_aware(datetime.now())
+        self.fields['start_date'].initial = now - timedelta(20)
+        self.fields['end_date'].initial = now
 
         self.helper = FormHelper()
         set_field_properties(self, self.helper)

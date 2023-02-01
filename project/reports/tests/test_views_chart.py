@@ -18,9 +18,9 @@ def fixture_data():
     b1 = BikeFactory(short_name='B1', date=date(2000, 1, 1))
     b2 = BikeFactory(short_name='B2', date=date(1999, 1, 1))
 
-    DataFactory(date=datetime(2000, 1, 1), bike=b1, distance=10.0)
-    DataFactory(date=datetime(2000, 1, 1), bike=b2, distance=20.0)
-    DataFactory(date=datetime(2001, 1, 1), bike=b2, distance=35.0)
+    DataFactory(date=datetime(2000, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius')), bike=b1, distance=10.0)
+    DataFactory(date=datetime(2000, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius')), bike=b2, distance=20.0)
+    DataFactory(date=datetime(2001, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius')), bike=b2, distance=35.0)
 
 
 def test_chart_overall_func():

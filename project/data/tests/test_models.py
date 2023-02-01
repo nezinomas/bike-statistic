@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import datetime
 from zoneinfo import ZoneInfo
 
 import pytest
@@ -35,7 +35,7 @@ def test_data_items(get_user):
 
 def test_data_items_filtered(get_user):
     DataFactory()
-    DataFactory(date=date(2100, 1, 1))
+    DataFactory(date=datetime(2100, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius')))
 
     assert Data.objects.items(2000).count() == 1
 
@@ -59,9 +59,9 @@ def test_data_bike_summary_user_data(get_user):
 def test_data_bike_summary(get_user):
     b1 = BikeFactory(short_name='B1')
 
-    DataFactory(bike=b1, date=datetime(2000, 1, 10))
-    DataFactory(bike=b1, date=datetime(3000, 1, 10))
-    DataFactory(bike=b1, date=datetime(3000, 1, 10))
+    DataFactory(bike=b1, date=datetime(2000, 1, 10, tzinfo=ZoneInfo('Europe/Vilnius')))
+    DataFactory(bike=b1, date=datetime(3000, 1, 10, tzinfo=ZoneInfo('Europe/Vilnius')))
+    DataFactory(bike=b1, date=datetime(3000, 1, 10, tzinfo=ZoneInfo('Europe/Vilnius')))
 
     expect = [
         {'date': datetime(2000, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius')), 'bike': 'B1', 'distance': 10},
@@ -74,10 +74,10 @@ def test_data_bike_summary(get_user):
 
 
 def test_distance_sum_all_years(get_user):
-    DataFactory(date=datetime(1999, 1, 1), distance=1)
-    DataFactory(date=datetime(1999, 1, 2), distance=2)
-    DataFactory(date=datetime(2000, 1, 1), distance=10)
-    DataFactory(date=datetime(2000, 1, 2), distance=20)
+    DataFactory(date=datetime(1999, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius')), distance=1)
+    DataFactory(date=datetime(1999, 1, 2, tzinfo=ZoneInfo('Europe/Vilnius')), distance=2)
+    DataFactory(date=datetime(2000, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius')), distance=10)
+    DataFactory(date=datetime(2000, 1, 2, tzinfo=ZoneInfo('Europe/Vilnius')), distance=20)
 
     actual = list(Data.objects.year_distances())
 
@@ -88,10 +88,10 @@ def test_distance_sum_all_years(get_user):
 
 
 def test_distance_sum_one_years(get_user):
-    DataFactory(date=datetime(1999, 1, 1), distance=1)
-    DataFactory(date=datetime(1999, 1, 2), distance=2)
-    DataFactory(date=datetime(2000, 1, 1), distance=10)
-    DataFactory(date=datetime(2000, 1, 2), distance=20)
+    DataFactory(date=datetime(1999, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius')), distance=1)
+    DataFactory(date=datetime(1999, 1, 2, tzinfo=ZoneInfo('Europe/Vilnius')), distance=2)
+    DataFactory(date=datetime(2000, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius')), distance=10)
+    DataFactory(date=datetime(2000, 1, 2, tzinfo=ZoneInfo('Europe/Vilnius')), distance=20)
 
     actual = list(Data.objects.year_distances(1999))
 

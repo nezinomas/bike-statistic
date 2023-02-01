@@ -1,5 +1,6 @@
 import re
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
+from zoneinfo import ZoneInfo
 
 import pytest
 from django.urls import resolve, reverse
@@ -105,7 +106,7 @@ def test_data_create_data_valid(client_logged):
     bike = BikeFactory()
     data = {
         'bike': str(bike.id),
-        'date': date(2000, 1, 1),
+        'date': datetime(2000, 1, 1, tzinfo=ZoneInfo('Europe/Vilnius')),
         'distance': 10.12,
         'time': timedelta(seconds=15),
         'temperature': 1.1,
