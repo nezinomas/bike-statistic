@@ -48,25 +48,29 @@ class SyncWithGarmin:
             if not workout.is_valid_activity:
                 continue
 
-            row_exists = (
-                Data.objects.filter(
-                    date=workout.start_time,
-                    distance=workout.distance,
-                    time=workout.duration,
-                    user=user
-                ))
+            row_exists = Data.objects.filter(
+                date=workout.start_time,
+                distance=workout.distance,
+                time=workout.duration,
+                user=user,
+            )
 
             if row_exists:
                 continue
 
             objects.append(
-                Data(user=user, bike=bike, temperature=self._temperature, **workout.data_object)
+                Data(
+                    user=user,
+                    bike=bike,
+                    temperature=self._temperature,
+                    **workout.data_object
+                )
             )
 
         Data.objects.bulk_create(objects)
 
     def _get_bike(self, user):
-        bike = Bike.objects.filter(user=user).order_by('pk')
+        bike = Bike.objects.filter(user=user).order_by("pk")
 
         if not bike.exists():
             raise garmin_exceptions.NoBikeError
