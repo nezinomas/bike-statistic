@@ -23,4 +23,13 @@ class GetActivitiesUnknownError(Exception):
 
 
 class NoBikeError(Exception):
-    """NAdd at least one Bike"""
+    """Add at least one Bike"""
+
+
+class WriteDataToDbError(Exception):
+    """Can't write data to db"""
+
+
+class PrepareDataToDbError(Exception):
+    """Failed prepare workout data for writing into db"""
+

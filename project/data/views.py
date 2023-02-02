@@ -14,6 +14,7 @@ from ..core.mixins.views import (
 )
 from . import forms, models
 from .library.insert_garmin import SyncWithGarmin
+from .library.temperature import Temperature
 
 
 class DataDetail(DetailViewMixin):
@@ -82,7 +83,7 @@ class DataInsert(TemplateViewMixin):
 
     def get(self, *args, **kwargs):
         try:
-            SyncWithGarmin().insert_data_current_user()
+            SyncWithGarmin(Temperature()).insert_data_current_user()
         except Exception as ex:
             self.kwargs["exception"] = ex
         return super().get(self.request, *args, **kwargs)
