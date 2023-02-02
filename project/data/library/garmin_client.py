@@ -7,18 +7,18 @@ from . import garmin_exceptions
 
 
 class GarminClient:
-    def __init__(self, username: str, password: str, client: Garmin):
+    def __init__(self, username: str, password: str):
         try:
-            self.client = self._client(username, password, client)
+            self.client = self._client(username, password)
         except Exception as e:
             raise e
 
-    def _client(self, username, password, client: Garmin):
+    def _client(self, username, password):
         if not username or not password:
             raise garmin_exceptions.NoUsernameOrPassword
 
         try:
-            _client = client(username, utils.decrypt(password))
+            _client = Garmin(username, utils.decrypt(password))
         except (
             GarminConnectConnectionError,
             GarminConnectAuthenticationError,
