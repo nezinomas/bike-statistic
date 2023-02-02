@@ -36,11 +36,12 @@ class SyncWithGarmin:
             try:
                 self._insert_data(user, workouts)
             except Exception as e:
-                raise garmin_exceptions.WriteDataToDbError from e
+                raise garmin_exceptions.WriteDataToDbError(e) from e
 
-    def _insert_data(self, user, workouts):
+    def _insert_data(self, user, workouts: list[GarminActivity]):
         bike = self._get_bike(user)
 
+        objects = []
         for w in workouts:
             workout = GarminActivity(w)
 
@@ -58,19 +59,11 @@ class SyncWithGarmin:
             if row_exists:
                 continue
 
-            Data.objects.create(
-                bike=bike,
-                date=workout.start_time,
-                distance=workout.distance,
-                time=workout.duration,
-                ascent=workout.ascent,
-                descent=workout.descent,
-                max_speed=workout.max_speed,
-                heart_rate=workout.avg_hr,
-                cadence=workout.avg_cadence,
-                temperature=self._temperature,
-                user=user
+            objects.append(
+                Data(user=user, bike=bike, temperature=self._temperature, **workout.data_object)
             )
+
+        Data.objects.bulk_create(objects)
 
     def _get_bike(self, user):
         bike = Bike.objects.filter(user=user).order_by('pk')
