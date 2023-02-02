@@ -30,6 +30,19 @@ class GarminActivity:
         self.avg_cadence = self.data.get('averageBikingCadenceInRevPerMinute')
         self.is_valid_activity = self._is_valid_activity()
 
+    @property
+    def data_object(self):
+        return {
+            'date': self.start_time,
+            'distance': self.distance,
+            'time': self.duration,
+            'ascent': self.ascent,
+            'descent': self.descent,
+            'max_speed': self.max_speed,
+            'cadence': self.avg_cadence,
+            'heart_rate': self.avg_hr
+        }
+
     def _name(self):
         name = (self.data.get('activityType') or {}).get('typeKey')
         return name.lower()

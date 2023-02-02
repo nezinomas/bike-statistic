@@ -130,3 +130,15 @@ def test_avg_cadence_none(data):
     data['averageBikingCadenceInRevPerMinute'] = None
     actual = GarminActivity(data)
     assert not actual.avg_cadence
+
+
+def test_data_object(data):
+    actual = GarminActivity(data).data_object
+    assert actual['date'] == datetime(2023, 1, 24, 17, 41, 30, tzinfo=timezone.utc)
+    assert actual['distance'] == 13.36
+    assert actual['time'] == timedelta(seconds=2996)
+    assert actual['ascent'] == 130
+    assert actual['descent'] == 134
+    assert actual['max_speed'] == 37.02
+    assert actual['cadence'] == 91
+    assert actual['heart_rate'] == 155
