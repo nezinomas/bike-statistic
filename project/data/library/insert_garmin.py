@@ -1,7 +1,9 @@
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 
 import requests
 from bs4 import BeautifulSoup
+from django.utils.timezone import make_aware
 from garminconnect import (Garmin, GarminConnectAuthenticationError,
                            GarminConnectConnectionError,
                            GarminConnectTooManyRequestsError)
@@ -14,8 +16,6 @@ from . import garmin_exceptions
 
 
 class SyncWithGarmin():
-    activities = ('cycling', 'biking', 'commuting')
-
     def __init__(self, max_results=10):
         self._max_results = max_results
         self._temperature = Temperature().temperature
@@ -75,31 +75,33 @@ class SyncWithGarmin():
         for w in workouts:
             workout = GarminActivity(w)
 
-            if any(activity in workout.name.lower() for activity in self.activities):
-                row_exists = (
-                    Data.objects.filter(
-                        date=workout.start_time,
-                        distance=workout.distance,
-                        time=workout.duration,
-                        user=user
-                    ))
+            if not workout.is_valid_activity:
+                continue
 
-                if row_exists:
-                    continue
-
-                Data.objects.create(
-                    bike=bike,
+            row_exists = (
+                Data.objects.filter(
                     date=workout.start_time,
                     distance=workout.distance,
                     time=workout.duration,
-                    ascent=workout.ascent,
-                    descent=workout.descent,
-                    max_speed=workout.max_speed,
-                    heart_rate=workout.avg_hr,
-                    cadence=workout.avg_cadence,
-                    temperature=self._temperature,
                     user=user
-                )
+                ))
+
+            if row_exists:
+                continue
+
+            Data.objects.create(
+                bike=bike,
+                date=workout.start_time,
+                distance=workout.distance,
+                time=workout.duration,
+                ascent=workout.ascent,
+                descent=workout.descent,
+                max_speed=workout.max_speed,
+                heart_rate=workout.avg_hr,
+                cadence=workout.avg_cadence,
+                temperature=self._temperature,
+                user=user
+            )
 
     def _get_bike(self, user):
         bike = Bike.objects.filter(user=user).order_by('pk')
@@ -124,51 +126,61 @@ class SyncWithGarmin():
 
         return workouts
 
-class GarminActivity():
-    name = None
-    ascent = 0
-    descent = 0
-    avg_hr = None
-    avg_cadence = None
 
-    _start_time = None
-    _distance = 0.0
-    _duration = 0
-    _max_speed = 0
+@dataclass
+class GarminActivity:
+    data: dict = field(repr=False)
+    name: str = field(init=False)
+    start_time: datetime = field(init=False)
+    distance: float = field(init=False)
+    duration: timedelta = field(init=False)
+    max_speed: float = field(init=False)
+    ascent: int = field(init=False, default=None)
+    descent: int = field(init=False, default=None)
+    avg_hr: int = field(init=False, default=None)
+    avg_cadence: int = field(init=False, default=None)
+    is_valid_activity: bool = field(init=False, default=False)
 
-    def __init__(self, data):
-        self.name = (data.get('activityType') or {}).get('typeKey')
-        self.ascent = data.get('elevationGain')
-        self.descent = data.get('elevationLoss')
-        self.avg_hr = data.get('averageHR')
-        self.avg_cadence = data.get('averageBikingCadenceInRevPerMinute')
+    def __post_init__(self):
+        self.name = self._name()
+        self.start_time = self._start_time()
+        self.distance = self._distance()
+        self.duration = self._duration()
+        self.max_speed = self._max_speed()
+        self.ascent = self.data.get('elevationGain')
+        self.descent = self.data.get('elevationLoss')
+        self.avg_hr = self.data.get('averageHR')
+        self.avg_cadence = self.data.get('averageBikingCadenceInRevPerMinute')
+        self.is_valid_activity = self._is_valid_activity()
 
-        self._start_time = data.get('startTimeLocal')
-        self._distance = data.get('distance')  # meters
-        self._duration = data.get('duration')  # seconds
-        self._max_speed = data.get('maxSpeed')  # meter/second
+    def _name(self):
+        name = (self.data.get('activityType') or {}).get('typeKey')
+        return name.lower()
 
-    @property
-    def start_time(self):
+    def _start_time(self):
+        """ return datetime object """
         date = datetime.now()
+        if start_time := self.data.get('startTimeLocal'):
+            date = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")
+        return make_aware(date)
 
-        if self._start_time:
-            date = datetime.strptime(self._start_time, "%Y-%m-%d %H:%M:%S")
-        return date
+    def _duration(self):
+        """ return: seconds """
+        return int(duration) if (duration := self.data.get('duration')) else 0
 
-    @property
-    def duration(self):
-        seconds = int(self._duration)
-        return timedelta(seconds=seconds)
+    def _distance(self):
+        """ return: km """
+        return round(self.data.get('distance', 0) / 1000, 2)
 
-    @property
-    def distance(self):
-        return round(self._distance / 1000, 2)
+    def _max_speed(self):
+        """ return: km/h """
+        if speed := self.data.get('maxSpeed'):
+            return round(speed * (3600 / 1000), 2)
+        return 0
 
-    @property
-    def max_speed(self):
-        speed = self._max_speed * (3600 / 1000)
-        return round(speed, 2)
+    def _is_valid_activity(self):
+        activities = ('cycling', 'biking', 'commuting')
+        return any(x in self.name for x in activities)
 
 
 class Temperature():
