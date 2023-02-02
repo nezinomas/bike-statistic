@@ -33,6 +33,7 @@ def fixture_data():
         'endLongitude': 25.223586950451136,
     }
 
+
 @pytest.mark.parametrize(
     'activityType, expect',
     [
