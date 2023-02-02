@@ -82,9 +82,8 @@ class DataInsert(TemplateViewMixin):
     template_name = "data/data_insert.html"
 
     def get(self, *args, **kwargs):
-        temp = Temperature()
         try:
-            SyncWithGarmin(temp).insert_data_current_user()
+            SyncWithGarmin(Temperature()).insert_data_current_user()
         except Exception as ex:
             self.kwargs["exception"] = ex
         return super().get(self.request, *args, **kwargs)

@@ -33,41 +33,38 @@ class SyncWithGarmin:
             except Exception as e:
                 raise e
 
-            try:
-                self._insert_data(user, workouts)
-            except Exception as e:
-                raise garmin_exceptions.WriteDataToDbError(e) from e
+            bike = self._get_bike(user)
+            objects = self._prepare_data(user, workouts)
+            self._insert_data(user, bike, objects)
 
-    def _insert_data(self, user, workouts: list[GarminActivity]):
-        bike = self._get_bike(user)
+    def _prepare_data(self, user, workouts: list[GarminActivity]):
+        activities = [GarminActivity(w) for w in workouts]
+        last = activities[-1].start_time
+        data = list(
+            Data.objects.related()
+            .filter(date__gte=last)
+            .order_by("-date")
+            .values_list("date", "distance", "time")
+        )
 
         objects = []
-        for w in workouts:
-            workout = GarminActivity(w)
-
-            if not workout.is_valid_activity:
+        for activity in activities:
+            if not activity.is_valid_activity:
                 continue
 
-            row_exists = Data.objects.filter(
-                date=workout.start_time,
-                distance=workout.distance,
-                time=workout.duration,
-                user=user,
-            )
-
-            if row_exists:
+            tpl = (activity.start_time, activity.distance, activity.duration)
+            if tpl in data:
                 continue
 
-            objects.append(
-                Data(
-                    user=user,
-                    bike=bike,
-                    temperature=self._temperature,
-                    **workout.data_object
-                )
-            )
+            objects.append(activity.data_object)
+        return objects
 
-        Data.objects.bulk_create(objects)
+    def _insert_data(self, user, bike, objects):
+        data = [
+            Data(user=user, bike=bike, temperature=self._temperature, **x)
+            for x in objects
+        ]
+        Data.objects.bulk_create(data)
 
     def _get_bike(self, user):
         bike = Bike.objects.filter(user=user).order_by("pk")

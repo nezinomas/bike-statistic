@@ -29,3 +29,7 @@ class NoBikeError(Exception):
 class WriteDataToDbError(Exception):
     """Can't write data to db"""
 
+
+class PrepareDataToDbError(Exception):
+    """Failed prepare workout data for writing into db"""
+
