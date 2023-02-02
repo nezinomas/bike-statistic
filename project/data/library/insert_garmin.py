@@ -54,10 +54,10 @@ class SyncWithGarmin():
             GarminConnectConnectionError,
             GarminConnectAuthenticationError,
             GarminConnectTooManyRequestsError,
-        ) as err:
-            raise garmin_exceptions.GarminConnectClientInitError(err)
-        except Exception:
-            raise garmin_exceptions.GarminConnectClientUknownError
+        ) as e:
+            raise garmin_exceptions.GarminConnectClientInitError from e
+        except Exception as e:
+            raise garmin_exceptions.GarminConnectClientUknownError from e
 
         try:
             client.login()
@@ -65,10 +65,10 @@ class SyncWithGarmin():
             GarminConnectConnectionError,
             GarminConnectAuthenticationError,
             GarminConnectTooManyRequestsError,
-        ) as err:
-            raise garmin_exceptions.GarminConnectClientLoginError(err)
-        except Exception:
-            raise garmin_exceptions.GarminConnectClientUknownError
+        ) as e:
+            raise garmin_exceptions.GarminConnectClientLoginError from e
+        except Exception as e:
+            raise garmin_exceptions.GarminConnectClientUknownError from e
 
         return client
 
@@ -123,10 +123,10 @@ class SyncWithGarmin():
             GarminConnectConnectionError,
             GarminConnectAuthenticationError,
             GarminConnectTooManyRequestsError,
-        ) as err:
-            raise garmin_exceptions.GetActivitiesError(err)
-        except Exception:
-            raise garmin_exceptions.GetActivitiesUnknownError
+        ) as e:
+            raise garmin_exceptions.GetActivitiesError from e
+        except Exception as e:
+            raise garmin_exceptions.GetActivitiesUnknownError from e
 
         return workouts
 
