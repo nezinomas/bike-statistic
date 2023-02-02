@@ -35,10 +35,14 @@ class SyncWithGarmin():
                     username=user.garmin_user,
                     password=user.garmin_password
                 )
-            except Exception as e:  # pylint: disable=broad-except
+            except Exception as e:
                 raise e
 
-            self._insert_data(client, user)
+            try:
+                self._insert_data(client, user)
+            except Exception as e:
+                raise garmin_exceptions.WriteDataToDbError from e
+
 
     def _client(self, username, password):
         if not username or not password:
@@ -165,8 +169,9 @@ class GarminActivity:
         return make_aware(date)
 
     def _duration(self):
-        """ return: seconds """
-        return int(duration) if (duration := self.data.get('duration')) else 0
+        """ return: timedelta(seconds) """
+        sec = int(duration) if (duration := self.data.get('duration')) else 0
+        return timedelta(seconds=sec)
 
     def _distance(self):
         """ return: km """

@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import pytest
 
@@ -68,13 +68,13 @@ def test_distance(data):
 
 def test_duration(data):
     actual = GarminActivity(data)
-    assert actual.duration == 2996
+    assert actual.duration == timedelta(seconds=2996)
 
 
 def test_duration_none(data):
     data['duration'] = None
     actual = GarminActivity(data)
-    assert actual.duration == 0
+    assert actual.duration == timedelta(seconds=0)
 
 
 def test_max_speed(data):

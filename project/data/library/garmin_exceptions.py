@@ -23,4 +23,9 @@ class GetActivitiesUnknownError(Exception):
 
 
 class NoBikeError(Exception):
-    """NAdd at least one Bike"""
+    """Add at least one Bike"""
+
+
+class WriteDataToDbError(Exception):
+    """Can't write data to db"""
+
