@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from ..library.insert_garmin import GarminActivity
+from ..library.garmin_activity import GarminActivity
 
 
 @pytest.fixture(name="data")
