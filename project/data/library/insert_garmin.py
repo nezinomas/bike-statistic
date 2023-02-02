@@ -1,24 +1,17 @@
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-
-import requests
-from bs4 import BeautifulSoup
-from django.utils.timezone import make_aware
-from garminconnect import (Garmin, GarminConnectAuthenticationError,
-                           GarminConnectConnectionError,
-                           GarminConnectTooManyRequestsError)
-
 from ...bikes.models import Bike
 from ...core.lib import utils
 from ...users.models import User
 from ..models import Data
 from . import garmin_exceptions
+from .garmin_activity import GarminActivity
+from .garmin_client import GarminClient
+from .temperature import Temperature
 
 
-class SyncWithGarmin():
-    def __init__(self, max_results=10):
-        self._max_results = max_results
-        self._temperature = Temperature().temperature
+class SyncWithGarmin:
+    def __init__(self, temperature: Temperature, client: GarminClient = GarminClient):
+        self._client = client
+        self._temperature = temperature.temperature
 
     def insert_data_current_user(self):
         users = [utils.get_user()]
@@ -31,50 +24,22 @@ class SyncWithGarmin():
     def _inserter(self, users):
         for user in users:
             try:
-                client = self._client(
-                    username=user.garmin_user,
-                    password=user.garmin_password
-                )
+                client = self._client(user.garmin_user, user.garmin_password)
             except Exception as e:
                 raise e
 
             try:
-                self._insert_data(client, user)
+                workouts = client.get_workouts()
+            except Exception as e:
+                raise e
+
+            try:
+                self._insert_data(user, workouts)
             except Exception as e:
                 raise garmin_exceptions.WriteDataToDbError from e
 
-
-    def _client(self, username, password):
-        if not username or not password:
-            raise garmin_exceptions.NoUsernameOrPassword
-
-        try:
-            client = Garmin(username, utils.decrypt(password))
-        except (
-            GarminConnectConnectionError,
-            GarminConnectAuthenticationError,
-            GarminConnectTooManyRequestsError,
-        ) as e:
-            raise garmin_exceptions.GarminConnectClientInitError from e
-        except Exception as e:
-            raise garmin_exceptions.GarminConnectClientUknownError from e
-
-        try:
-            client.login()
-        except (
-            GarminConnectConnectionError,
-            GarminConnectAuthenticationError,
-            GarminConnectTooManyRequestsError,
-        ) as e:
-            raise garmin_exceptions.GarminConnectClientLoginError from e
-        except Exception as e:
-            raise garmin_exceptions.GarminConnectClientUknownError from e
-
-        return client
-
-    def _insert_data(self, client, user):
+    def _insert_data(self, user, workouts):
         bike = self._get_bike(user)
-        workouts = self._get_workouts(client)
 
         for w in workouts:
             workout = GarminActivity(w)
