@@ -6,4 +6,7 @@ omit =
   *tests/*,
   *urls.py,
   *wsgi*,
-  manage.py
+  *conftest*,
+  manage.py,
+  *i18n.py,
+  *factories.py,
