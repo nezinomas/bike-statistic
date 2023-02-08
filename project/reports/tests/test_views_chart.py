@@ -3,6 +3,7 @@ from datetime import date, datetime, timezone
 import pytest
 from django.urls import resolve, reverse
 from freezegun import freeze_time
+from mock import patch
 
 from ...bikes.factories import BikeFactory
 from ...data.factories import DataFactory
@@ -62,8 +63,10 @@ def test_chart_overall_context_bikes(client_logged, data):
     assert list(actual) == ['B2', 'B1']
 
 
-@freeze_time('2001-01-01')
-def test_chart_overall_context_data_table(client_logged, data):
+@patch('project.core.lib.utils.datetime')
+def test_chart_overall_context_data_table(dt_mock, client_logged, data):
+    dt_mock.now.return_value = datetime(2001, 1, 1)
+
     url = reverse('reports:chart_overall')
     response = client_logged.get(url)
 
@@ -81,8 +84,10 @@ def test_chart_overall_context_data_table(client_logged, data):
     assert actual == list(zip(table, total_column))
 
 
-@freeze_time('2001-01-01')
-def test_chart_overall_context_total_value(client_logged, data):
+@patch('project.core.lib.utils.datetime')
+def test_chart_overall_context_total_value(dt_mock, client_logged, data):
+    dt_mock.now.return_value = datetime(2001, 1, 1)
+
     url = reverse('reports:chart_overall')
     response = client_logged.get(url)
 
@@ -91,8 +96,10 @@ def test_chart_overall_context_total_value(client_logged, data):
     assert actual == 65.0
 
 
-@freeze_time('2001-01-01')
-def test_chart_overall_context_chart_data(client_logged, data):
+@patch('project.core.lib.utils.datetime')
+def test_chart_overall_context_chart_data(dt_mock, client_logged, data):
+    dt_mock.now.return_value = datetime(2001, 1, 1)
+
     url = reverse('reports:chart_overall')
     response = client_logged.get(url)
 
@@ -111,6 +118,6 @@ def test_chart_overall_context_chart_data(client_logged, data):
             'borderWidth': '0.5'
         }
     ]
-    actual = response.context['chart_data']
+    actual = response.context['chart_overall_data']['data']
 
     assert actual == expect
