@@ -44,7 +44,7 @@ class ChartOverall(TemplateViewMixin):
 
         context = {
             'year_list': years,
-            'chart_overall_data': {'cagegories': years, 'data': chart_data[::-1]},
+            'chart_overall_data': {'categories': years, 'data': chart_data[::-1]},
             'bikes': bikes,
             'table_data': list(zip(obj.table, obj.total_column)),
             'total_row': obj.total_row,
