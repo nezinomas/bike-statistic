@@ -2,6 +2,7 @@ import re
 from datetime import date
 
 import pytest
+import time_machine
 from django.urls import resolve, reverse
 
 from ...bikes.factories import BikeFactory, ComponentFactory
@@ -101,7 +102,7 @@ def test_bike_detail_links(client_logged):
     assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#dialog" hx-swap="innerHTML">' in actual
 
 
-@pytest.mark.freeze_time('2000-2-2')
+@time_machine.travel('2000-2-2')
 def test_bike_create_load_form(client_logged):
     url = reverse('bikes:bike_create')
     response = client_logged.get(url)

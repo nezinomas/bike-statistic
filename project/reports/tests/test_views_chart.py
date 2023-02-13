@@ -1,8 +1,8 @@
 from datetime import date, datetime, timezone
 
 import pytest
+import time_machine
 from django.urls import resolve, reverse
-from freezegun import freeze_time
 from mock import patch
 
 from ...bikes.factories import BikeFactory
@@ -42,7 +42,7 @@ def test_chart_overall_200(client_logged, data):
     assert response.status_code == 200
 
 
-@freeze_time('2002-12-31')
+@time_machine.travel('2002-12-31')
 def test_chart_overall_context_years(get_user, client_logged):
     get_user.date_joined = datetime(1998, 1, 1, tzinfo=timezone.utc)
 
@@ -63,10 +63,8 @@ def test_chart_overall_context_bikes(client_logged, data):
     assert list(actual) == ['B2', 'B1']
 
 
-@patch('project.core.lib.utils.datetime')
-def test_chart_overall_context_data_table(dt_mock, client_logged, data):
-    dt_mock.now.return_value = datetime(2001, 1, 1)
-
+@time_machine.travel('2001-1-1')
+def test_chart_overall_context_data_table(client_logged, data):
     url = reverse('reports:chart_overall')
     response = client_logged.get(url)
 
@@ -84,10 +82,8 @@ def test_chart_overall_context_data_table(dt_mock, client_logged, data):
     assert actual == list(zip(table, total_column))
 
 
-@patch('project.core.lib.utils.datetime')
-def test_chart_overall_context_total_value(dt_mock, client_logged, data):
-    dt_mock.now.return_value = datetime(2001, 1, 1)
-
+@time_machine.travel('2001-1-1')
+def test_chart_overall_context_total_value(client_logged, data):
     url = reverse('reports:chart_overall')
     response = client_logged.get(url)
 
@@ -96,10 +92,8 @@ def test_chart_overall_context_total_value(dt_mock, client_logged, data):
     assert actual == 65.0
 
 
-@patch('project.core.lib.utils.datetime')
-def test_chart_overall_context_chart_data(dt_mock, client_logged, data):
-    dt_mock.now.return_value = datetime(2001, 1, 1)
-
+@time_machine.travel('2001-1-1')
+def test_chart_overall_context_chart_data(client_logged, data):
     url = reverse('reports:chart_overall')
     response = client_logged.get(url)
 

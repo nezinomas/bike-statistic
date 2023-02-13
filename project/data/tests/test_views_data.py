@@ -2,6 +2,7 @@ import re
 from datetime import date, datetime, timedelta, timezone
 
 import pytest
+import time_machine
 from django.urls import resolve, reverse
 
 from ...bikes.factories import BikeFactory
@@ -66,7 +67,7 @@ def test_data_list_not_loged(client):
     assert response.resolver_match.func.view_class is CustomLogin
 
 
-@pytest.mark.freeze_time('2000-01-20')
+@time_machine.travel('2000-01-20')
 def test_data_list_user_items(client_logged):
     DataFactory()
     DataFactory(user=UserFactory(username='xxx'))
@@ -91,7 +92,7 @@ def test_data_create_not_loged(client):
     assert response.resolver_match.func.view_class is CustomLogin
 
 
-@pytest.mark.freeze_time('2000-2-2 5:6:7')
+@time_machine.travel(datetime(2000, 2, 2, 5, 6, 7, tzinfo=timezone.utc))
 def test_data_create_load_form(client_logged):
     url = reverse('data:data_create')
     response = client_logged.get(url)
