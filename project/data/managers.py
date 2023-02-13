@@ -6,8 +6,8 @@ from ..core.lib import utils
 
 
 class DataQuerySet(models.QuerySet):
-    def related(self):
-        user = utils.get_user()
+    def related(self, user=None):
+        user = user if user else utils.get_user()
         return (
             self
             .select_related('user', 'bike')

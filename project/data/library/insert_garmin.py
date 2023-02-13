@@ -41,7 +41,7 @@ class SyncWithGarmin:
         activities = [GarminActivity(w) for w in workouts]
         last = activities[-1].start_time
         data = list(
-            Data.objects.related()
+            Data.objects.related(user)
             .filter(date__gte=last)
             .order_by("-date")
             .values_list("date", "distance", "time")
