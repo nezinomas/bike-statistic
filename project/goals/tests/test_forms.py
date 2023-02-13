@@ -1,5 +1,5 @@
 import pytest
-from freezegun import freeze_time
+import time_machine
 
 from ...users.factories import UserFactory
 from ..forms import GoalForm
@@ -20,7 +20,7 @@ def test_goal_init_fields(get_user):
     assert '<select name="user"' not in form
 
 
-@freeze_time('2001-01-01')
+@time_machine.travel('2001-01-01')
 def test_goal_year_initial_value(get_user):
     UserFactory()
 

@@ -1,8 +1,8 @@
 from datetime import date
 
 import pytest
+import time_machine
 from django.forms.models import model_to_dict
-from freezegun import freeze_time
 
 from ...bikes.factories import BikeFactory, ComponentFactory
 from ...users.factories import UserFactory
@@ -32,7 +32,7 @@ def test_bike_init_fields(get_user):
     assert '<select name="slug"' not in form
 
 
-@freeze_time('2001-01-01')
+@time_machine.travel('2001-01-01')
 def test_bike_date_initial_value(get_user):
     UserFactory()
 
