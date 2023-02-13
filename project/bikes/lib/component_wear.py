@@ -59,7 +59,7 @@ class ComponentWear:
     def bike_km(self):
         try:
             km = self._data.select(pl.col('distance').sum())[0,0]
-        except (AttributeError, pl.exceptions.NotFoundError):
+        except (AttributeError, pl.exceptions.ColumnNotFoundError):
             km = 0
         return km
 
