@@ -5,31 +5,28 @@ $(function () {
     Highcharts.setOptions({
         lang: {
             thousandsSep: '.',
-            decimalPoint: ',',
+            decimalPoint: '.',
         }
     });
     Highcharts.chart("chart-overall", {
-        chart : { type: 'column'},
+        chart : {
+            type: 'column'
+        },
         xAxis: {
             categories: chartData.categories,
         },
-        margin: 0,
         title: {
             text: ''
         },
         yAxis: {
-            min: 0,
-            title: {
-                text: 'km, thousants'
-            },
+            title: '',
         },
         legend: {
-            align: 'right',
-            verticalAlign: 'middle',
+            align: 'center',
+            verticalAlign: 'bottom',
             shadow: false,
             reversed: true,
-            layout: 'vertical',
-            itemMarginBottom: 10
+            layout: 'horizontal',
         },
         tooltip: {
             pointFormat: '{point.y:,.0f}',
