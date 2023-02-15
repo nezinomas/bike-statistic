@@ -10,7 +10,8 @@ $(function () {
     });
     Highcharts.chart("chart-overall", {
         chart : {
-            type: 'column'
+            type: 'column',
+            spacingRight: 0,
         },
         xAxis: {
             categories: chartData.categories,
@@ -20,6 +21,7 @@ $(function () {
         },
         yAxis: {
             title: '',
+            opposite: true,
         },
         legend: {
             align: 'center',
