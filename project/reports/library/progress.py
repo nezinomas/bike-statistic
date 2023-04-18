@@ -82,7 +82,7 @@ class Progress:
         return df.collect().to_dicts()
 
     def _progress_season(self, df: pl.DataFrame) -> pl.Expr:
-        day_of_year = pl.col("date").dt.day()
+        day_of_year = pl.col("date").dt.ordinal_day()
         return df.with_columns(
             season_distance=pl.col("distance").cumsum(),
             season_seconds=pl.col("seconds").cumsum(),
