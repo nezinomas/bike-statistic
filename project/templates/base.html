@@ -33,20 +33,20 @@
 						<h6 class="side-bar"> Data </h6>
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'index' %}"> View </a>
+								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'index' %}" hx-indicator="#indicator"> View </a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-indicator="#indicator" hx-get="{% url 'data:data_insert' %}"> Update </a>
+								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'data:data_insert' %}" hx-indicator="#indicator"> Update </a>
 							</li>
 						</ul>
 						<!-- Charts -->
 						<h6 class="side-bar"> Statistic </h6>
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'reports:chart_overall' %}"> Charts </a>
+								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'reports:chart_overall' %}" hx-indicator="#indicator"> Charts </a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'reports:extremums' %}"> Extremums </a>
+								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'reports:extremums' %}" hx-indicator="#indicator"> Extremums </a>
 							</li>
 						</ul>
 						<!-- Stats and Goals -->
@@ -55,35 +55,35 @@
 							{% for item in years %}
 							{% if forloop.counter < 6 %}
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-indicator="#indicator" hx-get="{% url 'reports:year_progress' item %}"> {{ item }} </a>
+								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'reports:year_progress' item %}" hx-indicator="#indicator"> {{ item }} </a>
 							</li>
 							{% endif %}
 							{% endfor %}
 						</ul>
 						<!-- Component wear -->
 						<h6 class="side-bar"> Component wear </h6>
-						<ul class="nav flex-column" hx-get="{% url 'bikes:bike_menu' %}" hx-target="this" hx-trigger="load, bike_update from:body">
+						<ul class="nav flex-column" hx-get="{% url 'bikes:bike_menu' %}" hx-target="this" hx-trigger="load, bike_update from:body" hx-indicator="#indicator">
 
 						</ul>
 						<!-- Settings -->
 						<h6 class="side-bar"> Settings </h6>
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'bikes:bike_list' %}"> Bikes </a>
+								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'bikes:bike_list' %}" hx-indicator="#indicator"> Bikes </a>
 							</li>
-							<li class="nav-item" hx-get="{% url 'bikes:info_default' %}" hx-target="this" hx-trigger="load"></li>
+							<li class="nav-item" hx-get="{% url 'bikes:info_default' %}" hx-target="this" hx-trigger="load" hx-indicator="#indicator"></li>
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'goals:goal_list' %}"> Goals </a>
+								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'goals:goal_list' %}" hx-indicator="#indicator"> Goals </a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'bikes:component_list' %}">Components</a>
+								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'bikes:component_list' %}" hx-indicator="#indicator">Components</a>
 							</li>
 						</ul>
 						<!-- Profile -->
 						<h6 class="side-bar"> Profile </h6>
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'users:sync_update' %}"> Garmin </a>
+								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'users:sync_update' %}" hx-indicator="#indicator"> Garmin </a>
 							</li>
 						</ul>
 						<ul class="nav flex-column">
