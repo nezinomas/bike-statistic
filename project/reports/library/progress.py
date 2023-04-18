@@ -61,7 +61,7 @@ class Progress:
             .with_columns((pl.col("date").dt.year()).alias("year"))
             .groupby("year")
             .agg(list(it.chain.from_iterable(_agg)))
-            .sort(pl.col("year"), reverse=True)
+            .sort(pl.col("year"), descending=True)
         )
         dicts = df.collect().to_dicts()
         return dicts[0] if self._year else dicts
@@ -77,7 +77,7 @@ class Progress:
             .pipe(self._progress_month)
             .pipe(self._progress_goals)
             .pipe(self._progress_dtypes)
-            .sort("date", reverse=True)
+            .sort("date", descending=True)
         )
         return df.collect().to_dicts()
 
