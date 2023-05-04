@@ -15,6 +15,11 @@ $(function () {
         },
         xAxis: {
             categories: chartData.categories,
+            labels: {
+                style: {
+                    fontSize: '10px',
+                },
+            }
         },
         title: {
             text: ''
@@ -22,6 +27,11 @@ $(function () {
         yAxis: {
             title: '',
             opposite: true,
+            labels: {
+                style: {
+                    fontSize: '10px',
+                },
+            }
         },
         legend: {
             align: 'center',
@@ -41,6 +51,7 @@ $(function () {
         plotOptions: {
             column: {
                 stacking: 'normal',
+                borderRadius: 0,
             }
         },
         series: chartData.data,
