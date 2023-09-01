@@ -4,7 +4,7 @@ from ...data.library.insert_garmin import SyncWithGarmin
 from ...data.library.temperature import Temperature
 
 
-class Command(BaseCommand):
+class Cron(BaseCommand):
     help = "Closes the specified poll for voting"
 
     def handle(self, *args, **options):
