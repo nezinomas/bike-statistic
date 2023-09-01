@@ -7,9 +7,7 @@ TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = ENV.list("ALLOWED_HOSTS")
 
 
-INSTALLED_APPS += [
-    'django_crontab',
-]
+INSTALLED_APPS += []
 
 TEMPLATES[0]['OPTIONS']['loaders'] = [
     ['django.template.loaders.cached.Loader', [
@@ -28,11 +26,6 @@ SECURE_SSL_REDIRECT = True
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = 'DENY'
-
-
-CRONJOBS = [
-    ('5,35 * * * *', 'project.data.cron.cron_insert_from_garmin', '> /dev/null 2>&1'),
-]
 
 
 LOGGING = {
