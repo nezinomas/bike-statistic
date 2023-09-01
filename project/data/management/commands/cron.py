@@ -1,10 +1,10 @@
 from django.core.management.base import BaseCommand
 
-from ...data.library.insert_garmin import SyncWithGarmin
-from ...data.library.temperature import Temperature
+from ...library.insert_garmin import SyncWithGarmin
+from ...library.temperature import Temperature
 
 
-class Cron(BaseCommand):
+class Command(BaseCommand):
     help = "Closes the specified poll for voting"
 
     def handle(self, *args, **options):
