@@ -15,7 +15,6 @@ class Command(BaseCommand):
         except Exception as e:
             raise CommandError(f"Can't sync with Garmin - {e}")
 
-
         self.stdout.write(
             self.style.SUCCESS(f"{datetime.now()}: successfully get Garmin activities")
         )
