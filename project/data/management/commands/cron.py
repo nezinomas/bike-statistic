@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.core.management.base import BaseCommand, CommandError
 
 from ...library.insert_garmin import SyncWithGarmin
@@ -15,5 +17,5 @@ class Command(BaseCommand):
 
 
         self.stdout.write(
-            self.style.SUCCESS("Successfully get Garmin activities")
+            self.style.SUCCESS(f"{datetime.now()}: successfully get Garmin activities")
         )
