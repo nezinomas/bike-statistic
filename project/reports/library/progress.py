@@ -59,7 +59,7 @@ class Progress:
             .select(["date", "ascent", "temp", "speed", "distance"])
             .with_columns(pl.col("temp").fill_null(0))
             .with_columns((pl.col("date").dt.year()).alias("year"))
-            .groupby("year")
+            .group_by("year")
             .agg(list(it.chain.from_iterable(_agg)))
             .sort(pl.col("year"), descending=True)
         )
@@ -84,9 +84,9 @@ class Progress:
     def _progress_season(self, df: pl.DataFrame) -> pl.Expr:
         day_of_year = pl.col("date").dt.ordinal_day()
         return df.with_columns(
-            season_distance=pl.col("distance").cumsum(),
-            season_seconds=pl.col("seconds").cumsum(),
-            season_ascent=pl.col("ascent").cumsum(),
+            season_distance=pl.col("distance").cum_sum(),
+            season_seconds=pl.col("seconds").cum_sum(),
+            season_ascent=pl.col("ascent").cum_sum(),
         ).with_columns(
             season_per_day=pl.col("season_distance") / day_of_year,
             season_speed=self._speed("season_distance", "season_seconds"),
@@ -98,7 +98,7 @@ class Progress:
         return (
             df.with_columns(
                 month=month,
-                monthlen=month.apply(lambda x: calendar.monthrange(self._year, x)[1]),
+                monthlen=month.map_elements(lambda x: calendar.monthrange(self._year, x)[1]),
             )
             .with_columns(
                 month_seconds=pl.col("seconds").sum().over("month"),
@@ -161,7 +161,7 @@ class Progress:
 
         df = (
             df.lazy()
-            .with_columns(pl.col("time").dt.seconds().alias("seconds"))
+            .with_columns(pl.col("time").dt.total_seconds().alias("seconds"))
             .with_columns(self._speed("distance", "seconds").alias("speed"))
             .with_columns(self._build_dtypes())
         ).collect()

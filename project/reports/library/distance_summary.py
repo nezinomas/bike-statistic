@@ -24,7 +24,7 @@ class DistanceSummary():
 
         df = (
             self._df
-            .groupby('year')
+            .group_by('year')
             .agg(pl.col('distance').sum())
             .sort('year'))
         df = df.rename({'distance': 'total'})
@@ -36,7 +36,7 @@ class DistanceSummary():
             return {}
         df = (
             self._df
-            .groupby('bike')
+            .group_by('bike')
             .agg(pl.col('distance').sum())
             .sort('bike'))
         return {x['bike']: x['distance'] for x in df.to_dicts()}
