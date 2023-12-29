@@ -14,7 +14,7 @@ class DistanceSummary():
         arr =  self._df.to_dicts()
         return [
             {'year': title} | {x['bike']: x['distance'] for x in group}
-            for title, group in it.group_by(arr, key=operator.itemgetter("year"))
+            for title, group in it.groupby(arr, key=operator.itemgetter("year"))
         ]
 
     @property
