@@ -59,7 +59,7 @@ class Progress:
             .select(["date", "ascent", "temp", "speed", "distance"])
             .with_columns(pl.col("temp").fill_null(0))
             .with_columns((pl.col("date").dt.year()).alias("year"))
-            .groupby("year")
+            .group_by("year")
             .agg(list(it.chain.from_iterable(_agg)))
             .sort(pl.col("year"), descending=True)
         )
