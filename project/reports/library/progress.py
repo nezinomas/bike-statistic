@@ -84,9 +84,9 @@ class Progress:
     def _progress_season(self, df: pl.DataFrame) -> pl.Expr:
         day_of_year = pl.col("date").dt.ordinal_day()
         return df.with_columns(
-            season_distance=pl.col("distance").cumsum(),
-            season_seconds=pl.col("seconds").cumsum(),
-            season_ascent=pl.col("ascent").cumsum(),
+            season_distance=pl.col("distance").cum_sum(),
+            season_seconds=pl.col("seconds").cum_sum(),
+            season_ascent=pl.col("ascent").cum_sum(),
         ).with_columns(
             season_per_day=pl.col("season_distance") / day_of_year,
             season_speed=self._speed("season_distance", "season_seconds"),
