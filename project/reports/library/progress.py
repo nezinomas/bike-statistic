@@ -98,7 +98,7 @@ class Progress:
         return (
             df.with_columns(
                 month=month,
-                monthlen=month.apply(lambda x: calendar.monthrange(self._year, x)[1]),
+                monthlen=month.map_elements(lambda x: calendar.monthrange(self._year, x)[1]),
             )
             .with_columns(
                 month_seconds=pl.col("seconds").sum().over("month"),
