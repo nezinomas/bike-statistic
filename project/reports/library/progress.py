@@ -161,7 +161,7 @@ class Progress:
 
         df = (
             df.lazy()
-            .with_columns(pl.col("time").dt.seconds().alias("seconds"))
+            .with_columns(pl.col("time").dt.total_seconds().alias("seconds"))
             .with_columns(self._speed("distance", "seconds").alias("speed"))
             .with_columns(self._build_dtypes())
         ).collect()
