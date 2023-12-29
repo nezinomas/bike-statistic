@@ -1,7 +1,7 @@
 {% if component %}
 {% for bike in object_list %}
 <li class="nav-item">
-	<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'bikes:stats_list' bike.slug component.pk %}"> {{ bike.short_name }}
+	<a class="nav-link" href="{% url 'bikes:stats_list' bike.slug component.pk %}"> {{ bike.short_name }}
 		 {% if bike.main %}<i class="bi bi-star ps-1" style="color:rgb(4, 196, 4);"></i>{% endif %}
 		 {% if bike.retired %}<i class="bi bi-dash-circle ps-1" style="color:rgb(230, 1, 1)"></i>{% endif %}
 	</a>

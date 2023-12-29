@@ -33,7 +33,7 @@
 						<h6 class="side-bar"> Data </h6>
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'index' %}" hx-indicator="#indicator"> View </a>
+								<a class="nav-link" href="{% url 'index' %}"> View </a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'data:data_insert' %}" hx-indicator="#indicator"> Update </a>
@@ -43,10 +43,10 @@
 						<h6 class="side-bar"> Statistic </h6>
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'reports:chart_overall' %}" hx-indicator="#indicator"> Charts </a>
+								<a class="nav-link" href="{% url 'reports:chart_overall' %}"> Charts </a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'reports:extremums' %}" hx-indicator="#indicator"> Extremums </a>
+								<a class="nav-link" href="{% url 'reports:extremums' %}"> Extremums </a>
 							</li>
 						</ul>
 						<!-- Stats and Goals -->
@@ -55,7 +55,7 @@
 							{% for item in years %}
 							{% if forloop.counter < 6 %}
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'reports:year_progress' item %}" hx-indicator="#indicator"> {{ item }} </a>
+								<a class="nav-link" href="{% url 'reports:year_progress' item %}"> {{ item }} </a>
 							</li>
 							{% endif %}
 							{% endfor %}
@@ -69,21 +69,21 @@
 						<h6 class="side-bar"> Settings </h6>
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'bikes:bike_list' %}" hx-indicator="#indicator"> Bikes </a>
+								<a class="nav-link" href="{% url 'bikes:bike_list' %}"> Bikes </a>
 							</li>
-							<li class="nav-item" hx-get="{% url 'bikes:info_default' %}" hx-target="this" hx-trigger="load" hx-indicator="#indicator"></li>
+							<li class="nav-item" href="{% url 'bikes:info_default' %}"></li>
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'goals:goal_list' %}" hx-indicator="#indicator"> Goals </a>
+								<a class="nav-link" href="{% url 'goals:goal_list' %}"> Goals </a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'bikes:component_list' %}" hx-indicator="#indicator">Components</a>
+								<a class="nav-link" href="{% url 'bikes:component_list' %}"> Components </a>
 							</li>
 						</ul>
 						<!-- Profile -->
 						<h6 class="side-bar"> Profile </h6>
 						<ul class="nav flex-column">
 							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'users:sync_update' %}" hx-indicator="#indicator"> Garmin </a>
+								<a class="nav-link" href="{% url 'users:sync_update' %}"> Garmin </a>
 							</li>
 						</ul>
 						<ul class="nav flex-column">
