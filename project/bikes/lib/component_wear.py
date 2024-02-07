@@ -22,11 +22,11 @@ class ComponentWear:
         stats = (
             stats
             .with_columns([
-                pl.col('start_date').cast(pl.Date),
-                pl.col('end_date').cast(pl.Date),
+                pl.col('start_date').cast(pl.Datetime),
+                pl.col('end_date').cast(pl.Datetime),
             ])
             .with_columns(
-                pl.col('end_date').fill_null(datetime.now().date())
+                pl.col('end_date').fill_null(datetime.now())
             )
         )
         return stats
