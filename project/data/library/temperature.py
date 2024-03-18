@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 
 class Temperature():
-    _url = 'https://www.gismeteo.lt/weather-vilnius-4230/now/'
+    _url = 'https://meteofor.lt/weather-vilnius-4230/now/'
 
     def __init__(self):
         try:
@@ -19,7 +19,8 @@ class Temperature():
         page = self._get_weather_page()
         soup = BeautifulSoup(page, 'html.parser')
 
-        element = soup.find('span', {'class': 'unit_temperature_c'})
+        if element := soup.find('div', {'class': 'now-weather'}):
+            element = element.find("span" , {'class': 'unit-temperature'})
 
         temperature = element.text
         temperature = temperature.replace(',', '.')
