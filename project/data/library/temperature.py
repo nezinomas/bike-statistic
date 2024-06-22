@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 
 class Temperature():
-    _url = 'https://www.gismeteo.lt/weather-vilnius-4230/now/'
+    _url = 'https://meteofor.lt/weather-vilnius-4230/now/'
 
     def __init__(self):
         try:
