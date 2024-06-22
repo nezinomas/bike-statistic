@@ -19,9 +19,9 @@ class Temperature():
         page = self._get_weather_page()
         soup = BeautifulSoup(page, 'html.parser')
 
-        element = soup.find('span', {'class': 'unit_temperature_c'})
+        element = soup.find("temperature-value")
 
-        temperature = element.text
+        temperature = element["value"]
         temperature = temperature.replace(',', '.')
         temperature = temperature.replace('−', '-')
 
