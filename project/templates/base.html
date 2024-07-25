@@ -1,4 +1,6 @@
-{% load static %}<!DOCTYPE html>
+{% load static %}
+{% load template_filters %}
+<!DOCTYPE html>
 <html lang="lt">
   <head>
     <meta charset="utf-8">
@@ -35,19 +37,23 @@
 		</div>
 
 		<!-- Charts and Statistic -->
-		<div {% if '/' == request.path %}class="active"{% endif %}>
-			<a href="{% url 'reports:chart_overall' %}">Statistic</a>
+		{% url 'reports:chart_overall' as url_chart_overall %}
+		{% url 'reports:extremums' as url_extremums %}
+		{% to_list url_chart_overall url_extremums as url_list_statistic %}
+
+		<div {% if request.path in url_list_statistic  %}class="active"{% endif %}>
+			<a href="{{url_chart_overall}}">Statistic</a>
 			<div class="dropdown">
 				<button class="dropdown__btn"></button>
 				<div class="dropdown__menu">
-					<a href="{% url 'reports:chart_overall' %}">Charts</a>
-					<a href="{% url 'reports:extremums' %}">Extremums</a>
+					<a href="{{url_chart_overall}}">Charts</a>
+					<a href="{{url_extremums}}">Extremums</a>
 				</div>
 			</div>
 		</div>
 
 		<!-- Statistics with Goals -->
-		<div {% if '/' == request.path %}class="active"{% endif %}>
+		<div {% if request.resolver_match.url_name == 'year_progress' %}class="active"{% endif %}>
 			<a href="{% url 'reports:year_progress' years.0 %}">Year progress</a>
 			<div class="dropdown">
 				<button class="dropdown__btn"></button>
@@ -60,7 +66,7 @@
 		</div>
 
 		<!-- Component wear -->
-		<div {% if '/' == request.path %}class="active"{% endif %}>
+		<div {% if request.resolver_match.url_name == 'stats_list' %}class="active"{% endif %}>
 			<a href="{% url 'bikes:stats_redirect' default_bike %}">Component wear</a>
 			<div class="dropdown">
 				<button class="dropdown__btn"></button>
@@ -76,21 +82,26 @@
 		</div>
 
 		<!-- Settings -->
-		<div {% if '/' == request.path %}class="active"{% endif %}>
-			<a href="{% url 'bikes:bike_list' %}">Settings</a>
+		{% url 'bikes:bike_list' as url_bike_list %}
+		{% url 'goals:goal_list' as url_goal_list %}
+		{% url 'bikes:component_list' as url_component_list %}
+		{% url 'users:sync_update' as url_garmin %}
+		{% to_list url_bike_list url_goal_list url_component_list url_garmin as url_list_settings %}
+		<div {% if request.path in url_list_settings %}class="active"{% endif %}>
+			<a href="{{url_bike_list}}">Settings</a>
 			<div class="dropdown">
 				<button class="dropdown__btn"></button>
 				<div class="dropdown__menu">
-					<a href="{% url 'bikes:bike_list' %}">Bikes</a>
-					<a href="{% url 'goals:goal_list' %}">Goals</a>
-					<a href="{% url 'bikes:component_list' %}">Components</a>
-					<a href="{% url 'users:sync_update' %}">Garmin Profile</a>
+					<a href="{{url_bike_list}}">Bikes</a>
+					<a href="{{url_goal_list}}">Goals</a>
+					<a href="{{url_component_list}}">Components</a>
+					<a href="{{url_garmin}}">Garmin Profile</a>
 				</div>
 			</div>
 		</div>
 
 		<!-- Profile -->
-		<div {% if '/' == request.path %}class="active"{% endif %}>
+		<div>
 			<a href="{% url 'users:logout' %}">Profile</a>
 			<div class="dropdown">
 				<button class="dropdown__btn"></button>
