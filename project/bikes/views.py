@@ -181,6 +181,21 @@ class ComponentDelete(DeleteViewMixin):
 # ---------------------------------------------------------------------------------------
 #                                                         Bike Component Statistic (Wear)
 # ---------------------------------------------------------------------------------------
+class StatsRedirect(RedirectViewMixin):
+    def get_redirect_url(self, *args, **kwargs):
+        default_url = reverse_lazy("index")
+
+        bike = self.kwargs.get("bike_slug")
+        if not bike:
+            return default_url
+
+        with contextlib.suppress(models.Component.DoesNotExist):
+            obj = models.Component.objects.related().first()
+            return reverse_lazy('bikes:stats_list', kwargs={'bike_slug': bike, 'component_pk': obj.pk})
+
+        return default_url
+
+
 class StatsDetail(DetailViewMixin):
     model = models.ComponentStatistic
     lookup_url_kwarg = "stats_pk"
