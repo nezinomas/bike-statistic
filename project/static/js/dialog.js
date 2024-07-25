@@ -4,14 +4,6 @@ $(document).on('shown.bs.modal', '#modal', function () {
 });
 
 
-htmx.on("htmx:afterSwap", (e) => {
-    /* Response targeting #dialog => show the modal */
-    if (e.detail.target.id == "dialog") {
-        $("#modal").modal("show").draggable({ handle: ".modal-header" });
-    }
-})
-
-
 htmx.on("htmx:beforeSwap", (e) => {
     if (e.detail.target.id == "dialog" && !e.detail.xhr.response) {
         var subbmiter = e.detail.requestConfig.triggeringEvent.submitter.id;
