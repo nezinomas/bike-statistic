@@ -312,12 +312,6 @@ def test_bike_delete(client_logged):
     assert models.Bike.objects.all().count() == 0
 
 
-def test_bike_menu_func():
-    view = resolve('/bike/menu/')
-
-    assert views.BikeMenuList is view.func.view_class
-
-
 def test_bike_menu_200(client_logged):
     url = reverse('bikes:bike_menu')
     response = client_logged.get(url)

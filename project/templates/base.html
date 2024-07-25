@@ -60,7 +60,20 @@
 		</div>
 
 		<!-- Component wear -->
-		<div hx-get="{% url 'bikes:bike_menu' %}" hx-target="this" hx-trigger="load, bike_update from:body"></div>
+		<div {% if '/' == request.path %}class="active"{% endif %}>
+			<a href="{% url 'bikes:stats_redirect' default_bike %}">Component wear</a>
+			<div class="dropdown">
+				<button class="dropdown__btn"></button>
+				<div class="dropdown__menu">
+					{% for bike in bike_list %}
+					<a href="{% url 'bikes:stats_redirect' bike.slug %}"> {{ bike.short_name }}
+						{% if bike.main %}<i class="bi bi-star" style="color:rgb(4, 196, 4);"></i>{% endif %}
+						{% if bike.retired %}<i class="bi bi-dash-circle" style="color:rgb(230, 1, 1)"></i>{% endif %}
+					</a>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
 
 		<!-- Settings -->
 		<div {% if '/' == request.path %}class="active"{% endif %}>

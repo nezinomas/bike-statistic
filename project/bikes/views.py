@@ -5,13 +5,9 @@ from django.db.models import Sum
 from django.urls import reverse_lazy
 
 from ..core.lib import utils
-from ..core.mixins.views import (
-    CreateViewMixin,
-    DeleteViewMixin,
-    DetailViewMixin,
-    ListViewMixin,
-    UpdateViewMixin,
-)
+from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
+                                 DetailViewMixin, ListViewMixin,
+                                 RedirectViewMixin, UpdateViewMixin)
 from ..data.models import Data
 from . import forms, models
 from .lib.component_wear import ComponentWear
@@ -27,20 +23,6 @@ class BikeList(ListViewMixin):
 
     def get_queryset(self):
         return models.Bike.objects.items()
-
-
-class BikeMenuList(ListViewMixin):
-    template_name = "bikes/bike_menu.html"
-
-    def get_queryset(self):
-        return models.Bike.objects.items()
-
-    def get_context_data(self, **kwargs):
-        with contextlib.suppress(models.Component.DoesNotExist):
-            obj = models.Component.objects.related().first()
-
-        context = {"component": obj or None}
-        return super().get_context_data(**kwargs) | context
 
 
 class BikeCreate(CreateViewMixin):
