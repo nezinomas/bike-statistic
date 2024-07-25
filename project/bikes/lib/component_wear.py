@@ -18,18 +18,19 @@ class ComponentWear:
         if not stats:
             return pl.DataFrame()
 
-        stats = pl.DataFrame(stats)
-        stats = (
-            stats
+        return (
+            pl.DataFrame(stats)
             .with_columns([
                 pl.col('start_date').cast(pl.Datetime),
                 pl.col('end_date').cast(pl.Datetime),
+            ])
+            .with_columns([
+                pl.col('end_date') + pl.duration(seconds=((23*60*60) + (59*60) + 59)),
             ])
             .with_columns(
                 pl.col('end_date').fill_null(datetime.now())
             )
         )
-        return stats
 
     def _make_data_df(self, data):
         return pl.DataFrame(data) if data else pl.DataFrame()

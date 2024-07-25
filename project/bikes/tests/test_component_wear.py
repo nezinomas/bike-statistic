@@ -1,7 +1,8 @@
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
 
 import pytest
+import time_machine
 
 from ..lib.component_wear import ComponentWear
 
@@ -38,6 +39,26 @@ def test_total_bike_distance_no_stats_no_data():
 
 def test_component_distance(stats, data):
     expect = {'1': 22.0, '2': 12.5}
+    actual = ComponentWear(stats, data).component_km
+
+    assert expect == actual
+
+
+@time_machine.travel('1999-2-5 5:6:7')
+def test_component_distance_with_datetimes():
+    data = [
+        {'date': datetime(1999, 2, 2, 3, 2, 1), 'distance': Decimal('1')},
+        {'date': datetime(1999, 2, 3, 3, 2, 1), 'distance': Decimal('2')},
+        {'date': datetime(1999, 2, 4, 3, 2, 1), 'distance': Decimal('4')},
+        {'date': datetime(1999, 2, 5, 3, 2, 1), 'distance': Decimal('5')},
+    ]
+
+    stats = [
+        {'start_date': date(1999, 2, 1), 'end_date': date(1999, 2, 3), 'pk': 1},
+        {'start_date': date(1999, 2, 4), 'end_date': None, 'pk': 2},
+    ]
+
+    expect = {'1': 3, '2': 9}
     actual = ComponentWear(stats, data).component_km
 
     assert expect == actual
