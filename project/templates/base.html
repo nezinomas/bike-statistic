@@ -1,9 +1,9 @@
 {% load static %}<!DOCTYPE html>
-<html lang="en">
+<html lang="lt">
   <head>
     <meta charset="utf-8">
-	<link rel="stylesheet" href="{% static 'css/css-loader.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/css-loader.css' %}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/htmx.org@1.7.0"></script> <!-- Htmx -->
     <script defer src="https://unpkg.com/alpinejs@3.10.2/dist/cdn.min.js"></script> <!-- Alpine Core -->
@@ -19,83 +19,86 @@
   <body>
 	  <!-- Loader -->
 	<div class="htmx-indicator loader loader-default is-active" id="indicator"></div>
+
 	{% block body %}
-	<div class="container-fluid">
-		<section class="section-content py-3">
-			<div class="row">
-				<aside class="d-flex col-lg-1 col-sm-2">
-					<nav class="sidebar">
-						<!-- Data -->
-						<h6 class="side-bar"> Data </h6>
-						<ul class="nav flex-column">
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'index' %}"> View </a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'data:data_insert' %}" hx-indicator="#indicator"> Update </a>
-							</li>
-						</ul>
-						<!-- Charts -->
-						<h6 class="side-bar"> Statistic </h6>
-						<ul class="nav flex-column">
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'reports:chart_overall' %}"> Charts </a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'reports:extremums' %}"> Extremums </a>
-							</li>
-						</ul>
-						<!-- Stats and Goals -->
-						<h6 class="side-bar"> Stats & Goals </h6>
-						<ul class="nav flex-column">
-							{% for item in years %}
-							{% if forloop.counter < 6 %}
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'reports:year_progress' item %}"> {{ item }} </a>
-							</li>
-							{% endif %}
-							{% endfor %}
-						</ul>
-						<!-- Component wear -->
-						<h6 class="side-bar"> Component wear </h6>
-						<ul class="nav flex-column" hx-get="{% url 'bikes:bike_menu' %}" hx-target="this" hx-trigger="load, bike_update from:body" hx-indicator="#indicator">
-
-						</ul>
-						<!-- Settings -->
-						<h6 class="side-bar"> Settings </h6>
-						<ul class="nav flex-column">
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'bikes:bike_list' %}"> Bikes </a>
-							</li>
-							<li class="nav-item" href="{% url 'bikes:info_default' %}"></li>
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'goals:goal_list' %}"> Goals </a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'bikes:component_list' %}"> Components </a>
-							</li>
-						</ul>
-						<!-- Profile -->
-						<h6 class="side-bar"> Profile </h6>
-						<ul class="nav flex-column">
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'users:sync_update' %}"> Garmin </a>
-							</li>
-						</ul>
-						<ul class="nav flex-column">
-							<li class="nav-item">
-								<a class="btn btn-sm btn-warning text-start" role="button" href="{% url 'users:logout' %}"> Logout </a>
-							</li>
-						</ul>
-					</nav>
-				</aside>
-				<main class="col-lg-11 col-sm-10" id="htmx-container">{% block content %}{% endblock content %}</main>
+	<nav>
+		<!-- Data -->
+		<div {% if '/' == request.path %}class="active"{% endif %}>
+			<a href="{% url 'index' %}">Data</a>
+			<div class="dropdown">
+				<button class="dropdown__btn"></button>
+				<div class="dropdown__menu">
+					<a href="{% url 'index' %}">View</a>
+					<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'data:data_insert' %}" hx-indicator="#indicator">Update</a>
+				</div>
 			</div>
-		</section>
-
-		<div id="modal" class="modal fade">
-			<div id="dialog" class="modal-dialog modal-650" hx-target="this" hx-swap="this"></div>
 		</div>
-	  {% endblock body %}
+
+		<!-- Charts and Statistic -->
+		<div {% if '/' == request.path %}class="active"{% endif %}>
+			<a href="{% url 'reports:chart_overall' %}">Statistic</a>
+			<div class="dropdown">
+				<button class="dropdown__btn"></button>
+				<div class="dropdown__menu">
+					<a href="{% url 'reports:chart_overall' %}">Charts</a>
+					<a href="{% url 'reports:extremums' %}">Extremums</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Statistics with Goals -->
+		<div {% if '/' == request.path %}class="active"{% endif %}>
+			<a href="{% url 'reports:year_progress' years.0 %}">Year progress</a>
+			<div class="dropdown">
+				<button class="dropdown__btn"></button>
+				<div class="dropdown__menu">
+					{% for item in years %}
+					<a href="{% url 'reports:year_progress' item %}">{{ item }}</a>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+
+		<!-- Component wear -->
+		<div hx-get="{% url 'bikes:bike_menu' %}" hx-target="this" hx-trigger="load, bike_update from:body"></div>
+
+		<!-- Settings -->
+		<div {% if '/' == request.path %}class="active"{% endif %}>
+			<a href="{% url 'bikes:bike_list' %}">Settings</a>
+			<div class="dropdown">
+				<button class="dropdown__btn"></button>
+				<div class="dropdown__menu">
+					<a href="{% url 'bikes:bike_list' %}">Bikes</a>
+					<a href="{% url 'goals:goal_list' %}">Goals</a>
+					<a href="{% url 'bikes:component_list' %}">Components</a>
+					<a href="{% url 'users:sync_update' %}">Garmin Profile</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Profile -->
+		<div {% if '/' == request.path %}class="active"{% endif %}>
+			<a href="{% url 'users:logout' %}">Profile</a>
+			<div class="dropdown">
+				<button class="dropdown__btn"></button>
+				<div class="dropdown__menu">
+					<a href="{% url 'users:logout' %}">Logout</a>
+				</div>
+			</div>
+		</div>
+
+	</nav>
+
+
+	<!-- Content -->
+	<main class="col-lg-11 col-sm-10" id="htmx-container">{% block content %}{% endblock content %}</main>
+
+
+	<!-- Modal -->
+	<div id="modal" class="modal fade">
+		<div id="dialog" class="modal-dialog modal-650" hx-target="this" hx-swap="this"></div>
+	</div>
+
+	{% endblock body %}
   </body>
 </html>

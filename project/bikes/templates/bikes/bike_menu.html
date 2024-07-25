@@ -1,11 +1,16 @@
 {% if component %}
-{% for bike in object_list %}
-<li class="nav-item">
-	<a class="nav-link" href="{% url 'bikes:stats_list' bike.slug component.pk %}"> {{ bike.short_name }}
-		 {% if bike.main %}<i class="bi bi-star ps-1" style="color:rgb(4, 196, 4);"></i>{% endif %}
-		 {% if bike.retired %}<i class="bi bi-dash-circle ps-1" style="color:rgb(230, 1, 1)"></i>{% endif %}
-	</a>
-
-</li>
-{% endfor %}
+<div {% if '/' == request.path %}class="active"{% endif %}>
+	<a href="{% url 'bikes:stats_list' object_list.0.slug component.pk %}"> {{ object_list.0.short_name }}</a>
+	<div class="dropdown">
+		<button class="dropdown__btn"></button>
+		<div class="dropdown__menu">
+			{% for bike in object_list %}
+			<a href="{% url 'bikes:stats_list' bike.slug component.pk %}"> {{ bike.short_name }}
+				{% if bike.main %}<i class="bi bi-star ps-1" style="color:rgb(4, 196, 4);"></i>{% endif %}
+				{% if bike.retired %}<i class="bi bi-dash-circle ps-1" style="color:rgb(230, 1, 1)"></i>{% endif %}
+			</a>
+			{% endfor %}
+		</div>
+	</div>
+</div>
 {% endif %}

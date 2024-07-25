@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from ..bikes.models import Bike
 from ..core.lib import utils
 from ..core.mixins.views import TemplateViewMixin
@@ -11,7 +13,7 @@ class YearProgress(TemplateViewMixin):
     template_name = 'reports/table.html'
 
     def get_context_data(self, **kwargs):
-        year = self.kwargs.get('year')
+        year = self.kwargs.get('year') or datetime.now().year
         data = ProgressData(year)
         obj = Progress(data)
         context = {
