@@ -1,4 +1,21 @@
 @import 'reset';
+@import 'navigation';
+
+
+@font-face {
+    font-family: 'Glyphicons Halflings';
+    src: url('/static/font/glyphicons-halflings-regular.ttf') format('truetype'),
+}
+
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: .7rem;
+    color: black;
+    margin-left: .5rem;
+    margin-right: .5rem;
+    margin-top: 0;
+    margin-bottom: .5rem;
+}
 
 // HTMX indicator
 .htmx-indicator {
