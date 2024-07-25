@@ -1,0 +1,136 @@
+$active: rgb(250, 124, 145, 1);
+$transition: 280ms all var(--delay) ease-out;
+$gap: 0.75rem;
+
+@mixin shadow {
+    --border-radius: 0.25rem;
+
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    border-radius: var(--border-radius);
+}
+
+
+.dropdown {
+    &:active,
+    &:focus,
+    &:focus-within {
+        .dropdown__menu {
+            opacity: 1;
+            transform: rotateX(0) translateX(0);
+            visibility: visible;
+        }
+    }
+
+    &.left {
+        .dropdown__menu {
+            right: 0;
+            left: auto;
+        }
+    }
+}
+
+.dropdown__menu {
+    @include shadow;
+    display: flex;
+    flex-direction: column;
+
+    position: absolute;
+    top: calc(100% + 0.15rem);
+    left: 0;
+    padding: 0.25rem 0;
+    margin: 0;
+    min-width: max-content;
+    text-align: left;
+    background-color: white;
+    z-index: 999;
+
+    opacity: 0;
+    transform: rotateX(-90deg) translateX(0);
+    transform-origin: top center;
+    transition: $transition;
+
+    > * {
+        display: block;
+        padding: 0.25rem 1.75rem 0.25rem 0.75rem;
+    }
+
+    > *:hover {
+        background-color: lighten($active, 25%);
+    }
+
+    > *.dropdown-divider {
+        background-color: rgb(black, .175);
+        min-height: 1px;
+        padding: 0;
+    }
+}
+
+
+.dropdown__btn {
+    border: 0;
+    background-color: transparent;
+
+    &::after {
+        font-family: 'Glyphicons Halflings';
+        content: " \e114";
+        padding-right: .25rem;
+        font-size: 8px;
+    }
+}
+
+
+
+nav {
+    @include shadow;
+
+    display: flex;
+    align-items: center;
+    gap: 0 1rem;
+    background-color: rgba(248, 249, 250, 1);
+    margin-bottom: $gap;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    a {
+        text-decoration: none;
+    }
+
+    a,
+    a:visited {
+        color: black;
+    }
+
+    a:hover,
+    a:focus,
+    .dropdown__btn:hover {
+        transition: $transition;
+        color: $active;
+    }
+
+    > div {
+        display: flex;
+        align-items: center;
+
+        > *:first-child {
+            padding: .5rem .25rem;
+        }
+    }
+
+    :has(.dropdown) {
+        position: relative;
+    }
+
+    > * {
+        border-bottom: 3px solid transparent;
+
+        &:hover,
+        &:focus {
+            transition: $transition;
+            border-bottom-color: $active;
+        }
+    }
+
+    > .active {
+        border-bottom: 3px solid $active;
+    }
+}
