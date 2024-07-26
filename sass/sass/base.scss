@@ -28,6 +28,7 @@ main {
     grid-gap: 1rem;
 }
 
+
 .buttons-group {
     display: flex;
     flex-wrap: wrap;
@@ -37,4 +38,24 @@ main {
         margin-left: auto;
         flex-grow: 0;
     }
+}
+
+
+.alert {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding: .5rem .25rem;
+
+    > div:nth-child(2) {
+        flex-grow: 1;
+        font-size: .85rem;
+    }
+}
+
+
+.alert-info {
+    background-color: #f0f7f9;
+    border: 1px solid #97aeb3;
+    color: #055160;
 }
