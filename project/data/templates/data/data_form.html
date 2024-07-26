@@ -6,22 +6,22 @@
         <form method="post" novalidate>
             {% csrf_token %}
             {{ form.media }}
-            <table class="table table-sm table-borderless inner">
-                <tr class="table-warning" hx-target="#data-form" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-post="{{view.url}}">
+            <table class="table-inner">
+                <tr hx-target="#data-form" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-post="{{view.url}}">
                     <td>{{ form.bike|as_crispy_field }}</td>
-                    <td class="text-center w11">{{ form.date|as_crispy_field }}</td>
-                    <td class="text-center w7">{{ form.distance|as_crispy_field }}</td>
-                    <td class="text-center w7">{{ form.time|as_crispy_field }}</td>
-                    <td class="text-center w7">{{ form.temperature|as_crispy_field }}</td>
-                    <td class="text-center w7">{{ form.ascent|as_crispy_field }}</td>
-                    <td class="text-center w7">{{ form.descent|as_crispy_field }}</td>
-                    <td class="text-center w7">{{ form.max_speed|as_crispy_field }}</td>
-                    <td class="text-center w7">{{ form.heart_rate|as_crispy_field }}</td>
-                    <td class="text-center w7">
+                    <td class="w11">{{ form.date|as_crispy_field }}</td>
+                    <td class="w7">{{ form.distance|as_crispy_field }}</td>
+                    <td class="w7">{{ form.time|as_crispy_field }}</td>
+                    <td class="w7">{{ form.temperature|as_crispy_field }}</td>
+                    <td class="w7">{{ form.ascent|as_crispy_field }}</td>
+                    <td class="w7">{{ form.descent|as_crispy_field }}</td>
+                    <td class="w7">{{ form.max_speed|as_crispy_field }}</td>
+                    <td class="w7">{{ form.heart_rate|as_crispy_field }}</td>
+                    <td class="w7">
                         {{ form.cadence|as_crispy_field }}
                         {{ form.checked }}
                     </td>
-                    <td class="text-end align-middle w6">
+                    <td class="w6">
                         {% save_button url=view.url target='data-form' swap='outerHTML' %}
                         {% if object %}
                         {% url 'data:data_detail' object.pk as url_detail %}

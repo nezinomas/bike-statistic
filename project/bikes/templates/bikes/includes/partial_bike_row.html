@@ -13,7 +13,7 @@
         {{ object.full_name }}
     </td>
     <td><a href="{% url 'bikes:info_list' object.slug %}">{{ object.short_name }}</a></td>
-    <td class="text-end last">
+    <td class="text-end">
         {% edit_button url=url_update label='True'  target=row_id swap='outerHTML' %}
         {% delete_button url=url_delete label='True' %}
     </td>

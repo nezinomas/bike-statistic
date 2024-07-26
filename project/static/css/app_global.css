@@ -35,26 +35,6 @@
   margin-bottom: 0!important;
 }
 
-.w6 {
-  width: 6rem!important;
-}
-
-.w7 {
-  width: 7rem!important;
-}
-
-.w10 {
-  width: 10rem!important;
-}
-
-.w11 {
-  width: 11rem!important;
-}
-
-.w20 {
-  width: 20rem!important;
-}
-
 
 .sidebar h6 {
   font-size: .9rem;
@@ -80,10 +60,6 @@ li.nav-item:last-child {
 .divider {
   border-top-width: 15px!important;
   border-top-color: rgb(207, 226, 255);
-}
-
-.table .right-black-border {
-  border-right: 1.5px solid black !important;
 }
 
 #data-table-tbody input.numberinput,
