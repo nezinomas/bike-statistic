@@ -21,19 +21,7 @@ main {
     grid-gap: 1rem;
 }
 
-// HTMX indicator
-.htmx-indicator {
-    display: none;
-}
-
-.htmx-request .htmx-indicator {
-    display: inline;
-}
-
-.htmx-request.htmx-indicator {
-    display: inline;
-}
-
 @import 'reset';
+@import 'utilities';
 @import 'navigation';
 @import 'table';
