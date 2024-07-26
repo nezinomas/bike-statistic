@@ -2,6 +2,7 @@
 @import 'utilities';
 @import 'navigation';
 @import 'table';
+@import 'buttons';
 
 
 @font-face {
@@ -25,4 +26,15 @@ main {
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 1rem;
+}
+
+.buttons-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+
+    > .end {
+        margin-left: auto;
+        flex-grow: 0;
+    }
 }

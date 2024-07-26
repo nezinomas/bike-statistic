@@ -4,12 +4,13 @@
 
 {% block content %}
 
-<div>
+<div class="hidden" hx-get="{% url 'bikes:bike_list' %}" hx-trigger="reload from:body" hx-target="htmx-container"></div>
+
+<div class="buttons-group">
     {% url 'bikes:bike_create' as url_create %}
-    {% new_button url=url_create label='New Bike' width='100%' target="table-tbody" swap="afterbegin" %}
+    {% new_button url=url_create label='New Bike' target="table-tbody" swap="afterbegin" css_class="end" %}
 </div>
 
-<div hx-get="{% url 'bikes:bike_list' %}" hx-trigger="reload from:body" hx-target="htmx-container"></div>
 <table class="table table-striped able-hover">
     <thead>
         <tr>

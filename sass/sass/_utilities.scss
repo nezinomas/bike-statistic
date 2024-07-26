@@ -2,6 +2,11 @@
     text-align: right !important;
 }
 
+.hidden {
+    display: none !important;
+    visibility: hidden !important;
+}
+
 // HTMX indicator
 .htmx-indicator {
     display: none;

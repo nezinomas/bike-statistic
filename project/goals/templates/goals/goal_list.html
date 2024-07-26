@@ -6,14 +6,12 @@
 
 {% block content %}
 
-<div class="mt-2" hx-trigger="reload from:body" hx-get="{% url 'goals:goal_list' %}" hx-target="#htmx-container"></div>
+<div class="hidden" hx-trigger="reload from:body" hx-get="{% url 'goals:goal_list' %}" hx-target="#htmx-container"></div>
 
-
-<div>
+<div class="buttons-group">
     {% url 'goals:goal_create' as url_create %}
-    {% new_button url=url_create label='New Goal' width='100%' target="table-tbody" swap="afterbegin" %}
+    {% new_button url=url_create label='New Goal' target="table-tbody" swap="afterbegin" css_class="end" %}
 </div>
-
 
 <table class="table table-striped table-hover">
     <thead>

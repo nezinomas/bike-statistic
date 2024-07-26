@@ -5,18 +5,16 @@
 
 {% block content %}
 
-<div hx-trigger="reload from:body" hx-get="{% url 'bikes:stats_list' bike.slug component.pk %}" hx-target="#htmx-container"></div>
+<div hx-trigger="reload from:body" hx-get="{% url 'bikes:stats_list' bike.slug component.pk %}" hx-target="#htmx-container" class="hidden"></div>
 
-<div>
+<div class="buttons-group">
     {% for item in object_list %}
-    <a role="button" hx-target="#htmx-container" hx-get="{% url 'bikes:stats_list' bike.slug item.id %}" hx-swap="innerHTML"  hx-target="#htmx-container" class="btn {% if item.id == component.pk %}btn-primary{% else %}btn-secondary{% endif %}">{{ item.name }}</a>
+    <button hx-target="#htmx-container" hx-get="{% url 'bikes:stats_list' bike.slug item.id %}" hx-swap="innerHTML"  hx-target="#htmx-container" class="btn {% if item.id == component.pk %}btn-primary{% else %}btn-secondary{% endif %}">{{ item.name }}</button>
     {% endfor %}
-</div>
-<div>
-    {% url 'bikes:stats_create' bike.slug component.pk as url_create %}
-    {% new_button url=url_create label='New Component' url=url_create target="stats-table-tbody" swap="afterbegin" width="100%" %}
-</div>
 
+    {% url 'bikes:stats_create' bike.slug component.pk as url_create %}
+    {% new_button url=url_create label='New Component' url=url_create target="stats-table-tbody" swap="afterbegin" css_class="end" %}
+</div>
 
 <div class="alert alert-info">
     <div>{% for key, value in stats.items %}

@@ -1,0 +1,127 @@
+@mixin button {
+    --button-border-radius: .1rem;
+    --padding-horizontal: .5rem;
+    --padding-vertical: .25rem;
+    --bg-color: white;
+
+    border-radius: var(--button-border-radius);
+    background-color: var(--bg-color);
+    padding-left: var(--padding-horizontal);
+    padding-right: var(--padding-horizontal);
+
+    &::before {
+        vertical-align: middle;
+        padding-bottom: var(--padding-vertical);
+        padding-right: var(--padding-vertical);
+    }
+}
+
+.btn-primary {
+    @include button();
+    color: #fff;
+    background-color: rgb(108, 117, 125);
+    border-color: rgb(84, 90, 96);
+
+    &:hover {
+        background-color: #5c6e64;
+    }
+
+    &:focus,
+    &:focus-within,
+    &:active {
+        outline: 0;
+        box-shadow:
+            inset 0 1px 2px rgba(black, .075),
+            0 0 0 0.15rem rgba(black, 0.1);
+    }
+}
+
+
+.btn-secondary {
+    @include button();
+    border-color: #989898;
+
+    &:hover {
+        background-color: #e1e1e1;
+    }
+
+    &:focus,
+    &:focus-within,
+    &:active {
+        outline: 0;
+        box-shadow:
+            inset 0 1px 2px rgba(black, .075),
+            0 0 0 0.15rem rgba(black, 0.1);
+    }
+}
+
+
+.btn-outline-success {
+    @include button();
+    color: #198754;
+    background-color: #fff;
+    border-color: #198754;
+
+    &:hover {
+        color: #fff;
+        background-color: #198754;
+    }
+
+    &:focus,
+    &:focus-within,
+    &:active {
+        outline: 0;
+        box-shadow:
+            inset 0 1px 2px rgba(#198754, .075),
+            0 0 0 0.15rem rgba(#198754, 0.1);
+    }
+
+    &::before {
+        font-family: 'Glyphicons Halflings';
+        content: "\2b";
+        font-size: .5rem;
+    }
+}
+
+
+.btn-success {
+    @include button();
+    color: #fff;
+    background-color: #198754;
+    border-color: #198754;
+
+    &:hover {
+        background-color: #157347;
+        border-color: #146c43;
+    }
+}
+
+
+.btn-danger {
+    @include button();
+    --padding-horizontal: .25rem;
+
+    color: #dc3545;
+    border-color: #989898;
+
+    &:hover {
+        background-color: #bb2d3b;
+        border-color: #b02a37;
+        color: #fff;
+    }
+
+    &:focus,
+    &:focus-within,
+    &:active {
+        outline: 0;
+        box-shadow:
+            inset 0 1px 2px rgba(black, .075),
+            0 0 0 0.15rem rgba(#dc3545, 0.17) !important;
+    }
+}
+
+.btn-edit {
+    @include button();
+    --padding-horizontal: .25rem;
+    border-color: #989898;
+}
