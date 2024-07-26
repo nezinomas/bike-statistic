@@ -36,6 +36,19 @@
 			</div>
 		</div>
 
+		<!-- Year progress -->
+		<div {% if request.resolver_match.url_name == 'year_progress' %}class="active"{% endif %}>
+			<a href="{% url 'reports:year_progress' years.0 %}">Year progress</a>
+			<div class="dropdown">
+				<button class="dropdown__btn"></button>
+				<div class="dropdown__menu">
+					{% for item in years %}
+					<a href="{% url 'reports:year_progress' item %}">{{ item }}</a>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+
 		<!-- Charts and Statistic -->
 		{% url 'reports:chart_overall' as url_chart_overall %}
 		{% url 'reports:extremums' as url_extremums %}
@@ -48,19 +61,6 @@
 				<div class="dropdown__menu">
 					<a href="{{url_chart_overall}}">Charts</a>
 					<a href="{{url_extremums}}">Extremums</a>
-				</div>
-			</div>
-		</div>
-
-		<!-- Statistics with Goals -->
-		<div {% if request.resolver_match.url_name == 'year_progress' %}class="active"{% endif %}>
-			<a href="{% url 'reports:year_progress' years.0 %}">Year progress</a>
-			<div class="dropdown">
-				<button class="dropdown__btn"></button>
-				<div class="dropdown__menu">
-					{% for item in years %}
-					<a href="{% url 'reports:year_progress' item %}">{{ item }}</a>
-					{% endfor %}
 				</div>
 			</div>
 		</div>
