@@ -2,51 +2,6 @@
 
 {% block content %}
 
-
-<table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th class="right-black-border"></th>
-            <th colspan="2" class="text-center right-black-border">Max T, &#8451;</th>
-            <th colspan="2" class="text-center right-black-border">Min T, &#8451;</th>
-            <th colspan="2" class="text-center right-black-border">Max Ascent, m</th>
-            <th colspan="2" class="text-center right-black-border">Max Speed, km/h</th>
-            <th colspan="2" class="text-center">Max Distance, km</th>
-        </tr>
-        <tr>
-            <th class="text-center right-black-border">Year</th>
-            <th class="text-center">Date</th>
-            <th class="text-center right-black-border">Value</th>
-            <th class="text-center">Date</th>
-            <th class="text-center right-black-border">Value</th>
-            <th class="text-center">Date</th>
-            <th class="text-center right-black-border">Value</th>
-            <th class="text-center">Date</th>
-            <th class="text-center right-black-border">Value</th>
-            <th class="text-center">Date</th>
-            <th class="text-center">Value</th>
-        </tr>
-    </thead>
-    <tbody class="table-group-divider">
-        {% for object in object_list %}
-        <tr>
-            <td class="text-center right-black-border">{{object.max_distance_date|date:"Y"}}</td>
-            <td class="text-center">{{ object.max_temp_date|date:"Y-m-d" }}</td>
-            <td class="text-center right-black-border">{{ object.max_temp|floatformat:0 }}</td>
-            <td class="text-center">{{ object.min_temp_date|date:"Y-m-d" }}</td>
-            <td class="text-center right-black-border">{{ object.min_temp|floatformat:0 }}</td>
-            <td class="text-center">{{ object.max_ascent_date|date:"Y-m-d" }}</td>
-            <td class="text-center right-black-border">{{ object.max_ascent|floatformat:0 }}</td>
-            <td class="text-center">{{ object.max_speed_date|date:"Y-m-d" }}</td>
-            <td class="text-center right-black-border">{{ object.max_speed|floatformat:1 }}</td>
-            <td class="text-center">{{ object.max_distance_date|date:"Y-m-d" }}</td>
-            <td class="text-center">{{ object.max_distance|floatformat:1 }}</td>
-        </tr>
-        {% empty %}
-        <tr><td class="bg-warning text-center" colspan="11">No records</td></tr>
-        {% endfor %}
-    </tbody>
-</table>
-
+{% include 'reports/partials/extremums_table.html' %}
 
 {% endblock content %}

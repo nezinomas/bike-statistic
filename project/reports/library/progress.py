@@ -63,8 +63,7 @@ class Progress:
             .agg(list(it.chain.from_iterable(_agg)))
             .sort(pl.col("year"), descending=True)
         )
-        dicts = df.collect().to_dicts()
-        return dicts[0] if self._year else dicts
+        return df.collect().to_dicts()
 
     def season_progress(self) -> list[dict]:
         if not self._year or self._df.is_empty():

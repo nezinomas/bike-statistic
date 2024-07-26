@@ -7,46 +7,7 @@
 
 {% block content %}
 
-{% if extremums %}
-<table class="table table-bordered">
-        <thead>
-            <tr>
-                <th colspan="2" class="right-black-border">Max T, &#8451;</th>
-                <th colspan="2" class="right-black-border">Min T, &#8451;</th>
-                <th colspan="2" class="right-black-border">Max Ascent, m</th>
-                <th colspan="2" class="right-black-border">Max Speed, km/h</th>
-                <th colspan="2">Max Distance, km</th>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <th class="right-black-border">Value</th>
-                <th>Date</th>
-                <th class="right-black-border">Value</th>
-                <th>Date</th>
-                <th class="right-black-border">Value</th>
-                <th>Date</th>
-                <th class="right-black-border">Value</th>
-                <th>Date</th>
-                <th>Value</th>
-            </tr>
-        </thead>
-    <tbody>
-
-        <tr>
-            <td>{{ extremums.max_temp_date|date:"Y-m-d" }}</td>
-            <td class="right-black-border">{{ extremums.max_temp|floatformat:0 }}</td>
-            <td>{{ extremums.min_temp_date|date:"Y-m-d" }}</td>
-            <td class="right-black-border">{{ extremums.min_temp|floatformat:0 }}</td>
-            <td>{{ extremums.max_ascent_date|date:"Y-m-d" }}</td>
-            <td class="right-black-border">{{ extremums.max_ascent|floatformat:0 }}</td>
-            <td>{{ extremums.max_speed_date|date:"Y-m-d" }}</td>
-            <td class="right-black-border">{{ extremums.max_speed|floatformat:1 }}</td>
-            <td>{{ extremums.max_distance_date|date:"Y-m-d" }}</td>
-            <td>{{ extremums.max_distance|floatformat:1 }}</td>
-        </tr>
-    </tbody>
-</table>
-{% endif %}
+{% include 'reports/partials/extremums_table.html' with object_list=extremums %}
 
 <table class="table table-hover table-striped sticky-table">
     <thead>
