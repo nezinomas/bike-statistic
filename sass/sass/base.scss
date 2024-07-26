@@ -1,6 +1,3 @@
-@import 'reset';
-@import 'navigation';
-
 
 @font-face {
     font-family: 'Glyphicons Halflings';
@@ -17,6 +14,13 @@ body {
     margin-bottom: .5rem;
 }
 
+
+main {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 1rem;
+}
+
 // HTMX indicator
 .htmx-indicator {
     display: none;
@@ -29,3 +33,7 @@ body {
 .htmx-request.htmx-indicator {
     display: inline;
 }
+
+@import 'reset';
+@import 'navigation';
+@import 'table';
