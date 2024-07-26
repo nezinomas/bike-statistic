@@ -40,6 +40,20 @@ main {
     }
 }
 
+.data-filtering-group {
+    display: flex;
+    align-items: center;
+
+    > .form-data-filter {
+        display: flex;
+        align-items: center;
+        gap: .35rem;
+    }
+
+    > *:last-child {
+        margin-left: auto;
+    }
+}
 
 .alert {
     display: flex;
