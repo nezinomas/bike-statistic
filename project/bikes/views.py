@@ -163,21 +163,6 @@ class ComponentDelete(DeleteViewMixin):
 # ---------------------------------------------------------------------------------------
 #                                                         Bike Component Statistic (Wear)
 # ---------------------------------------------------------------------------------------
-class StatsRedirect(RedirectViewMixin):
-    def get_redirect_url(self, *args, **kwargs):
-        default_url = reverse_lazy("index")
-
-        bike = self.kwargs.get("bike_slug")
-        if not bike:
-            return default_url
-
-        with contextlib.suppress(models.Component.DoesNotExist):
-            obj = models.Component.objects.related().first()
-            return reverse_lazy('bikes:stats_list', kwargs={'bike_slug': bike, 'component_pk': obj.pk})
-
-        return default_url
-
-
 class StatsDetail(DetailViewMixin):
     model = models.ComponentStatistic
     lookup_url_kwarg = "stats_pk"
@@ -185,7 +170,7 @@ class StatsDetail(DetailViewMixin):
 
     def get_context_data(self, **kwargs):
         bike_slug = self.kwargs["bike_slug"]
-        stats_pk = self.kwargs["stats_pk"]
+        stats_pk = self.kwargs.get("stats_pk")
         start_date = utils.date_to_datetime(self.object.start_date)
         end_date = utils.date_to_datetime(
             self.object.end_date or date.today(), 23, 59, 59
@@ -210,9 +195,12 @@ class StatsList(ListViewMixin):
 
     def get_context_data(self, **kwargs):
         bike = models.Bike.objects.related().get(slug=self.kwargs["bike_slug"])
-        component = models.Component.objects.related().get(
-            pk=self.kwargs["component_pk"]
-        )
+        component_pk = self.kwargs.get("component_pk")
+        if not component_pk:
+            component = models.Component.objects.related().first()
+        else:
+            component = models.Component.objects.related().get(pk=component_pk)
+
         data = Data.objects.items().filter(bike=bike).values("date", "distance")
 
         component_statistic = models.ComponentStatistic.objects.items().filter(
