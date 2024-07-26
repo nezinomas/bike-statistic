@@ -48,7 +48,7 @@ def test_year_progress_template(client_logged):
     url = reverse('reports:year_progress', kwargs={'year': 2000})
     response = client_logged.get(url)
 
-    assert response.templates[0].name == 'reports/table.html'
+    assert response.templates[0].name == 'reports/year_progress.html'
 
 
 def test_year_progress_context_has_items(client_logged):
