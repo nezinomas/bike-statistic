@@ -1,4 +1,4 @@
-.table-main {
+.tbl-main {
     --cell-horizontal-padding: .25rem;
     --head-bg-color: #e3eef0;
     --cell-height: 1.65rem;
@@ -41,7 +41,7 @@
         padding: 0 var(--cell-horizontal-padding);
     }
 
-    &.table-striped {
+    &.tbl-striped {
         tbody tr:nth-child(odd) {
             > td {
                 background-color: rgba(0, 0, 0, 0.05);
@@ -49,7 +49,7 @@
         }
     }
 
-    &.table-hover {
+    &.tbl-hover {
         tbody tr:hover {
             > td {
                 background-color: rgba(0, 0, 0, 0.08);
@@ -58,7 +58,7 @@
     }
 }
 
-.table-data {
+.tbl-data {
     td:last-child,
     th:last-child {
         text-align: right;
@@ -69,10 +69,9 @@
     background-color: #cff4fc;
 }
 
-.table-warning {
+.tbl-warning {
     background-color: #fff3cd;
 }
-
 
 .w6 {
     width: 6rem;
