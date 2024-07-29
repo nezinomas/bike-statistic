@@ -1,25 +1,32 @@
 @mixin button {
-    --button-border-radius: .1rem;
-    --padding-horizontal: .5rem;
-    --padding-vertical: .25rem;
-    --bg-color: white;
-
-    border-radius: var(--button-border-radius);
+    color: var(--color);
     background-color: var(--bg-color);
+    border-radius: var(--button-border-radius);
     padding-left: var(--padding-horizontal);
     padding-right: var(--padding-horizontal);
+    padding-bottom: var(--padding-vertical);
+    padding-top: var(--padding-vertical);
 
-    &::before {
-        vertical-align: middle;
+    &::before,
+    &::after {
         padding-bottom: var(--padding-vertical);
-        padding-right: var(--padding-vertical);
+        padding-top: var(--padding-vertical);
+        padding-right: .15rem;
     }
+
+    --button-border-radius: 0;
+    --padding-horizontal: .5rem;
+    --padding-vertical: .15rem;
+    --bg-color: white;
+    --color: black;
 }
+
 
 .btn-primary {
     @include button();
+
+    --bg-color: rgb(108, 117, 125);
     color: #fff;
-    background-color: rgb(108, 117, 125);
     border-color: rgb(84, 90, 96);
 
     &:hover {
@@ -37,8 +44,10 @@
 }
 
 
+
 .btn-secondary {
     @include button();
+
     border-color: #989898;
 
     &:hover {
@@ -58,6 +67,7 @@
 
 .btn-outline-success {
     @include button();
+
     color: #198754;
     background-color: #fff;
     border-color: #198754;
@@ -86,6 +96,7 @@
 
 .btn-success {
     @include button();
+
     color: #fff;
     background-color: #198754;
     border-color: #198754;
@@ -99,6 +110,7 @@
 
 .btn-danger {
     @include button();
+
     --padding-horizontal: .25rem;
 
     color: #dc3545;
@@ -122,6 +134,13 @@
 
 .btn-edit {
     @include button();
+
     --padding-horizontal: .25rem;
+
     border-color: #989898;
+}
+
+.btn-filter {
+    --padding-vertical: .25rem;
+    --padding-horizontal: 1rem;
 }
