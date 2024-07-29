@@ -37,12 +37,10 @@ button,
 input[type=submit],
 input[type=button]
 {
-    color: inherit;
-    font: inherit !important;
+    font: inherit;
     letter-spacing: inherit;
-    border: 1px solid black;
+    border: 1px solid #dee2e6;
     border-radius: 0;
-    padding: 0.15rem;
 }
 
 button,
@@ -55,11 +53,10 @@ a[role=button] {
 input,
 textarea,
 select{
-    color: inherit;
-    font: inherit !important;
+    font: inherit;
     letter-spacing: inherit;
+    border-radius: 0;
     border: 1px solid #dee2e6;
-    background-color: transparent !important;
 }
 
 css button * {   pointer-events: none; }
@@ -74,5 +71,5 @@ video {
 }
 
 [hidden] {
-    display: none !important;
+    display: none;
 }
