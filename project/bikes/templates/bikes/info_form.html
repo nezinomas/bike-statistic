@@ -5,7 +5,7 @@
     <td colspan="3" class="inner">
         <form method="post" novalidate>
             {% csrf_token %}
-            <table class="table table-borderless inner">
+            <table class="table-main table-borderless inner">
                 <tr class="table-warning" hx-target="#form-row" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-post="{{view.url}}">
                     <td width="12%">{{ form.component|as_crispy_field }}</td>
                     <td>{{ form.description|as_crispy_field }}</td>

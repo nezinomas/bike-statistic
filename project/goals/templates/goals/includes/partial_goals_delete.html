@@ -5,7 +5,7 @@
         <form method="post" action="{% url 'goals:goals_delete' object.year %}" class="js-delete-form"
             data-pk="{{ object.pk }}" data-tbl="0" novalidate>
             {% csrf_token %}
-            <table class="table table-md table-borderless inner">
+            <table class="table-main table-md table-borderless inner">
                 <tr class="table-danger">
                     <td width="150rem" class="v-middle">
                         <em>{{ object.pk }}</em>

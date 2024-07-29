@@ -1,5 +1,4 @@
-
-.table {
+.table-main {
     --cell-horizontal-padding: .25rem;
     --head-bg-color: #e3eef0;
     --cell-height: 1.65rem;
@@ -42,28 +41,20 @@
         height: var(--cell-height);
         padding: 0 var(--cell-horizontal-padding);
     }
-}
 
-.table-data {
-    td:last-child,
-    th:last-child {
-        text-align: right;
-    }
-}
-
-.table-striped {
-    tbody tr:nth-child(odd) {
-        > td {
-            background-color: rgba(0, 0, 0, 0.05);
+    &.table-striped {
+        tbody tr:nth-child(odd) {
+            > td {
+                background-color: rgba(0, 0, 0, 0.05);
+            }
         }
     }
-}
 
-
-.table-hover {
-    tbody tr:hover {
-        > td {
-            background-color: rgba(0, 0, 0, 0.08);
+    &.table-hover {
+        tbody tr:hover {
+            > td {
+                background-color: rgba(0, 0, 0, 0.08);
+            }
         }
     }
 }
