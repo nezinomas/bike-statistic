@@ -20,7 +20,7 @@
         <tr>
             <th>Bike</th>
             <th>Date</th>
-            <th class="text-end right-black-border">&#8451;</th>
+            <th class="right-black-border">&#8451;</th>
             <th>Dist</th>
             <th>Time</th>
             <th>Speed</th>
@@ -45,7 +45,7 @@
         <tr {% ifchanged object.month %}{% if not forloop.first %}class="divider"{% endif %}{% endifchanged %}>
             <td>{{ object.bikes }}</td>
             <td>{{ object.date|date:'Y-m-d' }}</td>
-            <td class="text-end right-black-border">{{ object.temp|floatformat:0|default:'-' }}</td>
+            <td class="right-black-border">{{ object.temp|floatformat:0|default:'-' }}</td>
             <td>{{ object.distance|floatformat:2 }}</td>
             <td>{{ object.seconds|duration }}</td>
             <td>{{ object.speed|floatformat:1 }}</td>
