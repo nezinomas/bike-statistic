@@ -58,6 +58,21 @@
     }
 }
 
+.table-data {
+    td:last-child,
+    th:last-child {
+        text-align: right;
+    }
+}
+
+.waiting-for-review {
+    background-color: #cff4fc;
+}
+
+.table-warning {
+    background-color: #fff3cd;
+}
+
 
 .w6 {
     width: 6rem;

@@ -47,7 +47,7 @@ def test_data_detail_links(client_logged):
     url_delete = reverse('data:data_delete', kwargs={'pk': data.pk})
 
     # table row
-    assert f'<tr id="{row_id}" class="table-info" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
+    assert f'<tr id="{row_id}" class="waiting-for-review" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
     # edit button
     assert f'<button type="button" class="btn btn-sm btn-warning" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
     # delete button
