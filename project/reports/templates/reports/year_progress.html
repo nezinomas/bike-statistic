@@ -40,7 +40,7 @@
             <th>Delta</th>
         </tr>
     </thead>
-    <tbody class="table-group-divider">
+    <tbody>
         {% for object in object_list  %}
         <tr {% ifchanged object.month %}{% if not forloop.first %}class="divider"{% endif %}{% endifchanged %}>
             <td>{{ object.bikes }}</td>
