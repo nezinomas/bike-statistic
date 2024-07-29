@@ -6,7 +6,7 @@
         <form method="post" novalidate>
             {% csrf_token %}
             {{ form.media }}
-            <table class="tbl-main table-borderless inner">
+            <table class="tbl-main inner">
                 <tr class="tbl-warning" hx-trigger="click[ctrlKey]" hx-post="{{view.url}}">
                     <td>{{form.start_date|as_crispy_field}}</td>
                     <td>{{form.end_date|as_crispy_field}}</td>
