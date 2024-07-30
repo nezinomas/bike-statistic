@@ -25,7 +25,7 @@ urlpatterns = [
         views.ComponentDelete.as_view(),
         name="component_delete",
     ),
-    # ............................................................... Component Statistic
+    # ............................................................... Component Wear
     path(
         "stats/<slug:bike_slug>/",
         views.StatsList.as_view(),
