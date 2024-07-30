@@ -6,8 +6,8 @@
         <form method="post" novalidate>
             {% csrf_token %}
             {{ form.media }}
-            <table class="tbl-main inner">
-                <tr class="tbl-warning" hx-target="#form-row" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-post="{{view.url}}">
+            <table class="table-inner">
+                <tr hx-target="#form-row" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-post="{{view.url}}">
                     <td class="w7"> </td>
                     <td>{{ form.name|as_crispy_field }}</td>
                     <td class="w10 text-end">
