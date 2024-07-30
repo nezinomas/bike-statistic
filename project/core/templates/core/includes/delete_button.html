@@ -2,7 +2,7 @@
     type="button"
     class="btn btn-danger"
     {% if url %}hx-get="{{url}}"{% endif %}
-    hx-target="#dialog"
+    hx-target="#mainModal"
     hx-swap="innerHTML">
     <i class="bi bi-trash"></i> {% if label %} Delete {% endif %}
 </button>

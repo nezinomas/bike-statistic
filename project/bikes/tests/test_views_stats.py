@@ -94,7 +94,7 @@ def test_stats_list_with_data_links(client_logged):
     # edit button
     assert f'<button type="button" class="btn btn-sm btn-warning" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
     # delete button
-    assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#dialog" hx-swap="innerHTML">' in actual
+    assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
 
 
 def test_stats_detail(client_logged):
@@ -126,7 +126,7 @@ def test_stats_detail_rendered_context(client_logged):
     # edit button
     assert f'<button type="button" class="btn btn-sm btn-warning" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
     # delete button
-    assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#dialog" hx-swap="innerHTML">' in actual
+    assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
 
 
 @time_machine.travel('2000-2-2')
