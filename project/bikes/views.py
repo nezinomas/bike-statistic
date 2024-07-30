@@ -161,12 +161,12 @@ class ComponentDelete(DeleteViewMixin):
 
 
 # ---------------------------------------------------------------------------------------
-#                                                         Bike Component Statistic (Wear)
+#                                                                     Bike Component Wear
 # ---------------------------------------------------------------------------------------
 class StatsDetail(DetailViewMixin):
     model = models.ComponentStatistic
     lookup_url_kwarg = "stats_pk"
-    template_name = "bikes/includes/partial_stats_row.html"
+    template_name = "bikes/includes/partial_component_wear_row.html"
 
     def get_context_data(self, **kwargs):
         bike_slug = self.kwargs["bike_slug"]
@@ -188,7 +188,7 @@ class StatsDetail(DetailViewMixin):
 
 
 class StatsList(ListViewMixin):
-    template_name = "bikes/stats_list.html"
+    template_name = "bikes/component_wear_list.html"
 
     def get_queryset(self):
         return models.Component.objects.items()
@@ -223,7 +223,7 @@ class StatsList(ListViewMixin):
 
 class StatsCreate(CreateViewMixin):
     model = models.ComponentStatistic
-    template_name = "bikes/stats_form.html"
+    template_name = "bikes/component_wear_form.html"
     hx_trigger_django = "reload"
 
     def url(self):
@@ -243,7 +243,7 @@ class StatsCreate(CreateViewMixin):
 class StatsUpdate(UpdateViewMixin):
     model = models.ComponentStatistic
     form_class = forms.ComponentStatisticForm
-    template_name = "bikes/stats_form.html"
+    template_name = "bikes/component_wear_form.html"
     lookup_url_kwarg = "stats_pk"
     hx_trigger_django = "reload"
 
@@ -259,7 +259,7 @@ class StatsUpdate(UpdateViewMixin):
 
 class StatsDelete(DeleteViewMixin):
     model = models.ComponentStatistic
-    template_name = "bikes/stats_confirm_delete.html"
+    template_name = "bikes/component_wear_confirm_delete.html"
     lookup_url_kwarg = "stats_pk"
     success_url = "/"
     hx_trigger_django = "reload"

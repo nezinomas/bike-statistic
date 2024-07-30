@@ -37,7 +37,7 @@
     </thead>
     <tbody id="stats-table-tbody">
         {% for object in component_statistic %}
-        {% include 'bikes/includes/partial_stats_row.html' %}
+        {% include 'bikes/includes/partial_component_wear_row.html' %}
         {% empty %}
         <tr><td class="bg-warning" colspan="6">No records</td></tr>
         {% endfor %}
