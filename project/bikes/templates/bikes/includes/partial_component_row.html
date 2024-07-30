@@ -8,7 +8,7 @@
     <td>{{ object.id }}</td>
     <td>{{ object.name }}</td>
     <td class="text-end">
-        {% edit_button url=url_update label='True'  target=row_id swap='outerHTML' %}
-        {% delete_button url=url_delete label='True' %}
+        {% edit_button url=url_update target=row_id swap='outerHTML' %}
+        {% delete_button url=url_delete %}
     </td>
 </tr>

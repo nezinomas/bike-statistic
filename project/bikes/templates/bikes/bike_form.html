@@ -14,10 +14,10 @@
                     <td class="w7">{{ form.main|as_crispy_field }}</td>
                     <td class="w7">{{ form.retired|as_crispy_field }}</td>
                     <td class="w10 text-end">
-                        {% save_button url=view.url target='form-row' swap='outerHTML' label='True' %}
+                        {% save_button url=view.url target='form-row' swap='outerHTML' %}
                         {% if object %}
                         {% url 'bikes:bike_detail' object.pk as url_detail %}
-                        {% close_button url=url_detail target='form-row' swap='outerHTML' label='True' %}
+                        {% close_button url=url_detail target='form-row' swap='outerHTML' %}
                         {% else %}
                         {% close_new_form_button id='form-row' label='True' %}
                         {% endif %}

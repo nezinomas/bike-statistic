@@ -11,12 +11,12 @@
                     <td style="width:25%">{{ form.year|as_crispy_field }}</td>
                     <td style="width:25%">{{ form.goal|as_crispy_field }}</td>
                     <td class="text-end" style="width:25%">
-                        {% save_button url=view.url target='form-row' swap='outerHTML' label='True' %}
+                        {% save_button url=view.url target='form-row' swap='outerHTML' %}
                         {% if object %}
                         {% url 'goals:goal_detail' object.pk as url_detail %}
-                        {% close_button url=url_detail target='form-row' swap='outerHTML' label='True' %}
+                        {% close_button url=url_detail target='form-row' swap='outerHTML' %}
                         {% else %}
-                        {% close_new_form_button id='form-row' label='True' %}
+                        {% close_new_form_button id='form-row' %}
                         {% endif %}
                     </td>
                     <td style="width:25%"> </td>
