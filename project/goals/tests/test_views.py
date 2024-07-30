@@ -44,7 +44,7 @@ def test_goal_list_no_records(client_logged):
     url = reverse('goals:goal_list')
     response = client_logged.get(url)
 
-    assert '<td class="bg-warning text-center" colspan="4">No records</td>' in str(
+    assert '<td class="bg-warning" colspan="4">No records</td>' in str(
         response.content)
 
 
@@ -92,9 +92,9 @@ def test_goal_detail_links(client_logged):
     assert f'<tr id="{row_id}"' in actual
     assert f'hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
     # edit button
-    assert f'<button type="button" class="btn btn-sm btn-warning" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
+    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
     # delete button
-    assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
+    assert f'<button type="button" class="btn-danger" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
 
 
 def test_goal_create_func():

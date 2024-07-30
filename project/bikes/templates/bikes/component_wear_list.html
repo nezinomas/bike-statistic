@@ -9,7 +9,7 @@
 
 <div class="buttons-group">
     {% for item in object_list %}
-    <button hx-target="#htmx-container" hx-get="{% url 'bikes:stats_list' bike.slug item.id %}" hx-swap="innerHTML"  hx-target="#htmx-container" class="btn {% if item.id == component.pk %}btn-primary{% else %}btn-secondary{% endif %}">{{ item.name }}</button>
+    <button hx-target="#htmx-container" hx-get="{% url 'bikes:stats_list' bike.slug item.id %}" hx-swap="innerHTML"  hx-target="#htmx-container" class="{% if item.id == component.pk %}btn-primary{% else %}btn-secondary{% endif %}">{{ item.name }}</button>
     {% endfor %}
 
     {% url 'bikes:stats_create' bike.slug component.pk as url_create %}

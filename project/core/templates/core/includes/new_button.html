@@ -1,6 +1,6 @@
 <button
     type="button"
-    class="btn btn-outline-success {% if css_class %}{{css_class}}{% endif %}"
+    class="btn-outline-success {% if css_class %}{{css_class}}{% endif %}"
     {% if width %}style="width: {{ width }};"{% endif %}
     {% if url %}hx-get="{{url}}"{% endif %}
     {% if target %}hx-target="#{{target}}"{% endif %}

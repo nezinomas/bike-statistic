@@ -35,7 +35,7 @@ def test_info_list_no_records(client_logged):
     url = reverse('bikes:info_list', kwargs={'bike_slug': 'xxx'})
     response = client_logged.get(url)
 
-    assert '<td class="bg-warning text-center" colspan="3"> No records </td>' in str(response.content)
+    assert '<td class="bg-warning" colspan="3">No records</td>' in str(response.content)
 
 
 def test_info_list_with_data(client_logged):
@@ -77,9 +77,9 @@ def test_info_list_with_data_links(client_logged):
     # table row
     assert f'<tr id="{row_id}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
     # edit button
-    assert f'<button type="button" class="btn btn-sm btn-warning" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
+    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
     # delete button
-    assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
+    assert f'<button type="button" class="btn-danger" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
 
 
 def test_info_detail_func():
@@ -113,9 +113,9 @@ def test_info_detail_rendered_context(client_logged):
     # table row
     assert f'<tr id="{row_id}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
     # edit button
-    assert f'<button type="button" class="btn btn-sm btn-warning" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
+    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
     # delete button
-    assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
+    assert f'<button type="button" class="btn-danger" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
 
 
 def test_info_create_func():
