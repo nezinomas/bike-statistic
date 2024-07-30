@@ -1,14 +1,14 @@
 @mixin cell {
-    border: 1px solid #ccc;
-    text-align: left;
+    border: 1px solid var(--border-color);
+    text-align: center;
     vertical-align: middle;
 }
-
 
 .tbl-main {
     --cell-horizontal-padding: .25rem;
     --head-bg-color: #e3eef0;
     --cell-height: 1.65rem;
+    --border-color: #ccc;
 
     width: 100%;
     border-collapse: collapse;
@@ -35,8 +35,8 @@
             padding: 0 var(--cell-horizontal-padding);
         }
 
-        > th:not(:first-child) {
-            text-align: center;
+        > th:first-child {
+            text-align: left;
         }
     }
 
@@ -49,8 +49,8 @@
             padding: 0 var(--cell-horizontal-padding);
         }
 
-        > td:not(:first-child) {
-            text-align: center;
+        > td:first-child {
+            text-align: left;
         }
     }
 
@@ -97,4 +97,27 @@
 
 .right-black-border {
     border-right: 1.5px solid black !important;
+}
+
+.inner {
+    --cell-horizontal-padding: 0;
+    --bg-inner-color: #fff3cd;
+
+    border: 1px solid var(--bg-inner-color);
+    background-color: var(--bg-inner-color) !important;
+
+    &:hover {
+        background-color: var(--bg-inner-color) !important;
+    }
+
+    .table-inner {
+        width: 100%;
+        height: 100%;
+        border-collapse: collapse;
+
+        > tbody > tr > td {
+            padding: 1rem .15rem;
+            vertical-align: top;
+        }
+    }
 }
