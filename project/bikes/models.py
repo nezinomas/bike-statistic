@@ -10,6 +10,10 @@ from ..users.models import User
 class BikeQuerySet(models.QuerySet):
     def related(self):
         user = utils.get_user()
+
+        if not user or not user.id:
+            return self
+
         return (
             self
             .select_related('user')

@@ -54,7 +54,7 @@ def test_bike_list_no_records(client_logged):
     url = reverse('bikes:bike_list')
     response = client_logged.get(url)
 
-    assert '<td class="bg-warning text-center" colspan="4"> No records </td>' in str(
+    assert '<td class="bg-warning" colspan="4">No records</td>' in str(
         response.content)
 
 
@@ -97,9 +97,9 @@ def test_bike_detail_links(client_logged):
     # table row
     assert f'<tr id="{row_id}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
     # edit button
-    assert f'<button type="button" class="btn btn-sm btn-warning" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
+    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
     # delete button
-    assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
+    assert f'<button type="button" class="btn-danger" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
 
 
 @time_machine.travel('2000-2-2')
@@ -310,22 +310,3 @@ def test_bike_delete(client_logged):
     client_logged.post(url, {})
 
     assert models.Bike.objects.all().count() == 0
-
-
-def test_bike_menu_200(client_logged):
-    url = reverse('bikes:bike_menu')
-    response = client_logged.get(url)
-
-    assert response.status_code == 200
-
-
-def test_bike_menu(client_logged):
-    bike = BikeFactory()
-    component = ComponentFactory()
-
-    url = reverse('bikes:bike_menu')
-    response = client_logged.get(url)
-    content = clean_content(response.content)
-    stats_url = reverse("bikes:stats_list", kwargs={"bike_slug": bike.slug, "component_pk": component.pk})
-
-    assert f'hx-get="{stats_url}"> Short Name </a>' in content

@@ -65,9 +65,10 @@
 			</div>
 		</div>
 
+		{% if bike_list%}
 		<!-- Component wear -->
 		<div {% if request.resolver_match.url_name == 'stats_list' %}class="active"{% endif %}>
-			<a href="{% url 'bikes:stats_list' default_bike %}">Component wear</a>
+			<a href="{% url 'bikes:stats_list' default_bike.slug %}">Component wear</a>
 			<div class="dropdown">
 				<button class="dropdown__btn"></button>
 				<div class="dropdown__menu">
@@ -80,6 +81,7 @@
 				</div>
 			</div>
 		</div>
+		{% endif %}
 
 		<!-- Settings -->
 		{% url 'bikes:bike_list' as url_bike_list %}

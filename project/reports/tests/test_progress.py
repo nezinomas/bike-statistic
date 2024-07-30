@@ -37,11 +37,11 @@ def test_extremums_no_data(no_data):
 def test_extremums_distance(data):
     actual = Progress(data).extremums()
 
-    assert actual['max_distance'] == 200.0
-    assert actual['max_distance_date'] == date(2000, 1, 31)
+    assert actual[0]['max_distance'] == 200.0
+    assert actual[0]['max_distance_date'] == date(2000, 1, 31)
 
-    assert actual['min_distance'] == 2.0
-    assert actual['min_distance_date'] == date(2000, 1, 1)
+    assert actual[0]['min_distance'] == 2.0
+    assert actual[0]['min_distance_date'] == date(2000, 1, 1)
 
 
 def test_extremums_temperature(data):
@@ -51,25 +51,25 @@ def test_extremums_temperature(data):
     ])
     actual = Progress(data).extremums()
 
-    assert actual['max_temp_date'] == date(2000, 1, 31)
-    assert actual['max_temp'] == 100
+    assert actual[0]['max_temp_date'] == date(2000, 1, 31)
+    assert actual[0]['max_temp'] == 100
 
-    assert actual['min_temp_date'] == date(2000, 4, 1)
-    assert actual['min_temp'] == -22
+    assert actual[0]['min_temp_date'] == date(2000, 4, 1)
+    assert actual[0]['min_temp'] == -22
 
 
 def test_extremums_ascent(data):
     actual = Progress(data).extremums()
 
-    assert actual['max_ascent_date'] == date(2000, 1, 31)
-    assert actual['max_ascent'] == 2000
+    assert actual[0]['max_ascent_date'] == date(2000, 1, 31)
+    assert actual[0]['max_ascent'] == 2000
 
 
 def test_extremums_speed(data):
     actual = Progress(data).extremums()
 
-    assert actual['max_speed_date'] == date(2000, 1, 31)
-    assert actual['max_speed'] == 360.0
+    assert actual[0]['max_speed_date'] == date(2000, 1, 31)
+    assert actual[0]['max_speed'] == 360.0
 
 
 def test_season_progress_keys(data):

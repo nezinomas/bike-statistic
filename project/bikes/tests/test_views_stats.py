@@ -58,7 +58,7 @@ def test_stats_list_no_data(client_logged):
     url = reverse('bikes:stats_list', kwargs={'bike_slug': bike.slug, 'component_pk': component.pk})
     response = client_logged.get(url)
     content = clean_content(response.content)
-    assert '<td class="bg-warning text-center" colspan="6">No records</td>' in content
+    assert '<td class="bg-warning" colspan="6">No records</td>' in content
 
 
 def test_stats_list_with_data(client_logged):
@@ -72,7 +72,7 @@ def test_stats_list_with_data(client_logged):
 
     assert '1999-01-01' in content
     assert '1999-01-31' in content
-    assert '1.11' in content
+    assert '1,11' in content
     assert 'Brand' in content
 
 
@@ -92,9 +92,9 @@ def test_stats_list_with_data_links(client_logged):
     # table row
     assert f'<tr id="{row_id}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
     # edit button
-    assert f'<button type="button" class="btn btn-sm btn-warning" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
+    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
     # delete button
-    assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
+    assert f'<button type="button" class="btn-danger" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
 
 
 def test_stats_detail(client_logged):
@@ -124,9 +124,9 @@ def test_stats_detail_rendered_context(client_logged):
     # table row
     assert f'<tr id="{row_id}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
     # edit button
-    assert f'<button type="button" class="btn btn-sm btn-warning" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
+    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
     # delete button
-    assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
+    assert f'<button type="button" class="btn-danger" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
 
 
 @time_machine.travel('2000-2-2')

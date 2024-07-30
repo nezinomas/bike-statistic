@@ -27,7 +27,7 @@ urlpatterns = [
     ),
     # ............................................................... Component Statistic
     path(
-        "stats/<slug:bike_slug>",
+        "stats/<slug:bike_slug>/",
         views.StatsList.as_view(),
         name="stats_list",
     ),
