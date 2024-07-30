@@ -124,11 +124,36 @@ $w20:  20rem;
     .table-inner {
         width: 100%;
         height: 100%;
+        table-layout: fixed;
         border-collapse: collapse;
 
         > tbody > tr > td {
             padding: 1rem .15rem;
             vertical-align: top;
         }
+    }
+}
+
+.component-wear-col {
+    &-date {
+        --col-value: calc((100% - (2 * $w7) - $w10 - $w6) / 2);
+        width: var(--col-value);
+        min-width: var(--col-value);
+    }
+
+    &-price {
+        width: $w7;
+    }
+
+    &-brand {
+        width: $w10;
+    }
+
+    &-distance {
+        width: $w7;
+    }
+
+    &-buttons {
+        width: $w6;
     }
 }

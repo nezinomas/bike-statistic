@@ -6,14 +6,14 @@
         <form method="post" novalidate>
             {% csrf_token %}
             {{ form.media }}
-            <table class="tbl-main inner">
-                <tr class="tbl-warning" hx-trigger="click[ctrlKey]" hx-post="{{view.url}}">
-                    <td>{{form.start_date|as_crispy_field}}</td>
-                    <td>{{form.end_date|as_crispy_field}}</td>
-                    <td class="w7">{{form.price|as_crispy_field}}</td>
-                    <td class="w10">{{form.brand|as_crispy_field}}</td>
-                    <td class="w7"></td>
-                    <td class="text-end w6">
+            <table class="table-inner">
+                <tr hx-trigger="click[ctrlKey]" hx-post="{{view.url}}">
+                    <td class="component-wear-col-date">{{form.start_date|as_crispy_field}}</td>
+                    <td class="component-wear-col-date">{{form.end_date|as_crispy_field}}</td>
+                    <td class="component-wear-col-price">{{form.price|as_crispy_field}}</td>
+                    <td class="component-wear-col-brand">{{form.brand|as_crispy_field}}</td>
+                    <td class="component-wear-col-distance"></td>
+                    <td class="component-wear-col-buttons text-end">
                         {% save_button url=view.url %}
                         {% if object %}
                         {% url 'bikes:stats_detail' object.bike.slug object.pk as url_detail %}
