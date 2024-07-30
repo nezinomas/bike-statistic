@@ -1,8 +1,17 @@
+$w6: 6rem;
+$w7: 7rem;
+$w10:  10rem;
+$w11:  11rem;
+$w20:  20rem;
+
+
 @mixin cell {
     border: 1px solid var(--border-color);
     text-align: center;
     vertical-align: middle;
 }
+
+
 
 .tbl-main {
     --cell-horizontal-padding: .25rem;
@@ -75,24 +84,26 @@
     background-color: #fff3cd;
 }
 
-.w6 {
-    width: 6rem;
-}
+.w {
+    &6 {
+        width: $w6;
+    }
 
-.w7 {
-    width: 7rem;
-}
+    &7 {
+        width: $w7;
+    }
 
-.w10 {
-    width: 10rem;
-}
+    &10 {
+        width: $w10;
+    }
 
-.w11 {
-    width: 11rem;
-}
+    &11 {
+        width: $w11;
+    }
 
-.w20 {
-    width: 20rem;
+    &20 {
+        width: $w20;
+    }
 }
 
 .right-black-border {
