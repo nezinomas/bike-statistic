@@ -142,13 +142,12 @@
     }
 }
 
-.btn-edit {
-    @include button();
 
+.btn-edit,
+.btn-close {
     --padding-horizontal: .25rem;
-
-    border-color: #989898;
 }
+
 
 .btn-filter {
     --padding-vertical: .25rem;
