@@ -137,17 +137,21 @@ $w20:  20rem;
 .component-wear-col {
     &-price {
         width: $w7;
+        min-width: $w7;
     }
 
     &-brand {
         width: $w10;
+        min-width: $w10;
     }
 
     &-distance {
         width: $w7;
+        min-width: $w7;
     }
 
     &-buttons {
         width: $w6;
+        min-width: $w6;
     }
 }
