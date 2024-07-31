@@ -90,7 +90,7 @@
 		{% url 'users:sync_update' as url_garmin %}
 		{% to_list url_bike_list url_goal_list url_component_list url_garmin as url_list_settings %}
 		<div {% if request.path in url_list_settings or 'info' in request.path %}class="active"{% endif %}>
-			<a href="{{url_bike_list}}">Settings</a>
+			<a href="{{url_goal_list}}">Settings</a>
 			<div class="dropdown">
 				<button class="dropdown__btn"></button>
 				<div class="dropdown__menu">
