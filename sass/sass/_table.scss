@@ -142,6 +142,21 @@ $w20:  20rem;
     }
 }
 
+.data-cols {
+    // all columns
+    td {
+        width: $w7;
+    }
+    // date
+    td:nth-child(2) {
+        width: $w11;
+    }
+    // buttons
+    td:last-child {
+        width: $w6;
+    }
+}
+
 .component-wear-col {
     &-price {
         width: $w7;

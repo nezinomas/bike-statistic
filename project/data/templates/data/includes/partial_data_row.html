@@ -7,16 +7,16 @@
 {% var row_id="row-id-"|join:object.pk %}
 <tr id="{{row_id}}" class="{% if object.checked == 'n' %}waiting-for-review{% endif %}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{{url_update}}">
     <td>{{ object.bike }}</td>
-    <td class="w11">{{ object.date|date:'Y-m-d' }}</td>
-    <td class="w7">{{ object.distance }}</td>
-    <td class="w7">{{ object.time }}</td>
-    <td class="w7">{{ object.temperature|default_if_none:'-' }}</td>
-    <td class="w7">{{ object.ascent|floatformat:0|intcomma }}</td>
-    <td class="w7">{{ object.descent|floatformat:0|intcomma }}</td>
-    <td class="w7">{{ object.max_speed|floatformat:1 }}</td>
-    <td class="w7">{{ object.heart_rate|default_if_none:'-' }}</td>
-    <td class="w7">{{ object.cadence|default_if_none:'-' }}</td>
-    <td class="w6 text-end">
+    <td>{{ object.date|date:'Y-m-d' }}</td>
+    <td>{{ object.distance }}</td>
+    <td>{{ object.time }}</td>
+    <td>{{ object.temperature|default_if_none:'-' }}</td>
+    <td>{{ object.ascent|floatformat:0|intcomma }}</td>
+    <td>{{ object.descent|floatformat:0|intcomma }}</td>
+    <td>{{ object.max_speed|floatformat:1 }}</td>
+    <td>{{ object.heart_rate|default_if_none:'-' }}</td>
+    <td>{{ object.cadence|default_if_none:'-' }}</td>
+    <td class="text-end">
         {% if object.checked == 'n' %}
         {% url 'data:data_quick_update' object.id as url_quick_update %}
         {% quick_save_button url=url_quick_update target=row_id swap='outerHTML' %}
