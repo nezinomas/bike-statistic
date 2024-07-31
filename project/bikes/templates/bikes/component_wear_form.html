@@ -8,8 +8,8 @@
             {{ form.media }}
             <table class="table-inner">
                 <tr hx-trigger="click[ctrlKey]" hx-post="{{view.url}}">
-                    <td class="component-wear-col-date">{{form.start_date|as_crispy_field}}</td>
-                    <td class="component-wear-col-date">{{form.end_date|as_crispy_field}}</td>
+                    <td>{{form.start_date|as_crispy_field}}</td>
+                    <td>{{form.end_date|as_crispy_field}}</td>
                     <td class="component-wear-col-price">{{form.price|as_crispy_field}}</td>
                     <td class="component-wear-col-brand">{{form.brand|as_crispy_field}}</td>
                     <td class="component-wear-col-distance"></td>

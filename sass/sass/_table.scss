@@ -135,12 +135,6 @@ $w20:  20rem;
 }
 
 .component-wear-col {
-    &-date {
-        --col-value: calc((100% - (2 * $w7) - $w10 - $w6) / 2);
-        width: var(--col-value);
-        min-width: var(--col-value);
-    }
-
     &-price {
         width: $w7;
     }

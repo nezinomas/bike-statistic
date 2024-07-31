@@ -6,14 +6,14 @@
 {% url 'bikes:stats_delete' object.bike.slug object.id as url_delete %}
 {% var row_id="row-id-"|join:object.id %}
 <tr id="{{row_id}}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{{url_update}}">
-    <td class="component-wear-col-date">{{ object.start_date|date:"Y-m-d" }}</td>
-    <td class="component-wear-col-date">{% if object.end_date %}{{ object.end_date|date:"Y-m-d" }}{% else %}in use{% endif %}</td>
-    <td class="component-wear-col-price">{{ object.price|default_if_none:'-' }}</td>
-    <td class="component-wear-col-brand">{{ object.brand }}</td>
-    <td class="component-wear-col-distance text-end">
+    <td>{{ object.start_date|date:"Y-m-d" }}</td>
+    <td>{% if object.end_date %}{{ object.end_date|date:"Y-m-d" }}{% else %}in use{% endif %}</td>
+    <td>{{ object.price|default_if_none:'-' }}</td>
+    <td>{{ object.brand }}</td>
+    <td class="text-end">
         {% with km|get_item:object.id as km %}{{ km|floatformat:0|intcomma }}{% endwith %}
     </td>
-    <td class="component-wear-col-buttons text-end">
+    <td class="text-end">
         {% edit_button url=url_update target=row_id swap='outerHTML' %}
         {% delete_button url=url_delete %}
     </td>
