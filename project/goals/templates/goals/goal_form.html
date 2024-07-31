@@ -8,9 +8,10 @@
             {{ form.media }}
             <table class="table-inner">
                 <tr hx-target="#form-row" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-post="{{view.url}}">
-                    <td style="width:25%">{{ form.year|as_crispy_field }}</td>
-                    <td style="width:25%">{{ form.goal|as_crispy_field }}</td>
-                    <td class="text-end" style="width:25%">
+                    <td class="goals-col-year">{{ form.year|as_crispy_field }}</td>
+                    <td class="goals-col-goal">{{ form.goal|as_crispy_field }}</td>
+                    <td > </td>
+                    <td class="goals-col-buttons text-end">
                         {% save_button url=view.url target='form-row' swap='outerHTML' %}
                         {% if object %}
                         {% url 'goals:goal_detail' object.pk as url_detail %}
@@ -19,7 +20,6 @@
                         {% close_new_form_button id='form-row' %}
                         {% endif %}
                     </td>
-                    <td style="width:25%"> </td>
                 </tr>
             </table>
         </form>

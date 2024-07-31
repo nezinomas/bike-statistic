@@ -155,3 +155,17 @@ $w20:  20rem;
         min-width: $w6;
     }
 }
+
+.goals-col {
+    &-goal {
+        width: $w20;
+    }
+
+    &-year {
+        width: $w20;
+    }
+
+    &-buttons {
+        width: $w6;
+    }
+}

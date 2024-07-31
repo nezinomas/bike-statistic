@@ -7,12 +7,12 @@
 {% var row_id="row-id-"|join:object.pk %}
     {% with distances|get_item:object.year as d %}
 <tr id="{{row_id}}" class="{% if d >= object.goal %}table-success{% else %}table-danger{% endif %}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{{url_update}}">
-    <td style="width:25%">{{ object.year }}</td>
-    <td style="width:25%">{{ object.goal|intcomma }}</td>
-    <td class="text-end"  style="width:25%">
+    <td>{{ object.year }}</td>
+    <td>{{ object.goal|intcomma }}</td>
+    <td>{{ d|floatformat:0|intcomma }}</td>
+    <td class="text-end">
         {% edit_button url=url_update target=row_id swap='outerHTML' %}
         {% delete_button url=url_delete %}
     </td>
 
-    <td  style="width:25%" class="text-end">{{ d|floatformat:0|intcomma }}</td>
 </tr>{% endwith %}
