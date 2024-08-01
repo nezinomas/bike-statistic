@@ -13,6 +13,8 @@
     {% new_button url=url_create label='New Goal' target="table-tbody" swap="afterbegin" css_class="end" %}
 </div>
 
+{% if object_list %}
+
 <table class="tbl-main tbl-striped tbl-hover">
     <thead>
         <tr>
@@ -25,11 +27,12 @@
     <tbody id="table-tbody">
         {% for object in object_list %}
         {% include 'goals/includes/partial_goal_row.html' %}
-        {% empty %}
-        <tr><td class="bg-warning" colspan="4">No records</td></tr>
         {% endfor %}
     </tbody>
 </table>
 
+{% else %}
+<div class="alert alert-warning">No records</div>
+{% endif %}
 
 {% endblock content %}
