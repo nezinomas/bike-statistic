@@ -50,11 +50,16 @@ htmx.on("htmx:beforeSwap", (e) => {
     if (target == "mainModal" && !e.detail.xhr.response) {
         /* find submit button id */
         let subbmiter = e.detail.requestConfig.triggeringEvent.submitter.id;
-        pk = $("#_delete").attr("data-pk");
-        if(subbmiter == '_delete' && pk) {
+        if(subbmiter == '_delete') {
+            pk = $("#_delete").attr("data-pk");
             var row = document.getElementById(`row-id-${pk}`);
             row.parentNode.removeChild(row);
         }
+
+        /* remove error messages */
+        $('.invalid-feedback').remove();
+        $('.is-invalid').removeClass('is-invalid');
+
         modal_hide(target);
         e.detail.shouldSwap = false;
     }
