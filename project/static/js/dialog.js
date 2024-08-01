@@ -39,11 +39,6 @@ htmx.on("htmx:afterSwap", (e) => {
 
     if (modals.includes(target)) {
         $(`#${target}`).parent().show();
-
-        // focus on [autofocus] field
-        // commented on 2024.05.06
-        // $(`#${target}`).find('[autofocus]').focus();
-
     }
 })
 
