@@ -1,27 +1,7 @@
-{% load crispy_forms_tags %}
 {% load slippers %}
 
-<tr id="form-row">
-    <td colspan="4" class="inner">
-        <form method="post" novalidate>
-            {% csrf_token %}
-            {{ form.media }}
-            <table class="table-inner">
-                <tr hx-target="#form-row" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-post="{{view.url}}">
-                    <td class="goals-col-year">{{ form.year|as_crispy_field }}</td>
-                    <td class="goals-col-goal">{{ form.goal|as_crispy_field }}</td>
-                    <td > </td>
-                    <td class="goals-col-buttons text-end">
-                        {% save_button url=view.url target='form-row' swap='outerHTML' %}
-                        {% if object %}
-                        {% url 'goals:goal_detail' object.pk as url_detail %}
-                        {% close_button url=url_detail target='form-row' swap='outerHTML' %}
-                        {% else %}
-                        {% close_new_form_button id='form-row' %}
-                        {% endif %}
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </td>
-</tr>
+{% load slippers %}
+
+
+
+{% generic_form csrf_token=csrf_token form=form url=view.url object=object %}
