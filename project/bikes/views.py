@@ -162,7 +162,7 @@ class ComponentDelete(DeleteViewMixin):
 # ---------------------------------------------------------------------------------------
 #                                                                     Bike Component Wear
 # ---------------------------------------------------------------------------------------
-class StatsList(ListViewMixin):
+class ComponentWearList(ListViewMixin):
     template_name = "bikes/component_wear_list.html"
 
     def get_queryset(self):
@@ -196,7 +196,7 @@ class StatsList(ListViewMixin):
         return super().get_context_data(**kwargs) | context
 
 
-class StatsCreate(CreateViewMixin):
+class ComponentWearCreate(CreateViewMixin):
     model = models.ComponentStatistic
     template_name = "core/includes/generic_form.html"
 
@@ -217,7 +217,7 @@ class StatsCreate(CreateViewMixin):
         return "New Component"
 
 
-class StatsUpdate(UpdateViewMixin):
+class ComponentWearUpdate(UpdateViewMixin):
     model = models.ComponentStatistic
     form_class = forms.ComponentStatisticForm
     template_name = "core/includes/generic_form.html"
@@ -236,7 +236,7 @@ class StatsUpdate(UpdateViewMixin):
         return "Update Component"
 
 
-class StatsDelete(DeleteViewMixin):
+class ComponentWearDelete(DeleteViewMixin):
     model = models.ComponentStatistic
     template_name = "core/includes/generic_delete_form.html"
     lookup_url_kwarg = "stats_pk"

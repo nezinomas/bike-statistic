@@ -16,25 +16,25 @@ pytestmark = pytest.mark.django_db
 def test_stats_list_func():
     view = resolve('/stats/bike/66/')
 
-    assert views.StatsList is view.func.view_class
+    assert views.ComponentWearList is view.func.view_class
 
 
 def test_stats_create_func():
     view = resolve('/stats/bike/66/create/')
 
-    assert views.StatsCreate is view.func.view_class
+    assert views.ComponentWearCreate is view.func.view_class
 
 
 def test_stats_update_func():
     view = resolve('/stats/bike/update/7/')
 
-    assert views.StatsUpdate is view.func.view_class
+    assert views.ComponentWearUpdate is view.func.view_class
 
 
 def test_stats_delete_func():
     view = resolve('/stats/bike/delete/7/')
 
-    assert views.StatsDelete is view.func.view_class
+    assert views.ComponentWearDelete is view.func.view_class
 
 
 def test_stats_list_200(client_logged):
