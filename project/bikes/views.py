@@ -1,11 +1,7 @@
-from datetime import date
-
-from django.db.models import Sum
 from django.urls import reverse_lazy
 
-from ..core.lib import utils
 from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
-                                 DetailViewMixin, ListViewMixin,
+                                 ListViewMixin,
                                  UpdateViewMixin)
 from ..data.models import Data
 from . import forms, models
