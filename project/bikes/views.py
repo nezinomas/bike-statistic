@@ -74,10 +74,6 @@ class BikeInfoList(ListViewMixin):
             bike__slug=self.kwargs["bike_slug"]
         )
 
-    def get_context_data(self, **kwargs):
-        context = {"bike_list": models.Bike.objects.items()}
-        return super().get_context_data(**kwargs) | context
-
 
 class BikeInfoDetail(DetailViewMixin):
     model = models.BikeInfo
