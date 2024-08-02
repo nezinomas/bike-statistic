@@ -6,7 +6,7 @@ from django.db import models
 from ...users.factories import UserFactory
 from ..factories import (BikeFactory, BikeInfoFactory, ComponentFactory,
                          ComponentStatisticFactory)
-from ..models import Bike, BikeInfo, Component, ComponentStatistic
+from ..models import Bike, BikeInfo, Component, ComponentWear
 
 pytestmark = pytest.mark.django_db
 
@@ -184,7 +184,7 @@ def test_component_statistic_related_different_users(get_user):
     ComponentStatisticFactory(bike=b1)
     ComponentStatisticFactory(bike=b2)
 
-    actual = ComponentStatistic.objects.related()
+    actual = ComponentWear.objects.related()
 
     # for user bob
     assert len(actual) == 1
@@ -195,13 +195,13 @@ def test_component_statistic_related_qs_count(get_user, django_assert_max_num_qu
     ComponentStatisticFactory()
     ComponentStatisticFactory()
 
-    assert ComponentStatistic.objects.all().count() == 2
+    assert ComponentWear.objects.all().count() == 2
 
     with django_assert_max_num_queries(1):
-        list(q.bike.short_name for q in ComponentStatistic.objects.related())
+        list(q.bike.short_name for q in ComponentWear.objects.related())
 
 
 def test_component_statistic_items(get_user):
     ComponentStatisticFactory()
 
-    assert ComponentStatistic.objects.items().count() == 1
+    assert ComponentWear.objects.items().count() == 1

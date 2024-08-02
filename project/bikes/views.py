@@ -178,7 +178,7 @@ class ComponentWearList(ListViewMixin):
 
         data = Data.objects.items().filter(bike=bike).values("date", "distance")
 
-        component_statistic = models.ComponentStatistic.objects.items().filter(
+        component_statistic = models.ComponentWear.objects.items().filter(
             bike=bike, component=component
         )
 
@@ -197,7 +197,7 @@ class ComponentWearList(ListViewMixin):
 
 
 class ComponentWearCreate(CreateViewMixin):
-    model = models.ComponentStatistic
+    model = models.ComponentWear
     template_name = "core/includes/generic_form.html"
 
     def url(self):
@@ -218,7 +218,7 @@ class ComponentWearCreate(CreateViewMixin):
 
 
 class ComponentWearUpdate(UpdateViewMixin):
-    model = models.ComponentStatistic
+    model = models.ComponentWear
     form_class = forms.ComponentWearForm
     template_name = "core/includes/generic_form.html"
     lookup_url_kwarg = "stats_pk"
@@ -237,7 +237,7 @@ class ComponentWearUpdate(UpdateViewMixin):
 
 
 class ComponentWearDelete(DeleteViewMixin):
-    model = models.ComponentStatistic
+    model = models.ComponentWear
     template_name = "core/includes/generic_delete_form.html"
     lookup_url_kwarg = "stats_pk"
     success_url = "/"

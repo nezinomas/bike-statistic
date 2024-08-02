@@ -22,4 +22,4 @@ class ComponentStatisticAdmin(admin.ModelAdmin):
 admin.site.register(models.Bike, BikeAdmin)
 # admin.site.register(models.BikeInfo, BikeNoteAdmin)
 admin.site.register(models.Component, ComponentAdmin)
-admin.site.register(models.ComponentStatistic, ComponentStatisticAdmin)
+admin.site.register(models.ComponentWear, ComponentStatisticAdmin)

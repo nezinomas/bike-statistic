@@ -137,7 +137,7 @@ def test_stats_create_save_with_valid_data(client_logged):
 
     url = reverse('bikes:stats_create', kwargs={'bike_slug': bike.slug, 'component_pk': component.pk})
     client_logged.post(url, data)
-    actual = models.ComponentStatistic.objects.first()
+    actual = models.ComponentWear.objects.first()
 
     assert actual.bike == bike
     assert actual.component == component
@@ -206,7 +206,7 @@ def test_stats_update_start_date(client_logged):
     url = reverse('bikes:stats_update', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
     client_logged.post(url, data)
 
-    actual = models.ComponentStatistic.objects.get(pk=stats.pk)
+    actual = models.ComponentWear.objects.get(pk=stats.pk)
 
     assert actual.start_date == date(1999, 1, 30)
 
@@ -224,7 +224,7 @@ def test_stats_update_end_date(client_logged):
     url = reverse('bikes:stats_update', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
     client_logged.post(url, data)
 
-    actual = models.ComponentStatistic.objects.get(pk=stats.pk)
+    actual = models.ComponentWear.objects.get(pk=stats.pk)
 
     assert not actual.end_date
 
@@ -259,4 +259,4 @@ def test_stats_delete(client_logged):
 
     client_logged.post(url, {})
 
-    assert models.ComponentStatistic.objects.all().count() == 0
+    assert models.ComponentWear.objects.all().count() == 0

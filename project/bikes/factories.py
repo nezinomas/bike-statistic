@@ -3,7 +3,7 @@ from datetime import date
 import factory
 
 from ..users.factories import UserFactory
-from .models import Bike, BikeInfo, Component, ComponentStatistic
+from .models import Bike, BikeInfo, Component, ComponentWear
 
 
 class BikeFactory(factory.django.DjangoModelFactory):
@@ -46,4 +46,4 @@ class ComponentStatisticFactory(factory.django.DjangoModelFactory):
     component = factory.SubFactory(ComponentFactory)
 
     class Meta:
-        model = ComponentStatistic
+        model = ComponentWear

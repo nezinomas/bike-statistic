@@ -5,7 +5,7 @@ from crispy_forms.helper import FormHelper
 from django import forms
 
 from ..core.mixins.form_mixin import FormMixin
-from .models import Bike, BikeInfo, Component, ComponentStatistic
+from .models import Bike, BikeInfo, Component, ComponentWear
 
 
 class ComponentForm(FormMixin, forms.ModelForm):
@@ -21,7 +21,7 @@ class ComponentForm(FormMixin, forms.ModelForm):
 
 class ComponentWearForm(forms.ModelForm):
     class Meta:
-        model = ComponentStatistic
+        model = ComponentWear
         fields = ['start_date', 'end_date', 'price', 'brand']
 
         widgets = {

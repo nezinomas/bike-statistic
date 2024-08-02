@@ -137,7 +137,7 @@ class Component(models.Model):
         return reverse_lazy("bikes:component_list")
 
 
-class ComponentStatisticQuerySet(models.QuerySet):
+class ComponentWearQuerySet(models.QuerySet):
     def related(self):
         user = utils.get_user()
         return (
@@ -150,7 +150,7 @@ class ComponentStatisticQuerySet(models.QuerySet):
         return self.related()
 
 
-class ComponentStatistic(models.Model):
+class ComponentWear(models.Model):
     start_date = models.DateField()
     end_date = models.DateField(
         null=True,
@@ -175,7 +175,7 @@ class ComponentStatistic(models.Model):
         related_name='components'
     )
 
-    objects = ComponentStatisticQuerySet.as_manager()
+    objects = ComponentWearQuerySet.as_manager()
 
     class Meta:
         ordering = ['-start_date']
