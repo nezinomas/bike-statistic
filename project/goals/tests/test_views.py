@@ -84,17 +84,15 @@ def test_goal_detail_links(client_logged):
 
     actual = clean_content(response.content)
 
-    row_id = f'row-id-{goal.pk}'
     url_update = reverse('goals:goal_update', kwargs={'pk': goal.pk})
     url_delete = reverse('goals:goal_delete', kwargs={'pk': goal.pk})
 
     # table row
-    assert f'<tr id="{row_id}"' in actual
-    assert f'hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
+    assert f'hx-target="#mainModal" hx-trigger="dblclick" hx-get="{url_update}">' in actual
     # edit button
-    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
+    assert f'class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#mainModal"' in actual
     # delete button
-    assert f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
+    assert f'class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal"' in actual
 
 
 def test_goal_create_func():
@@ -152,17 +150,6 @@ def test_goal_update_load_form(client_logged):
 
     assert '2000' in form
     assert '1000' in form
-
-
-def test_goal_update_load_form_close_button(client_logged):
-    goal = GoalFactory()
-
-    url = reverse('goals:goal_update', kwargs={'pk': goal.pk})
-    response = client_logged.get(url)
-    actual = clean_content(response.content)
-
-    url_close = reverse('goals:goal_detail', kwargs={'pk': goal.pk})
-    assert f'hx-get="{url_close}"' in actual
 
 
 def test_goal_update_year(client_logged):
