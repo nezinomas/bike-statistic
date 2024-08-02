@@ -113,30 +113,6 @@ $w20:  20rem;
     border-right: 1.5px solid black !important;
 }
 
-.inner {
-    --cell-horizontal-padding: 0;
-    --bg-inner-color: #fff3cd;
-
-    border: 1px solid var(--bg-inner-color);
-    background-color: var(--bg-inner-color) !important;
-
-    &:hover {
-        background-color: var(--bg-inner-color) !important;
-    }
-
-    .table-inner {
-        width: 100%;
-        height: 100%;
-        table-layout: fixed;
-        border-collapse: collapse;
-
-        > tbody > tr > td {
-            padding: 1rem .15rem;
-            vertical-align: top;
-        }
-    }
-}
-
 .data-cols {
     // all columns
     td {
