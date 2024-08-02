@@ -39,11 +39,6 @@ htmx.on("htmx:afterSwap", (e) => {
 
     if (modals.includes(target)) {
         $(`#${target}`).parent().show();
-
-        // focus on [autofocus] field
-        // commented on 2024.05.06
-        // $(`#${target}`).find('[autofocus]').focus();
-
     }
 })
 
@@ -55,11 +50,21 @@ htmx.on("htmx:beforeSwap", (e) => {
     if (target == "mainModal" && !e.detail.xhr.response) {
         /* find submit button id */
         let subbmiter = e.detail.requestConfig.triggeringEvent.submitter.id;
-        pk = $("#_delete").attr("data-pk");
-        if(subbmiter == '_delete' && pk) {
-            var row = document.getElementById(`row-id-${pk}`);
-            row.parentNode.removeChild(row);
+
+        if(subbmiter == '_delete') {
+            let pk = $("#_delete").attr("data-pk");
+            let row = document.getElementById(`row-id-${pk}`);
+            if (row) {
+                row.parentNode.removeChild(row);
+            }
         }
+
+        if(subbmiter == '_close') {
+            /* remove error messages */
+            $('.invalid-feedback').remove();
+            $('.is-invalid').removeClass('is-invalid');
+        }
+
         modal_hide(target);
         e.detail.shouldSwap = false;
     }

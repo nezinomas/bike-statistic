@@ -35,7 +35,7 @@ def test_component_list_no_records(client_logged):
     url = reverse('bikes:component_list')
     response = client_logged.get(url)
 
-    assert '<td class="bg-warning" colspan="3">No components</td>' in str(
+    assert '<div class="alert alert-warning">No records</div>' in str(
         response.content)
 
 
@@ -49,61 +49,29 @@ def test_component_list(client_logged):
     assert 'Component' in content
 
 
-def test_component_detail_func():
-    view = resolve('/component/detail/9/')
-
-    assert views.ComponentDetail is view.func.view_class
-
-
-def test_component_detail(client_logged):
+def test_component_links(client_logged):
     comp = ComponentFactory()
 
-    url = reverse('bikes:component_detail', kwargs={'pk': comp.pk})
-    response = client_logged.get(url)
-
-    actual = response.context['object']
-    assert response.status_code == 200
-    assert actual == comp
-
-
-def test_component_detail_links(client_logged):
-    comp = ComponentFactory()
-
-    url = reverse('bikes:component_detail', kwargs={'pk': comp.pk})
+    url = reverse('bikes:component_list')
     response = client_logged.get(url)
 
     actual = clean_content(response.content)
 
-    row_id = f'row-id-{comp.pk}'
     url_update = reverse('bikes:component_update', kwargs={'pk': comp.pk})
     url_delete = reverse('bikes:component_delete', kwargs={'pk': comp.pk})
 
     # table row
-    assert f'<tr id="{row_id}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
+    assert f'<tr hx-target="#mainModal" hx-trigger="dblclick" hx-get="{url_update}"' in actual
     # edit button
-    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
+    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#mainModal"' in actual
     # delete button
-    assert f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
+    assert f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal"' in actual
 
 
 def test_component_create_func():
     view = resolve('/component/create/')
 
     assert views.ComponentCreate is view.func.view_class
-
-
-def test_component_create_load_form(client_logged):
-    url = reverse('bikes:component_create')
-    response = client_logged.get(url)
-    content = clean_content(response.content)
-
-    assert response.status_code == 200
-    assert '<tr id="form-row">' in content
-    assert '<form method="post" novalidate>' in content
-
-    button_create = re.findall(fr'<button.+hx-post="({url})" hx-target="(.*?)"', content)
-    assert button_create[0][0] == url
-    assert button_create[0][1] == '#form-row'
 
 
 def test_component_create_save_with_valid_data(client_logged):
@@ -131,25 +99,6 @@ def test_component_update_func():
     view = resolve('/component/update/1/')
 
     assert views.ComponentUpdate is view.func.view_class
-
-
-def test_component_update_load_form(client_logged):
-    comp = ComponentFactory()
-
-    url = reverse('bikes:component_update', kwargs={'pk': comp.pk})
-    response = client_logged.get(url)
-    form = clean_content(response.content)
-
-    assert 'Component' in form
-
-    save_button = re.findall(fr'hx-post="({url})" hx-target="(.*?)"', form)
-    assert save_button[0][0] == url
-    assert save_button[0][1] == '#form-row'
-
-    url_detail = url = reverse('bikes:component_detail', kwargs={'pk': comp.pk})
-    close_button = re.findall(fr'hx-get="({url_detail})" hx-target="(.*?)"', form)
-    assert close_button[0][0] == url
-    assert close_button[0][1] == '#form-row'
 
 
 def test_component_update_name(client_logged):

@@ -1,7 +1,6 @@
 $w6: 6rem;
 $w7: 7rem;
 $w10:  10rem;
-$w11:  11rem;
 $w20:  20rem;
 
 
@@ -105,10 +104,6 @@ $w20:  20rem;
         width: $w10;
     }
 
-    &11 {
-        width: $w11;
-    }
-
     &20 {
         width: $w20;
     }
@@ -149,7 +144,7 @@ $w20:  20rem;
     }
     // date
     td:nth-child(2) {
-        width: $w11;
+        width: $w10;
     }
     // buttons
     td:last-child {
@@ -189,6 +184,48 @@ $w20:  20rem;
     }
 
     &-buttons {
+        width: $w6;
+    }
+}
+
+.bike-info-cols {
+    // component
+    td:first-child {
+        width: $w20;
+    }
+    // buttons
+    td:last-child {
+        width: $w6;
+    }
+}
+
+.component-cols {
+    // #
+    td:first-child {
+        width: $w6;
+    }
+    // buttons
+    td:last-child {
+        width: $w6;
+    }
+
+    td:first-child,
+    th:first-child {
+        text-align: center !important;
+    }
+}
+
+.bike-cols {
+    // date
+    td:first-child {
+        width: $w20;
+    }
+    // full name
+    td:nth-child(2) {
+        width: $w20;
+    }
+    // buttons
+    td:last-child {
         width: $w6;
     }
 }

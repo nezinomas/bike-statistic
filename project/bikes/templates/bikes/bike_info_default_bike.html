@@ -1,3 +1,0 @@
-{% for bike in object_list %}
-<a class="nav-link" role="button" hx-target="#htmx-container" hx-get="{% url 'bikes:info_list' bike.slug %}"> Bike Info </a>
-{% endfor %}

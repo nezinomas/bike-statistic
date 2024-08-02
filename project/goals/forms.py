@@ -24,7 +24,6 @@ class GoalForm(FormMixin, forms.ModelForm):
         self.fields['year'].initial = datetime.now().year
 
         self.helper = FormHelper()
-        set_field_properties(self, self.helper)
 
     def clean(self):
         cleaned_data = super().clean()

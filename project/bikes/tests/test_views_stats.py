@@ -13,12 +13,6 @@ from .. import models, views
 pytestmark = pytest.mark.django_db
 
 
-def test_stats_detail_func():
-    view = resolve('/stats/bike/detail/9/')
-
-    assert views.StatsDetail is view.func.view_class
-
-
 def test_stats_list_func():
     view = resolve('/stats/bike/66/')
 
@@ -58,7 +52,7 @@ def test_stats_list_no_data(client_logged):
     url = reverse('bikes:stats_list', kwargs={'bike_slug': bike.slug, 'component_pk': component.pk})
     response = client_logged.get(url)
     content = clean_content(response.content)
-    assert '<td class="bg-warning" colspan="6">No records</td>' in content
+    assert '<div class="alert alert-warning">No records</div>' in content
 
 
 def test_stats_list_with_data(client_logged):
@@ -85,48 +79,35 @@ def test_stats_list_with_data_links(client_logged):
     response = client_logged.get(url)
     actual = clean_content(response.content)
 
-    row_id = f'row-id-{stats.pk}'
     url_update = reverse('bikes:stats_update', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
     url_delete = reverse('bikes:stats_delete', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
 
     # table row
-    assert f'<tr id="{row_id}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
+    assert f'<tr hx-target="#mainModal" hx-trigger="dblclick" hx-get="{url_update}"' in actual
     # edit button
-    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
+    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#mainModal"' in actual
     # delete button
-    assert f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
+    assert f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal"' in actual
 
 
-def test_stats_detail(client_logged):
+def test_stats_rendered_context(client_logged):
     bike = BikeFactory()
     stats = ComponentStatisticFactory()
 
-    url = reverse('bikes:stats_detail', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
-    response = client_logged.get(url)
-
-    actual = response.context['object']
-    assert actual == stats
-
-
-def test_stats_detail_rendered_context(client_logged):
-    bike = BikeFactory()
-    stats = ComponentStatisticFactory()
-
-    url = reverse('bikes:stats_detail', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    url = reverse('bikes:stats_list', kwargs={'bike_slug': bike.slug, 'component_pk': stats.pk})
     response = client_logged.get(url)
 
     actual = clean_content(response.content)
 
-    row_id = f'row-id-{stats.pk}'
     url_update = reverse('bikes:stats_update', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
     url_delete = reverse('bikes:stats_delete', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
 
     # table row
-    assert f'<tr id="{row_id}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
+    assert f'<tr hx-target="#mainModal" hx-trigger="dblclick" hx-get="{url_update}"' in actual
     # edit button
-    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
+    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#mainModal" ' in actual
     # delete button
-    assert f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
+    assert f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal"' in actual
 
 
 @time_machine.travel('2000-2-2')
@@ -203,7 +184,7 @@ def test_stats_update_load_form_close_button(client_logged):
     bike = BikeFactory()
     stats = ComponentStatisticFactory()
 
-    url = reverse('bikes:stats_detail', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    url = reverse('bikes:stats_list', kwargs={'bike_slug': bike.slug, 'component_pk': stats.pk})
     response = client_logged.get(url)
     actual = clean_content(response.content)
 

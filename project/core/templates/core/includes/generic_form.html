@@ -1,0 +1,26 @@
+{% load crispy_forms_tags %}
+{% load slippers %}
+{% load i18n %}
+
+<form method="POST" id="modal-form" class="modal-content modal-form" hx-encoding="multipart/form-data" novalidate autocomplete="off" tabindex="-1" hx-post="{{ view.url }}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' data-hx-trigger-form="{{hx_trigger_form}}">
+    {% include 'core/includes/form_date_scripts.html' %}
+    <div class="modal-header">
+        <h5 class="modal-title">{{ view.title|default:"Create/Update"}}</h5>
+        <button type="button" class="button-close modal-close" data-dismiss="mainModal" aria-label="{% translate 'Close' %}"></button>
+    </div>
+    <div class="modal-body">
+        {% include 'core/includes/form_errors.html' %}
+
+        {% for field in form %}
+        {% if not field.is_hidden %}
+        {{ field|as_crispy_field }}
+        {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" id="_close" class="btn-primary">{% if object %}Update{% else %}Create{% endif %}</button>
+        <button type="button" class="btn-secondary modal-close" data-dismiss="mainModal">Close</button>
+    </div>
+
+</form>

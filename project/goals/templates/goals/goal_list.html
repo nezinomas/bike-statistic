@@ -6,12 +6,13 @@
 
 {% block content %}
 
-<div class="hidden" hx-trigger="reload from:body" hx-get="{% url 'goals:goal_list' %}" hx-target="#htmx-container"></div>
+<div class="hidden" hx-get="{% url 'goals:goal_list' %}" hx-trigger="reload from:body" hx-target="#htmx-container"></div>
 
 <div class="buttons-group">
     {% url 'goals:goal_create' as url_create %}
-    {% new_button url=url_create label='New Goal' target="table-tbody" swap="afterbegin" css_class="end" %}
+    {% new_button url=url_create label='New Goal' target="mainModal" css_class="end" %}
 </div>
+
 
 {% if object_list %}
 
@@ -24,9 +25,22 @@
             <th class="goals-col-buttons text-end">Actions</th>
         </tr>
     </thead>
-    <tbody id="table-tbody">
+    <tbody>
         {% for object in object_list %}
-        {% include 'goals/includes/partial_goal_row.html' %}
+        {% url 'goals:goal_update' object.pk as url_update %}
+        {% url 'goals:goal_delete' object.pk as url_delete %}
+
+        {% with distances|get_item:object.year as d %}
+        <tr class="{% if d >= object.goal %}tbl-success{% else %}tbl-danger{% endif %}" hx-target="#mainModal" hx-trigger="dblclick" hx-get="{{url_update}}">
+            <td>{{ object.year }}</td>
+            <td>{{ object.goal|intcomma }}</td>
+            <td>{{ d|floatformat:0|intcomma }}</td>
+            <td class="text-end">
+                {% edit_button url=url_update target='mainModal' %}
+                {% delete_button url=url_delete %}
+            </td>
+        </tr>{% endwith %}
+
         {% endfor %}
     </tbody>
 </table>
@@ -34,5 +48,6 @@
 {% else %}
 <div class="alert alert-warning">No records</div>
 {% endif %}
+
 
 {% endblock content %}

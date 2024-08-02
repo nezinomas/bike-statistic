@@ -18,7 +18,6 @@ class ComponentForm(FormMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         self.helper = FormHelper()
-        set_field_properties(self, self.helper)
 
 
 class ComponentStatisticForm(forms.ModelForm):
@@ -39,7 +38,6 @@ class ComponentStatisticForm(forms.ModelForm):
 
         self.fields['start_date'].initial = datetime.now()
         self.helper = FormHelper()
-        set_field_properties(self, self.helper)
 
     def save(self, *args, **kwargs):
         instance = super().save(commit=False)
@@ -74,15 +72,6 @@ class BikeForm(FormMixin, forms.ModelForm):
         self.fields['date'].initial = datetime.now()
 
         self.helper = FormHelper()
-        set_field_properties(self, self.helper)
-
-        self.helper.form_show_labels = True
-        self.fields['date'].label = ''
-        self.fields['full_name'].label = ''
-        self.fields['short_name'].label = ''
-        self.fields['main'].label = 'Main'
-        self.fields['retired'].label = 'Retired'
-
 
     def clean_main(self):
         _main = self.cleaned_data.get('main')
@@ -119,7 +108,6 @@ class BikeInfoForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         self.helper = FormHelper()
-        set_field_properties(self, self.helper)
 
     def save(self, *args, **kwargs):
         instance = super().save(commit=False)

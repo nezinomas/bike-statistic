@@ -74,8 +74,8 @@
 				<div class="dropdown__menu">
 					{% for bike in bike_list %}
 					<a href="{% url 'bikes:stats_list' bike.slug %}"> {{ bike.short_name }}
-						{% if bike.main %}<i class="bi bi-star" style="color:rgb(4, 196, 4);"></i>{% endif %}
-						{% if bike.retired %}<i class="bi bi-dash-circle" style="color:rgb(230, 1, 1)"></i>{% endif %}
+						{% if bike.main %}<i class="bi bi-star bike-main"></i>{% endif %}
+						{% if bike.retired %}<i class="bi bi-dash-circle bike-retired"></i>{% endif %}
 					</a>
 					{% endfor %}
 				</div>

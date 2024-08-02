@@ -54,6 +54,18 @@ main {
     grid-gap: 1rem;
 }
 
+a[role=button] {
+    text-decoration: none;
+}
+
+.bike-main  {
+    color: rgb(4, 196, 4) !important;
+}
+
+.bike-retired {
+    color:rgb(230, 1, 1) !important;
+}
+
 .buttons-group {
     display: flex;
     flex-wrap: wrap;

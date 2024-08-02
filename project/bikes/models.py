@@ -59,7 +59,7 @@ class Bike(models.Model):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse_lazy("bikes:bike_detail", kwargs={"pk": self.pk})
+        return reverse_lazy("bikes:bike_list")
 
 
 class BikeInfoQuerySet(models.QuerySet):
@@ -97,7 +97,7 @@ class BikeInfo(models.Model):
         return f'{self.bike}: {self.component}'
 
     def get_absolute_url(self):
-        return reverse_lazy("bikes:info_detail", kwargs={"bike_slug": self.bike.slug, "pk": self.pk})
+        return reverse_lazy("bikes:info_list", kwargs={"bike_slug": self.bike.slug})
 
 
 class ComponentQuerySet(models.QuerySet):
@@ -134,7 +134,7 @@ class Component(models.Model):
         return str(self.name)
 
     def get_absolute_url(self):
-        return reverse_lazy("bikes:component_detail", kwargs={"pk": self.pk})
+        return reverse_lazy("bikes:component_list")
 
 
 class ComponentStatisticQuerySet(models.QuerySet):
@@ -185,5 +185,5 @@ class ComponentStatistic(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy(
-            "bikes:stats_detail",
-            kwargs={"bike_slug": self.bike.slug, "stats_pk": self.pk})
+            "bikes:stats_list",
+            kwargs={"bike_slug": self.bike.slug, "component_pk": self.pk})

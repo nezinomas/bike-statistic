@@ -1,7 +1,9 @@
 {% extends request.htmx|yesno:"base_htmx.html,base.html" %}
 
-{% load slippers %}
 {% load humanize %}
+{% load slippers %}
+{% load template_filters %}
+
 
 {% block content %}
 
@@ -9,11 +11,11 @@
 
 <div class="buttons-group">
     {% for item in object_list %}
-    <button hx-target="#htmx-container" hx-get="{% url 'bikes:stats_list' bike.slug item.id %}" hx-swap="innerHTML"  hx-target="#htmx-container" class="{% if item.id == component.pk %}btn-primary{% else %}btn-secondary{% endif %}">{{ item.name }}</button>
+    <a role="button" href="{% url 'bikes:stats_list' bike.slug item.id %}" class="{% if item.id == component.pk %}btn-primary{% else %}btn-secondary{% endif %}">{{ item.name }}</a>
     {% endfor %}
 
     {% url 'bikes:stats_create' bike.slug component.pk as url_create %}
-    {% new_button url=url_create label='New Component' url=url_create target="stats-table-tbody" swap="afterbegin" css_class="end" %}
+    {% new_button url=url_create label='New Component' target="mainModal" css_class="end" %}
 </div>
 
 <div class="alert-component-wear">
@@ -23,6 +25,9 @@
     <div><strong>{{bike}}</strong> / {{component.name}}</div>
     <div> Total: {{ total|floatformat:0|intcomma }}km</div>
 </div>
+
+
+{% if component_statistic %}
 
 <table class="tbl-main tbl-striped tbl-hover">
     <thead>
@@ -37,11 +42,29 @@
     </thead>
     <tbody id="stats-table-tbody">
         {% for object in component_statistic %}
-        {% include 'bikes/includes/partial_component_wear_row.html' %}
-        {% empty %}
-        <tr><td class="bg-warning" colspan="6">No records</td></tr>
+
+        {% url 'bikes:stats_update' object.bike.slug object.id as url_update %}
+        {% url 'bikes:stats_delete' object.bike.slug object.id as url_delete %}
+        <tr hx-target="#mainModal" hx-trigger="dblclick" hx-get="{{url_update}}">
+            <td>{{ object.start_date|date:"Y-m-d" }}</td>
+            <td>{% if object.end_date %}{{ object.end_date|date:"Y-m-d" }}{% else %}in use{% endif %}</td>
+            <td>{{ object.price|default_if_none:'-' }}</td>
+            <td>{{ object.brand }}</td>
+            <td class="text-end">
+                {% with km|get_item:object.id as km %}{{ km|floatformat:0|intcomma }}{% endwith %}
+            </td>
+            <td class="text-end">
+                {% edit_button url=url_update target='mainModal' %}
+                {% delete_button url=url_delete %}
+            </td>
+        </tr>
+
         {% endfor %}
     </tbody>
 </table>
+
+{% else %}
+<div class="alert alert-warning">No records</div>
+{% endif %}
 
 {% endblock content %}
