@@ -97,7 +97,7 @@ class BikeInfo(models.Model):
         return f'{self.bike}: {self.component}'
 
     def get_absolute_url(self):
-        return reverse_lazy("bikes:info_detail", kwargs={"bike_slug": self.bike.slug, "pk": self.pk})
+        return reverse_lazy("bikes:info_list", kwargs={"bike_slug": self.bike.slug})
 
 
 class ComponentQuerySet(models.QuerySet):

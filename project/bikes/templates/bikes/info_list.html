@@ -30,7 +30,7 @@
 
         {% url 'bikes:info_update' object.bike.slug object.pk as url_update %}
         {% url 'bikes:info_delete' object.bike.slug object.pk as url_delete %}
-        <tr hx-target="this" hx-trigger="dblclick" hx-get="{{url_update}}" hx-target="#mainModal">
+        <tr hx-target="#mainModal" hx-trigger="dblclick" hx-get="{{url_update}}">
             <td>{{ object.component }}</td>
             <td>{{ object.description }}</td>
             <td class="text-end">

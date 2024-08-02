@@ -35,7 +35,7 @@ def test_info_list_no_records(client_logged):
     url = reverse('bikes:info_list', kwargs={'bike_slug': 'xxx'})
     response = client_logged.get(url)
 
-    assert '<td class="bg-warning" colspan="3">No records</td>' in str(response.content)
+    assert '<div class="alert alert-warning">No records</div>' in str(response.content)
 
 
 def test_info_list_with_data(client_logged):
@@ -70,52 +70,15 @@ def test_info_list_with_data_links(client_logged):
     response = client_logged.get(url)
     actual = clean_content(response.content)
 
-    row_id = f'row-id-{info.pk}'
     url_update = reverse('bikes:info_update', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
     url_delete = reverse('bikes:info_delete', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
 
     # table row
-    assert f'<tr id="{row_id}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
+    assert f'<tr hx-target="#mainModal" hx-trigger="dblclick" hx-get="{url_update}"' in actual
     # edit button
-    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
+    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#mainModal"' in actual
     # delete button
-    assert f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
-
-
-def test_info_detail_func():
-    view = resolve('/info/bike/detail/9/')
-
-    assert views.BikeInfoDetail is view.func.view_class
-
-
-def test_info_detail(client_logged):
-    info = BikeInfoFactory()
-
-    url = reverse('bikes:info_detail', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
-    response = client_logged.get(url)
-
-    actual = response.context['object']
-    assert actual == info
-
-
-def test_info_detail_rendered_context(client_logged):
-    info = BikeInfoFactory()
-
-    url = reverse('bikes:info_detail', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
-    response = client_logged.get(url)
-
-    actual = clean_content(response.content)
-
-    row_id = f'row-id-{info.pk}'
-    url_update = reverse('bikes:info_update', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
-    url_delete = reverse('bikes:info_delete', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
-
-    # table row
-    assert f'<tr id="{row_id}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
-    # edit button
-    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
-    # delete button
-    assert f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
+    assert f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal"' in actual
 
 
 def test_info_create_func():
@@ -128,7 +91,6 @@ def test_info_create_load_form(client_logged):
     bike = BikeFactory()
     url = reverse('bikes:info_create', kwargs={'bike_slug': bike.slug})
     response = client_logged.get(url)
-    content = clean_content(response.content)
 
     assert response.status_code == 200
 
@@ -177,17 +139,6 @@ def test_info_update_load_form(client_logged):
 
     assert 'Component' in form
     assert 'Description' in form
-
-
-def test_info_update_load_form_close_button(client_logged):
-    info = BikeInfoFactory()
-
-    url = reverse('bikes:info_update', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
-    response = client_logged.get(url)
-    actual = clean_content(response.content)
-
-    url_close = reverse('bikes:info_detail', kwargs={'bike_slug': info.bike.slug, 'pk': info.pk})
-    assert f'hx-get="{url_close}"' in actual
 
 
 def test_info_update_component(client_logged):
