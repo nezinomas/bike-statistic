@@ -11,7 +11,6 @@ $w20:  20rem;
 }
 
 
-
 .tbl-main {
     --cell-horizontal-padding: .25rem;
     --head-bg-color: #e3eef0;
@@ -89,24 +88,6 @@ $w20:  20rem;
 
 .tbl-success {
     background-color: #d1e7dd;
-}
-
-.w {
-    &6 {
-        width: $w6;
-    }
-
-    &7 {
-        width: $w7;
-    }
-
-    &10 {
-        width: $w10;
-    }
-
-    &20 {
-        width: $w20;
-    }
 }
 
 .right-black-border {
