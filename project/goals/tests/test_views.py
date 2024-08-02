@@ -44,7 +44,7 @@ def test_goal_list_no_records(client_logged):
     url = reverse('goals:goal_list')
     response = client_logged.get(url)
 
-    assert '<td class="bg-warning" colspan="4">No records</td>' in str(
+    assert '<div class="alert alert-warning">No records</div>' in str(
         response.content)
 
 
@@ -57,42 +57,6 @@ def test_goal_list(client_logged):
 
     assert '2000' in content
     assert '1.000' in content
-
-
-def test_goal_detail_func():
-    view = resolve('/goals/detail/9/')
-
-    assert views.GoalDetail is view.func.view_class
-
-
-def test_goal_detail(client_logged):
-    goal = GoalFactory()
-
-    url = reverse('goals:goal_detail', kwargs={'pk': goal.pk})
-    response = client_logged.get(url)
-
-    actual = response.context['object']
-    assert response.status_code == 200
-    assert actual == goal
-
-
-def test_goal_detail_links(client_logged):
-    goal = GoalFactory()
-
-    url = reverse('goals:goal_detail', kwargs={'pk': goal.pk})
-    response = client_logged.get(url)
-
-    actual = clean_content(response.content)
-
-    url_update = reverse('goals:goal_update', kwargs={'pk': goal.pk})
-    url_delete = reverse('goals:goal_delete', kwargs={'pk': goal.pk})
-
-    # table row
-    assert f'hx-target="#mainModal" hx-trigger="dblclick" hx-get="{url_update}">' in actual
-    # edit button
-    assert f'class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#mainModal"' in actual
-    # delete button
-    assert f'class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal"' in actual
 
 
 def test_goal_create_func():
