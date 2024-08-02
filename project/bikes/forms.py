@@ -19,7 +19,7 @@ class ComponentForm(FormMixin, forms.ModelForm):
         self.helper = FormHelper()
 
 
-class ComponentStatisticForm(forms.ModelForm):
+class ComponentWearForm(forms.ModelForm):
     class Meta:
         model = ComponentStatistic
         fields = ['start_date', 'end_date', 'price', 'brand']

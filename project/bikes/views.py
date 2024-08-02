@@ -211,7 +211,7 @@ class ComponentWearCreate(CreateViewMixin):
 
     def get_form(self, data=None, files=None, **kwargs):
         # pass bike_slug and component_pk from self.kwargs to form
-        return forms.ComponentStatisticForm(data, files, **kwargs | self.kwargs)
+        return forms.ComponentWearForm(data, files, **kwargs | self.kwargs)
 
     def title(self):
         return "New Component"
@@ -219,7 +219,7 @@ class ComponentWearCreate(CreateViewMixin):
 
 class ComponentWearUpdate(UpdateViewMixin):
     model = models.ComponentStatistic
-    form_class = forms.ComponentStatisticForm
+    form_class = forms.ComponentWearForm
     template_name = "core/includes/generic_form.html"
     lookup_url_kwarg = "stats_pk"
 
