@@ -202,8 +202,7 @@ class StatsList(ListViewMixin):
 
 class StatsCreate(CreateViewMixin):
     model = models.ComponentStatistic
-    template_name = "bikes/component_wear_form.html"
-    hx_trigger_django = "reload"
+    template_name = "core/includes/generic_form.html"
 
     def url(self):
         return reverse_lazy(
@@ -218,13 +217,15 @@ class StatsCreate(CreateViewMixin):
         # pass bike_slug and component_pk from self.kwargs to form
         return forms.ComponentStatisticForm(data, files, **kwargs | self.kwargs)
 
+    def title(self):
+        return "New Component"
+
 
 class StatsUpdate(UpdateViewMixin):
     model = models.ComponentStatistic
     form_class = forms.ComponentStatisticForm
-    template_name = "bikes/component_wear_form.html"
+    template_name = "core/includes/generic_form.html"
     lookup_url_kwarg = "stats_pk"
-    hx_trigger_django = "reload"
 
     def url(self):
         return reverse_lazy(
@@ -235,10 +236,24 @@ class StatsUpdate(UpdateViewMixin):
             },
         )
 
+    def title(self):
+        return "Update Component"
+
 
 class StatsDelete(DeleteViewMixin):
     model = models.ComponentStatistic
-    template_name = "bikes/component_wear_confirm_delete.html"
+    template_name = "core/includes/generic_delete_form.html"
     lookup_url_kwarg = "stats_pk"
     success_url = "/"
-    hx_trigger_django = "reload"
+
+    def url(self):
+        return reverse_lazy(
+            "bikes:stats_delete",
+            kwargs={
+                "bike_slug": self.kwargs["bike_slug"],
+                "stats_pk": self.kwargs["stats_pk"],
+            },
+        )
+
+    def title(self):
+        return "Delete Component"

@@ -185,5 +185,5 @@ class ComponentStatistic(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy(
-            "bikes:stats_detail",
-            kwargs={"bike_slug": self.bike.slug, "stats_pk": self.pk})
+            "bikes:stats_list",
+            kwargs={"bike_slug": self.bike.slug, "component_pk": self.pk})

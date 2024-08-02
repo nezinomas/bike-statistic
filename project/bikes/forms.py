@@ -38,7 +38,6 @@ class ComponentStatisticForm(forms.ModelForm):
 
         self.fields['start_date'].initial = datetime.now()
         self.helper = FormHelper()
-        set_field_properties(self, self.helper)
 
     def save(self, *args, **kwargs):
         instance = super().save(commit=False)
