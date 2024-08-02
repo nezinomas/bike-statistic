@@ -37,6 +37,10 @@ main {
     grid-gap: 1rem;
 }
 
+a[role=button] {
+    text-decoration: none;
+}
+
 .buttons-group {
     display: flex;
     flex-wrap: wrap;

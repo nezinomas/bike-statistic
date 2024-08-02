@@ -192,3 +192,14 @@ $w20:  20rem;
         width: $w6;
     }
 }
+
+.bike-info-cols {
+    // component
+    td:first-child {
+        width: $w20;
+    }
+    // buttons
+    td:last-child {
+        width: $w6;
+    }
+}

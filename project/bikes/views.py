@@ -82,8 +82,7 @@ class BikeInfoDetail(DetailViewMixin):
 
 class BikeInfoCreate(CreateViewMixin):
     model = models.BikeInfo
-    template_name = "bikes/info_form.html"
-    detail_view = BikeInfoDetail
+    template_name = "core/includes/generic_form.html"
 
     def url(self):
         return reverse_lazy(
@@ -94,12 +93,14 @@ class BikeInfoCreate(CreateViewMixin):
         # pass bike_slug and component_pk from self.kwargs to form
         return forms.BikeInfoForm(data, files, **kwargs | self.kwargs)
 
+    def title(self):
+        return "New Bike Info"
+
 
 class BikeInfoUpdate(UpdateViewMixin):
     model = models.BikeInfo
     form_class = forms.BikeInfoForm
-    template_name = "bikes/info_form.html"
-    detail_view = BikeInfoDetail
+    template_name = "core/includes/generic_form.html"
 
     def url(self):
         return reverse_lazy(
@@ -107,11 +108,23 @@ class BikeInfoUpdate(UpdateViewMixin):
             kwargs={"bike_slug": self.kwargs["bike_slug"], "pk": self.kwargs["pk"]},
         )
 
+    def title(self):
+        return "Update Bike Info"
+
 
 class BikeInfoDelete(DeleteViewMixin):
     model = models.BikeInfo
-    template_name = "bikes/info_confirm_delete.html"
+    template_name = "core/includes/generic_delete_form.html"
     success_url = "/"
+
+    def url(self):
+        return reverse_lazy(
+            "bikes:info_delete",
+            kwargs={"bike_slug": self.kwargs["bike_slug"], "pk": self.kwargs["pk"]},
+        )
+
+    def title(self):
+        return "Delete Bike Info"
 
 
 # ---------------------------------------------------------------------------------------

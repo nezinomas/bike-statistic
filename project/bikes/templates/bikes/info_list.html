@@ -8,30 +8,31 @@
 
 <div class="buttons-group">
     {% for bike in bike_list %}
-    <button hx-target="#htmx-container" hx-get="{% url 'bikes:info_list' bike_slug=bike.slug %}" hx-swap="innerHTML" class="{% if bike.slug == request.resolver_match.kwargs.bike_slug %}btn-primary{% else %}btn-secondary{% endif %}">{{ bike.short_name }}</button>
+    <a role="button" href="{% url 'bikes:info_list' bike_slug=bike.slug %}" class="{% if bike.slug == request.resolver_match.kwargs.bike_slug %}btn-primary{% else %}btn-secondary{% endif %}">{{ bike.short_name }}</a>
     {% endfor %}
 
     {% url 'bikes:info_create' request.resolver_match.kwargs.bike_slug as url_create %}
-    {% new_button url=url_create label='New Record' target="table-tbody" swap="afterbegin" css_class="end" %}
+    {% new_button url=url_create label='New Record' target="mainModal" css_class="end" %}
 </div>
 
-<table class="tbl-main tbl-striped tbl-hover">
+{% if object_list %}
+<table class="tbl-main tbl-striped tbl-hover bike-info-cols">
     <thead>
         <tr>
-            <th width="12%">Component</th>
+            <th>Component</th>
             <th>Description</th>
-            <th width="10%" class="text-end">Actions</th>
+            <th class="text-end">Actions</th>
         </tr>
     </thead>
-    <tbody id="table-tbody">
+    <tbody>
         {% for object in object_list %}
         {% include 'bikes/includes/partial_info_row.html' %}
-        {% empty %}
-        <tr>
-            <td class="bg-warning" colspan="3">No records</td>
-        </tr>
         {% endfor %}
     </tbody>
 </table>
+
+{% else %}
+<div class="alert alert-warning">No records</div>
+{% endif %}
 
 {% endblock content %}

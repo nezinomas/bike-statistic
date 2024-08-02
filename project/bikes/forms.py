@@ -110,7 +110,6 @@ class BikeInfoForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         self.helper = FormHelper()
-        set_field_properties(self, self.helper)
 
     def save(self, *args, **kwargs):
         instance = super().save(commit=False)
