@@ -203,3 +203,19 @@ $w20:  20rem;
         width: $w6;
     }
 }
+
+.component-cols {
+    // #
+    td:first-child {
+        width: $w6;
+    }
+    // buttons
+    td:last-child {
+        width: $w6;
+    }
+
+    td:first-child,
+    th:first-child {
+        text-align: center !important;
+    }
+}

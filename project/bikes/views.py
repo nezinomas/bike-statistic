@@ -145,27 +145,37 @@ class ComponentList(ListViewMixin):
 class ComponentCreate(CreateViewMixin):
     model = models.Component
     form_class = forms.ComponentForm
-    template_name = "bikes/component_form.html"
-    detail_view = ComponentDetail
+    template_name = "core/includes/generic_form.html"
 
     def url(self):
         return reverse_lazy("bikes:component_create")
+
+    def title(self):
+        return "New Component"
 
 
 class ComponentUpdate(UpdateViewMixin):
     model = models.Component
     form_class = forms.ComponentForm
-    template_name = "bikes/component_form.html"
-    detail_view = ComponentDetail
+    template_name = "core/includes/generic_form.html"
 
     def url(self):
         return reverse_lazy("bikes:component_update", kwargs={"pk": self.kwargs["pk"]})
 
+    def title(self):
+        return "Update Component"
+
 
 class ComponentDelete(DeleteViewMixin):
     model = models.Component
-    template_name = "bikes/component_confirm_delete.html"
+    template_name = "core/includes/generic_delete_form.html"
     success_url = "/"
+
+    def url(self):
+        return reverse_lazy("bikes:component_delete", kwargs={"pk": self.kwargs["pk"]})
+
+    def title(self):
+        return "Delete Component"
 
 
 # ---------------------------------------------------------------------------------------

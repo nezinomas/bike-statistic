@@ -18,7 +18,6 @@ class ComponentForm(FormMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         self.helper = FormHelper()
-        set_field_properties(self, self.helper)
 
 
 class ComponentStatisticForm(forms.ModelForm):
