@@ -3,6 +3,6 @@
     class="btn-secondary btn-edit"
     {% if url %}hx-get="{{url}}"{% endif %}
     {% if target %}hx-target="#{{target}}"{% endif %}
-    hx-swap="{% if swap %}{{swap}}{% else %}innerHTML{% endif %}">
+    {% if swap %}hx-swap="{{swap}}"{% endif %}>
     <i class="bi bi-pencil"></i> {% if label %} Edit {% endif %}
 </button>
