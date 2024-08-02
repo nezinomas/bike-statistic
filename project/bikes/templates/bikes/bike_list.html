@@ -4,12 +4,14 @@
 
 {% block content %}
 
-<div class="hidden" hx-get="{% url 'bikes:bike_list' %}" hx-trigger="reload from:body" hx-target="htmx-container"></div>
+<div class="hidden" hx-get="{% url 'bikes:bike_list' %}" hx-trigger="reload from:body" hx-target="#htmx-container"></div>
 
 <div class="buttons-group">
     {% url 'bikes:bike_create' as url_create %}
-    {% new_button url=url_create label='New Bike' target="table-tbody" swap="afterbegin" css_class="end" %}
+    {% new_button url=url_create label='New Bike' target="mainModal" css_class="end" %}
 </div>
+
+{% if object_list %}
 
 <table class="tbl-main tbl-striped tbl-hover">
     <thead>
@@ -20,15 +22,17 @@
             <th class="text-end w10">Actions</th>
         </tr>
     </thead>
-    <tbody id="table-tbody">
+    <tbody>
         {% for object in object_list %}
         {% include 'bikes/includes/partial_bike_row.html' %}
-        {% empty %}
-        <tr>
-            <td class="bg-warning" colspan="4">No records</td>
-        </tr>
         {% endfor %}
     </tbody>
 </table>
+
+{% else %}
+
+<div class="alert alert-warning">No records</div>
+
+{% endif %}
 
 {% endblock content %}

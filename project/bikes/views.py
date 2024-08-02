@@ -1,4 +1,3 @@
-import contextlib
 from datetime import date
 
 from django.db.models import Sum
@@ -7,7 +6,7 @@ from django.urls import reverse_lazy
 from ..core.lib import utils
 from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
                                  DetailViewMixin, ListViewMixin,
-                                 RedirectViewMixin, UpdateViewMixin)
+                                 UpdateViewMixin)
 from ..data.models import Data
 from . import forms, models
 from .lib.component_wear import ComponentWear
@@ -28,30 +27,40 @@ class BikeList(ListViewMixin):
 class BikeCreate(CreateViewMixin):
     model = models.Bike
     form_class = forms.BikeForm
-    template_name = "bikes/bike_form.html"
-    detail_view = BikeDetail
-    hx_trigger_django = "bike_update"
+    template_name = "core/includes/generic_form.html"
 
     def url(self):
         return reverse_lazy("bikes:bike_create")
+
+    def title(self):
+        return "Create Bike"
 
 
 class BikeUpdate(UpdateViewMixin):
     model = models.Bike
     form_class = forms.BikeForm
-    template_name = "bikes/bike_form.html"
-    detail_view = BikeDetail
-    hx_trigger_django = "bike_update"
+    template_name = "core/includes/generic_form.html"
 
     def url(self):
         return reverse_lazy("bikes:bike_update", kwargs={"pk": self.kwargs["pk"]})
 
+    def title(self):
+        return "Update Bike"
+
 
 class BikeDelete(DeleteViewMixin):
     model = models.Bike
-    template_name = "bikes/bike_confirm_delete.html"
+    template_name = "core/includes/generic_delete_form.html"
     success_url = "/"
-    hx_trigger_django = "bike_update"
+
+    def url(self):
+        return reverse_lazy("bikes:bike_delete", kwargs={"pk": self.kwargs["pk"]})
+
+    def title(self):
+        return "Delete Bike"
+
+    def message(self):
+        return "Warning: all activities related to this bike will be deleted!"
 
 
 # ---------------------------------------------------------------------------------------
