@@ -1,7 +1,6 @@
 $w6: 6rem;
 $w7: 7rem;
 $w10:  10rem;
-$w11:  11rem;
 $w20:  20rem;
 
 
@@ -105,10 +104,6 @@ $w20:  20rem;
         width: $w10;
     }
 
-    &11 {
-        width: $w11;
-    }
-
     &20 {
         width: $w20;
     }
@@ -149,7 +144,7 @@ $w20:  20rem;
     }
     // date
     td:nth-child(2) {
-        width: $w11;
+        width: $w10;
     }
     // buttons
     td:last-child {
