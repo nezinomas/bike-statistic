@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<div class="hidden" hx-get="{% url 'index' %}" hx-trigger="reload from:body" hx-target="#htmx-container" hx-swap="outerHTML"></div>
+<div class="hidden" hx-get="{% url 'index' %}" hx-trigger="reload from:body" hx-target="#htmx-container"></div>
 
 <div class="data-filtering-group">
     <form class="form-data-filter" method="post" novalidate autocomplete="off" hx-get="{% url 'index' %}" hx-target="#htmx-container">
@@ -14,8 +14,10 @@
         <input type="submit" value="Filter" class="btn-primary btn-filter">
     </form>
     {% url 'data:data_create' as url_create %}
-    {% new_button url=url_create target="data-table-tbody" swap="afterbegin" label='New ride' %}
+    {% new_button url=url_create target="mainModal" label='New activity' %}
 </div>
+
+{% if object_list %}
 
 <table class="tbl-main tbl-striped tbl-hover data-cols">
     <thead>
@@ -36,11 +38,12 @@
     <tbody id="data-table-tbody">
         {% for object in object_list %}
         {% include 'data/includes/partial_data_row.html' %}
-        {% empty %}
-        <tr><td class="bg-warning" colspan="11">No records</td></tr>
         {% endfor %}
     </tbody>
 </table>
 
+{% else %}
+<div class="alert alert-warning">No records</div>
+{% endif %}
 
 {% endblock content %}

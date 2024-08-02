@@ -36,7 +36,6 @@ class DataForm(FormMixin, forms.ModelForm):
         self.fields['bike'].queryset = Bike.objects.items().filter(retired=False)
 
         self.helper = FormHelper()
-        set_field_properties(self, self.helper)
 
     def save(self, commit=True):
         self.instance.checked = 'y'
