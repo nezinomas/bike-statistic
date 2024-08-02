@@ -56,6 +56,12 @@ class GoalUpdate(UpdateViewMixin):
 
 class GoalDelete(DeleteViewMixin):
     model = models.Goal
-    template_name = 'goals/goal_confirm_delete.html'
+    template_name = 'core/includes/generic_delete_form.html'
     success_url = '/'
     hx_trigger_django = 'reload'
+
+    def url(self):
+        return reverse_lazy('goals:goal_delete', kwargs={'pk': self.kwargs['pk']})
+
+    def title(self):
+        return "Delete goal"
