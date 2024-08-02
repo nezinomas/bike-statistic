@@ -6,5 +6,4 @@ components:
     delete_button: "core/includes/delete_button.html"
     close_new_form_button: "core/includes/close_new_form_button.html"
     close_button: "core/includes/close_button.html"
-    generic_form: "core/includes/generic_form.html"
     generic_delete_form: "core/includes/generic_delete_form.html"

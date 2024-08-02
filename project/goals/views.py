@@ -37,7 +37,7 @@ class GoalList(ListViewMixin):
 class GoalCreate(CreateViewMixin):
     model = models.Goal
     form_class = forms.GoalForm
-    template_name = 'goals/goal_form.html'
+    template_name = 'core/includes/generic_form.html'
     hx_trigger_django = 'reload'
 
     def url(self):
@@ -47,7 +47,7 @@ class GoalCreate(CreateViewMixin):
 class GoalUpdate(UpdateViewMixin):
     model = models.Goal
     form_class = forms.GoalForm
-    template_name = 'goals/goal_form.html'
+    template_name = 'core/includes/generic_form.html'
     hx_trigger_django = 'reload'
 
     def url(self):

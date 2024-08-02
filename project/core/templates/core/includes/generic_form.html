@@ -2,7 +2,7 @@
 {% load slippers %}
 {% load i18n %}
 
-<form method="POST" id="modal-form" class="modal-content modal-form" hx-encoding="multipart/form-data" novalidate autocomplete="off" tabindex="-1" hx-post="{{ url }}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' data-hx-trigger-form="{{hx_trigger_form}}">
+<form method="POST" id="modal-form" class="modal-content modal-form" hx-encoding="multipart/form-data" novalidate autocomplete="off" tabindex="-1" hx-post="{{ view.url }}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' data-hx-trigger-form="{{hx_trigger_form}}">
     {% include 'core/includes/form_date_scripts.html' %}
     <div class="modal-header">
         <h5 class="modal-title">{% if object %}Update Goal{% else %}Create Goal{% endif %}</h5>
