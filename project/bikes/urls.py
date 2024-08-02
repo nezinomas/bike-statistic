@@ -63,7 +63,6 @@ urlpatterns = [
     path("bike/update/<int:pk>/", views.BikeUpdate.as_view(), name="bike_update"),
     path("bike/delete/<int:pk>/", views.BikeDelete.as_view(), name="bike_delete"),
     # ......................................................................... Bike Info
-    path("info/", views.BikeInfoDefaultBike.as_view(), name="info_default"),
     path("info/<slug:bike_slug>/", views.BikeInfoList.as_view(), name="info_list"),
     path(
         "info/<slug:bike_slug>/create/",

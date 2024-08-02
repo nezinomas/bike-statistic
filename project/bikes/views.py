@@ -84,16 +84,6 @@ class BikeInfoDetail(DetailViewMixin):
     template_name = "bikes/includes/partial_info_row.html"
 
 
-class BikeInfoDefaultBike(ListViewMixin):
-    template_name = "bikes/bike_info_default_bike.html"
-
-    def get_queryset(self):
-        return (
-            models.Bike.objects.related().filter(main=True)[:1]
-            or models.Bike.objects.related().items()[:1]
-        )
-
-
 class BikeInfoCreate(CreateViewMixin):
     model = models.BikeInfo
     template_name = "bikes/info_form.html"
