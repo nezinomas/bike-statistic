@@ -4,7 +4,6 @@ from bootstrap_datepicker_plus.widgets import DatePickerInput
 from crispy_forms.helper import FormHelper
 from django import forms
 
-from ..core.helpers.form_helpers import set_field_properties
 from ..core.mixins.form_mixin import FormMixin
 from .models import Bike, BikeInfo, Component, ComponentStatistic
 

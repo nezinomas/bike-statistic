@@ -6,7 +6,6 @@ from django import forms
 from django.utils.timezone import make_aware
 
 from ..bikes.models import Bike
-from ..core.helpers.form_helpers import set_field_properties
 from ..core.mixins.form_mixin import FormMixin
 from . import models
 
@@ -58,4 +57,4 @@ class DateFilterForm(forms.Form):
         self.fields['end_date'].initial = now
 
         self.helper = FormHelper()
-        set_field_properties(self, self.helper)
+        self.helper.form_show_labels = False
