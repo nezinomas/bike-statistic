@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<div class="hidden" hx-trigger="reload from:body" hx-get="{% url 'goals:goal_list' %}" hx-target="#htmx-container"></div>
+<div class="hidden" hx-get="{% url 'goals:goal_list' %}" hx-trigger="reload from:body" hx-target="#htmx-container"></div>
 
 <div class="buttons-group">
     {% url 'goals:goal_create' as url_create %}
