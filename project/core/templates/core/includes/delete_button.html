@@ -2,7 +2,6 @@
     type="button"
     class="btn-trash"
     {% if url %}hx-get="{{url}}"{% endif %}
-    hx-target="#mainModal"
-    hx-swap="innerHTML">
+    hx-target="#mainModal">
     <i class="bi bi-trash"></i> {% if label %} Delete {% endif %}
 </button>

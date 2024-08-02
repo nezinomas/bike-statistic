@@ -17,27 +17,11 @@ from ..models import Data
 pytestmark = pytest.mark.django_db
 
 
-def test_data_detail_func():
-    view = resolve('/data/detail/9/')
-
-    assert views.DataDetail is view.func.view_class
-
-
-def test_data_detail(client_logged):
+@time_machine.travel('2000-1-1')
+def test_data_links(client_logged):
     data = DataFactory()
 
-    url = reverse('data:data_detail', kwargs={'pk': data.pk})
-    response = client_logged.get(url)
-
-    actual = response.context['object']
-    assert response.status_code == 200
-    assert actual == data
-
-
-def test_data_detail_links(client_logged):
-    data = DataFactory()
-
-    url = reverse('data:data_detail', kwargs={'pk': data.pk})
+    url = reverse('data:data_list')
     response = client_logged.get(url)
 
     actual = clean_content(response.content)
@@ -45,13 +29,16 @@ def test_data_detail_links(client_logged):
     row_id = f'row-id-{data.pk}'
     url_update = reverse('data:data_update', kwargs={'pk': data.pk})
     url_delete = reverse('data:data_delete', kwargs={'pk': data.pk})
+    url_quick_update = reverse('data:data_quick_update', kwargs={'pk': data.pk})
 
     # table row
-    assert f'<tr id="{row_id}" class="waiting-for-review" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
+    assert f'<tr id="{row_id}" class="waiting-for-review" hx-target="#mainModal" hx-trigger="dblclick" hx-get="{url_update}"' in actual
+    # quick save button
+    assert f'<button type="button" class="btn-save" hx-get="{url_quick_update}" hx-target="#{row_id}" hx-swap="outerHTML"' in actual
     # edit button
-    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
+    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#mainModal"' in actual
     # delete button
-    assert f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal" hx-swap="innerHTML">' in actual
+    assert f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal"' in actual
 
 
 def test_data_list_func():
@@ -102,6 +89,7 @@ def test_data_create_load_form(client_logged):
     assert '<input type="text" name="date" value="2000-02-02 05:06:07"' in content
 
 
+@time_machine.travel("2000-1-1")
 def test_data_create_data_valid(client_logged):
     bike = BikeFactory()
     data = {
@@ -117,21 +105,19 @@ def test_data_create_data_valid(client_logged):
         'heart_rate': 200,
     }
     url = reverse('data:data_create')
-    response = client_logged.post(url, data=data)
-    content = clean_content(response.content)
+    client_logged.post(url, data=data)
 
-    assert '2000-01-01' in content
-    assert '10,12' in content
-    assert '0:00:15' in content
-    assert '600' in content
-    assert '500' in content
-    assert '110' in content
-    assert '120' in content
-    assert '200' in content
+    actual = Data.objects.first()
 
-    assert '<tr id="row-id-1"' in content
-    assert 'hx-get="/data/delete/1/" hx-target="#mainModal"' in content
-    assert 'hx-get="/data/update/1/" hx-target="#row-id-1"' in content
+    assert actual.date == datetime(2000, 1, 1, 3, 2, 1, tzinfo=timezone.utc)
+    assert actual.distance == 10.12
+    assert actual.time == timedelta(seconds=15)
+    assert actual.temperature == 1.1
+    assert actual.ascent == 600
+    assert actual.descent == 500
+    assert actual.max_speed == 110
+    assert actual.cadence == 120
+    assert actual.heart_rate == 200
 
 
 def test_data_create_data_valid_db_object(client_logged, get_user):
@@ -290,18 +276,19 @@ def test_data_update(client_logged):
     }
 
     url = reverse('data:data_update', kwargs={'pk': obj.pk})
-    response = client_logged.post(url, data=data)
-    content = clean_content(response.content)
+    client_logged.post(url, data=data, follow=True)
 
-    assert '2000-01-01' in content  # distance
-    assert '10,12' in content  # distance
-    assert '0:00:15' in content  # time
-    assert '1,1' in content  # temperature
-    assert '600' in content  # ascent
-    assert '500' in content  # descent
-    assert '110' in content  # max_speed
-    assert '120' in content  # cadence
-    assert '200' in content  # heart
+    actual = Data.objects.get(pk=obj.pk)
+
+    assert actual.date == datetime(2000, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
+    assert actual.distance == 10.12
+    assert actual.time == timedelta(seconds=15)
+    assert actual.temperature == 1.1
+    assert actual.ascent == 600
+    assert actual.descent == 500
+    assert actual.max_speed == 110
+    assert actual.cadence == 120
+    assert actual.heart_rate == 200
 
 
 def test_data_update_bike(client_logged):

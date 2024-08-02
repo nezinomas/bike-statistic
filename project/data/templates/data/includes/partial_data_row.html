@@ -6,7 +6,7 @@
 {% url 'data:data_update' object.id as url_update %}
 {% url 'data:data_delete' object.pk as url_delete %}
 {% var row_id="row-id-"|join:object.pk %}
-<tr id="{{row_id}}" class="{% if object.checked == 'n' %}waiting-for-review{% endif %}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{{url_update}}">
+<tr id="{{row_id}}" class="{% if object.checked == 'n' %}waiting-for-review{% endif %}" hx-target="#mainModal" hx-trigger="dblclick" hx-get="{{url_update}}">
     <td>{{ object.bike }}</td>
     <td>{{ object.date|date:'Y-m-d' }}</td>
     <td>{{ object.distance }}</td>
