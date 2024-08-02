@@ -37,7 +37,6 @@ def httpHtmxResponse(hx_trigger_name=None, status_code=204):
 # ---------------------------------------------------------------------------------------
 class CreateUpdateMixin:
     hx_trigger_django = 'reload'
-    detail_view = None
 
     def get_hx_trigger_django(self):
         return self.hx_trigger_django
@@ -46,12 +45,6 @@ class CreateUpdateMixin:
         response = super().form_valid(form)
         if self.hx_trigger_django:
             response.status_code = 204
-
-        if self.detail_view:
-            rendered = render_to_string(
-                self.detail_view.template_name, {'object': self.object}, self.request)
-            response = HttpResponse(rendered)
-            response.status_code = 200
 
         trigger_client_event(response=response, name=self.hx_trigger_django, params={})
 

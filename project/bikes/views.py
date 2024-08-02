@@ -12,11 +12,6 @@ from . import forms, models
 from .lib.component_wear import ComponentWear
 
 
-class BikeDetail(DetailViewMixin):
-    model = models.Bike
-    template_name = "bikes/includes/partial_bike_row.html"
-
-
 class BikeList(ListViewMixin):
     template_name = "bikes/bike_list.html"
 
@@ -75,11 +70,6 @@ class BikeInfoList(ListViewMixin):
         )
 
 
-class BikeInfoDetail(DetailViewMixin):
-    model = models.BikeInfo
-    template_name = "bikes/includes/partial_info_row.html"
-
-
 class BikeInfoCreate(CreateViewMixin):
     model = models.BikeInfo
     template_name = "core/includes/generic_form.html"
@@ -130,11 +120,6 @@ class BikeInfoDelete(DeleteViewMixin):
 # ---------------------------------------------------------------------------------------
 #                                                                              Components
 # ---------------------------------------------------------------------------------------
-class ComponentDetail(DetailViewMixin):
-    model = models.Component
-    template_name = "bikes/includes/partial_component_row.html"
-
-
 class ComponentList(ListViewMixin):
     template_name = "bikes/component_list.html"
 
@@ -181,30 +166,6 @@ class ComponentDelete(DeleteViewMixin):
 # ---------------------------------------------------------------------------------------
 #                                                                     Bike Component Wear
 # ---------------------------------------------------------------------------------------
-class StatsDetail(DetailViewMixin):
-    model = models.ComponentStatistic
-    lookup_url_kwarg = "stats_pk"
-    template_name = "bikes/includes/partial_component_wear_row.html"
-
-    def get_context_data(self, **kwargs):
-        bike_slug = self.kwargs["bike_slug"]
-        stats_pk = self.kwargs.get("stats_pk")
-        start_date = utils.date_to_datetime(self.object.start_date)
-        end_date = utils.date_to_datetime(
-            self.object.end_date or date.today(), 23, 59, 59
-        )
-
-        distance_sum = Data.objects.filter(
-            bike__slug=bike_slug, date__range=(start_date, end_date)
-        ).aggregate(Sum("distance"))
-
-        context = {
-            "km": {str(stats_pk): distance_sum.get("distance__sum", 0)},
-        }
-
-        return super().get_context_data(**kwargs) | context
-
-
 class StatsList(ListViewMixin):
     template_name = "bikes/component_wear_list.html"
 

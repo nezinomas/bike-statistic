@@ -1,23 +1,10 @@
 from django.urls import reverse_lazy
 
 from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
-                                 DetailViewMixin, ListViewMixin,
+                                 ListViewMixin,
                                  UpdateViewMixin)
 from ..data.models import Data
 from . import forms, models
-
-
-class GoalDetail(DetailViewMixin):
-    model = models.Goal
-    template_name = 'goals/includes/partial_goal_row.html'
-
-    def get_context_data(self, **kwargs):
-        year = self.object.year
-        qs = Data.objects.year_distances(year)
-        context = {
-            'distances': {str(year): qs[0]['distance'] if qs.exists() else 0}
-        }
-        return super().get_context_data(**kwargs) | context
 
 
 class GoalList(ListViewMixin):

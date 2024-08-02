@@ -17,11 +17,6 @@ from .library.insert_garmin import SyncWithGarmin
 from .library.temperature import Temperature
 
 
-class DataDetail(DetailViewMixin):
-    model = models.Data
-    template_name = "data/includes/partial_data_row.html"
-
-
 class DataList(ListViewMixin):
     model = models.Data
     template_name = "data/data_list.html"
@@ -45,7 +40,6 @@ class DataList(ListViewMixin):
 class DataCreate(CreateViewMixin):
     model = models.Data
     form_class = forms.DataForm
-    detail_view = DataDetail
     success_url = reverse_lazy("data:data_list")
 
     def url(self):
@@ -55,7 +49,6 @@ class DataCreate(CreateViewMixin):
 class DataUpdate(UpdateViewMixin):
     model = models.Data
     form_class = forms.DataForm
-    detail_view = DataDetail
     success_url = reverse_lazy("data:data_list")
 
     def url(self):
