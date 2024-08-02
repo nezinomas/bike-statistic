@@ -6,7 +6,7 @@ import time_machine
 from django.urls import resolve, reverse
 
 from ...bikes.factories import (BikeFactory, ComponentFactory,
-                                ComponentStatisticFactory)
+                                ComponentWearFactory)
 from ...core.lib.tests_utils import clean_content
 from .. import models, views
 
@@ -58,7 +58,7 @@ def test_stats_list_no_data(client_logged):
 def test_stats_list_with_data(client_logged):
     bike = BikeFactory()
     component = ComponentFactory()
-    ComponentStatisticFactory()
+    ComponentWearFactory()
 
     url = reverse('bikes:stats_list', kwargs={'bike_slug': bike.slug, 'component_pk': component.pk})
     response = client_logged.get(url)
@@ -73,7 +73,7 @@ def test_stats_list_with_data(client_logged):
 def test_stats_list_with_data_links(client_logged):
     bike = BikeFactory()
     component = ComponentFactory()
-    stats = ComponentStatisticFactory()
+    stats = ComponentWearFactory()
 
     url = reverse('bikes:stats_list', kwargs={'bike_slug': bike.slug, 'component_pk': component.pk})
     response = client_logged.get(url)
@@ -92,7 +92,7 @@ def test_stats_list_with_data_links(client_logged):
 
 def test_stats_rendered_context(client_logged):
     bike = BikeFactory()
-    stats = ComponentStatisticFactory()
+    stats = ComponentWearFactory()
 
     url = reverse('bikes:stats_list', kwargs={'bike_slug': bike.slug, 'component_pk': stats.pk})
     response = client_logged.get(url)
@@ -168,7 +168,7 @@ def test_stats_create_save_no_start_date(client_logged):
 
 def test_stats_update_load_form(client_logged):
     bike = BikeFactory()
-    stats = ComponentStatisticFactory()
+    stats = ComponentWearFactory()
 
     url = reverse('bikes:stats_update', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
     response = client_logged.get(url)
@@ -182,7 +182,7 @@ def test_stats_update_load_form(client_logged):
 
 def test_stats_update_load_form_close_button(client_logged):
     bike = BikeFactory()
-    stats = ComponentStatisticFactory()
+    stats = ComponentWearFactory()
 
     url = reverse('bikes:stats_list', kwargs={'bike_slug': bike.slug, 'component_pk': stats.pk})
     response = client_logged.get(url)
@@ -194,7 +194,7 @@ def test_stats_update_load_form_close_button(client_logged):
 
 def test_stats_update_start_date(client_logged):
     bike = BikeFactory()
-    stats = ComponentStatisticFactory()
+    stats = ComponentWearFactory()
 
     data = {
         'start_date': '1999-1-30',
@@ -213,7 +213,7 @@ def test_stats_update_start_date(client_logged):
 
 def test_stats_update_end_date(client_logged):
     bike = BikeFactory()
-    stats = ComponentStatisticFactory()
+    stats = ComponentWearFactory()
 
     data = {
         'start_date': str(stats.start_date),
@@ -231,7 +231,7 @@ def test_stats_update_end_date(client_logged):
 
 def test_stats_delete_200(client_logged):
     bike = BikeFactory()
-    stats = ComponentStatisticFactory()
+    stats = ComponentWearFactory()
     url = reverse('bikes:stats_delete', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
 
     response = client_logged.get(url)
@@ -241,7 +241,7 @@ def test_stats_delete_200(client_logged):
 
 def test_stats_delete_load_form(client_logged):
     bike = BikeFactory()
-    stats = ComponentStatisticFactory()
+    stats = ComponentWearFactory()
     url = reverse('bikes:stats_delete', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
 
     response = client_logged.get(url)
@@ -254,7 +254,7 @@ def test_stats_delete_load_form(client_logged):
 
 def test_stats_delete(client_logged):
     bike = BikeFactory()
-    stats = ComponentStatisticFactory()
+    stats = ComponentWearFactory()
     url = reverse('bikes:stats_delete', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
 
     client_logged.post(url, {})

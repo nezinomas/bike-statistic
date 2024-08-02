@@ -5,7 +5,7 @@ from django.db import models
 
 from ...users.factories import UserFactory
 from ..factories import (BikeFactory, BikeInfoFactory, ComponentFactory,
-                         ComponentStatisticFactory)
+                         ComponentWearFactory)
 from ..models import Bike, BikeInfo, Component, ComponentWear
 
 pytestmark = pytest.mark.django_db
@@ -170,7 +170,7 @@ def test_component_name_validation(name):
 #                                                                     Component Statistic
 # ---------------------------------------------------------------------------------------
 def test_component_statistic_str():
-    obj = ComponentStatisticFactory.build()
+    obj = ComponentWearFactory.build()
 
     assert str(obj) == 'Short Name / Component / 1999-01-01 ... 1999-01-31'
 
@@ -181,8 +181,8 @@ def test_component_statistic_related_different_users(get_user):
     b1 = BikeFactory(short_name='B1')  # user bob
     b2 = BikeFactory(short_name='B2', user=u)  # user tom
 
-    ComponentStatisticFactory(bike=b1)
-    ComponentStatisticFactory(bike=b2)
+    ComponentWearFactory(bike=b1)
+    ComponentWearFactory(bike=b2)
 
     actual = ComponentWear.objects.related()
 
@@ -192,8 +192,8 @@ def test_component_statistic_related_different_users(get_user):
 
 
 def test_component_statistic_related_qs_count(get_user, django_assert_max_num_queries):
-    ComponentStatisticFactory()
-    ComponentStatisticFactory()
+    ComponentWearFactory()
+    ComponentWearFactory()
 
     assert ComponentWear.objects.all().count() == 2
 
@@ -202,6 +202,6 @@ def test_component_statistic_related_qs_count(get_user, django_assert_max_num_qu
 
 
 def test_component_statistic_items(get_user):
-    ComponentStatisticFactory()
+    ComponentWearFactory()
 
     assert ComponentWear.objects.items().count() == 1

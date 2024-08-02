@@ -37,7 +37,7 @@ class ComponentFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ('user', 'name',)
 
 
-class ComponentStatisticFactory(factory.django.DjangoModelFactory):
+class ComponentWearFactory(factory.django.DjangoModelFactory):
     start_date = date(1999, 1, 1)
     end_date = date(1999, 1, 31)
     price = 1.11
