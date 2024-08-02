@@ -1,6 +1,7 @@
 {% extends request.htmx|yesno:"base_htmx.html,base.html" %}
 
 {% load slippers %}
+{% load template_filters %}
 
 {% block content %}
 
@@ -13,18 +14,35 @@
 
 {% if object_list %}
 
-<table class="tbl-main tbl-striped tbl-hover">
+<table class="tbl-main tbl-striped tbl-hover bike-cols">
     <thead>
         <tr>
-            <th class="w20">Date</th>
-            <th class="w20">Full Name</th>
+            <th>Date</th>
+            <th>Full Name</th>
             <th>Short Name</th>
-            <th class="text-end w10">Actions</th>
+            <th class="text-end">Actions</th>
         </tr>
     </thead>
     <tbody>
         {% for object in object_list %}
-        {% include 'bikes/includes/partial_bike_row.html' %}
+
+        {% url 'bikes:bike_update' object.id as url_update %}
+        {% url 'bikes:bike_delete' object.id as url_delete %}
+        <tr hx-trigger="dblclick" hx-get="{{url_update}}" hx-target="#mainModal">
+            <td>{{ object.date|date:'Y-m-d' }}</td>
+            <td>
+                {% if object.main %}<i class="bi bi-star bike-main"></i>{% endif %}
+                {% if object.retired %}<i class="bi bi-dash-circle bike-retired"></i>{% endif %}
+                {% if not object.main and not object.retired %}{% endif %}
+                {{ object.full_name }}
+            </td>
+            <td><a href="{% url 'bikes:info_list' object.slug %}">{{ object.short_name }}</a></td>
+            <td class="text-end">
+                {% edit_button url=url_update target='mainModal' %}
+                {% delete_button url=url_delete %}
+            </td>
+        </tr>
+
         {% endfor %}
     </tbody>
 </table>

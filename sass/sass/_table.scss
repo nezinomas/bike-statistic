@@ -214,3 +214,18 @@ $w20:  20rem;
         text-align: center !important;
     }
 }
+
+.bike-cols {
+    // date
+    td:first-child {
+        width: $w20;
+    }
+    // full name
+    td:nth-child(2) {
+        width: $w20;
+    }
+    // buttons
+    td:last-child {
+        width: $w6;
+    }
+}
