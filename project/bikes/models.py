@@ -134,7 +134,7 @@ class Component(models.Model):
         return str(self.name)
 
     def get_absolute_url(self):
-        return reverse_lazy("bikes:component_detail", kwargs={"pk": self.pk})
+        return reverse_lazy("bikes:component_list")
 
 
 class ComponentStatisticQuerySet(models.QuerySet):
