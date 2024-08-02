@@ -4,9 +4,8 @@ from bootstrap_datepicker_plus.widgets import DatePickerInput
 from crispy_forms.helper import FormHelper
 from django import forms
 
-from ..core.helpers.form_helpers import set_field_properties
 from ..core.mixins.form_mixin import FormMixin
-from .models import Bike, BikeInfo, Component, ComponentStatistic
+from .models import Bike, BikeInfo, Component, ComponentWear
 
 
 class ComponentForm(FormMixin, forms.ModelForm):
@@ -20,9 +19,9 @@ class ComponentForm(FormMixin, forms.ModelForm):
         self.helper = FormHelper()
 
 
-class ComponentStatisticForm(forms.ModelForm):
+class ComponentWearForm(forms.ModelForm):
     class Meta:
-        model = ComponentStatistic
+        model = ComponentWear
         fields = ['start_date', 'end_date', 'price', 'brand']
 
         widgets = {

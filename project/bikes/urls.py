@@ -23,27 +23,27 @@ urlpatterns = [
     # ............................................................... Component Wear
     path(
         "stats/<slug:bike_slug>/",
-        views.StatsList.as_view(),
+        views.ComponentWearList.as_view(),
         name="stats_list",
     ),
     path(
         "stats/<slug:bike_slug>/<int:component_pk>/",
-        views.StatsList.as_view(),
+        views.ComponentWearList.as_view(),
         name="stats_list",
     ),
     path(
         "stats/<slug:bike_slug>/<int:component_pk>/create/",
-        views.StatsCreate.as_view(),
+        views.ComponentWearCreate.as_view(),
         name="stats_create",
     ),
     path(
         "stats/<slug:bike_slug>/update/<int:stats_pk>/",
-        views.StatsUpdate.as_view(),
+        views.ComponentWearUpdate.as_view(),
         name="stats_update",
     ),
     path(
         "stats/<slug:bike_slug>/delete/<int:stats_pk>/",
-        views.StatsDelete.as_view(),
+        views.ComponentWearDelete.as_view(),
         name="stats_delete",
     ),
     # .............................................................................. Bike

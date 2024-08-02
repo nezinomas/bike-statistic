@@ -7,7 +7,7 @@ from django.forms.models import model_to_dict
 from ...bikes.factories import BikeFactory, ComponentFactory
 from ...users.factories import UserFactory
 from ..forms import (BikeForm, BikeInfoForm, ComponentForm,
-                     ComponentStatisticForm)
+                     ComponentWearForm)
 
 pytestmark = pytest.mark.django_db
 
@@ -188,11 +188,11 @@ def test_component_blank_data(get_user):
 #                                                                      ComponentStatistic
 # ---------------------------------------------------------------------------------------
 def test_component_statistic_init(get_user):
-    ComponentStatisticForm()
+    ComponentWearForm()
 
 
 def test_component_statistic_init_fields(get_user):
-    form = ComponentStatisticForm().as_p()
+    form = ComponentWearForm().as_p()
 
     assert '<input type="text" name="start_date"' in form
     assert '<input type="text" name="end_date"' in form
@@ -204,7 +204,7 @@ def test_component_statistic_valid_data(get_user):
     b = BikeFactory()
     c = ComponentFactory()
 
-    form = ComponentStatisticForm(data={
+    form = ComponentWearForm(data={
         'start_date': '2000-01-01',
         'end_date': '2000-01-31',
         'price': 10.01,
@@ -226,7 +226,7 @@ def test_component_statistic_valid_data(get_user):
 
 
 def test_component_statistic_blank_data(get_user):
-    form = ComponentStatisticForm(data={})
+    form = ComponentWearForm(data={})
 
     assert not form.is_valid()
 

@@ -162,7 +162,7 @@ class ComponentDelete(DeleteViewMixin):
 # ---------------------------------------------------------------------------------------
 #                                                                     Bike Component Wear
 # ---------------------------------------------------------------------------------------
-class StatsList(ListViewMixin):
+class ComponentWearList(ListViewMixin):
     template_name = "bikes/component_wear_list.html"
 
     def get_queryset(self):
@@ -178,7 +178,7 @@ class StatsList(ListViewMixin):
 
         data = Data.objects.items().filter(bike=bike).values("date", "distance")
 
-        component_statistic = models.ComponentStatistic.objects.items().filter(
+        component_statistic = models.ComponentWear.objects.items().filter(
             bike=bike, component=component
         )
 
@@ -196,8 +196,8 @@ class StatsList(ListViewMixin):
         return super().get_context_data(**kwargs) | context
 
 
-class StatsCreate(CreateViewMixin):
-    model = models.ComponentStatistic
+class ComponentWearCreate(CreateViewMixin):
+    model = models.ComponentWear
     template_name = "core/includes/generic_form.html"
 
     def url(self):
@@ -211,15 +211,15 @@ class StatsCreate(CreateViewMixin):
 
     def get_form(self, data=None, files=None, **kwargs):
         # pass bike_slug and component_pk from self.kwargs to form
-        return forms.ComponentStatisticForm(data, files, **kwargs | self.kwargs)
+        return forms.ComponentWearForm(data, files, **kwargs | self.kwargs)
 
     def title(self):
         return "New Component"
 
 
-class StatsUpdate(UpdateViewMixin):
-    model = models.ComponentStatistic
-    form_class = forms.ComponentStatisticForm
+class ComponentWearUpdate(UpdateViewMixin):
+    model = models.ComponentWear
+    form_class = forms.ComponentWearForm
     template_name = "core/includes/generic_form.html"
     lookup_url_kwarg = "stats_pk"
 
@@ -236,8 +236,8 @@ class StatsUpdate(UpdateViewMixin):
         return "Update Component"
 
 
-class StatsDelete(DeleteViewMixin):
-    model = models.ComponentStatistic
+class ComponentWearDelete(DeleteViewMixin):
+    model = models.ComponentWear
     template_name = "core/includes/generic_delete_form.html"
     lookup_url_kwarg = "stats_pk"
     success_url = "/"
