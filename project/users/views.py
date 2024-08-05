@@ -8,7 +8,7 @@ from django.urls.base import reverse
 from .forms import ExternalUserForm
 
 
-class CustomLogin(auth_views.LoginView):
+class Login(auth_views.LoginView):
     def form_valid(self, form):
         user = form.get_user()
         login(self.request, user)

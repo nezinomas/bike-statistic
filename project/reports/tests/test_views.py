@@ -3,7 +3,7 @@ from django.urls import resolve, reverse
 
 from .. import views
 from ...data.factories import DataFactory
-from ...users.views import CustomLogin
+from ...users.views import Login
 
 pytestmark = pytest.mark.django_db
 
@@ -12,7 +12,7 @@ def test_year_progress_302(client):
     url = reverse('reports:year_progress', kwargs={'year': 2000})
     response = client.get(url, follow=True)
 
-    assert response.resolver_match.func.view_class is CustomLogin
+    assert response.resolver_match.func.view_class is Login
 
 
 def test_year_progress_200(client_logged):

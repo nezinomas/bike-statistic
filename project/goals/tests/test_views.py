@@ -6,7 +6,7 @@ from django.urls import resolve, reverse
 
 from ...core.lib.tests_utils import clean_content
 from ...users.factories import UserFactory
-from ...users.views import CustomLogin
+from ...users.views import Login
 from .. import models, views
 from ..factories import GoalFactory
 
@@ -30,7 +30,7 @@ def test_goal_list_302_redirect(client):
     url = reverse('goals:goal_list')
     response = client.get(url, follow=True)
 
-    assert response.resolver_match.func.view_class is CustomLogin
+    assert response.resolver_match.func.view_class is Login
 
 
 def test_goal_list_200(client_logged):
