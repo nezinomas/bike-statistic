@@ -9,6 +9,8 @@
 {% include 'reports/partials/extremums_table.html' with object_list=extremums %}
 
 <div class="tbl-responsive">
+    {% if object_list%}
+
     <table class="tbl-main tbl-hover tbl-striped sticky-table">
         <thead>
             <tr>
@@ -65,13 +67,14 @@
                 <td>{{ object.goal_percent|floatformat:1 }}</td>
                 <td>{{ object.goal_delta|floatformat:0|intcomma }}</td>
             </tr>
-            {% empty %}
-            <tr>
-                <td class="bg-warning" colspan="20">No records</td>
-            </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    {% else %}
+    <div class="alert alert-warning">No records</div>
+    {% endif %}
+
 </div>
 
 <script>$('.sticky-table').stickyTableHeaders();</script>
