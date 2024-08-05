@@ -17,7 +17,7 @@ def test_custom_login_func():
 def test_custom_logout_func():
     view = resolve('/logout/')
 
-    assert auth_views.LogoutView == view.func.view_class
+    assert views.Logout == view.func.view_class
 
 
 def test_logout_redirects_to_login(client_logged):
