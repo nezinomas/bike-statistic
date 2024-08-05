@@ -20,6 +20,14 @@ def test_custom_logout_func():
     assert auth_views.LogoutView == view.func.view_class
 
 
+def test_logout_redirects_to_login(client_logged):
+    url = reverse('users:logout')
+    response = client_logged.get(url, follow=True)
+
+    assert response.status_code == 200
+    assert response.resolver_match.url_name == 'login'
+
+
 def test_successful_login(client):
     UserFactory()
 
