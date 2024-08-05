@@ -32,7 +32,7 @@ def test_year_progress_no_records_top_table(client_logged):
     url = reverse('reports:year_progress', kwargs={'year': 2000})
     response = client_logged.get(url)
 
-    assert '<td class="bg-warning" colspan="20">No records</td>' in str(
+    assert '<div class="alert alert-warning">No records</div>' in str(
         response.content)
 
 
@@ -40,7 +40,7 @@ def test_year_progress_no_records(client_logged):
     url = reverse('reports:year_progress', kwargs={'year': 2000})
     response = client_logged.get(url)
 
-    assert '<td class="bg-warning" colspan="20">No records</td>' in str(
+    assert '<div class="alert alert-warning">No records</div>' in str(
         response.content)
 
 

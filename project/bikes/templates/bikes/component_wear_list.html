@@ -29,39 +29,41 @@
 
 {% if component_statistic %}
 
-<table class="tbl-main tbl-striped tbl-hover">
-    <thead>
-        <tr>
-            <th>Start date</th>
-            <th>End date</th>
-            <th class="component-wear-col-price">Price</th>
-            <th class="component-wear-col-brand">Brand</th>
-            <th class="component-wear-col-distance text-end">km</th>
-            <th class="component-wear-col-buttons text-end">Actions</th>
-        </tr>
-    </thead>
-    <tbody id="stats-table-tbody">
-        {% for object in component_statistic %}
+<div class="tbl-responsive">
+    <table class="tbl-main tbl-striped tbl-hover">
+        <thead>
+            <tr>
+                <th>Start date</th>
+                <th>End date</th>
+                <th class="component-wear-col-price">Price</th>
+                <th class="component-wear-col-brand">Brand</th>
+                <th class="component-wear-col-distance text-end">km</th>
+                <th class="component-wear-col-buttons text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="stats-table-tbody">
+            {% for object in component_statistic %}
 
-        {% url 'bikes:stats_update' object.bike.slug object.id as url_update %}
-        {% url 'bikes:stats_delete' object.bike.slug object.id as url_delete %}
-        <tr hx-target="#mainModal" hx-trigger="dblclick" hx-get="{{url_update}}">
-            <td>{{ object.start_date|date:"Y-m-d" }}</td>
-            <td>{% if object.end_date %}{{ object.end_date|date:"Y-m-d" }}{% else %}in use{% endif %}</td>
-            <td>{{ object.price|default_if_none:'-' }}</td>
-            <td>{{ object.brand }}</td>
-            <td class="text-end">
-                {% with km|get_item:object.id as km %}{{ km|floatformat:0|intcomma }}{% endwith %}
-            </td>
-            <td class="text-end">
-                {% edit_button url=url_update target='mainModal' %}
-                {% delete_button url=url_delete %}
-            </td>
-        </tr>
+            {% url 'bikes:stats_update' object.bike.slug object.id as url_update %}
+            {% url 'bikes:stats_delete' object.bike.slug object.id as url_delete %}
+            <tr hx-target="#mainModal" hx-trigger="dblclick" hx-get="{{url_update}}">
+                <td>{{ object.start_date|date:"Y-m-d" }}</td>
+                <td>{% if object.end_date %}{{ object.end_date|date:"Y-m-d" }}{% else %}in use{% endif %}</td>
+                <td>{{ object.price|default_if_none:'-' }}</td>
+                <td>{{ object.brand }}</td>
+                <td class="text-end">
+                    {% with km|get_item:object.id as km %}{{ km|floatformat:0|intcomma }}{% endwith %}
+                </td>
+                <td class="text-end">
+                    {% edit_button url=url_update target='mainModal' %}
+                    {% delete_button url=url_delete %}
+                </td>
+            </tr>
 
-        {% endfor %}
-    </tbody>
-</table>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% else %}
 <div class="alert alert-warning">No records</div>

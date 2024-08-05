@@ -1,5 +1,6 @@
 {% if object_list %}
-<table class="tbl-main tbl-hover tbl-striped">
+<div class="tbl-responsive">
+    <table class="tbl-main tbl-hover tbl-striped">
         <thead>
             <tr>
                 <th colspan="2" class="right-black-border">Max T, &#8451;</th>
@@ -21,21 +22,22 @@
                 <th>Value</th>
             </tr>
         </thead>
-    <tbody>
-        {% for object in object_list %}
-        <tr>
-            <td>{{ object.max_temp_date|date:"Y-m-d" }}</td>
-            <td class="right-black-border">{{ object.max_temp|floatformat:0 }}</td>
-            <td>{{ object.min_temp_date|date:"Y-m-d" }}</td>
-            <td class="right-black-border">{{ object.min_temp|floatformat:0 }}</td>
-            <td>{{ object.max_ascent_date|date:"Y-m-d" }}</td>
-            <td class="right-black-border">{{ object.max_ascent|floatformat:0 }}</td>
-            <td>{{ object.max_speed_date|date:"Y-m-d" }}</td>
-            <td class="right-black-border">{{ object.max_speed|floatformat:1 }}</td>
-            <td>{{ object.max_distance_date|date:"Y-m-d" }}</td>
-            <td>{{ object.max_distance|floatformat:1 }}</td>
-        </tr>
-        {% endfor%}
-    </tbody>
-</table>
+        <tbody>
+            {% for object in object_list %}
+            <tr>
+                <td>{{ object.max_temp_date|date:"Y-m-d" }}</td>
+                <td class="right-black-border">{{ object.max_temp|floatformat:0 }}</td>
+                <td>{{ object.min_temp_date|date:"Y-m-d" }}</td>
+                <td class="right-black-border">{{ object.min_temp|floatformat:0 }}</td>
+                <td>{{ object.max_ascent_date|date:"Y-m-d" }}</td>
+                <td class="right-black-border">{{ object.max_ascent|floatformat:0 }}</td>
+                <td>{{ object.max_speed_date|date:"Y-m-d" }}</td>
+                <td class="right-black-border">{{ object.max_speed|floatformat:1 }}</td>
+                <td>{{ object.max_distance_date|date:"Y-m-d" }}</td>
+                <td>{{ object.max_distance|floatformat:1 }}</td>
+            </tr>
+            {% endfor%}
+        </tbody>
+    </table>
+</div>
 {% endif %}
