@@ -33,7 +33,16 @@ class ComponentWear:
         )
 
     def _make_data_df(self, data):
-        return pl.DataFrame(data) if data else pl.DataFrame()
+        if not data:
+            return pl.DataFrame()
+
+        return (
+            pl.DataFrame(data)
+            .with_columns([
+                pl.col('date').cast(pl.Datetime),
+            ])
+        )
+
 
     def _make_df(self):
         if self._stats.is_empty():
