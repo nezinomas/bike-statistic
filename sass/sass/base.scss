@@ -127,3 +127,24 @@ a[role=button] {
         }
     }
 }
+
+.sync-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    > form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        > button {
+            max-width: max-content;
+            margin-left: auto;
+        }
+    }
+
+    > .alert > p:first-child {
+        margin-bottom:.5rem;
+    }
+}

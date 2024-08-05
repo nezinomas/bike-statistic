@@ -20,7 +20,6 @@ class ExternalUserForm(ModelForm):
         self.fields['garmin_user'].initial = self._user.garmin_user
 
         self.helper = FormHelper()
-        self.helper.form_show_labels = False
 
     def save(self, *args, **kwargs):
         instance = super().save(commit=False)

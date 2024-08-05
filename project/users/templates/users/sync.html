@@ -5,34 +5,27 @@
 
 {% block content %}
 
-<div id="sync-form">
-    <form method="post" class="mb-2" novalidate>
+<div class="sync-form" id="sync-form">
+    <form method="post" novalidate>
         {% csrf_token %}
         {{ form.media }}
 
-        {% if form.non_field_errors %}
-        <div class="alert alert-danger" role="alert">
-            {% for error in form.non_field_errors %}
-            <p {% if forloop.last %} class="mb-0" {% endif %}>{{ error }}</p>
-            {% endfor %}
-        </div>
-        {% endif %}
+        {% include 'core/includes/form_errors.html' %}
 
         {% for field in form %}
-        <div class="row mb-3 align-items-center">
-            <div class="col">{{ field.label_tag }}<br>
-            {{ field|as_crispy_field }}</div>
-        </div>
+            {{ field|as_crispy_field }}
         {% endfor %}
-        {% url 'users:sync_update' as url_write %}
-        <div class="form-group">{% save_button label='Update' url=url_write target='sync-form' swap='outerHTML' %}</div>
+        <button type="button" class="btn-primary" hx-post="{% url 'users:sync_update' %}" hx-target="#sync-form" hx-swap="outerHTML">Update</button>
     </form>
-    <p class="mt-5">Raw passwords are not stored, so there is no way to see this user's password.</p>
-    <p>{% if password %}<b>Encrypted password:</b> *{{ password }}*
-        {% else %}
-        <b>No password</b>
-        {% endif %}
-    </p>
+
+    <div class="alert alert-warning">
+        <p>Raw passwords are not stored, so there is no way to see this user's password.</p>
+        <p>{% if password %}<b>Encrypted password:</b> *{{ password }}*
+            {% else %}
+            <b>No password</b>
+            {% endif %}
+        </p>
+    </div>
 </div>
 
 {% endblock content %}
