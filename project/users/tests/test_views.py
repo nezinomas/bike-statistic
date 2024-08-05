@@ -1,5 +1,4 @@
 import pytest
-from django.contrib.auth import views as auth_views
 from django.urls import resolve, reverse
 
 from .. import views
