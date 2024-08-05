@@ -11,6 +11,10 @@
     visibility: hidden !important;
 }
 
+.tbl-responsive {
+    overflow-x: auto;
+}
+
 // HTMX indicator
 .htmx-indicator {
     display: none;
