@@ -1,9 +1,0 @@
-<button
-    type="button"
-    class="btn-save"
-    {% if url %}hx-post="{{url}}"{% endif %}
-    {% if target %}hx-target="#{{target}}"{% endif %}
-    {% if swap %}hx-swap="{{swap}}"{% endif %}
->
-    <i class="bi bi-save2"></i> {% if label %} Save {% endif %}
-</button>

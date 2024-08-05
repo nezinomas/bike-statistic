@@ -1,6 +1,5 @@
 components:
     new_button: "core/includes/new_button.html"
-    save_button: "core/includes/save_button.html"
     quick_save_button: "core/includes/quick_save_button.html"
     edit_button: "core/includes/edit_button.html"
     delete_button: "core/includes/delete_button.html"
