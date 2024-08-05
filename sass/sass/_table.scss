@@ -141,7 +141,8 @@ $w20:  20rem;
     }
 
     &-year {
-        width: $w20;
+        width: clamp(5rem, 15vw, 20vw); // $w20;
+
     }
 
     &-buttons {
@@ -163,11 +164,11 @@ $w20:  20rem;
 .component-cols {
     // #
     td:first-child {
-        width: $w6;
+        width: clamp(30px, 10vw, 20vw);
     }
     // buttons
     td:last-child {
-        width: $w6;
+        width: clamp(3.75rem, 10vw, 20vw);
     }
 
     td:first-child,
