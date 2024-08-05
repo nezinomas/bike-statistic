@@ -1,0 +1,150 @@
+$disabled: #E9ECEF;
+$active: rgb(250, 124, 145, 1);
+$transition: 280ms all var(--delay) ease-out;
+$gap: 0.75rem;
+$primary: #0d6efd;
+$black:   black;
+$modal-border-radius: 0.25rem;
+
+
+$success: #28a745;
+$success-text-clr: #0a3622;
+$success-bg: #d1e7dd;
+$success-border: #a3cfbb;
+
+$warning: #ffc107;
+$warning-text-clr: #664d03;
+$warning-bg: #fff3cd;
+$warning-border: #ffe69c;
+
+$danger: #dc3545;
+$danger-text-clr: #58151c;
+$danger-bg: #f8d7da;
+$danger-border: #f1aeb5;
+
+
+@import 'reset';
+@import 'utilities';
+@import 'navigation';
+@import 'table';
+@import 'buttons';
+@import 'forms';
+@import 'modal';
+@import 'alerts';
+
+
+@font-face {
+    font-family: 'Glyphicons Halflings';
+    src: url('/static/font/glyphicons-halflings-regular.ttf') format('truetype'),
+}
+
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: .7rem;
+    color: black;
+    margin-left: .5rem;
+    margin-right: .5rem;
+    margin-top: 0;
+    margin-bottom: .5rem;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 1rem;
+}
+
+a[role=button] {
+    text-decoration: none;
+}
+
+.bike-main  {
+    color: rgb(4, 196, 4) !important;
+}
+
+.bike-retired {
+    color:rgb(230, 1, 1) !important;
+}
+
+.buttons-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+
+    > .end {
+        margin-left: auto;
+        flex-grow: 0;
+    }
+}
+
+.data-filtering-group {
+    display: flex;
+    align-items: center;
+
+    > .form-data-filter {
+        display: flex;
+        align-items: center;
+        gap: .35rem;
+    }
+
+    > *:last-child {
+        margin-left: auto;
+    }
+}
+
+.login {
+    display: grid;
+    grid-template-columns: 1fr;
+    height: 100vh;
+    margin: 0 2rem;
+
+    > form {
+        align-self: center;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 2rem;
+
+        box-shadow: rgba(0,0,0,.16) 0px 1px 4px;
+        border-radius: var(--border-radius);
+        border-radius: 0.05rem;
+
+        > button {
+            max-width: max-content;
+            margin-left: auto;
+        }
+    }
+}
+
+
+@media only screen and (min-width: 992px) {
+    .login {
+        grid-template-columns: repeat(3, 1fr);
+
+        > form {
+            grid-column-start: 2;
+            grid-column-end: 3;
+        }
+    }
+}
+
+.sync-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    > form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        > button {
+            max-width: max-content;
+            margin-left: auto;
+        }
+    }
+
+    > .alert > p:first-child {
+        margin-bottom:.5rem;
+    }
+}

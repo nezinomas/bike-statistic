@@ -1,18 +1,30 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.urls.base import reverse
 
 from .forms import ExternalUserForm
 
 
-class CustomLogin(auth_views.LoginView):
+class Login(auth_views.LoginView):
     def form_valid(self, form):
         user = form.get_user()
         login(self.request, user)
 
         return HttpResponseRedirect(self.get_success_url())
+
+
+class Logout(auth_views.LogoutView):
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+
+        if request.user.is_authenticated:
+            logout(request)
+            return redirect(reverse("users:login"))
+
+        return response
 
 
 @login_required

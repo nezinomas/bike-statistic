@@ -29,4 +29,4 @@ class Goal(models.Model):
         return str(self.year)
 
     def get_absolute_url(self):
-        return reverse_lazy("goals:goal_detail", kwargs={"pk": self.pk})
+        return reverse_lazy("goals:goal_list")

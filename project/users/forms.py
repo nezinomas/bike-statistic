@@ -1,7 +1,6 @@
 from crispy_forms.helper import FormHelper
 from django.forms import ModelForm, PasswordInput
 
-from ..core.helpers.form_helpers import set_field_properties
 from ..core.lib import utils
 from .models import User
 
@@ -21,7 +20,6 @@ class ExternalUserForm(ModelForm):
         self.fields['garmin_user'].initial = self._user.garmin_user
 
         self.helper = FormHelper()
-        set_field_properties(self, self.helper)
 
     def save(self, *args, **kwargs):
         instance = super().save(commit=False)

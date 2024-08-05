@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from decimal import Decimal
 
 import pytest
@@ -12,9 +12,9 @@ pytestmark = pytest.mark.django_db
 @pytest.fixture(name="data")
 def fixture_data():
     return [
-        {'date': date(1999, 1, 1), 'distance': Decimal('10.5')},
-        {'date': date(1999, 1, 31), 'distance': Decimal('11.5')},
-        {'date': date(2000, 1, 31), 'distance': Decimal('12.5')},
+        {'date': datetime(1999, 1, 1, 0, 0, 1, tzinfo=timezone.utc), 'distance': Decimal('10.5')},
+        {'date': datetime(1999, 1, 31, 0, 0, 1, tzinfo=timezone.utc), 'distance': Decimal('11.5')},
+        {'date': datetime(2000, 1, 31, 0, 0, 1, tzinfo=timezone.utc), 'distance': Decimal('12.5')},
     ]
 
 @pytest.fixture(name="stats")

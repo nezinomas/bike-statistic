@@ -1,0 +1,25 @@
+.text-end {
+    text-align: right !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.hidden {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+// HTMX indicator
+.htmx-indicator {
+    display: none;
+}
+
+.htmx-request .htmx-indicator {
+    display: inline;
+}
+
+.htmx-request.htmx-indicator {
+    display: inline;
+}

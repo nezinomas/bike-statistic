@@ -1,5 +1,4 @@
 import pytest
-from django.contrib.auth import views as auth_views
 from django.urls import resolve, reverse
 
 from .. import views
@@ -11,13 +10,21 @@ pytestmark = pytest.mark.django_db
 def test_custom_login_func():
     view = resolve('/login/')
 
-    assert views.CustomLogin == view.func.view_class
+    assert views.Login == view.func.view_class
 
 
 def test_custom_logout_func():
     view = resolve('/logout/')
 
-    assert auth_views.LogoutView == view.func.view_class
+    assert views.Logout == view.func.view_class
+
+
+def test_logout_redirects_to_login(client_logged):
+    url = reverse('users:logout')
+    response = client_logged.get(url, follow=True)
+
+    assert response.status_code == 200
+    assert response.resolver_match.url_name == 'login'
 
 
 def test_successful_login(client):

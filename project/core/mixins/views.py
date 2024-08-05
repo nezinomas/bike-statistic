@@ -36,20 +36,15 @@ def httpHtmxResponse(hx_trigger_name=None, status_code=204):
 #                                                                                  Mixins
 # ---------------------------------------------------------------------------------------
 class CreateUpdateMixin:
-    hx_trigger_django = None
-    detail_view = None
+    hx_trigger_django = 'reload'
+
+    def get_hx_trigger_django(self):
+        return self.hx_trigger_django
 
     def form_valid(self, form, **kwargs):
         response = super().form_valid(form)
-
         if self.hx_trigger_django:
             response.status_code = 204
-
-        if self.detail_view:
-            rendered = render_to_string(
-                self.detail_view.template_name, {'object': self.object}, self.request)
-            response = HttpResponse(rendered)
-            response.status_code = 200
 
         trigger_client_event(response=response, name=self.hx_trigger_django, params={})
 
@@ -57,7 +52,7 @@ class CreateUpdateMixin:
 
 
 class DeleteMixin:
-    hx_trigger_django = None
+    hx_trigger_django = 'reload'
     hx_redirect = None
 
     def get_hx_trigger_django(self):

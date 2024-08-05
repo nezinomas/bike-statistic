@@ -1,10 +1,10 @@
 <button
     type="button"
-    class="btn btn-sm btn-success {% if css_class %}{{css_class}}{% endif %}"
+    class="btn-outline-success {% if css_class %}{{css_class}}{% endif %}"
     {% if width %}style="width: {{ width }};"{% endif %}
     {% if url %}hx-get="{{url}}"{% endif %}
     {% if target %}hx-target="#{{target}}"{% endif %}
     {% if swap %}hx-swap="{{swap}}"{% endif %}
 >
-    <i class="bi bi-plus"></i> {% if label %} {{label}} {% endif %}
+    {% if label %} {{label}} {% endif %}
 </button>

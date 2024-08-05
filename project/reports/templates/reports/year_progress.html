@@ -1,0 +1,77 @@
+{% extends request.htmx|yesno:"base_htmx.html,base.html" %}
+
+{% load static %}
+{% load humanize %}
+{% load filters %}
+
+{% block content %}
+
+{% include 'reports/partials/extremums_table.html' with object_list=extremums %}
+
+<table class="tbl-main tbl-hover tbl-striped sticky-table">
+    <thead>
+        <tr>
+            <th colspan="3" class="right-black-border"> </th>
+            <th colspan="4" class="right-black-border">Workout Stats</th>
+            <th colspan="5" class="right-black-border">Month Stats</th>
+            <th colspan="5" class="right-black-border">Season Stats</th>
+            <th colspan="3">Goals</th>
+        </tr>
+        <tr>
+            <th>Bike</th>
+            <th>Date</th>
+            <th class="right-black-border">&#8451;</th>
+            <th>Dist</th>
+            <th>Time</th>
+            <th>Speed</th>
+            <th class="right-black-border">Ascent</th>
+            <th>Dist</th>
+            <th>Time</th>
+            <th>Speed</th>
+            <th>Per day</th>
+            <th class="right-black-border">Ascent</th>
+            <th>Dist</th>
+            <th>Time</th>
+            <th>Speed</th>
+            <th>Per day</th>
+            <th class="right-black-border">Ascent</th>
+            <th>Goal</th>
+            <th>%</th>
+            <th>Delta</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for object in object_list  %}
+        <tr {% ifchanged object.month %}{% if not forloop.first %}class="divider"{% endif %}{% endifchanged %}>
+            <td>{{ object.bikes }}</td>
+            <td>{{ object.date|date:'Y-m-d' }}</td>
+            <td class="right-black-border">{{ object.temp|floatformat:0|default:'-' }}</td>
+            <td>{{ object.distance|floatformat:2 }}</td>
+            <td>{{ object.seconds|duration }}</td>
+            <td>{{ object.speed|floatformat:1 }}</td>
+            <td class="right-black-border">{{ object.ascent|floatformat:0 }}</td>
+            <td>{{ object.month_distance|floatformat:0 }}</td>
+            <td>{{ object.month_seconds|duration }}</td>
+            <td>{{ object.month_speed|floatformat:1 }}</td>
+            <td>{{ object.month_per_day|floatformat:1 }}</td>
+            <td class="right-black-border">{{ object.month_ascent|floatformat:0|intcomma }}</td>
+            <td>{{ object.season_distance|floatformat:0|intcomma }}</td>
+            <td>{{ object.season_seconds|duration }}</td>
+            <td>{{ object.season_speed|floatformat:1 }}</td>
+            <td>{{ object.season_per_day|floatformat:1 }}</td>
+            <td class="right-black-border">{{ object.season_ascent|floatformat:0|intcomma }}</td>
+            <td>{{ object.goal_per_day|floatformat:0|intcomma }}</td>
+            <td>{{ object.goal_percent|floatformat:1 }}</td>
+            <td>{{ object.goal_delta|floatformat:0|intcomma }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td class="bg-warning" colspan="20">No records</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>$('.sticky-table').stickyTableHeaders();</script>
+
+{% endblock content %}

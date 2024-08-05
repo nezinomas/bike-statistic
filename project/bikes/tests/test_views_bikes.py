@@ -5,7 +5,7 @@ import pytest
 import time_machine
 from django.urls import resolve, reverse
 
-from ...bikes.factories import BikeFactory, ComponentFactory
+from ...bikes.factories import BikeFactory
 from ...core.lib.tests_utils import clean_content
 from ...users.factories import UserFactory
 from .. import models, views
@@ -17,12 +17,6 @@ def test_bike_list_func():
     view = resolve('/bike/')
 
     assert views.BikeList is view.func.view_class
-
-
-def test_bike_detail_func():
-    view = resolve('/bike/detail/9/')
-
-    assert views.BikeDetail is view.func.view_class
 
 
 def test_bike_create_func():
@@ -54,7 +48,7 @@ def test_bike_list_no_records(client_logged):
     url = reverse('bikes:bike_list')
     response = client_logged.get(url)
 
-    assert '<td class="bg-warning text-center" colspan="4"> No records </td>' in str(
+    assert '<div class="alert alert-warning">No records</div>' in str(
         response.content)
 
 
@@ -71,35 +65,23 @@ def test_bike_list(client_logged):
     assert f'<a href="{info_url}">Short Name</a>' in content
 
 
-def test_bike_detail(client_logged):
+def test_bike_links(client_logged):
     bike = BikeFactory()
 
-    url = reverse('bikes:bike_detail', kwargs={'pk': bike.pk})
-    response = client_logged.get(url)
-
-    actual = response.context['object']
-    assert response.status_code == 200
-    assert actual == bike
-
-
-def test_bike_detail_links(client_logged):
-    bike = BikeFactory()
-
-    url = reverse('bikes:bike_detail', kwargs={'pk': bike.pk})
+    url = reverse('bikes:bike_list')
     response = client_logged.get(url)
 
     actual = clean_content(response.content)
 
-    row_id = f'row-id-{bike.pk}'
     url_update = reverse('bikes:bike_update', kwargs={'pk': bike.pk})
     url_delete = reverse('bikes:bike_delete', kwargs={'pk': bike.pk})
 
     # table row
-    assert f'<tr id="{row_id}" hx-target="this" hx-swap="outerHTML" hx-trigger="click[ctrlKey]" hx-get="{url_update}">' in actual
+    assert f'<tr hx-target="#mainModal" hx-trigger="dblclick" hx-get="{url_update}"' in actual
     # edit button
-    assert f'<button type="button" class="btn btn-sm btn-warning" hx-get="{url_update}" hx-target="#{row_id}" hx-swap="outerHTML">' in actual
+    assert f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#mainModal"' in actual
     # delete button
-    assert f'<button type="button" class="btn btn-sm btn-danger" hx-get="{url_delete}" hx-target="#dialog" hx-swap="innerHTML">' in actual
+    assert f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal"' in actual
 
 
 @time_machine.travel('2000-2-2')
@@ -154,17 +136,6 @@ def test_bike_update_load_form(client_logged):
     assert '1999-01-01' in form
     assert 'Full Name' in form
     assert 'Short Name' in form
-
-
-def test_bike_update_load_form_close_button(client_logged):
-    bike = BikeFactory()
-
-    url = reverse('bikes:bike_update', kwargs={'pk': bike.pk})
-    response = client_logged.get(url)
-    actual = clean_content(response.content)
-
-    url_close = reverse('bikes:bike_detail', kwargs={'pk': bike.pk})
-    assert f'hx-get="{url_close}"' in actual
 
 
 def test_bike_update_date(client_logged):
@@ -310,28 +281,3 @@ def test_bike_delete(client_logged):
     client_logged.post(url, {})
 
     assert models.Bike.objects.all().count() == 0
-
-
-def test_bike_menu_func():
-    view = resolve('/bike/menu/')
-
-    assert views.BikeMenuList is view.func.view_class
-
-
-def test_bike_menu_200(client_logged):
-    url = reverse('bikes:bike_menu')
-    response = client_logged.get(url)
-
-    assert response.status_code == 200
-
-
-def test_bike_menu(client_logged):
-    bike = BikeFactory()
-    component = ComponentFactory()
-
-    url = reverse('bikes:bike_menu')
-    response = client_logged.get(url)
-    content = clean_content(response.content)
-    stats_url = reverse("bikes:stats_list", kwargs={"bike_slug": bike.slug, "component_pk": component.pk})
-
-    assert f'hx-get="{stats_url}"> Short Name </a>' in content

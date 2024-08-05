@@ -17,11 +17,6 @@ from .library.insert_garmin import SyncWithGarmin
 from .library.temperature import Temperature
 
 
-class DataDetail(DetailViewMixin):
-    model = models.Data
-    template_name = "data/includes/partial_data_row.html"
-
-
 class DataList(ListViewMixin):
     model = models.Data
     template_name = "data/data_list.html"
@@ -45,22 +40,26 @@ class DataList(ListViewMixin):
 class DataCreate(CreateViewMixin):
     model = models.Data
     form_class = forms.DataForm
-    detail_view = DataDetail
+    template_name = "core/includes/generic_form.html"
     success_url = reverse_lazy("data:data_list")
 
     def url(self):
         return reverse_lazy("data:data_create")
 
+    def title(self):
+        return "New activity"
 
 class DataUpdate(UpdateViewMixin):
     model = models.Data
     form_class = forms.DataForm
-    detail_view = DataDetail
+    template_name = "core/includes/generic_form.html"
     success_url = reverse_lazy("data:data_list")
 
     def url(self):
         return reverse_lazy("data:data_update", kwargs={"pk": self.object.pk})
 
+    def title(self):
+        return "Update activity"
 
 class QuickUpdate(DetailViewMixin):
     model = models.Data
@@ -75,7 +74,14 @@ class QuickUpdate(DetailViewMixin):
 
 class DataDelete(DeleteViewMixin):
     model = models.Data
+    template_name = "core/includes/generic_delete_form.html"
     success_url = reverse_lazy("data:data_list")
+
+    def url(self):
+        return reverse_lazy("data:data_delete", kwargs={"pk": self.object.pk})
+
+    def title(self):
+        return "Delete activity"
 
 
 class DataInsert(TemplateViewMixin):

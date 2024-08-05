@@ -12,3 +12,8 @@ def get_item(dictionary, key):
 @register.filter
 def join(var1, var2):
     return f'{var1}{var2}'
+
+
+@register.simple_tag
+def to_list(*args):
+    return args

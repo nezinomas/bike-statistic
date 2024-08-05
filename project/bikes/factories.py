@@ -3,7 +3,7 @@ from datetime import date
 import factory
 
 from ..users.factories import UserFactory
-from .models import Bike, BikeInfo, Component, ComponentStatistic
+from .models import Bike, BikeInfo, Component, ComponentWear
 
 
 class BikeFactory(factory.django.DjangoModelFactory):
@@ -37,7 +37,7 @@ class ComponentFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ('user', 'name',)
 
 
-class ComponentStatisticFactory(factory.django.DjangoModelFactory):
+class ComponentWearFactory(factory.django.DjangoModelFactory):
     start_date = date(1999, 1, 1)
     end_date = date(1999, 1, 31)
     price = 1.11
@@ -46,4 +46,4 @@ class ComponentStatisticFactory(factory.django.DjangoModelFactory):
     component = factory.SubFactory(ComponentFactory)
 
     class Meta:
-        model = ComponentStatistic
+        model = ComponentWear

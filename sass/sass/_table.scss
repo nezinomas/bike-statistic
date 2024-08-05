@@ -1,0 +1,192 @@
+$w6: 6rem;
+$w7: 7rem;
+$w10:  10rem;
+$w20:  20rem;
+
+
+@mixin cell {
+    border: 1px solid var(--border-color);
+    text-align: center;
+    vertical-align: middle;
+}
+
+
+.tbl-main {
+    --cell-horizontal-padding: .25rem;
+    --head-bg-color: #e3eef0;
+    --cell-height: 1.65rem;
+    --border-color: #ccc;
+
+    width: 100%;
+    border-collapse: collapse;
+
+    > thead {
+        border-bottom: 2px solid black;
+        background-color: var(--head-bg-color);
+    }
+
+    > tfoot {
+        border-top: 2px double black;
+        background-color: var(--head-bg-color);
+    }
+
+    > thead > tr,
+    > tfoot > tr {
+        > th {
+            @include cell();
+
+            --cell-height: 1.8rem;
+
+            min-height: var(--cell-height);
+            height: var(--cell-height);
+            padding: 0 var(--cell-horizontal-padding);
+        }
+
+        > th:first-child {
+            text-align: left;
+        }
+    }
+
+    > tbody > tr {
+        &.divider {
+            border-bottom: 5px solid #ccc !important;
+        }
+
+        > td {
+            @include cell();
+
+            min-height: var(--cell-height);
+            height: var(--cell-height);
+            padding: 0 var(--cell-horizontal-padding);
+        }
+
+        > td:first-child {
+            text-align: left;
+        }
+    }
+
+    &.tbl-striped {
+        > tbody > tr:nth-child(even) > td  {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    }
+
+    &.tbl-hover {
+        > tbody > tr:hover > td {
+            background-color: rgba(0, 0, 0, 0.08);
+        }
+    }
+}
+
+.waiting-for-review {
+    background-color: #cff4fc;
+}
+
+.tbl-warning {
+    background-color: #fff3cd;
+}
+
+.tbl-danger {
+    background-color: #f8d7da;
+}
+
+.tbl-success {
+    background-color: #d1e7dd;
+}
+
+.right-black-border {
+    border-right: 1.5px solid black !important;
+}
+
+.data-cols {
+    // all columns
+    td {
+        width: $w7;
+    }
+    // date
+    td:nth-child(2) {
+        width: $w10;
+    }
+    // buttons
+    td:last-child {
+        width: $w6;
+    }
+}
+
+.component-wear-col {
+    &-price {
+        width: $w7;
+        min-width: $w7;
+    }
+
+    &-brand {
+        width: $w10;
+        min-width: $w10;
+    }
+
+    &-distance {
+        width: $w7;
+        min-width: $w7;
+    }
+
+    &-buttons {
+        width: $w6;
+        min-width: $w6;
+    }
+}
+
+.goals-col {
+    &-goal {
+        width: $w20;
+    }
+
+    &-year {
+        width: $w20;
+    }
+
+    &-buttons {
+        width: $w6;
+    }
+}
+
+.bike-info-cols {
+    // component
+    td:first-child {
+        width: $w20;
+    }
+    // buttons
+    td:last-child {
+        width: $w6;
+    }
+}
+
+.component-cols {
+    // #
+    td:first-child {
+        width: $w6;
+    }
+    // buttons
+    td:last-child {
+        width: $w6;
+    }
+
+    td:first-child,
+    th:first-child {
+        text-align: center !important;
+    }
+}
+
+.bike-cols {
+    // date
+    td:first-child {
+        width: $w20;
+    }
+    // full name
+    td:nth-child(2) {
+        width: $w20;
+    }
+    // buttons
+    td:last-child {
+        width: $w6;
+    }
+}

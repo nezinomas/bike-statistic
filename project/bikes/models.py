@@ -10,6 +10,10 @@ from ..users.models import User
 class BikeQuerySet(models.QuerySet):
     def related(self):
         user = utils.get_user()
+
+        if not user or not user.id:
+            return self
+
         return (
             self
             .select_related('user')
@@ -55,7 +59,7 @@ class Bike(models.Model):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse_lazy("bikes:bike_detail", kwargs={"pk": self.pk})
+        return reverse_lazy("bikes:bike_list")
 
 
 class BikeInfoQuerySet(models.QuerySet):
@@ -93,7 +97,7 @@ class BikeInfo(models.Model):
         return f'{self.bike}: {self.component}'
 
     def get_absolute_url(self):
-        return reverse_lazy("bikes:info_detail", kwargs={"bike_slug": self.bike.slug, "pk": self.pk})
+        return reverse_lazy("bikes:info_list", kwargs={"bike_slug": self.bike.slug})
 
 
 class ComponentQuerySet(models.QuerySet):
@@ -130,10 +134,10 @@ class Component(models.Model):
         return str(self.name)
 
     def get_absolute_url(self):
-        return reverse_lazy("bikes:component_detail", kwargs={"pk": self.pk})
+        return reverse_lazy("bikes:component_list")
 
 
-class ComponentStatisticQuerySet(models.QuerySet):
+class ComponentWearQuerySet(models.QuerySet):
     def related(self):
         user = utils.get_user()
         return (
@@ -146,7 +150,7 @@ class ComponentStatisticQuerySet(models.QuerySet):
         return self.related()
 
 
-class ComponentStatistic(models.Model):
+class ComponentWear(models.Model):
     start_date = models.DateField()
     end_date = models.DateField(
         null=True,
@@ -171,7 +175,7 @@ class ComponentStatistic(models.Model):
         related_name='components'
     )
 
-    objects = ComponentStatisticQuerySet.as_manager()
+    objects = ComponentWearQuerySet.as_manager()
 
     class Meta:
         ordering = ['-start_date']
@@ -181,5 +185,5 @@ class ComponentStatistic(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy(
-            "bikes:stats_detail",
-            kwargs={"bike_slug": self.bike.slug, "stats_pk": self.pk})
+            "bikes:stats_list",
+            kwargs={"bike_slug": self.bike.slug, "component_pk": self.pk})
