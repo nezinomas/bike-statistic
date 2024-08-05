@@ -60,6 +60,10 @@
         min-height: 1px;
         padding: 0;
     }
+
+    > a[role="button"] {
+        border: 0;
+    }
 }
 
 
