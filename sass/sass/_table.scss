@@ -48,6 +48,10 @@ $w20:  20rem;
     }
 
     > tbody > tr {
+        &.divider {
+            border-bottom: 5px solid #ccc !important;
+        }
+
         > td {
             @include cell();
 
