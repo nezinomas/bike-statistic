@@ -6,7 +6,7 @@ from django.urls import resolve, reverse
 from mock import patch
 
 from ...data.views import DataInsert, DataList
-from ...users.views import CustomLogin
+from ...users.views import Login
 from .. import views
 
 
@@ -42,7 +42,7 @@ def test_insert_data_redirection_if_user_not_logged(client):
     url = reverse('data:data_insert')
     response = client.get(url, follow=True)
 
-    assert response.resolver_match.func.view_class is CustomLogin
+    assert response.resolver_match.func.view_class is Login
 
 
 @patch('project.data.views.SyncWithGarmin.insert_data_current_user', side_effect=Exception('Error X'))

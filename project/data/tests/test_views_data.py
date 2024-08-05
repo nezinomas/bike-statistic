@@ -9,7 +9,7 @@ from ...bikes.factories import BikeFactory
 from ...core.lib.tests_utils import clean_content
 from ...data.factories import DataFactory
 from ...users.factories import UserFactory
-from ...users.views import CustomLogin
+from ...users.views import Login
 from .. import views
 from ..factories import DataFactory
 from ..models import Data
@@ -51,7 +51,7 @@ def test_data_list_not_loged(client):
     url = reverse('data:data_list')
     response = client.get(url, follow=True)
 
-    assert response.resolver_match.func.view_class is CustomLogin
+    assert response.resolver_match.func.view_class is Login
 
 
 @time_machine.travel('2000-01-20')
@@ -76,7 +76,7 @@ def test_data_create_func():
 def test_data_create_not_loged(client):
     url = reverse('data:data_create')
     response = client.get(url, follow=True)
-    assert response.resolver_match.func.view_class is CustomLogin
+    assert response.resolver_match.func.view_class is Login
 
 
 @time_machine.travel(datetime(2000, 2, 2, 5, 6, 7, tzinfo=timezone.utc))
@@ -174,7 +174,7 @@ def test_data_delete_not_loged(client):
     data = DataFactory()
     url = reverse('data:data_delete', kwargs={'pk': data.pk})
     response = client.get(url, follow=True)
-    assert response.resolver_match.func.view_class is CustomLogin
+    assert response.resolver_match.func.view_class is Login
 
 
 def test_data_delete_200(client_logged):
@@ -224,7 +224,7 @@ def test_data_update_not_loged(client):
     data = DataFactory()
     url = reverse('data:data_update', kwargs={'pk': data.pk})
     response = client.get(url, follow=True)
-    assert response.resolver_match.func.view_class is CustomLogin
+    assert response.resolver_match.func.view_class is Login
 
 
 def test_data_update_object_200(client_logged):
@@ -334,7 +334,7 @@ def test_data_quick_update_not_loged(client):
     data = DataFactory()
     url = reverse('data:data_quick_update', kwargs={'pk': data.pk})
     response = client.get(url, follow=True)
-    assert response.resolver_match.func.view_class is CustomLogin
+    assert response.resolver_match.func.view_class is Login
 
 
 def test_data_quick_update_404(client_logged):
