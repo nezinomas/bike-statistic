@@ -16,6 +16,9 @@ PROJECT_ROOT = os.path.dirname(SITE_ROOT)
 ENV = environ.Env()
 environ.Env.read_env(os.path.join(PROJECT_ROOT, '.env'))
 
+
+ADMIN_ENABLED = False
+
 # ================   SITE CONFIGURATION
 LOGOUT_REDIRECT_URL = 'index'
 LOGIN_REDIRECT_URL = 'index'

@@ -1,13 +1,11 @@
 from django.conf import settings
 from django.conf.urls import static
-from django.contrib import admin
 from django.urls import include, path
 from django.views.defaults import (page_not_found, permission_denied,
                                    server_error)
 from ..data.views import DataList as IndexView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', IndexView.as_view(), name='index'),
     path('', include('project.users.urls')),
     path('', include('project.bikes.urls')),
