@@ -79,8 +79,8 @@ def test_wear_list_with_data_links(client_logged):
     response = client_logged.get(url)
     actual = clean_content(response.content)
 
-    url_update = reverse('bikes:wear_update', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
-    url_delete = reverse('bikes:wear_delete', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    url_update = reverse('bikes:wear_update', kwargs={'bike_slug': bike.slug, 'wear_pk': stats.pk})
+    url_delete = reverse('bikes:wear_delete', kwargs={'bike_slug': bike.slug, 'wear_pk': stats.pk})
 
     # table row
     assert f'<tr hx-target="#mainModal" hx-trigger="dblclick" hx-get="{url_update}"' in actual
@@ -99,8 +99,8 @@ def test_stats_rendered_context(client_logged):
 
     actual = clean_content(response.content)
 
-    url_update = reverse('bikes:wear_update', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
-    url_delete = reverse('bikes:wear_delete', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    url_update = reverse('bikes:wear_update', kwargs={'bike_slug': bike.slug, 'wear_pk': stats.pk})
+    url_delete = reverse('bikes:wear_delete', kwargs={'bike_slug': bike.slug, 'wear_pk': stats.pk})
 
     # table row
     assert f'<tr hx-target="#mainModal" hx-trigger="dblclick" hx-get="{url_update}"' in actual
@@ -170,7 +170,7 @@ def test_wear_update_load_form(client_logged):
     bike = BikeFactory()
     stats = ComponentWearFactory()
 
-    url = reverse('bikes:wear_update', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    url = reverse('bikes:wear_update', kwargs={'bike_slug': bike.slug, 'wear_pk': stats.pk})
     response = client_logged.get(url)
     form = response.context['form'].as_p()
 
@@ -188,7 +188,7 @@ def test_wear_update_load_form_close_button(client_logged):
     response = client_logged.get(url)
     actual = clean_content(response.content)
 
-    url_close = reverse('bikes:wear_update', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    url_close = reverse('bikes:wear_update', kwargs={'bike_slug': bike.slug, 'wear_pk': stats.pk})
     assert f'hx-get="{url_close}"' in actual
 
 
@@ -203,7 +203,7 @@ def test_wear_update_start_date(client_logged):
         'brand': stats.brand
     }
 
-    url = reverse('bikes:wear_update', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    url = reverse('bikes:wear_update', kwargs={'bike_slug': bike.slug, 'wear_pk': stats.pk})
     client_logged.post(url, data)
 
     actual = models.ComponentWear.objects.get(pk=stats.pk)
@@ -221,7 +221,7 @@ def test_wear_update_end_date(client_logged):
         'brand': stats.brand
     }
 
-    url = reverse('bikes:wear_update', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    url = reverse('bikes:wear_update', kwargs={'bike_slug': bike.slug, 'wear_pk': stats.pk})
     client_logged.post(url, data)
 
     actual = models.ComponentWear.objects.get(pk=stats.pk)
@@ -232,7 +232,7 @@ def test_wear_update_end_date(client_logged):
 def test_wear_delete_200(client_logged):
     bike = BikeFactory()
     stats = ComponentWearFactory()
-    url = reverse('bikes:wear_delete', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    url = reverse('bikes:wear_delete', kwargs={'bike_slug': bike.slug, 'wear_pk': stats.pk})
 
     response = client_logged.get(url)
 
@@ -242,7 +242,7 @@ def test_wear_delete_200(client_logged):
 def test_wear_delete_load_form(client_logged):
     bike = BikeFactory()
     stats = ComponentWearFactory()
-    url = reverse('bikes:wear_delete', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    url = reverse('bikes:wear_delete', kwargs={'bike_slug': bike.slug, 'wear_pk': stats.pk})
 
     response = client_logged.get(url)
     content = clean_content(response.content)
@@ -255,7 +255,7 @@ def test_wear_delete_load_form(client_logged):
 def test_wear_delete(client_logged):
     bike = BikeFactory()
     stats = ComponentWearFactory()
-    url = reverse('bikes:wear_delete', kwargs={'bike_slug': bike.slug, 'stats_pk': stats.pk})
+    url = reverse('bikes:wear_delete', kwargs={'bike_slug': bike.slug, 'wear_pk': stats.pk})
 
     client_logged.post(url, {})
 

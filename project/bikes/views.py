@@ -221,14 +221,14 @@ class ComponentWearUpdate(UpdateViewMixin):
     model = models.ComponentWear
     form_class = forms.ComponentWearForm
     template_name = "core/includes/generic_form.html"
-    lookup_url_kwarg = "stats_pk"
+    lookup_url_kwarg = "wear_pk"
 
     def url(self):
         return reverse_lazy(
             "bikes:wear_update",
             kwargs={
                 "bike_slug": self.kwargs["bike_slug"],
-                "stats_pk": self.kwargs["stats_pk"],
+                "wear_pk": self.kwargs["wear_pk"],
             },
         )
 
@@ -239,7 +239,7 @@ class ComponentWearUpdate(UpdateViewMixin):
 class ComponentWearDelete(DeleteViewMixin):
     model = models.ComponentWear
     template_name = "core/includes/generic_delete_form.html"
-    lookup_url_kwarg = "stats_pk"
+    lookup_url_kwarg = "wear_pk"
     success_url = "/"
 
     def url(self):
@@ -247,7 +247,7 @@ class ComponentWearDelete(DeleteViewMixin):
             "bikes:wear_delete",
             kwargs={
                 "bike_slug": self.kwargs["bike_slug"],
-                "stats_pk": self.kwargs["stats_pk"],
+                "wear_pk": self.kwargs["wear_pk"],
             },
         )
 

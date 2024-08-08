@@ -37,12 +37,12 @@ urlpatterns = [
         name="wear_create",
     ),
     path(
-        "wear/<slug:bike_slug>/update/<int:stats_pk>/",
+        "wear/<slug:bike_slug>/update/<int:wear_pk>/",
         views.ComponentWearUpdate.as_view(),
         name="wear_update",
     ),
     path(
-        "wear/<slug:bike_slug>/delete/<int:stats_pk>/",
+        "wear/<slug:bike_slug>/delete/<int:wear_pk>/",
         views.ComponentWearDelete.as_view(),
         name="wear_delete",
     ),
