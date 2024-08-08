@@ -26,8 +26,11 @@
 
 .modal-body {
     padding: $gap;
-    max-height: calc(100vh - 200px);
-    overflow-y: auto;
+
+    &.scrollable {
+        max-height: 600px;
+        overflow-y: auto;
+    }
 }
 
 .modal-content {
