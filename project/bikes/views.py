@@ -202,7 +202,7 @@ class ComponentWearCreate(CreateViewMixin):
 
     def url(self):
         return reverse_lazy(
-            "bikes:stats_create",
+            "bikes:wear_create",
             kwargs={
                 "bike_slug": self.kwargs["bike_slug"],
                 "component_pk": self.kwargs["component_pk"],
@@ -225,7 +225,7 @@ class ComponentWearUpdate(UpdateViewMixin):
 
     def url(self):
         return reverse_lazy(
-            "bikes:stats_update",
+            "bikes:wear_update",
             kwargs={
                 "bike_slug": self.kwargs["bike_slug"],
                 "stats_pk": self.kwargs["stats_pk"],
@@ -244,7 +244,7 @@ class ComponentWearDelete(DeleteViewMixin):
 
     def url(self):
         return reverse_lazy(
-            "bikes:stats_delete",
+            "bikes:wear_delete",
             kwargs={
                 "bike_slug": self.kwargs["bike_slug"],
                 "stats_pk": self.kwargs["stats_pk"],

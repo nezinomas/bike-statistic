@@ -185,5 +185,5 @@ class ComponentWear(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy(
-            "bikes:stats_list",
+            "bikes:wear_list",
             kwargs={"bike_slug": self.bike.slug, "component_pk": self.pk})

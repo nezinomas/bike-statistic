@@ -67,13 +67,13 @@
 
 		{% if bike_list%}
 		<!-- Component wear -->
-		<div {% if request.resolver_match.url_name == 'stats_list' %}class="active"{% endif %}>
-			<a href="{% url 'bikes:stats_list' default_bike.slug %}">Component wear</a>
+		<div {% if request.resolver_match.url_name == 'wear_list' %}class="active"{% endif %}>
+			<a href="{% url 'bikes:wear_list' default_bike.slug %}">Component wear</a>
 			<div class="dropdown">
 				<button class="dropdown__btn"></button>
 				<div class="dropdown__menu">
 					{% for bike in bike_list %}
-					<a href="{% url 'bikes:stats_list' bike.slug %}"> {{ bike.short_name }}
+					<a href="{% url 'bikes:wear_list' bike.slug %}"> {{ bike.short_name }}
 						{% if bike.main %}<i class="bi bi-star bike-main"></i>{% endif %}
 						{% if bike.retired %}<i class="bi bi-dash-circle bike-retired"></i>{% endif %}
 					</a>
