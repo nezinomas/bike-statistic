@@ -70,7 +70,6 @@ a[role=button] {
     display: grid;
     grid-template-columns: 10rem 1fr 10rem;
     align-items: center;
-
     gap: .35rem;
 
     &__components {
@@ -78,17 +77,17 @@ a[role=button] {
         text-align: left;
     }
 
-    > .end {
-        margin-left: auto;
-        align-self: end;
-        grid-column: 3 / 4;
-    }
-
     &__title {
         text-align: center;
         grid-column: 2 / 3;
         font-size: 1rem;
         font-weight: 600;
+    }
+
+    > .end {
+        margin-left: auto;
+        align-self: end;
+        grid-column: 3 / 4;
     }
 }
 
