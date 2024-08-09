@@ -169,13 +169,13 @@ def test_component_name_validation(name):
 # ---------------------------------------------------------------------------------------
 #                                                                     Component Statistic
 # ---------------------------------------------------------------------------------------
-def test_component_statistic_str():
+def test_wear_str():
     obj = ComponentWearFactory.build()
 
     assert str(obj) == 'Short Name / Component / 1999-01-01 ... 1999-01-31'
 
 
-def test_component_statistic_related_different_users(get_user):
+def test_wear_related_different_users(get_user):
     u = UserFactory(username='tom')
 
     b1 = BikeFactory(short_name='B1')  # user bob
@@ -191,7 +191,7 @@ def test_component_statistic_related_different_users(get_user):
     assert str(actual[0]) == 'B1 / Component / 1999-01-01 ... 1999-01-31'
 
 
-def test_component_statistic_related_qs_count(get_user, django_assert_max_num_queries):
+def test_wear_related_qs_count(get_user, django_assert_max_num_queries):
     ComponentWearFactory()
     ComponentWearFactory()
 
@@ -201,7 +201,7 @@ def test_component_statistic_related_qs_count(get_user, django_assert_max_num_qu
         list(q.bike.short_name for q in ComponentWear.objects.related())
 
 
-def test_component_statistic_items(get_user):
+def test_wear_items(get_user):
     ComponentWearFactory()
 
     assert ComponentWear.objects.items().count() == 1

@@ -187,11 +187,11 @@ def test_component_blank_data(get_user):
 # ---------------------------------------------------------------------------------------
 #                                                                          Component Wear
 # ---------------------------------------------------------------------------------------
-def test_component_statistic_init(get_user):
+def test_wear_init(get_user):
     ComponentWearForm()
 
 
-def test_component_statistic_init_fields(get_user):
+def test_wear_init_fields(get_user):
     form = ComponentWearForm().as_p()
 
     assert '<input type="text" name="start_date"' in form
@@ -200,7 +200,7 @@ def test_component_statistic_init_fields(get_user):
     assert '<input type="text" name="brand"' in form
 
 
-def test_component_statistic_valid_data(get_user):
+def test_wear_valid_data(get_user):
     b = BikeFactory()
     c = ComponentFactory()
 
@@ -225,7 +225,7 @@ def test_component_statistic_valid_data(get_user):
     assert data.component == c
 
 
-def test_component_statistic_blank_data(get_user):
+def test_wear_blank_data(get_user):
     form = ComponentWearForm(data={})
 
     assert not form.is_valid()
