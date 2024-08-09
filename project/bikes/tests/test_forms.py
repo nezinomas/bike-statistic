@@ -233,7 +233,7 @@ def test_wear_blank_data(get_user):
     assert 'start_date' in form.errors
 
 
-def test_wear_end_date_earlier_than_start_date():
+def test_wear_end_date_earlier_than_start_date(get_user):
     b = BikeFactory()
     c = ComponentFactory()
 
