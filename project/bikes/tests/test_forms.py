@@ -4,7 +4,7 @@ import pytest
 import time_machine
 from django.forms.models import model_to_dict
 
-from ...bikes.factories import BikeFactory, ComponentFactory
+from ...bikes.factories import BikeFactory, ComponentFactory, ComponentWearFactory
 from ...users.factories import UserFactory
 from ..forms import (BikeForm, BikeInfoForm, ComponentForm,
                      ComponentWearForm)
@@ -185,13 +185,13 @@ def test_component_blank_data(get_user):
 
 
 # ---------------------------------------------------------------------------------------
-#                                                                      ComponentStatistic
+#                                                                          Component Wear
 # ---------------------------------------------------------------------------------------
-def test_component_statistic_init(get_user):
+def test_wear_init(get_user):
     ComponentWearForm()
 
 
-def test_component_statistic_init_fields(get_user):
+def test_wear_init_fields(get_user):
     form = ComponentWearForm().as_p()
 
     assert '<input type="text" name="start_date"' in form
@@ -200,7 +200,7 @@ def test_component_statistic_init_fields(get_user):
     assert '<input type="text" name="brand"' in form
 
 
-def test_component_statistic_valid_data(get_user):
+def test_wear_valid_data(get_user):
     b = BikeFactory()
     c = ComponentFactory()
 
@@ -225,9 +225,49 @@ def test_component_statistic_valid_data(get_user):
     assert data.component == c
 
 
-def test_component_statistic_blank_data(get_user):
+def test_wear_blank_data(get_user):
     form = ComponentWearForm(data={})
 
     assert not form.is_valid()
 
     assert 'start_date' in form.errors
+
+
+def test_wear_end_date_earlier_than_start_date():
+    b = BikeFactory()
+    c = ComponentFactory()
+
+    form = ComponentWearForm(data={
+        'start_date': '2000-01-31',
+        'end_date': '2000-01-01',
+        'price': 10.01,
+        'brand': 'Brand',
+        'bike': b.pk,
+        'component': c.pk,
+    }, **{'bike_slug': b.slug, 'component_pk': c.pk})
+
+    assert not form.is_valid()
+
+    assert 'end_date' in form.errors
+    assert 'End date cannot be earlier than start date.' in form.errors["end_date"]
+
+
+def test_wear_create_new_but_not_closed_exists(get_user):
+    b = BikeFactory()
+    c = ComponentFactory()
+    ComponentWearFactory(end_date=None)
+
+    form = ComponentWearForm(data={
+        'start_date': '2000-01-31',
+        'end_date': '',
+        'price': 10.01,
+        'brand': 'Brand',
+        'bike': b.pk,
+        'component': c.pk,
+    }, **{'bike_slug': b.slug, 'component_pk': c.pk})
+
+    assert not form.is_valid()
+
+    assert form.errors == {
+        '__all__': ['All components must be closed.']
+    }

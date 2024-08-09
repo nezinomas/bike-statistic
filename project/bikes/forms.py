@@ -50,6 +50,27 @@ class ComponentWearForm(forms.ModelForm):
 
         return instance
 
+    def clean(self):
+        cleaned = super().clean()
+
+        started = cleaned.get("start_date")
+        ended = cleaned.get("end_date")
+
+        if ended and started and ended < started:
+            self.add_error(
+                "end_date", "End date cannot be earlier than start date."
+            )
+
+        q = ComponentWear.objects.items().filter(end_date__isnull=True)
+        print(f'--------------------------->\n{q=}\n')
+        #  check if all component are closed
+        if ComponentWear.objects.items().filter(end_date__isnull=True).count() > 0:
+            raise forms.ValidationError(
+                "All components must be closed."
+            )
+
+        return cleaned
+
 
 class BikeForm(FormMixin, forms.ModelForm):
     class Meta:
