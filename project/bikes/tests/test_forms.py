@@ -4,7 +4,7 @@ import pytest
 import time_machine
 from django.forms.models import model_to_dict
 
-from ...bikes.factories import BikeFactory, ComponentFactory
+from ...bikes.factories import BikeFactory, ComponentFactory, ComponentWearFactory
 from ...users.factories import UserFactory
 from ..forms import (BikeForm, BikeInfoForm, ComponentForm,
                      ComponentWearForm)
@@ -250,3 +250,24 @@ def test_wear_end_date_earlier_than_start_date():
 
     assert 'end_date' in form.errors
     assert 'End date cannot be earlier than start date.' in form.errors["end_date"]
+
+
+def test_wear_create_new_but_not_closed_exists(get_user):
+    b = BikeFactory()
+    c = ComponentFactory()
+    ComponentWearFactory(end_date=None)
+
+    form = ComponentWearForm(data={
+        'start_date': '2000-01-31',
+        'end_date': '',
+        'price': 10.01,
+        'brand': 'Brand',
+        'bike': b.pk,
+        'component': c.pk,
+    }, **{'bike_slug': b.slug, 'component_pk': c.pk})
+
+    assert not form.is_valid()
+
+    assert form.errors == {
+        '__all__': ['All components must be closed.']
+    }
