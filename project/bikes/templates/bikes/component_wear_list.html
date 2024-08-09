@@ -11,8 +11,8 @@
 
 <div hx-trigger="reload from:body" hx-get="{% url 'bikes:wear_list' bike.slug component.pk %}" hx-target="#htmx-container" class="hidden"></div>
 
-<div class="buttons-group">
-    <div class="buttons-group__components">
+<div class="button_group">
+    <div class="button_group__components">
     {% for item in object_list %}
     <a role="button" href="{% url 'bikes:wear_list' bike.slug item.id %}" class="{% if item.id == component.pk %}btn-primary{% else %}btn-secondary{% endif %}">{{ item.name }}</a>
     {% endfor %}

@@ -8,8 +8,8 @@
 
 <div class="hidden" hx-get="{% url 'goals:goal_list' %}" hx-trigger="reload from:body" hx-target="#htmx-container"></div>
 
-<div class="buttons-group">
-    <div class="buttons-group__title">Goals</div>
+<div class="button_group">
+    <div class="button_group__title">Goals</div>
     {% url 'goals:goal_create' as url_create %}
     {% new_button url=url_create label='New Goal' target="mainModal" css_class="end" %}
 </div>

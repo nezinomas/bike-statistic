@@ -7,7 +7,7 @@
 
 <div class="hidden" hx-get="{% url 'bikes:info_list' request.resolver_match.kwargs.bike_slug %}" hx-trigger="reload from:body" hx-target="#htmx-container"></div>
 
-<div class="buttons-group">
+<div class="button_group">
     {% for bike in bike_list %}
     <a role="button" href="{% url 'bikes:info_list' bike_slug=bike.slug %}" class="{% if bike.slug == request.resolver_match.kwargs.bike_slug %}btn-primary{% else %}btn-secondary{% endif %}">{{ bike.short_name }}</a>
     {% endfor %}
