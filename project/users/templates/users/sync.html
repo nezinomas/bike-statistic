@@ -5,31 +5,33 @@
 
 {% block content %}
 
-<div class="button_group">
-    <div class="button_group__title">Garmin User</div>
-</div>
+<div id="sync-form">
+    <div class="button_group">
+        <div class="button_group__title">Garmin User</div>
+    </div>
 
 
-<div class="sync-form" id="sync-form">
-    <form method="post" novalidate>
-        {% csrf_token %}
-        {{ form.media }}
+    <div class="sync-form">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.media }}
 
-        {% include 'core/includes/form_errors.html' %}
+            {% include 'core/includes/form_errors.html' %}
 
-        {% for field in form %}
-            {{ field|as_crispy_field }}
-        {% endfor %}
-        <button type="button" class="btn-primary" hx-post="{% url 'users:sync_update' %}" hx-target="#sync-form" hx-swap="outerHTML">Update</button>
-    </form>
+            {% for field in form %}
+                {{ field|as_crispy_field }}
+            {% endfor %}
+            <button type="button" class="btn-primary" hx-post="{% url 'users:sync_update' %}" hx-target="#sync-form" hx-swap="outerHTML">Update</button>
+        </form>
 
-    <div class="alert alert-warning">
-        <p>Raw passwords are not stored, so there is no way to see this user's password.</p>
-        <p>{% if password %}<b>Encrypted password:</b> *{{ password }}*
-            {% else %}
-            <b>No password</b>
-            {% endif %}
-        </p>
+        <div class="alert alert-warning">
+            <p>Raw passwords are not stored, so there is no way to see this user's password.</p>
+            <p>{% if password %}<b>Encrypted password:</b> *{{ password }}*
+                {% else %}
+                <b>No password</b>
+                {% endif %}
+            </p>
+        </div>
     </div>
 </div>
 
