@@ -185,7 +185,7 @@ def test_component_blank_data(get_user):
 
 
 # ---------------------------------------------------------------------------------------
-#                                                                      ComponentStatistic
+#                                                                          Component Wear
 # ---------------------------------------------------------------------------------------
 def test_component_statistic_init(get_user):
     ComponentWearForm()
@@ -231,3 +231,22 @@ def test_component_statistic_blank_data(get_user):
     assert not form.is_valid()
 
     assert 'start_date' in form.errors
+
+
+def test_wear_end_date_earlier_than_start_date():
+    b = BikeFactory()
+    c = ComponentFactory()
+
+    form = ComponentWearForm(data={
+        'start_date': '2000-01-31',
+        'end_date': '2000-01-01',
+        'price': 10.01,
+        'brand': 'Brand',
+        'bike': b.pk,
+        'component': c.pk,
+    }, **{'bike_slug': b.slug, 'component_pk': c.pk})
+
+    assert not form.is_valid()
+
+    assert 'end_date' in form.errors
+    assert 'End date cannot be earlier than start date.' in form.errors["end_date"]

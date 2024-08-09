@@ -50,6 +50,19 @@ class ComponentWearForm(forms.ModelForm):
 
         return instance
 
+    def clean(self):
+        cleaned = super().clean()
+
+        started = cleaned.get("start_date")
+        ended = cleaned.get("end_date")
+
+        if ended and started and ended < started:
+            self.add_error(
+                "end_date", "End date cannot be earlier than start date."
+            )
+
+        return cleaned
+
 
 class BikeForm(FormMixin, forms.ModelForm):
     class Meta:
