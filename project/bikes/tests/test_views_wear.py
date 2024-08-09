@@ -46,6 +46,24 @@ def test_wear_list_200(client_logged):
     assert response.status_code == 200
 
 
+def test_wear_list_alernative_200(client_logged):
+    bike = BikeFactory()
+    ComponentFactory()
+    url = reverse('bikes:wear_list', kwargs={'bike_slug': bike.slug})
+    response = client_logged.get(url)
+
+    assert response.status_code == 200
+
+
+def test_wear_list_no_component_200(client_logged):
+    bike = BikeFactory()
+
+    url = reverse('bikes:wear_list', kwargs={'bike_slug': bike.slug})
+    response = client_logged.get(url)
+
+    assert response.status_code == 200
+
+
 def test_wear_list_no_data(client_logged):
     bike = BikeFactory()
     component = ComponentFactory()

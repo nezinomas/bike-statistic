@@ -76,6 +76,12 @@ class DistanceSummary():
         df1 = self._build_years_and_bikes_df(years, bikes)
         if df1.is_empty():
             return df1
+
+        if not data:
+            df1 = df1.with_columns(pl.lit(0).alias('distance'))
+            return df1
+
         df2 = self._build_data_df(data)
         _, df = pl.align_frames(df1, df2, on=["year", "bike"])
+
         return df.fill_null(0)

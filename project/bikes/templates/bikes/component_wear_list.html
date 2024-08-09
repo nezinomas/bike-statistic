@@ -7,6 +7,8 @@
 
 {% block content %}
 
+{% if component %}
+
 <div hx-trigger="reload from:body" hx-get="{% url 'bikes:wear_list' bike.slug component.pk %}" hx-target="#htmx-container" class="hidden"></div>
 
 <div class="buttons-group">
@@ -68,5 +70,14 @@
 {% else %}
 <div class="alert alert-warning">No records</div>
 {% endif %}
+
+
+
+{% else %}
+
+<div class="alert alert-danger">There is no single component, please <a href="{% url 'bikes:component_list' %}">add one</a></div>
+
+{% endif %}
+
 
 {% endblock content %}

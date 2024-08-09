@@ -34,6 +34,16 @@ def test_table(years, bikes, data):
     assert actual == expect
 
 
+def test_table_no_data(years, bikes):
+    expect = [
+        {'year': 2000, 'B1': 0.0, 'B2': 0.0},
+        {'year': 2001, 'B1': 0.0, 'B2': 0.0},
+    ]
+    actual = T(years, bikes, []).table
+
+    assert actual == expect
+
+
 def test_table_total_column(years, bikes, data):
     data.extend([
         {'date': date(2002, 1, 1), 'bike': 'B3', 'distance': 35.0},

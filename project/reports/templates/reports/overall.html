@@ -10,6 +10,7 @@
 
 <script src="https://code.highcharts.com/highcharts.src.js"></script>
 
+{% if total %}
 
 <div id="chart-overall"></div>
 <script src="{% static 'js/chart_overall.js' %}"></script>
@@ -45,5 +46,11 @@
         <th>{{ total|floatformat:0|intcomma }}</th>
     </tfoot>
 </table>
+
+{% else %}
+
+<div class="alert alert-warning">No data</div>
+
+{% endif %}
 
 {% endblock content %}
