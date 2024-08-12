@@ -89,6 +89,6 @@ class DistanceSummary:
 
             df = df.join(df_data, on=["year", "bike"], how="left")
 
-        df = df.fill_null(0).sort(["year", "grp"]).drop("grp")
+        df = df.fill_null(0).sort(["year", "grp"])
 
         return df
