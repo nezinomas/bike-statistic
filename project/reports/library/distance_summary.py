@@ -1,5 +1,4 @@
 import itertools as it
-import operator
 
 import polars as pl
 
@@ -11,11 +10,23 @@ class DistanceSummary():
 
     @property
     def table(self) -> list[dict]:
-        arr =  self._df.to_dicts()
+        """
+        Returns a list of dictionaries representing the distance summary data grouped by year and bike.
+
+        Returns:
+            list[dict]: List of dictionaries with 'year' as a key and bike-distance mappings.
+
+            e.g. [{'year': 2020, 'bike1': 100, 'bike2': 200}, ...]
+        """
+
+        if self._df.is_empty():
+            return []
+
         return [
-            {'year': title} | {x['bike']: x['distance'] for x in group}
-            for title, group in it.groupby(arr, key=operator.itemgetter("year"))
+            {'year': year[0], **{x['bike']: x['distance'] for x in data.drop("year").to_dicts()}}
+            for year, data in self._df.group_by('year')
         ]
+
 
     @property
     def total_column(self):
@@ -54,11 +65,13 @@ class DistanceSummary():
 
     def _build_years_and_bikes_df(self, years: list, bikes: list) -> pl.DataFrame:
         # product years x bikes and make [{'year': year, 'bike': bike_name}]
-        arr = [{'year': r[0], 'bike': r[1]} for r in it.product(years, bikes)]
+        arr = [{'year': r[0], 'bike': r[1], 'grp': bikes.index(r[1])} for r in it.product(years, bikes)]
         if not arr:
             return pl.DataFrame()
+
         df = pl.DataFrame(arr)
         df = df.with_columns([pl.col('year').cast(pl.Int32)])
+
         return df
 
     def _build_data_df(self, data: list[dict]) -> pl.DataFrame:
@@ -73,15 +86,25 @@ class DistanceSummary():
         return df
 
     def _build_df(self, years, bikes, data: list[dict]) -> pl.DataFrame:
-        df1 = self._build_years_and_bikes_df(years, bikes)
-        if df1.is_empty():
-            return df1
+        df = self._build_years_and_bikes_df(years, bikes)
+        if df.is_empty():
+            return df
 
         if not data:
-            df1 = df1.with_columns(pl.lit(0).alias('distance'))
-            return df1
+            df = df.with_columns(pl.lit(0).alias('distance'))
+        else:
+            df_data = self._build_data_df(data)
 
-        df2 = self._build_data_df(data)
-        _, df = pl.align_frames(df1, df2, on=["year", "bike"])
+            df = (
+                df
+                .join(df_data, on=["year", "bike"], how="left")
+            )
 
-        return df.fill_null(0)
+        df = (
+            df
+            .fill_null(0)
+            .sort(['year', 'grp'])
+            .drop('grp')
+        )
+
+        return df
