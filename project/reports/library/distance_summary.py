@@ -35,9 +35,13 @@ class DistanceSummary:
         if self._df.is_empty():
             return []
 
-        df = self._df.group_by("year").agg(pl.col("distance").sum()).sort("year")
-        df = df.rename({"distance": "total"})
-        return df.to_dicts()
+        return (
+            self._df
+            .group_by("year")
+            .agg(pl.col("distance").sum())
+            .sort("year")
+            .rename({"distance": "total"})
+        ).to_dicts()
 
     @property
     def total_row(self):
