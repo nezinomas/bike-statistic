@@ -67,8 +67,8 @@ class DistanceSummary:
                 .with_columns([pl.col("year").cast(pl.Int32)])
                 .with_columns(pl.lit(0).alias("distance"))
             )
-        else:
-            return pl.DataFrame()
+
+        return pl.DataFrame()
 
     def _build_data_df(self, data: list[dict]) -> pl.DataFrame:
         df = pl.DataFrame(list(data))
