@@ -62,7 +62,7 @@ class ComponentWearForm(forms.ModelForm):
             )
 
         #  check if all component are closed
-        if ComponentWear.objects.items().filter(end_date__isnull=True).count() > 0:
+        if not self.instance.pk and ComponentWear.objects.items().filter(end_date__isnull=True).count() > 0:
             raise forms.ValidationError(
                 "All components must be closed."
             )

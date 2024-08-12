@@ -247,6 +247,28 @@ def test_wear_update_end_date(client_logged):
     assert not actual.end_date
 
 
+def test_wear_update_brand_no_end_date(client_logged):
+    obj = ComponentWearFactory(end_date=None)
+
+    obj.brand = 'Brand New'
+
+    data = {
+        'start_date': str(obj.start_date),
+        'end_date': '',
+        'price': obj.price,
+        'brand': obj.brand,
+        'component': obj.component.pk,
+        'bike': obj.bike.pk,
+    }
+
+    url = reverse('bikes:wear_update', kwargs={'bike_slug': obj.bike.slug, 'wear_pk': obj.pk})
+    client_logged.post(url, data)
+
+    actual = models.ComponentWear.objects.get(pk=obj.pk)
+
+    assert actual.brand == 'Brand New'
+
+
 def test_wear_delete_200(client_logged):
     bike = BikeFactory()
     stats = ComponentWearFactory()
