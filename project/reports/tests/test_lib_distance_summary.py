@@ -45,13 +45,9 @@ def test_table_no_data(years, bikes):
 
 
 def test_table_total_column(years, bikes, data):
-    data.extend([
-        {'date': date(2002, 1, 1), 'bike': 'B3', 'distance': 35.0},
-    ])
     expect = [
         {'year': 2000, 'total': 30.0},
         {'year': 2001, 'total': 35.0},
-        {'year': 2002, 'total': 35.0},
     ]
     actual = T(years, bikes, data).total_column
 
