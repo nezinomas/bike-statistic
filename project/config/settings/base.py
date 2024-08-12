@@ -65,11 +65,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 # ================   GENERAL CONFIGURATION
-LANGUAGE_CODE = 'lt-LT'
+LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 # USE_I18N = True
 # USE_L10N = True
 USE_TZ = True
+
+
+FORMAT_MODULE_PATH = [
+    "project.core.formats",
+]
 
 
 # ================   TEMPLATE CONFIGURATION

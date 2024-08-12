@@ -49,7 +49,7 @@
                 <td>{{ object.bikes }}</td>
                 <td>{{ object.date|date:'Y-m-d' }}</td>
                 <td class="right-black-border">{{ object.temp|floatformat:0|default:'-' }}</td>
-                <td>{{ object.distance|floatformat:2 }}</td>
+                <td>{{ object.distance|floatformat:2|intcomma }}</td>
                 <td>{{ object.seconds|duration }}</td>
                 <td>{{ object.speed|floatformat:1 }}</td>
                 <td class="right-black-border">{{ object.ascent|floatformat:0 }}</td>
