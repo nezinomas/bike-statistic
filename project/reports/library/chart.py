@@ -9,7 +9,17 @@ colors = [
 ]
 
 
-def get_color(num, alpha=1):
+def get_color(num: int, alpha: int = 1):
+    """
+    Returns an RGBA color string based on the provided index and alpha value.
+
+    Args:
+        num (int): Index of the color to retrieve.
+        alpha (float, optional): Alpha value for the color. Defaults to 1.
+
+    Returns:
+        str: RGBA color string in the format "rgba(red, blue, green, alpha)".
+    """
     if num >= len(colors):
         num = len(colors) - 1
 
