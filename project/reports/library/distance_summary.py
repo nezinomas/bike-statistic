@@ -58,18 +58,17 @@ class DistanceSummary:
         )
 
     def _build_years_and_bikes_df(self, years: list, bikes: list) -> pl.DataFrame:
-        # product years x bikes and make [{'year': year, 'bike': bike_name}]
-        arr = [
+        if arr := [
             {"year": r[0], "bike": r[1], "grp": bikes.index(r[1])}
             for r in it.product(years, bikes)
-        ]
-        if not arr:
+        ]:
+            return (
+                pl.DataFrame(arr)
+                .with_columns([pl.col("year").cast(pl.Int32)])
+                .with_columns(pl.lit(0).alias("distance"))
+            )
+        else:
             return pl.DataFrame()
-
-        df = pl.DataFrame(arr)
-        df = df.with_columns([pl.col("year").cast(pl.Int32)])
-
-        return df
 
     def _build_data_df(self, data: list[dict]) -> pl.DataFrame:
         df = pl.DataFrame(list(data))
