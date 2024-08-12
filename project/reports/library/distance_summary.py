@@ -70,24 +70,21 @@ class DistanceSummary:
 
         return pl.DataFrame()
 
-    def _build_data_df(self, data: list[dict]) -> pl.DataFrame:
-        df = pl.DataFrame(list(data))
-        df = df.with_columns([pl.col("date").dt.year().alias("year")])
-        df = df.drop("date")
-        return df
-
     def _build_df(self, years, bikes, data: list[dict]) -> pl.DataFrame:
         df = self._build_years_and_bikes_df(years, bikes)
         if df.is_empty():
             return df
 
         if data:
-            df_data = self._build_data_df(data)
+            df_data = (
+                pl.DataFrame(list(data))
+                .with_columns(year=pl.col("date").dt.year())
+                .drop("date")
+            )
 
             df = (
-                df
-                .join(df_data, on=["year", "bike"], how="left")
-                .with_columns(distance=pl.col("distance") + pl.col("distance_right"))
+                df.join(df_data, on=["year", "bike"], how="left")
+                .with_columns(distance=(pl.col("distance") + pl.col("distance_right")))
                 .fill_null(0.0)
                 .drop("distance_right")
             )
