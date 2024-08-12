@@ -81,13 +81,15 @@ class DistanceSummary:
         if df.is_empty():
             return df
 
-        if not data:
-            df = df.with_columns(pl.lit(0).alias("distance"))
-        else:
+        if data:
             df_data = self._build_data_df(data)
 
-            df = df.join(df_data, on=["year", "bike"], how="left")
+            df = (
+                df
+                .join(df_data, on=["year", "bike"], how="left")
+                .with_columns(distance=pl.col("distance") + pl.col("distance_right"))
+                .fill_null(0.0)
+                .drop("distance_right")
+            )
 
-        df = df.fill_null(0).sort(["year", "grp"])
-
-        return df
+        return df.sort(["year", "grp"])
