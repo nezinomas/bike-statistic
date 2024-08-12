@@ -72,6 +72,11 @@ TIME_ZONE = 'UTC'
 USE_TZ = True
 
 
+FORMAT_MODULE_PATH = [
+    "project.core.formats",
+]
+
+
 # ================   TEMPLATE CONFIGURATION
 TEMPLATES = [
     {
