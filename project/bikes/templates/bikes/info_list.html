@@ -8,9 +8,11 @@
 <div class="hidden" hx-get="{% url 'bikes:info_list' request.resolver_match.kwargs.bike_slug %}" hx-trigger="reload from:body" hx-target="#htmx-container"></div>
 
 <div class="button_group">
-    {% for bike in bike_list %}
-    <a role="button" href="{% url 'bikes:info_list' bike_slug=bike.slug %}" class="{% if bike.slug == request.resolver_match.kwargs.bike_slug %}btn-primary{% else %}btn-secondary{% endif %}">{{ bike.short_name }}</a>
-    {% endfor %}
+    <div class="button_group__components">
+        {% for bike in bike_list %}
+        <a role="button" href="{% url 'bikes:info_list' bike_slug=bike.slug %}" class="{% if bike.slug == request.resolver_match.kwargs.bike_slug %}btn-primary{% else %}btn-secondary{% endif %}">{{ bike.short_name }}</a>
+        {% endfor %}
+    </div>
 
     {% url 'bikes:info_create' request.resolver_match.kwargs.bike_slug as url_create %}
     {% new_button url=url_create label='New Record' target="mainModal" css_class="end" %}
