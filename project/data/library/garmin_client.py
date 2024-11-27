@@ -1,10 +1,15 @@
-from garminconnect import (Garmin, GarminConnectAuthenticationError,
-                           GarminConnectConnectionError,
-                           GarminConnectTooManyRequestsError)
+import garth.http
+from garminconnect import (
+    Garmin,
+    GarminConnectAuthenticationError,
+    GarminConnectConnectionError,
+    GarminConnectTooManyRequestsError,
+)
 
 from ...core.lib import utils
 from . import garmin_exceptions
 
+garth.http.USER_AGENT = {"User-Agent": "GCM-iOS-5.7.2.1",}
 
 class GarminClient:
     def __init__(self, username: str, password: str):
