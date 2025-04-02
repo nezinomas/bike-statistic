@@ -45,8 +45,7 @@ def encrypt(txt):
         # input should be byte, so convert the text to byte
         encrypted_text = cipher_suite.encrypt(txt.encode('ascii'))
         # encode to urlsafe base64 format
-        encrypted_text = base64.urlsafe_b64encode(encrypted_text).decode("ascii")
-        return encrypted_text
+        return base64.urlsafe_b64encode(encrypted_text).decode("ascii")
     except Exception:
         logging.getLogger("error_logger").error(traceback.format_exc())
         return None
