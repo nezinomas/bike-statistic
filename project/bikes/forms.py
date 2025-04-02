@@ -60,10 +60,16 @@ class ComponentWearForm(forms.ModelForm):
             self.add_error("end_date", "End date cannot be earlier than start date.")
 
         #  check if all component are closed
-        if (
-            not self.instance.pk
-            and ComponentWear.objects.items().filter(end_date__isnull=True).count() > 0
-        ):
+        not_closed_components = (
+            ComponentWear.objects.items()
+            .filter(
+                component__pk=self._component_pk,
+                bike__slug=self._bike_slug,
+                end_date__isnull=True,
+            )
+            .count()
+        )
+        if not self.instance.pk and not_closed_components > 0:
             raise forms.ValidationError("All components must be closed.")
 
         return cleaned

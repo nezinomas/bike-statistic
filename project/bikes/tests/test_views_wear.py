@@ -206,6 +206,71 @@ def test_wear_create_save_with_valid_data(client_logged):
     assert actual.brand == "some brand"
 
 
+def test_wear_create_same_bike_another_component_not_closed(client_logged):
+    bike = BikeFactory()
+    component = ComponentFactory()
+    ComponentWearFactory(
+        bike=bike,
+        component=ComponentFactory(name="Component 2"),
+        start_date=date(1999, 1, 1),
+        end_date=None,
+    )
+
+    data = {
+        "start_date": "2000-2-2",
+        "end_date": "3000-3-3",
+        "price": 6,
+        "brand": "some brand",
+    }
+
+    url = reverse(
+        "bikes:wear_create",
+        kwargs={"bike_slug": bike.slug, "component_pk": component.pk},
+    )
+    client_logged.post(url, data)
+
+    actual = models.ComponentWear.objects.first()
+
+    assert actual.bike == bike
+    assert actual.component == component
+    assert actual.start_date == date(2000, 2, 2)
+    assert actual.end_date == date(3000, 3, 3)
+    assert actual.price == 6.0
+    assert actual.brand == "some brand"
+
+
+def test_wear_create_another_bike_same_component_not_closed(client_logged):
+    bike = BikeFactory()
+    component = ComponentFactory()
+    ComponentWearFactory(
+        bike=BikeFactory(full_name="Bike 2", short_name="B2"),
+        component=component,
+        start_date=date(1999, 1, 1),
+        end_date=None,
+    )
+    data = {
+        "start_date": "2000-2-2",
+        "end_date": "3000-3-3",
+        "price": 6,
+        "brand": "some brand",
+    }
+
+    url = reverse(
+        "bikes:wear_create",
+        kwargs={"bike_slug": bike.slug, "component_pk": component.pk},
+    )
+    client_logged.post(url, data)
+
+    actual = models.ComponentWear.objects.first()
+
+    assert actual.bike == bike
+    assert actual.component == component
+    assert actual.start_date == date(2000, 2, 2)
+    assert actual.end_date == date(3000, 3, 3)
+    assert actual.price == 6.0
+    assert actual.brand == "some brand"
+
+
 def test_wear_create_save_no_start_date(client_logged):
     bike = BikeFactory()
     component = ComponentFactory()
