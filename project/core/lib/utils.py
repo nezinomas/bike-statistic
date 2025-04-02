@@ -39,7 +39,7 @@ def get_user():
 def encrypt(txt):
     try:
         txt = str(txt)
-        key = settings.ENV('ENCRYPT_KEY').encode()
+        key = settings.ENV['ENCRYPT_KEY'].encode()
 
         cipher_suite = Fernet(key)  # key should be byte
         # input should be byte, so convert the text to byte
@@ -54,7 +54,7 @@ def encrypt(txt):
 
 def decrypt(txt):
     try:
-        key = settings.ENV('ENCRYPT_KEY').encode()
+        key = settings.ENV['ENCRYPT_KEY'].encode()
 
         # base64 decode
         txt = base64.urlsafe_b64decode(txt)
