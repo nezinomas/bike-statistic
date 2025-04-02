@@ -1,0 +1,51 @@
+[project]
+name = "bike-project"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "crispy-bootstrap5>=2024.10",
+    "cryptography>=44.0.2",
+    "django>=5.1.7",
+    "django-bootstrap-datepicker-plus>=5.0.5",
+    "django-bootstrap-datepicker-widget>=0.1",
+    "django-bootstrap4>=25.1",
+    "django-crequest>=2018.5.11",
+    "django-crispy-forms>=2.3",
+    "django-extensions>=3.2.3",
+    "django-htmx>=1.23.0",
+    "django-spaceless-templates>=1.0.2",
+    "django-vanilla-views>=3.0.0",
+    "django-widget-tweaks>=1.5.0",
+    "garminconnect>=0.2.25",
+    "mysqlclient>=2.2.7",
+    "polars>=1.26.0",
+    "requests>=2.32.3",
+    "slippers>=0.6.2",
+]
+
+[tool.ruff.lint]
+select = ["E", "N", "R", "I"]
+
+[dependency-groups]
+dev = [
+    "django-debug-toolbar>=5.1.0",
+    "django-test-without-migrations>=0.6",
+    "mock>=5.2.0",
+    "pytest>=8.3.5",
+    "pytest-clarity>=1.0.1",
+    "pytest-cov>=6.1.0",
+    "pytest-diff>=0.1.14",
+    "pytest-django>=4.11.0",
+    "pytest-factoryboy>=2.7.0",
+    "pytest-forked>=1.6.0",
+    "pytest-icdiff>=0.9",
+    "pytest-mock>=3.14.0",
+    "pytest-raises>=0.11",
+    "pytest-randomly>=3.16.0",
+    "pytest-sugar>=1.0.0",
+    "pytest-xdist>=3.6.1",
+    "ruff>=0.11.2",
+    "time-machine>=2.16.0",
+]
