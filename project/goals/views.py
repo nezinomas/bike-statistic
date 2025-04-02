@@ -1,8 +1,11 @@
 from django.urls import reverse_lazy
 
-from ..core.mixins.views import (CreateViewMixin, DeleteViewMixin,
-                                 ListViewMixin,
-                                 UpdateViewMixin)
+from ..core.mixins.views import (
+    CreateViewMixin,
+    DeleteViewMixin,
+    ListViewMixin,
+    UpdateViewMixin,
+)
 from ..data.models import Data
 from . import forms, models
 

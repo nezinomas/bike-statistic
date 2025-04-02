@@ -1,6 +1,5 @@
 from django.apps import AppConfig
 
-
 App_name = 'core'
 
 class CoreConfig(AppConfig):

@@ -6,8 +6,7 @@ from django.forms.models import model_to_dict
 
 from ...bikes.factories import BikeFactory, ComponentFactory, ComponentWearFactory
 from ...users.factories import UserFactory
-from ..forms import (BikeForm, BikeInfoForm, ComponentForm,
-                     ComponentWearForm)
+from ..forms import BikeForm, BikeInfoForm, ComponentForm, ComponentWearForm
 
 pytestmark = pytest.mark.django_db
 

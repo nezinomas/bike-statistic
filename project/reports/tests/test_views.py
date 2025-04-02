@@ -1,9 +1,9 @@
 import pytest
 from django.urls import resolve, reverse
 
-from .. import views
 from ...data.factories import DataFactory
 from ...users.views import Login
+from .. import views
 
 pytestmark = pytest.mark.django_db
 

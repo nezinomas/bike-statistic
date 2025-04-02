@@ -1,4 +1,5 @@
 import pytest
+
 from ..templatetags.get_index import get_index as T
 
 

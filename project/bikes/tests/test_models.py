@@ -4,8 +4,12 @@ import pytest
 from django.db import models
 
 from ...users.factories import UserFactory
-from ..factories import (BikeFactory, BikeInfoFactory, ComponentFactory,
-                         ComponentWearFactory)
+from ..factories import (
+    BikeFactory,
+    BikeInfoFactory,
+    ComponentFactory,
+    ComponentWearFactory,
+)
 from ..models import Bike, BikeInfo, Component, ComponentWear
 
 pytestmark = pytest.mark.django_db

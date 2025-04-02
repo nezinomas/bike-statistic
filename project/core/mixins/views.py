@@ -4,8 +4,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django_htmx.http import HttpResponseClientRedirect, trigger_client_event
-from vanilla import (CreateView, DeleteView, DetailView, ListView,
-                     RedirectView, TemplateView, UpdateView)
+from vanilla import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    RedirectView,
+    TemplateView,
+    UpdateView,
+)
 
 
 def rendered_content(request, view_class, **kwargs):

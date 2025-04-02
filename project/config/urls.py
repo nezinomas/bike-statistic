@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.conf.urls import static
 from django.urls import include, path
-from django.views.defaults import (page_not_found, permission_denied,
-                                   server_error)
+from django.views.defaults import page_not_found, permission_denied, server_error
+
 from ..data.views import DataList as IndexView
 
 urlpatterns = [

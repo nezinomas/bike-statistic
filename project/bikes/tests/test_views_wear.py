@@ -5,8 +5,7 @@ import pytest
 import time_machine
 from django.urls import resolve, reverse
 
-from ...bikes.factories import (BikeFactory, ComponentFactory,
-                                ComponentWearFactory)
+from ...bikes.factories import BikeFactory, ComponentFactory, ComponentWearFactory
 from ...core.lib.tests_utils import clean_content
 from .. import models, views
 

@@ -1,7 +1,6 @@
 import os
-from pathlib import Path
-
 import tomllib as toml
+from pathlib import Path
 
 AUTH_USER_MODEL = 'users.User'
 
