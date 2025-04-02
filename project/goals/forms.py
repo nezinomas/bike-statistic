@@ -12,15 +12,15 @@ from .models import Goal
 class GoalForm(FormMixin, forms.ModelForm):
     class Meta:
         model = Goal
-        fields = ['year', 'goal']
+        fields = ["year", "goal"]
         widgets = {
-            'year': YearPickerInput(),
+            "year": YearPickerInput(),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['year'].initial = datetime.now().year
+        self.fields["year"].initial = datetime.now().year
 
         self.helper = FormHelper()
 
@@ -31,12 +31,12 @@ class GoalForm(FormMixin, forms.ModelForm):
         year = cleaned_data.get("year")
 
         # if update
-        if self.instance.pk and 'year' not in self.changed_data:
+        if self.instance.pk and "year" not in self.changed_data:
             return cleaned_data
 
         # if new record
         qs = Goal.objects.related().filter(year=year)
         if qs.exists():
-            self.add_error('year', f"{year} already has a goal.")
+            self.add_error("year", f"{year} already has a goal.")
 
         return cleaned_data

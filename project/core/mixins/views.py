@@ -19,18 +19,14 @@ def rendered_content(request, view_class, **kwargs):
     # update request kwargs
     request.resolver_match.kwargs.update({**kwargs})
 
-    return (
-        view_class
-        .as_view()(request, **kwargs)
-        .rendered_content
-    )
+    return view_class.as_view()(request, **kwargs).rendered_content
 
 
 def httpHtmxResponse(hx_trigger_name=None, status_code=204):
     headers = {}
     if hx_trigger_name:
         headers = {
-            'HX-Trigger': json.dumps({hx_trigger_name: None}),
+            "HX-Trigger": json.dumps({hx_trigger_name: None}),
         }
 
     return HttpResponse(
@@ -43,7 +39,7 @@ def httpHtmxResponse(hx_trigger_name=None, status_code=204):
 #                                                                                  Mixins
 # ---------------------------------------------------------------------------------------
 class CreateUpdateMixin:
-    hx_trigger_django = 'reload'
+    hx_trigger_django = "reload"
 
     def get_hx_trigger_django(self):
         return self.hx_trigger_django
@@ -59,7 +55,7 @@ class CreateUpdateMixin:
 
 
 class DeleteMixin:
-    hx_trigger_django = 'reload'
+    hx_trigger_django = "reload"
     hx_redirect = None
 
     def get_hx_trigger_django(self):
@@ -78,7 +74,6 @@ class DeleteMixin:
             return HttpResponseClientRedirect(hx_redirect)
 
         return httpHtmxResponse(self.get_hx_trigger_django())
-
 
 
 # ---------------------------------------------------------------------------------------

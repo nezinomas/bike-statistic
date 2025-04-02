@@ -8,16 +8,16 @@ from .models import User
 class ExternalUserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['garmin_user', 'garmin_password']
+        fields = ["garmin_user", "garmin_password"]
         widgets = {
-            'garmin_password': PasswordInput(),
+            "garmin_password": PasswordInput(),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self._user = utils.get_user()
-        self.fields['garmin_user'].initial = self._user.garmin_user
+        self.fields["garmin_user"].initial = self._user.garmin_user
 
         self.helper = FormHelper()
 

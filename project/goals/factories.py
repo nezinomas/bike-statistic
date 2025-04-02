@@ -11,4 +11,7 @@ class GoalFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Goal
-        django_get_or_create = ('user', 'year',)
+        django_get_or_create = (
+            "user",
+            "year",
+        )

@@ -12,11 +12,11 @@ from django.utils.timezone import make_aware
 
 
 def date_to_datetime(
-        dt: date,
-        hour: Optional[int] = 0,
-        minute: Optional[int] = 0,
-        second: Optional[int] = 0) -> datetime:
-
+    dt: date,
+    hour: Optional[int] = 0,
+    minute: Optional[int] = 0,
+    second: Optional[int] = 0,
+) -> datetime:
     if isinstance(dt, str):
         year = int(dt[:4])
         month = int(dt[5:7])
@@ -39,11 +39,11 @@ def get_user():
 def encrypt(txt):
     try:
         txt = str(txt)
-        key = settings.ENV['ENCRYPT_KEY'].encode()
+        key = settings.ENV["ENCRYPT_KEY"].encode()
 
         cipher_suite = Fernet(key)  # key should be byte
         # input should be byte, so convert the text to byte
-        encrypted_text = cipher_suite.encrypt(txt.encode('ascii'))
+        encrypted_text = cipher_suite.encrypt(txt.encode("ascii"))
         # encode to urlsafe base64 format
         return base64.urlsafe_b64encode(encrypted_text).decode("ascii")
     except Exception:
@@ -53,7 +53,7 @@ def encrypt(txt):
 
 def decrypt(txt):
     try:
-        key = settings.ENV['ENCRYPT_KEY'].encode()
+        key = settings.ENV["ENCRYPT_KEY"].encode()
 
         # base64 decode
         txt = base64.urlsafe_b64decode(txt)
@@ -83,7 +83,7 @@ def clean_year_picker_input(field_name, data, cleaned_data, errors):
         return cleaned_data
     # try split field by '-'
     try:
-        field, *other = field.split('-')
+        field, *other = field.split("-")
     except AttributeError:
         return cleaned_data
     # try convert field to int

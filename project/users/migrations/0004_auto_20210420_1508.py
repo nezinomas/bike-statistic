@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('users', '0003_auto_20210104_1253'),
+        ("users", "0003_auto_20210104_1253"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='garmin_password',
-            field=models.CharField(max_length=254, verbose_name='Garmin password'),
+            model_name="user",
+            name="garmin_password",
+            field=models.CharField(max_length=254, verbose_name="Garmin password"),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='garmin_user',
-            field=models.CharField(max_length=32, verbose_name='Garmin user'),
+            model_name="user",
+            name="garmin_user",
+            field=models.CharField(max_length=32, verbose_name="Garmin user"),
         ),
     ]

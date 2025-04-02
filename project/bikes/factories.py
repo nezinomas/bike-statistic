@@ -9,20 +9,23 @@ from .models import Bike, BikeInfo, Component, ComponentWear
 class BikeFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     date = date(1999, 1, 1)
-    full_name = 'Full Name'
-    short_name = 'Short Name'
+    full_name = "Full Name"
+    short_name = "Short Name"
     main = False
     retired = False
 
     class Meta:
         model = Bike
-        django_get_or_create = ('user', 'short_name',)
+        django_get_or_create = (
+            "user",
+            "short_name",
+        )
 
 
 class BikeInfoFactory(factory.django.DjangoModelFactory):
     bike = factory.SubFactory(BikeFactory)
-    component = 'Component'
-    description = 'Description'
+    component = "Component"
+    description = "Description"
 
     class Meta:
         model = BikeInfo
@@ -30,18 +33,21 @@ class BikeInfoFactory(factory.django.DjangoModelFactory):
 
 class ComponentFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
-    name = 'Component'
+    name = "Component"
 
     class Meta:
         model = Component
-        django_get_or_create = ('user', 'name',)
+        django_get_or_create = (
+            "user",
+            "name",
+        )
 
 
 class ComponentWearFactory(factory.django.DjangoModelFactory):
     start_date = date(1999, 1, 1)
     end_date = date(1999, 1, 31)
     price = 1.11
-    brand = 'Brand'
+    brand = "Brand"
     bike = factory.SubFactory(BikeFactory)
     component = factory.SubFactory(ComponentFactory)
 

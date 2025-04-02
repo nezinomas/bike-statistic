@@ -36,8 +36,7 @@ class DistanceSummary:
             return []
 
         return (
-            self._df
-            .group_by("year")
+            self._df.group_by("year")
             .agg(pl.col("distance").sum())
             .sort("year")
             .rename({"distance": "total"})

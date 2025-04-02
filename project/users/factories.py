@@ -12,11 +12,11 @@ from ..users.models import User
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
-        django_get_or_create = ('username',)
+        django_get_or_create = ("username",)
 
-    username = 'bob'
-    password = make_password('123')
-    email = 'bob@bob.com'
+    username = "bob"
+    password = make_password("123")
+    email = "bob@bob.com"
     date_joined = datetime(2000, 1, 1, tzinfo=pytz.UTC)
-    garmin_user = 'ebob'
-    garmin_password = '123'
+    garmin_user = "ebob"
+    garmin_password = "123"

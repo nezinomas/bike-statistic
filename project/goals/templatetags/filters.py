@@ -9,4 +9,4 @@ def duration(duration):
     m, s = divmod(total_seconds, 60)
     h, m = divmod(m, 60)
 
-    return '{h:02d}:{m:02d}:{s:02d}'.format(h=h, m=m, s=s)
+    return "{h:02d}:{m:02d}:{s:02d}".format(h=h, m=m, s=s)

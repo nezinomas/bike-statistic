@@ -82,16 +82,14 @@ class Progress:
 
     def _progress_season(self, df: pl.DataFrame) -> pl.Expr:
         day_of_year = pl.col("date").dt.ordinal_day()
-        return (
-            df.with_columns(
-                season_distance=pl.col("distance").cum_sum(),
-                season_seconds=pl.col("seconds").cum_sum(),
-                season_ascent=pl.col("ascent").cum_sum(),
-            )
-            .with_columns(
-                season_per_day=pl.col("season_distance") / day_of_year,
-                season_speed=self._speed("season_distance", "season_seconds")
-            ))
+        return df.with_columns(
+            season_distance=pl.col("distance").cum_sum(),
+            season_seconds=pl.col("seconds").cum_sum(),
+            season_ascent=pl.col("ascent").cum_sum(),
+        ).with_columns(
+            season_per_day=pl.col("season_distance") / day_of_year,
+            season_speed=self._speed("season_distance", "season_seconds"),
+        )
 
     def _progress_month(self, df: pl.DataFrame) -> pl.Expr:
         month = pl.col("date").dt.month()
@@ -99,7 +97,10 @@ class Progress:
         return (
             df.with_columns(
                 month=month,
-                monthlen=month.map_elements(lambda x: calendar.monthrange(self._year, x)[1], return_dtype=pl.Int8),
+                monthlen=month.map_elements(
+                    lambda x: calendar.monthrange(self._year, x)[1],
+                    return_dtype=pl.Int8,
+                ),
             )
             .with_columns(
                 month_seconds=pl.col("seconds").sum().over("month"),
@@ -118,12 +119,10 @@ class Progress:
         per_day = self._goal / year_len
         percent = (pl.col("season_distance") * 100) / pl.col("goal_per_day")
         delta = pl.col("season_distance") - pl.col("goal_per_day")
-        return (
-            df.with_columns(goal_per_day=(day_of_year * per_day))
-            .with_columns(
-                goal_percent=percent,
-                goal_delta=delta,
-        ))
+        return df.with_columns(goal_per_day=(day_of_year * per_day)).with_columns(
+            goal_percent=percent,
+            goal_delta=delta,
+        )
 
     def _progress_dtypes(self, df: pl.DataFrame) -> pl.Expr:
         return df.with_columns(

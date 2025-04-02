@@ -11,7 +11,7 @@ from .models import Bike, BikeInfo, Component, ComponentWear
 class ComponentForm(FormMixin, forms.ModelForm):
     class Meta:
         model = Component
-        fields = ['name']
+        fields = ["name"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -22,20 +22,20 @@ class ComponentForm(FormMixin, forms.ModelForm):
 class ComponentWearForm(forms.ModelForm):
     class Meta:
         model = ComponentWear
-        fields = ['start_date', 'end_date', 'price', 'brand']
+        fields = ["start_date", "end_date", "price", "brand"]
 
         widgets = {
-            'start_date': DatePickerInput(),
-            'end_date': DatePickerInput(),
+            "start_date": DatePickerInput(),
+            "end_date": DatePickerInput(),
         }
 
     def __init__(self, *args, **kwargs):
-        self._bike_slug = kwargs.pop('bike_slug', None)
-        self._component_pk = kwargs.pop('component_pk', None)
+        self._bike_slug = kwargs.pop("bike_slug", None)
+        self._component_pk = kwargs.pop("component_pk", None)
 
         super().__init__(*args, **kwargs)
 
-        self.fields['start_date'].initial = datetime.now()
+        self.fields["start_date"].initial = datetime.now()
         self.helper = FormHelper()
 
     def save(self, *args, **kwargs):
@@ -57,15 +57,14 @@ class ComponentWearForm(forms.ModelForm):
         ended = cleaned.get("end_date")
 
         if ended and started and ended < started:
-            self.add_error(
-                "end_date", "End date cannot be earlier than start date."
-            )
+            self.add_error("end_date", "End date cannot be earlier than start date.")
 
         #  check if all component are closed
-        if not self.instance.pk and ComponentWear.objects.items().filter(end_date__isnull=True).count() > 0:
-            raise forms.ValidationError(
-                "All components must be closed."
-            )
+        if (
+            not self.instance.pk
+            and ComponentWear.objects.items().filter(end_date__isnull=True).count() > 0
+        ):
+            raise forms.ValidationError("All components must be closed.")
 
         return cleaned
 
@@ -74,25 +73,25 @@ class BikeForm(FormMixin, forms.ModelForm):
     class Meta:
         model = Bike
         fields = [
-            'date',
-            'full_name',
-            'short_name',
-            'main',
-            'retired',
+            "date",
+            "full_name",
+            "short_name",
+            "main",
+            "retired",
         ]
         widgets = {
-            'date': DatePickerInput(),
+            "date": DatePickerInput(),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['date'].initial = datetime.now()
+        self.fields["date"].initial = datetime.now()
 
         self.helper = FormHelper()
 
     def clean_main(self):
-        _main = self.cleaned_data.get('main')
+        _main = self.cleaned_data.get("main")
 
         qs = Bike.objects.items().filter(main=True)
 
@@ -101,16 +100,16 @@ class BikeForm(FormMixin, forms.ModelForm):
             qs = qs.exclude(pk=self.instance.pk)
 
         if _main and qs.count() > 0:
-            raise forms.ValidationError('There can be only one main bike.')
+            raise forms.ValidationError("There can be only one main bike.")
 
         return _main
 
     def clean_retired(self):
-        _main = self.cleaned_data.get('main')
-        _retired = self.cleaned_data.get('retired')
+        _main = self.cleaned_data.get("main")
+        _retired = self.cleaned_data.get("retired")
 
         if _main and _retired:
-            raise forms.ValidationError('The main bike cannot be marked as Retired!')
+            raise forms.ValidationError("The main bike cannot be marked as Retired!")
 
         return _retired
 
@@ -118,10 +117,10 @@ class BikeForm(FormMixin, forms.ModelForm):
 class BikeInfoForm(forms.ModelForm):
     class Meta:
         model = BikeInfo
-        fields = ['component', 'description']
+        fields = ["component", "description"]
 
     def __init__(self, *args, **kwargs):
-        self._bike_slug = kwargs.pop('bike_slug', None)
+        self._bike_slug = kwargs.pop("bike_slug", None)
 
         super().__init__(*args, **kwargs)
 

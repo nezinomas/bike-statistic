@@ -6,32 +6,51 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('bikes', '0001_initial'),
+        ("bikes", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Data',
+            name="Data",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(default=django.utils.timezone.now)),
-                ('distance', models.FloatField()),
-                ('time', models.DurationField()),
-                ('temperature', models.FloatField(blank=True, null=True)),
-                ('ascent', models.FloatField(default=0.0)),
-                ('descent', models.FloatField(default=0.0)),
-                ('max_speed', models.FloatField(default=0.0)),
-                ('cadence', models.IntegerField(blank=True, null=True)),
-                ('heart_rate', models.IntegerField(blank=True, null=True)),
-                ('checked', models.CharField(choices=[('y', 'Yes'), ('n', 'No')], default='n', max_length=1)),
-                ('bike', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='bike_set', to='bikes.Bike')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateField(default=django.utils.timezone.now)),
+                ("distance", models.FloatField()),
+                ("time", models.DurationField()),
+                ("temperature", models.FloatField(blank=True, null=True)),
+                ("ascent", models.FloatField(default=0.0)),
+                ("descent", models.FloatField(default=0.0)),
+                ("max_speed", models.FloatField(default=0.0)),
+                ("cadence", models.IntegerField(blank=True, null=True)),
+                ("heart_rate", models.IntegerField(blank=True, null=True)),
+                (
+                    "checked",
+                    models.CharField(
+                        choices=[("y", "Yes"), ("n", "No")], default="n", max_length=1
+                    ),
+                ),
+                (
+                    "bike",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="bike_set",
+                        to="bikes.Bike",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-date'],
+                "ordering": ["-date"],
             },
         ),
     ]

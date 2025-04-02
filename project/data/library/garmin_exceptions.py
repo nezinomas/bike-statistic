@@ -32,4 +32,3 @@ class WriteDataToDbError(Exception):
 
 class PrepareDataToDbError(Exception):
     """Failed prepare workout data for writing into db"""
-

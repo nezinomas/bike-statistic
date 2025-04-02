@@ -49,6 +49,7 @@ class DataCreate(CreateViewMixin):
     def title(self):
         return "New activity"
 
+
 class DataUpdate(UpdateViewMixin):
     model = models.Data
     form_class = forms.DataForm
@@ -60,6 +61,7 @@ class DataUpdate(UpdateViewMixin):
 
     def title(self):
         return "Update activity"
+
 
 class QuickUpdate(DetailViewMixin):
     model = models.Data
@@ -98,7 +100,7 @@ class DataInsert(TemplateViewMixin):
         if ex := self.kwargs.get("exception"):
             message = (
                 f"<p>{ex}</p>"
-                f'<p>{"-"*120}</p>'
+                f"<p>{'-' * 120}</p>"
                 f"<p>Type: {type(ex).__name__}</p>"
                 f"<p>Args: {ex.args}</p>"
             )

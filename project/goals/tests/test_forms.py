@@ -20,7 +20,7 @@ def test_goal_init_fields(get_user):
     assert '<select name="user"' not in form
 
 
-@time_machine.travel('2001-01-01')
+@time_machine.travel("2001-01-01")
 def test_goal_year_initial_value(get_user):
     UserFactory()
 
@@ -30,10 +30,12 @@ def test_goal_year_initial_value(get_user):
 
 
 def test_goal_valid_data(get_user):
-    form = GoalForm(data={
-        'year': '2000',
-        'goal': '5000',
-    })
+    form = GoalForm(
+        data={
+            "year": "2000",
+            "goal": "5000",
+        }
+    )
 
     assert form.is_valid()
 
@@ -41,7 +43,7 @@ def test_goal_valid_data(get_user):
 
     assert data.year == 2000
     assert data.goal == 5000
-    assert data.user.username == 'bob'
+    assert data.user.username == "bob"
 
 
 def test_goal_blank_data(get_user):
@@ -50,5 +52,5 @@ def test_goal_blank_data(get_user):
     assert not form.is_valid()
 
     assert len(form.errors) == 2
-    assert 'year' in form.errors
-    assert 'goal' in form.errors
+    assert "year" in form.errors
+    assert "goal" in form.errors

@@ -2,7 +2,7 @@ import os
 import tomllib as toml
 from pathlib import Path
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = "users.User"
 
 # ================   PATH CONFIGURATION
 BASE_DIR = Path(__file__).absolute()
@@ -20,23 +20,23 @@ with open(PROJECT_ROOT / ".conf", "rb") as f:
 ADMIN_ENABLED = False
 
 # ================   SITE CONFIGURATION
-LOGOUT_REDIRECT_URL = 'index'
-LOGIN_REDIRECT_URL = 'index'
-LOGIN_URL = 'users:login'
+LOGOUT_REDIRECT_URL = "index"
+LOGIN_REDIRECT_URL = "index"
+LOGIN_URL = "users:login"
 
 
 # ================   CASH CONFIGURATION
-CASH_ROOT = os.path.join(PROJECT_ROOT, 'cash')
+CASH_ROOT = os.path.join(PROJECT_ROOT, "cash")
 
 
 # ================   MEDIA CONFIGURATION
-MEDIA_ROOT = ENV['MEDIA_ROOT']
+MEDIA_ROOT = ENV["MEDIA_ROOT"]
 MEDIA_URL = "/media/"
 
 
 # ================   STATIC FILE CONFIGURATION
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(SITE_ROOT, 'static')
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(SITE_ROOT, "static")
 
 
 # ================   DEBUG CONFIGURATION
@@ -45,11 +45,11 @@ TEMPLATE_DEBUG = DEBUG
 
 
 # ================   SECRET CONFIGURATION
-SECRET_KEY = ENV['SECRET_KEY']
+SECRET_KEY = ENV["SECRET_KEY"]
 
 
 # ================   project CONFIGURATION
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 
 # ================   DATABASE CONFIGURATION
@@ -58,8 +58,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 
 # ================   GENERAL CONFIGURATION
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = "en-us"
+TIME_ZONE = "UTC"
 # USE_I18N = True
 # USE_L10N = True
 USE_TZ = True
@@ -73,17 +73,17 @@ FORMAT_MODULE_PATH = [
 # ================   TEMPLATE CONFIGURATION
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(SITE_ROOT, 'templates')],
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.static',
-                'project.core.context.years',
-                'project.core.context.bike_list',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [os.path.join(SITE_ROOT, "templates")],
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.static",
+                "project.core.context.years",
+                "project.core.context.bike_list",
             ],
         },
     },
@@ -92,64 +92,64 @@ TEMPLATES = [
 
 # ================   MIDDLEWARE CONFIGURATION
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'crequest.middleware.CrequestMiddleware',
-    'django_htmx.middleware.HtmxMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "crequest.middleware.CrequestMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 
 # ================   APP CONFIGURATION
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.humanize',
-    'django.contrib.staticfiles',
-    'django_htmx',
-    'bootstrap_datepicker_plus',
-    'crispy_forms',
-    'crispy_bootstrap5',
-    'widget_tweaks',
-    'crequest',
-    'slippers',
-    'project.core',
-    'project.bikes',
-    'project.goals',
-    'project.data',
-    'project.reports',
-    'project.users'
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.humanize",
+    "django.contrib.staticfiles",
+    "django_htmx",
+    "bootstrap_datepicker_plus",
+    "crispy_forms",
+    "crispy_bootstrap5",
+    "widget_tweaks",
+    "crequest",
+    "slippers",
+    "project.core",
+    "project.bikes",
+    "project.goals",
+    "project.data",
+    "project.reports",
+    "project.users",
 ]
 
 
 # ================   URL CONFIGURATION
-ROOT_URLCONF = 'project.config.urls'
+ROOT_URLCONF = "project.config.urls"
 
 
 # ================   WSGI CONFIGURATION
-WSGI_APPLICATION = 'project.config.wsgi.application'
+WSGI_APPLICATION = "project.config.wsgi.application"
 
 
 # ================   PASSWORD VALIDATORS CONFIGURATION
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 

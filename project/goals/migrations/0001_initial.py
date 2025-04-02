@@ -5,22 +5,45 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Goal',
+            name="Goal",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('year', models.IntegerField(unique=True, validators=[django.core.validators.MinValueValidator(2000), django.core.validators.MaxValueValidator(2050)])),
-                ('goal', models.IntegerField(validators=[django.core.validators.MinValueValidator(100), django.core.validators.MaxValueValidator(20000)])),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "year",
+                    models.IntegerField(
+                        unique=True,
+                        validators=[
+                            django.core.validators.MinValueValidator(2000),
+                            django.core.validators.MaxValueValidator(2050),
+                        ],
+                    ),
+                ),
+                (
+                    "goal",
+                    models.IntegerField(
+                        validators=[
+                            django.core.validators.MinValueValidator(100),
+                            django.core.validators.MaxValueValidator(20000),
+                        ]
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-year'],
+                "ordering": ["-year"],
             },
         ),
     ]

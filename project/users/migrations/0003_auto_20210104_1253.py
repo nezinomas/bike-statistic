@@ -4,20 +4,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('users', '0002_auto_20200114_1656'),
+        ("users", "0002_auto_20200114_1656"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='user',
-            old_name='endomondo_password',
-	    new_name='garmin_password'
+            model_name="user", old_name="endomondo_password", new_name="garmin_password"
         ),
         migrations.RenameField(
-            model_name='user',
-            old_name='endomondo_user',
-            new_name='garmin_user'
+            model_name="user", old_name="endomondo_user", new_name="garmin_user"
         ),
     ]

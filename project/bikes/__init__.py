@@ -1,1 +1,1 @@
-default_app_config = 'project.bikes.apps.bikesConfig'
+default_app_config = "project.bikes.apps.bikesConfig"

@@ -20,29 +20,30 @@ class ComponentWear:
 
         return (
             pl.DataFrame(stats)
-            .with_columns([
-                pl.col('start_date').cast(pl.Datetime),
-                pl.col('end_date').cast(pl.Datetime),
-            ])
-            .with_columns([
-                pl.col('end_date') + pl.duration(seconds=((23*60*60) + (59*60) + 59)),
-            ])
             .with_columns(
-                pl.col('end_date').fill_null(datetime.now())
+                [
+                    pl.col("start_date").cast(pl.Datetime),
+                    pl.col("end_date").cast(pl.Datetime),
+                ]
             )
+            .with_columns(
+                [
+                    pl.col("end_date")
+                    + pl.duration(seconds=((23 * 60 * 60) + (59 * 60) + 59)),
+                ]
+            )
+            .with_columns(pl.col("end_date").fill_null(datetime.now()))
         )
 
     def _make_data_df(self, data):
         if not data:
             return pl.DataFrame()
 
-        return (
-            pl.DataFrame(data)
-            .with_columns([
-                pl.col('date').cast(pl.Datetime),
-            ])
+        return pl.DataFrame(data).with_columns(
+            [
+                pl.col("date").cast(pl.Datetime),
+            ]
         )
-
 
     def _make_df(self):
         if self._stats.is_empty():
@@ -51,34 +52,39 @@ class ComponentWear:
         stats = self._stats.to_dicts()
 
         if self._data.is_empty():
-            return pl.DataFrame({str(x['pk']): 0 for x in stats})
+            return pl.DataFrame({str(x["pk"]): 0 for x in stats})
 
-        filter_and_sum = [self._sum_distances(
-            x['start_date'], x['end_date'], x['pk']) for x in stats]
+        filter_and_sum = [
+            self._sum_distances(x["start_date"], x["end_date"], x["pk"]) for x in stats
+        ]
 
         return self._data.select(filter_and_sum)
 
     def _sum_distances(self, start, end, name):
         return (
-            pl.col('distance')
-            .filter(pl.col('date').is_between(start, end, closed='both'))
+            pl.col("distance")
+            .filter(pl.col("date").is_between(start, end, closed="both"))
             .sum()
-            .alias(f'{name}'))
+            .alias(f"{name}")
+        )
 
     @property
     def bike_km(self):
         try:
-            km = self._data.select(pl.col('distance').sum())[0,0]
+            km = self._data.select(pl.col("distance").sum())[0, 0]
         except (AttributeError, pl.exceptions.ColumnNotFoundError):
             km = 0
         return km
 
     @property
     def component_stats(self):
-        dicts = {'avg': 0, 'median': 0,}
+        dicts = {
+            "avg": 0,
+            "median": 0,
+        }
         if not self._df.is_empty():
             col = self._df.transpose().to_series()
-            dicts['avg'] = col.mean()
-            dicts['median'] = col.median()
+            dicts["avg"] = col.mean()
+            dicts["median"] = col.median()
 
         return dicts

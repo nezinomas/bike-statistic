@@ -10,7 +10,7 @@ pytestmark = pytest.mark.django_db
 def test_goal_str():
     obj = GoalFactory.build()
 
-    assert str(obj) == '2000'
+    assert str(obj) == "2000"
 
 
 def test_goal_related_qs_count(get_user, django_assert_max_num_queries):
@@ -31,7 +31,7 @@ def test_goal_items(get_user):
 
 def test_goal_items_for_logged_user(get_user):
     GoalFactory()
-    GoalFactory(user=UserFactory(username='XXX'))
+    GoalFactory(user=UserFactory(username="XXX"))
 
     assert Goal.objects.all().count() == 2
     assert Goal.objects.items().count() == 1
@@ -39,7 +39,7 @@ def test_goal_items_for_logged_user(get_user):
 
 @pytest.mark.xfail
 def test_goal_unique_for_one_user(get_user):
-    _user = UserFactory(username='XXX')
+    _user = UserFactory(username="XXX")
 
     Goal.objects.create(user=_user, year=2000, goal=1000)
     Goal.objects.create(user=_user, year=2000, goal=1000)
@@ -47,4 +47,4 @@ def test_goal_unique_for_one_user(get_user):
 
 def test_goal_unique_for_two_users(get_user):
     GoalFactory()
-    GoalFactory(user=UserFactory(username='XXX'))
+    GoalFactory(user=UserFactory(username="XXX"))

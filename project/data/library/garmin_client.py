@@ -9,7 +9,10 @@ from garminconnect import (
 from ...core.lib import utils
 from . import garmin_exceptions
 
-garth.http.USER_AGENT = {"User-Agent": "GCM-iOS-5.7.2.1",}
+garth.http.USER_AGENT = {
+    "User-Agent": "GCM-iOS-5.7.2.1",
+}
+
 
 class GarminClient:
     def __init__(self, username: str, password: str):
@@ -46,7 +49,7 @@ class GarminClient:
 
         return _client
 
-    def get_workouts(self, max_results = 10):
+    def get_workouts(self, max_results=10):
         try:
             workouts = self.client.get_activities(0, max_results)
         except (

@@ -8,44 +8,23 @@ from . import managers
 
 class Data(models.Model):
     # choices
-    yes = 'y'
-    no = 'n'
-    checked_choices = ((yes, 'Yes'), (no, 'No'))
+    yes = "y"
+    no = "n"
+    checked_choices = ((yes, "Yes"), (no, "No"))
 
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='data'
-    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="data")
     bike = models.ForeignKey(
-        bikeModels.Bike,
-        on_delete=models.CASCADE,
-        related_name='bike_set'
+        bikeModels.Bike, on_delete=models.CASCADE, related_name="bike_set"
     )
     date = models.DateTimeField(default=now)
     distance = models.FloatField()
     time = models.DurationField()
-    temperature = models.FloatField(
-        null=True,
-        blank=True
-    )
-    ascent = models.FloatField(
-        default=0.0
-    )
-    descent = models.FloatField(
-        default=0.0
-    )
-    max_speed = models.FloatField(
-        default=0.0
-    )
-    cadence = models.IntegerField(
-        null=True,
-        blank=True
-    )
-    heart_rate = models.IntegerField(
-        null=True,
-        blank=True
-    )
+    temperature = models.FloatField(null=True, blank=True)
+    ascent = models.FloatField(default=0.0)
+    descent = models.FloatField(default=0.0)
+    max_speed = models.FloatField(default=0.0)
+    cadence = models.IntegerField(null=True, blank=True)
+    heart_rate = models.IntegerField(null=True, blank=True)
     checked = models.CharField(
         max_length=1,
         choices=checked_choices,
@@ -55,7 +34,7 @@ class Data(models.Model):
     objects = managers.DataQuerySet.as_manager()
 
     class Meta:
-        ordering = ['-date']
+        ordering = ["-date"]
 
     def __str__(self):
-        return f'{self.date:%Y-%m-%d} {self.bike}'
+        return f"{self.date:%Y-%m-%d} {self.bike}"

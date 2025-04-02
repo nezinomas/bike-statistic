@@ -24,51 +24,51 @@ class GarminActivity:
         self.distance = self._distance()
         self.duration = self._duration()
         self.max_speed = self._max_speed()
-        self.ascent = self.data.get('elevationGain')
-        self.descent = self.data.get('elevationLoss')
-        self.avg_hr = self.data.get('averageHR')
-        self.avg_cadence = self.data.get('averageBikingCadenceInRevPerMinute')
+        self.ascent = self.data.get("elevationGain")
+        self.descent = self.data.get("elevationLoss")
+        self.avg_hr = self.data.get("averageHR")
+        self.avg_cadence = self.data.get("averageBikingCadenceInRevPerMinute")
         self.is_valid_activity = self._is_valid_activity()
 
     @property
     def data_object(self):
         return {
-            'date': self.start_time,
-            'distance': self.distance,
-            'time': self.duration,
-            'ascent': self.ascent,
-            'descent': self.descent,
-            'max_speed': self.max_speed,
-            'cadence': self.avg_cadence,
-            'heart_rate': self.avg_hr
+            "date": self.start_time,
+            "distance": self.distance,
+            "time": self.duration,
+            "ascent": self.ascent,
+            "descent": self.descent,
+            "max_speed": self.max_speed,
+            "cadence": self.avg_cadence,
+            "heart_rate": self.avg_hr,
         }
 
     def _name(self):
-        name = (self.data.get('activityType') or {}).get('typeKey')
+        name = (self.data.get("activityType") or {}).get("typeKey")
         return name.lower()
 
     def _start_time(self):
-        """ return datetime object """
+        """return datetime object"""
         date = datetime.now()
-        if start_time := self.data.get('startTimeLocal'):
+        if start_time := self.data.get("startTimeLocal"):
             date = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")
         return make_aware(date)
 
     def _duration(self):
-        """ return: timedelta(seconds) """
-        sec = int(duration) if (duration := self.data.get('duration')) else 0
+        """return: timedelta(seconds)"""
+        sec = int(duration) if (duration := self.data.get("duration")) else 0
         return timedelta(seconds=sec)
 
     def _distance(self):
-        """ return: km """
-        return round(self.data.get('distance', 0) / 1000, 2)
+        """return: km"""
+        return round(self.data.get("distance", 0) / 1000, 2)
 
     def _max_speed(self):
-        """ return: km/h """
-        if speed := self.data.get('maxSpeed'):
+        """return: km/h"""
+        if speed := self.data.get("maxSpeed"):
             return round(speed * (3600 / 1000), 2)
         return 0
 
     def _is_valid_activity(self):
-        activities = ('cycling', 'biking', 'commuting')
+        activities = ("cycling", "biking", "commuting")
         return any(x in self.name for x in activities)

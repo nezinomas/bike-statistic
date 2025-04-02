@@ -31,12 +31,12 @@ class Logout(auth_views.LogoutView):
 def sync_update(request):
     form = ExternalUserForm(request.POST or None, instance=request.user)
 
-    if request.method == 'POST' and form.is_valid():
+    if request.method == "POST" and form.is_valid():
         form.save()
 
-    template = 'users/sync.html'
+    template = "users/sync.html"
     context = {
-        'form': form,
-        'password': request.user.garmin_password[:50],
+        "form": form,
+        "password": request.user.garmin_password[:50],
     }
     return render(request, template, context)

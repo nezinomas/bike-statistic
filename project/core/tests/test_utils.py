@@ -17,7 +17,7 @@ def test_years_user_logged(get_user):
 
 
 def test_encrypt_decrypt(encrypt_key):
-    txt = 'abc123'
+    txt = "abc123"
 
     encrypted = utils.encrypt(txt)
     decrypted = utils.decrypt(encrypted)

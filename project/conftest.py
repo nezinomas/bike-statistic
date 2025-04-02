@@ -4,7 +4,7 @@ from django.contrib.auth.models import AnonymousUser
 from .users.factories import UserFactory
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def user(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         u = UserFactory()
@@ -17,7 +17,7 @@ def user(django_db_setup, django_db_blocker):
 def get_user(monkeypatch):
     user = UserFactory()
 
-    mock_func = 'project.core.lib.utils.get_user'
+    mock_func = "project.core.lib.utils.get_user"
     monkeypatch.setattr(mock_func, lambda: user)
 
     return user
@@ -27,7 +27,7 @@ def get_user(monkeypatch):
 def anonymous_user(monkeypatch):
     user_ = AnonymousUser()
 
-    mock_func = 'project.core.lib.utils.get_user'
+    mock_func = "project.core.lib.utils.get_user"
     monkeypatch.setattr(mock_func, lambda: user_)
 
     return user_
@@ -36,7 +36,7 @@ def anonymous_user(monkeypatch):
 @pytest.fixture()
 def client_logged(client):
     UserFactory()
-    client.login(username='bob', password='123')
+    client.login(username="bob", password="123")
 
     return client
 

@@ -8,11 +8,14 @@ ALLOWED_HOSTS = ENV["ALLOWED_HOSTS"]
 
 INSTALLED_APPS += []
 
-TEMPLATES[0]['OPTIONS']['loaders'] = [
-    ['django.template.loaders.cached.Loader', [
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader', ],
-     ],
+TEMPLATES[0]["OPTIONS"]["loaders"] = [
+    [
+        "django.template.loaders.cached.Loader",
+        [
+            "django.template.loaders.filesystem.Loader",
+            "django.template.loaders.app_directories.Loader",
+        ],
+    ],
 ]
 
 SECURE_HSTS_SECONDS = 60
@@ -24,51 +27,47 @@ SESSION_COOKIE_HTTPONLY = True
 SECURE_SSL_REDIRECT = True
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
-X_FRAME_OPTIONS = 'DENY'
+X_FRAME_OPTIONS = "DENY"
 
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
+    "handlers": {
         # Include the default Django email handler for errors
         # This is what you'd get without configuring logging at all.
-        'mail_admins': {
-            'class': 'django.utils.log.AdminEmailHandler',
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
+        "mail_admins": {
+            "class": "django.utils.log.AdminEmailHandler",
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
             # But the emails are plain text by default - HTML is nicer
-            'include_html': True,
+            "include_html": True,
         },
         # Log to a text file that can be rotated by logrotate
-        'logfile': {
-            'class': 'logging.handlers.WatchedFileHandler',
-            'filename': '/data/django_projects/_bike.log'
+        "logfile": {
+            "class": "logging.handlers.WatchedFileHandler",
+            "filename": "/data/django_projects/_bike.log",
         },
     },
-    'loggers': {
+    "loggers": {
         # Again, default Django configuration to email unhandled exceptions
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
+        "django.request": {
+            "handlers": ["mail_admins"],
+            "level": "ERROR",
+            "propagate": True,
         },
         # Might as well log any errors anywhere else in Django
-        'django': {
-            'handlers': ['logfile'],
-            'level': 'ERROR',
-            'propagate': False,
+        "django": {
+            "handlers": ["logfile"],
+            "level": "ERROR",
+            "propagate": False,
         },
         # Your own app - this assumes all your logger names start with "myapp."
-        'myapp': {
-            'handlers': ['logfile'],
-            'level': 'DEBUG',  # Or maybe INFO or WARNING
-            'propagate': False
+        "myapp": {
+            "handlers": ["logfile"],
+            "level": "DEBUG",  # Or maybe INFO or WARNING
+            "propagate": False,
         },
     },
 }

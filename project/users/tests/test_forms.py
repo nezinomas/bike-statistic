@@ -34,17 +34,19 @@ def test_external_blank_data(get_user):
 
     assert len(form.errors) == 2
 
-    assert 'garmin_user' in form.errors
-    assert 'garmin_password' in form.errors
+    assert "garmin_user" in form.errors
+    assert "garmin_password" in form.errors
 
 
 def test_external_valid_data(get_user):
     UserFactory()
 
-    form = ExternalUserForm(data={
-        'garmin_user': 'user@email.com',
-        'garmin_password': '123456',
-    })
+    form = ExternalUserForm(
+        data={
+            "garmin_user": "user@email.com",
+            "garmin_password": "123456",
+        }
+    )
 
     assert form.is_valid()
 
@@ -55,6 +57,6 @@ def test_external_valid_data(get_user):
 
     actual = actual[0]
 
-    assert actual.username == 'bob'
-    assert actual.garmin_user == 'user@email.com'
-    assert utils.decrypt(actual.garmin_password) == '123456'
+    assert actual.username == "bob"
+    assert actual.garmin_user == "user@email.com"
+    assert utils.decrypt(actual.garmin_password) == "123456"

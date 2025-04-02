@@ -6,61 +6,122 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Bike',
+            name="Bike",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField()),
-                ('full_name', models.CharField(blank=True, max_length=150)),
-                ('short_name', models.CharField(max_length=20, unique=True)),
-                ('slug', models.SlugField(editable=False)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateField()),
+                ("full_name", models.CharField(blank=True, max_length=150)),
+                ("short_name", models.CharField(max_length=20, unique=True)),
+                ("slug", models.SlugField(editable=False)),
             ],
             options={
-                'ordering': ['date'],
+                "ordering": ["date"],
             },
         ),
         migrations.CreateModel(
-            name='Component',
+            name="Component",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, unique=True, validators=[django.core.validators.MaxLengthValidator(99), django.core.validators.MinLengthValidator(3)])),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=100,
+                        unique=True,
+                        validators=[
+                            django.core.validators.MaxLengthValidator(99),
+                            django.core.validators.MinLengthValidator(3),
+                        ],
+                    ),
+                ),
             ],
             options={
-                'ordering': ['name'],
+                "ordering": ["name"],
             },
         ),
         migrations.CreateModel(
-            name='ComponentStatistic',
+            name="ComponentStatistic",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('start_date', models.DateField()),
-                ('end_date', models.DateField(blank=True, null=True)),
-                ('price', models.FloatField(blank=True, null=True)),
-                ('brand', models.CharField(blank=True, max_length=254)),
-                ('bike', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='bikes', to='bikes.Bike')),
-                ('component', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='components', to='bikes.Component')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("start_date", models.DateField()),
+                ("end_date", models.DateField(blank=True, null=True)),
+                ("price", models.FloatField(blank=True, null=True)),
+                ("brand", models.CharField(blank=True, max_length=254)),
+                (
+                    "bike",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="bikes",
+                        to="bikes.Bike",
+                    ),
+                ),
+                (
+                    "component",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="components",
+                        to="bikes.Component",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-start_date'],
+                "ordering": ["-start_date"],
             },
         ),
         migrations.CreateModel(
-            name='BikeInfo',
+            name="BikeInfo",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('component', models.CharField(max_length=100)),
-                ('description', models.CharField(max_length=254)),
-                ('bike', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='bike_info', to='bikes.Bike')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("component", models.CharField(max_length=100)),
+                ("description", models.CharField(max_length=254)),
+                (
+                    "bike",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="bike_info",
+                        to="bikes.Bike",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['component'],
+                "ordering": ["component"],
             },
         ),
     ]

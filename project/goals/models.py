@@ -13,17 +13,13 @@ class Goal(models.Model):
     goal = models.IntegerField(
         validators=[MinValueValidator(100), MaxValueValidator(20000)]
     )
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='goals'
-    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="goals")
 
     objects = managers.GoalQuerySet.as_manager()
 
     class Meta:
-        ordering = ['-year']
-        unique_together = ('user', 'year')
+        ordering = ["-year"]
+        unique_together = ("user", "year")
 
     def __str__(self):
         return str(self.year)
