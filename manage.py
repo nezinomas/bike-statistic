@@ -1,20 +1,25 @@
 #!/usr/bin/env python
 import os
 import sys
-
-import environ
-
+import tomllib as toml
+from pathlib import Path
 
 if __name__ == "__main__":
     # Set the project base directory
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    conf_file = Path(Path(__file__).cwd(), ".conf")
 
-    # Take environment variables from .env file
-    environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+    # Take environment variables from .conf file
+    try:
+        conf = conf_file.read_text()
+        conf = toml.loads(conf)["django"]
+
+    except FileNotFoundError as e:
+        raise FileNotFoundError(
+            f"File not found: {conf_file}. Please create a .conf file with the required settings."
+        ) from e
 
     # set settings file develop/productions/test
-    ENV = environ.Env()
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", ENV("DJANGO_SETTINGS_MODULE"))
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", conf["DJANGO_SETTINGS_MODULE"])
 
     try:
         from django.core.management import execute_from_command_line
