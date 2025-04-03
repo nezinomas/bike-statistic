@@ -18,6 +18,7 @@ class ComponentWear:
         if not stats:
             return pl.DataFrame()
 
+        now = datetime.now()
         return (
             pl.DataFrame(stats)
             .with_columns(
@@ -32,7 +33,11 @@ class ComponentWear:
                     + pl.duration(seconds=((23 * 60 * 60) + (59 * 60) + 59)),
                 ]
             )
-            .with_columns(pl.col("end_date").fill_null(datetime.now()))
+            .with_columns(
+                pl.col("end_date").fill_null(
+                    datetime(now.year, now.month, now.day, 23, 59, 59)
+                )
+            )
         )
 
     def _make_data_df(self, data):
