@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.timezone import now
 
-from ..bikes import models as bikeModels
+from ..bikes import models as bike_models
 from ..users.models import User
 from . import managers
 
@@ -14,7 +14,7 @@ class Data(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="data")
     bike = models.ForeignKey(
-        bikeModels.Bike, on_delete=models.CASCADE, related_name="bike_set"
+        bike_models.Bike, on_delete=models.CASCADE, related_name="bike_set"
     )
     date = models.DateTimeField(default=now)
     distance = models.FloatField()

@@ -33,22 +33,22 @@ def test_data_links(client_logged):
 
     # table row
     assert (
-        f'<tr id="{row_id}" class="waiting-for-review" hx-target="#mainModal" hx-trigger="dblclick" hx-get="{url_update}"'
+        f'<tr id="{row_id}" class="waiting-for-review" hx-target="#mainModal" hx-trigger="dblclick" hx-get="{url_update}"'  # noqa: E501
         in actual
     )
     # quick save button
     assert (
-        f'<button type="button" class="btn-save" hx-get="{url_quick_update}" hx-target="#{row_id}" hx-swap="outerHTML"'
+        f'<button type="button" class="btn-save" hx-get="{url_quick_update}" hx-target="#{row_id}" hx-swap="outerHTML"'  # noqa: E501
         in actual
     )
     # edit button
     assert (
-        f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#mainModal"'
+        f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#mainModal"'  # noqa: E501
         in actual
     )
     # delete button
     assert (
-        f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal"'
+        f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal"'  # noqa: E501
         in actual
     )
 

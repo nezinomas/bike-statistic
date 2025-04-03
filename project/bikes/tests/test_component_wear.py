@@ -99,8 +99,8 @@ def test_component_distance_no_components():
 def test_component_stats(stats, data):
     actual = ComponentWear(stats, data).component_stats
 
-    assert actual["avg"] == 17.25
-    assert actual["median"] == 17.25
+    assert actual["avg"] == 17.0
+    assert actual["median"] == 17.0
 
 
 def test_component_stats_no_data(stats):

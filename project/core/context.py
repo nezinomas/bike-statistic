@@ -1,9 +1,9 @@
 from ..bikes.models import Bike
-from .lib.utils import years as Y
+from .lib.utils import years as utils_years
 
 
 def years(context):
-    return {"years": Y()[::-1]}
+    return {"years": utils_years()[::-1]}
 
 
 def bike_list(context):

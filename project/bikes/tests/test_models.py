@@ -15,9 +15,9 @@ from ..models import Bike, BikeInfo, Component, ComponentWear
 pytestmark = pytest.mark.django_db
 
 
-# ---------------------------------------------------------------------------------------
-#                                                                                    Bike
-# ---------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
+#                                                                                  Bike
+# -------------------------------------------------------------------------------------
 def test_bike_str():
     obj = BikeFactory.build()
 
@@ -76,9 +76,9 @@ def test_bike_retired_field():
     assert isinstance(Bike._meta.get_field("retired"), models.BooleanField)
 
 
-# ---------------------------------------------------------------------------------------
-#                                                                               Bike Info
-# ---------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
+#                                                                             Bike Info
+# -------------------------------------------------------------------------------------
 def test_bike_info_str():
     obj = BikeInfoFactory.build()
 
@@ -108,7 +108,7 @@ def test_bike_info_related_qs_count(get_user, django_assert_max_num_queries):
     assert BikeInfo.objects.items().count() == 2
 
     with django_assert_max_num_queries(1):
-        list(q.bike.short_name for q in BikeInfo.objects.related())
+        print([q.bike.short_name for q in BikeInfo.objects.related()])
 
 
 def test_bike_info_items(get_user):
@@ -117,9 +117,9 @@ def test_bike_info_items(get_user):
     assert BikeInfo.objects.items().count() == 1
 
 
-# ---------------------------------------------------------------------------------------
-#                                                                               Component
-# ---------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
+#                                                                             Component
+# -------------------------------------------------------------------------------------
 def test_component_str():
     obj = ComponentFactory.build()
 
@@ -170,9 +170,9 @@ def test_component_name_validation(name):
     Component(name=name, user=user).full_clean()
 
 
-# ---------------------------------------------------------------------------------------
-#                                                                     Component Statistic
-# ---------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
+#                                                                   Component Statistic
+# -------------------------------------------------------------------------------------
 def test_wear_str():
     obj = ComponentWearFactory.build()
 

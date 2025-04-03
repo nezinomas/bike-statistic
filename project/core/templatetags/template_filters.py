@@ -5,8 +5,7 @@ register = template.Library()
 
 @register.filter
 def get_item(dictionary, key):
-    if dictionary:
-        return dictionary.get(str(key), 0.0)
+    return dictionary.get(str(key), 0.0) if dictionary else None
 
 
 @register.filter

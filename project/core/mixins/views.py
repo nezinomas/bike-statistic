@@ -22,7 +22,7 @@ def rendered_content(request, view_class, **kwargs):
     return view_class.as_view()(request, **kwargs).rendered_content
 
 
-def httpHtmxResponse(hx_trigger_name=None, status_code=204):
+def http_htmx_response(hx_trigger_name=None, status_code=204):
     headers = {}
     if hx_trigger_name:
         headers = {
@@ -35,9 +35,9 @@ def httpHtmxResponse(hx_trigger_name=None, status_code=204):
     )
 
 
-# ---------------------------------------------------------------------------------------
-#                                                                                  Mixins
-# ---------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
+#                                                                                Mixins
+# -------------------------------------------------------------------------------------
 class CreateUpdateMixin:
     hx_trigger_django = "reload"
 
@@ -73,12 +73,12 @@ class DeleteMixin:
         if hx_redirect := self.get_hx_redirect():
             return HttpResponseClientRedirect(hx_redirect)
 
-        return httpHtmxResponse(self.get_hx_trigger_django())
+        return http_htmx_response(self.get_hx_trigger_django())
 
 
-# ---------------------------------------------------------------------------------------
-#                                                                            Views Mixins
-# ---------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
+#                                                                          Views Mixins
+# -------------------------------------------------------------------------------------
 class CreateViewMixin(LoginRequiredMixin, CreateUpdateMixin, CreateView):
     pass
 

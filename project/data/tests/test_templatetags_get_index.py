@@ -1,6 +1,6 @@
 import pytest
 
-from ..templatetags.get_index import get_index as T
+from ..templatetags.get_index import get_index
 
 
 @pytest.fixture()
@@ -14,6 +14,6 @@ def distances():
 
 
 def test_get_index_01(distances):
-    actual = T(distances, 1)
+    actual = get_index(distances, 1)
 
     assert [2.1, 2.2, 2.3] == actual

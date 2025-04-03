@@ -38,7 +38,7 @@ def fixture_data():
 
 
 @pytest.mark.parametrize(
-    "activityType, expect",
+    "activity_type, expect",
     [
         ("cycling", True),
         ("road_biking", True),
@@ -48,8 +48,8 @@ def fixture_data():
         ("swimming", False),
     ],
 )
-def test_is_valid_activity(activityType, expect, data):
-    data["activityType"]["typeKey"] = activityType
+def test_is_valid_activity(activity_type, expect, data):
+    data["activityType"]["typeKey"] = activity_type
     actual = GarminActivity(data)
     assert actual.is_valid_activity == expect
 

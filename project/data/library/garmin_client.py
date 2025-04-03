@@ -23,7 +23,7 @@ class GarminClient:
 
     def _client(self, username, password):
         if not username or not password:
-            raise garmin_exceptions.NoUsernameOrPassword
+            raise garmin_exceptions.NoUsernameOrPasswordError
 
         try:
             _client = Garmin(username, utils.decrypt(password))

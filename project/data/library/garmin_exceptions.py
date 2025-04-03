@@ -1,4 +1,4 @@
-class NoUsernameOrPassword(Exception):
+class NoUsernameOrPasswordError(Exception):
     """No Garmin user/password entered"""
 
 

@@ -6,7 +6,7 @@ from .apps import App_name
 app_name = App_name
 
 urlpatterns = [
-    # ......................................................................... Component
+    # ........................................................................Component
     path("component/", views.ComponentList.as_view(), name="component_list"),
     path("component/create/", views.ComponentCreate.as_view(), name="component_create"),
     path(
@@ -19,7 +19,7 @@ urlpatterns = [
         views.ComponentDelete.as_view(),
         name="component_delete",
     ),
-    # ............................................................... Component Wear
+    # ...................................................   .............Component Wear
     path(
         "wear/<slug:bike_slug>/",
         views.ComponentWearList.as_view(),
@@ -45,12 +45,12 @@ urlpatterns = [
         views.ComponentWearDelete.as_view(),
         name="wear_delete",
     ),
-    # .............................................................................. Bike
+    # .............................................................................Bike
     path("bike/", views.BikeList.as_view(), name="bike_list"),
     path("bike/create/", views.BikeCreate.as_view(), name="bike_create"),
     path("bike/update/<int:pk>/", views.BikeUpdate.as_view(), name="bike_update"),
     path("bike/delete/<int:pk>/", views.BikeDelete.as_view(), name="bike_delete"),
-    # ......................................................................... Bike Info
+    # ........................................................................Bike Info
     path("info/<slug:bike_slug>/", views.BikeInfoList.as_view(), name="info_list"),
     path(
         "info/<slug:bike_slug>/create/",

@@ -166,8 +166,7 @@ class Progress:
             .with_columns(self._build_dtypes())
         ).collect()
 
-        df = df.drop("time")
-        return df
+        return df.drop("time")
 
     def _speed(self, distance_km: str, time_seconds: str) -> pl.Expr:
         return pl.col(distance_km) / (pl.col(time_seconds) / 3600)
