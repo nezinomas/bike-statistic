@@ -1,6 +1,6 @@
 import pytest
 
-from ..templatetags import template_filters as T
+from ..templatetags import template_filters
 
 
 @pytest.mark.parametrize(
@@ -13,4 +13,4 @@ from ..templatetags import template_filters as T
     ],
 )
 def test_get_item(dictionary, key, expect):
-    assert T.get_item(dictionary, key) == expect
+    assert template_filters.get_item(dictionary, key) == expect
