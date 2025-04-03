@@ -82,12 +82,12 @@ def test_bike_links(client_logged):
     )
     # edit button
     assert (
-        f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#mainModal"'
+        f'<button type="button" class="btn-secondary btn-edit" hx-get="{url_update}" hx-target="#mainModal"'  # noqa: E501
         in actual
     )
     # delete button
     assert (
-        f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal"'
+        f'<button type="button" class="btn-trash" hx-get="{url_delete}" hx-target="#mainModal"'  # noqa: E501
         in actual
     )
 

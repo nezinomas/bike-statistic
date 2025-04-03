@@ -30,7 +30,7 @@ class Temperature:
     def _get_weather_page(self):
         try:
             headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"
+                "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"  # noqa: E501
             }
             html = requests.get(self._url, headers=headers)
             return html.text

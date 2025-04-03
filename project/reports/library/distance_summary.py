@@ -11,10 +11,13 @@ class DistanceSummary:
     @property
     def table(self) -> list[dict]:
         """
-        Returns a list of dictionaries representing the distance summary data grouped by year and bike.
+        Returns:
+            list of dictionaries representing the distance summary
+            data grouped by year and bike.
 
         Returns:
-            list[dict]: List of dictionaries with 'year' as a key and bike-distance mappings.
+            list[dict]: List of dictionaries with 'year' as a key
+            and bike-distance mappings.
 
             e.g. [{'year': 2020, 'bike1': 100, 'bike2': 200}, ...]
         """
