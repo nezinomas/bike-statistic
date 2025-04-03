@@ -173,11 +173,11 @@ class ComponentWearList(ListViewMixin):
 
     def get_context_data(self, **kwargs):
         bike = models.Bike.objects.related().get(slug=self.kwargs["bike_slug"])
-        component_pk = self.kwargs.get("component_pk")
-        if not component_pk:
-            component = models.Component.objects.related().first()
-        else:
+
+        if component_pk := self.kwargs.get("component_pk"):
             component = models.Component.objects.related().get(pk=component_pk)
+        else:
+            component = models.Component.objects.related().first()
 
         data = Data.objects.items().filter(bike=bike).values("date", "distance")
 
