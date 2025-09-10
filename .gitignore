@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 .conf
 
+.python-version
+
 # my folders
 media/
 .idea/
