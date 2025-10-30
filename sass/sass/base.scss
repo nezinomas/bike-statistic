@@ -67,27 +67,28 @@ a[role=button] {
 }
 
 .button_group {
-    display: grid;
-    grid-template-columns: 10rem 1fr 10rem;
+    position: relative;
     align-items: center;
+    display: flex;
     gap: .35rem;
+    min-height: 2rem;
+    flex-wrap: wrap;
 
-    &__components {
-        grid-column: 1 / 3;
-        text-align: left;
+    > * {
+        text-wrap: nowrap;
     }
 
     &__title {
+        position: absolute;
         text-align: center;
-        grid-column: 2 / 3;
         font-size: 1rem;
         font-weight: 600;
+        left: 50%;
+        transform: translateX(-50%);
     }
 
     > .end {
         margin-left: auto;
-        align-self: end;
-        grid-column: 3 / 4;
     }
 }
 
