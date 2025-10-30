@@ -25,10 +25,6 @@ dependencies = [
     "slippers>=0.6.2",
 ]
 
-production = [
-    "gunicorn>=23.0.0",
-]
-
 [project.optional-dependencies]
 dev = [
     "django-debug-toolbar>=5.1.0",
@@ -50,6 +46,10 @@ dev = [
     "pytz>=2025.2",
     "ruff>=0.11.2",
     "time-machine>=2.16.0",
+]
+
+production = [
+    "gunicorn>=23.0.0",
 ]
 
 [tool.ruff.lint]
