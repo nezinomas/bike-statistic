@@ -25,6 +25,10 @@ dependencies = [
     "slippers>=0.6.2",
 ]
 
+production = [
+    "gunicorn>=23.0.0",
+]
+
 [project.optional-dependencies]
 dev = [
     "django-debug-toolbar>=5.1.0",
