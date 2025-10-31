@@ -43,7 +43,7 @@ $(function () {
         tooltip: {
             pointFormat: '{point.y:,.0f}',
             formatter: function () {
-                return '<b>' + this.x + '</b><br/>' +
+                return '<b>' + this.point.category + '</b><br/>' +
                     `${this.series.name}: ${Highcharts.numberFormat(this.point.y, 0)}<br/>` +
                     `Total: ${Highcharts.numberFormat(this.point.stackTotal, 0)}`;
             }
