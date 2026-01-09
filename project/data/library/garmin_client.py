@@ -1,5 +1,5 @@
-import contextlib
 from pathlib import Path
+import shutil
 
 import requests
 from garminconnect import (
@@ -26,21 +26,33 @@ class GarminClient:
         if not username or not password:
             raise garmin_exceptions.NoUsernameOrPasswordError
 
-        tokenstore_path = Path(settings.ENV['GARMIN_TOKEN_STORE']).expanduser()
+        tokenstore_path = Path(settings.ENV["GARMIN_TOKEN_STORE"]).expanduser()
 
-        # First try to login with stored tokens
-        with contextlib.suppress(
-            FileNotFoundError,
-            GarthHTTPError,
-            GarminConnectAuthenticationError,
-            GarminConnectConnectionError,
-        ):
-            garmin = Garmin()
-            garmin.login(str(tokenstore_path))
-            return garmin
+        # Ensure directory exists
+        if not tokenstore_path.parent.exists():
+            tokenstore_path.parent.mkdir(parents=True, exist_ok=True)
 
         try:
-            garmin = Garmin(email=username, password=utils.decrypt(password), is_cn=False, return_on_mfa=False)
+            garmin = Garmin()
+            garmin.login(str(tokenstore_path))
+            garmin.get_user_profile()
+            return garmin
+        except (GarminConnectAuthenticationError, Exception) as e:
+            print(f"Tokens expired or invalid ({e}). Cleaning up...")
+
+            try:
+                shutil.rmtree(tokenstore_path)
+                tokenstore_path.parent.mkdir(parents=True, exist_ok=True)
+            except Exception as cleanup_err:
+                print(f"Failed to delete old tokens: {cleanup_err}")
+
+        try:
+            garmin = Garmin(
+                email=username,
+                password=utils.decrypt(password),
+                is_cn=False,
+                return_on_mfa=False,
+            )
             garmin.login()
 
             # Save tokens for future use
