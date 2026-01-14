@@ -1,4 +1,5 @@
 from datetime import datetime
+from time import sleep
 
 from django.core.management.base import BaseCommand, CommandError
 
@@ -10,6 +11,7 @@ class Command(BaseCommand):
     help = "Get bike activities from Garmin"
 
     def handle(self, *args, **options):
+        sleep(10.12)
         try:
             SyncWithGarmin(Temperature()).insert_data_all_users()
         except Exception as e:
