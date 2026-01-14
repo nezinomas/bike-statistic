@@ -36,6 +36,7 @@ class GarminClient:
             garmin = Garmin()
             garmin.login(str(tokenstore_path))
             garmin.get_user_profile()
+            print("Successfully logged in using stored tokens.")
             return garmin
         except (GarminConnectAuthenticationError, Exception) as e:
             print(f"Tokens expired or invalid ({e}). Cleaning up...")
@@ -57,6 +58,7 @@ class GarminClient:
 
             # Save tokens for future use
             garmin.garth.dump(str(tokenstore_path))
+            print("Successfully logged using username and password.")
             return garmin
 
         except (
