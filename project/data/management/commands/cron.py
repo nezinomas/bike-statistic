@@ -13,7 +13,7 @@ class Command(BaseCommand):
         try:
             SyncWithGarmin(Temperature()).insert_data_all_users()
         except Exception as e:
-            raise CommandError(f"Can't sync with Garmin - {e}")
+            raise CommandError(f"Can't sync with Garmin - {e}") from e
 
         self.stdout.write(
             self.style.SUCCESS(f"{datetime.now()}: successfully get Garmin activities")
