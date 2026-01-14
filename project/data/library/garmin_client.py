@@ -1,7 +1,8 @@
-from pathlib import Path
 import shutil
+from pathlib import Path
 
 import requests
+from django.conf import settings
 from garminconnect import (
     Garmin,
     GarminConnectAuthenticationError,
@@ -12,7 +13,6 @@ from garminconnect import (
 
 from ...core.lib import utils
 from . import garmin_exceptions
-from django.conf import settings
 
 
 class GarminClient:
