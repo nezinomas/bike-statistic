@@ -63,7 +63,7 @@ def test_chart_overall_context_bikes(client_logged, data):
     assert list(actual) == ["B2", "B1"]
 
 
-@time_machine.travel("2001-1-1")
+@time_machine.travel("2001-01-01")
 def test_chart_overall_context_data_table(client_logged, data):
     url = reverse("reports:chart_overall")
     response = client_logged.get(url)
@@ -82,7 +82,7 @@ def test_chart_overall_context_data_table(client_logged, data):
     assert actual == list(zip(table, total_column))
 
 
-@time_machine.travel("2001-1-1")
+@time_machine.travel("2001-01-01")
 def test_chart_overall_context_total_value(client_logged, data):
     url = reverse("reports:chart_overall")
     response = client_logged.get(url)
@@ -92,7 +92,7 @@ def test_chart_overall_context_total_value(client_logged, data):
     assert actual == 65.0
 
 
-@time_machine.travel("2001-1-1")
+@time_machine.travel("2001-01-01")
 def test_chart_overall_context_chart_data(client_logged, data):
     url = reverse("reports:chart_overall")
     response = client_logged.get(url)

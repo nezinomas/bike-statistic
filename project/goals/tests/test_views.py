@@ -64,7 +64,7 @@ def test_goal_create_func():
     assert views.GoalCreate is view.func.view_class
 
 
-@time_machine.travel("2000-2-2")
+@time_machine.travel("2000-02-02")
 def test_goal_create_load_form(client_logged):
     url = reverse("goals:goal_create")
     response = client_logged.get(url)

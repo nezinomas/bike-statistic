@@ -163,7 +163,7 @@ def test_stats_rendered_context(client_logged):
     )
 
 
-@time_machine.travel("2000-2-2")
+@time_machine.travel("2000-02-02")
 def test_wear_create_load_form(client_logged):
     bike = BikeFactory()
     component = ComponentFactory()

@@ -17,7 +17,7 @@ from ..models import Data
 pytestmark = pytest.mark.django_db
 
 
-@time_machine.travel("2000-1-1")
+@time_machine.travel("2000-01-01")
 def test_data_links(client_logged):
     data = DataFactory()
 
@@ -101,7 +101,7 @@ def test_data_create_load_form(client_logged):
     assert '<input type="text" name="date" value="2000-02-02 05:06:07"' in content
 
 
-@time_machine.travel("2000-1-1")
+@time_machine.travel("2000-01-01")
 def test_data_create_data_valid(client_logged):
     bike = BikeFactory()
     data = {

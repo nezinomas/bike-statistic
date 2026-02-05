@@ -54,7 +54,7 @@ def test_component_distance(stats, data):
     assert expect == actual
 
 
-@time_machine.travel("1999-2-5 5:6:7")
+@time_machine.travel("1999-02-05 05:06:07")
 def test_component_distance_with_datetimes():
     data = [
         {"date": datetime(1999, 2, 2, 3, 2, 1), "distance": Decimal("1")},

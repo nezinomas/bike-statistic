@@ -92,7 +92,7 @@ def test_bike_links(client_logged):
     )
 
 
-@time_machine.travel("2000-2-2")
+@time_machine.travel("2000-02-02")
 def test_bike_create_load_form(client_logged):
     url = reverse("bikes:bike_create")
     response = client_logged.get(url)
