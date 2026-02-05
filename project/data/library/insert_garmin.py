@@ -5,14 +5,10 @@ from ..models import Data
 from . import garmin_exceptions
 from .garmin_activity import GarminActivity
 from .garmin_client import GarminClient
-from .temperature import Temperature
+from .temperature import get_temperature
 
 
 class SyncWithGarmin:
-    def __init__(self, temperature: Temperature, client: GarminClient = GarminClient):
-        self._client = client
-        self._temperature = temperature.temperature
-
     def insert_data_current_user(self):
         users = [utils.get_user()]
         self._inserter(users)
@@ -24,7 +20,7 @@ class SyncWithGarmin:
     def _inserter(self, users):
         for user in users:
             try:
-                client = self._client(user.garmin_user, user.garmin_password)
+                client = GarminClient(user.garmin_user, user.garmin_password)
             except Exception as e:
                 raise e
 
@@ -35,7 +31,14 @@ class SyncWithGarmin:
 
             bike = self._get_bike(user)
             objects = self._prepare_data(user, workouts)
+            objects = self._push_temperature_data(objects)
+
             self._insert_data(user, bike, objects)
+
+    def _push_temperature_data(self, objects):
+        for obj in objects:
+            obj["temperature"] = get_temperature(obj["date"])
+        return objects
 
     def _prepare_data(self, user, workouts: list[GarminActivity]):
         activities = [GarminActivity(w) for w in workouts]
@@ -61,7 +64,7 @@ class SyncWithGarmin:
 
     def _insert_data(self, user, bike, objects):
         data = [
-            Data(user=user, bike=bike, temperature=self._temperature, **x)
+            Data(user=user, bike=bike, **x)
             for x in objects
         ]
         Data.objects.bulk_create(data)
