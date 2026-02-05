@@ -4,7 +4,6 @@ from time import sleep
 from django.core.management.base import BaseCommand, CommandError
 
 from ...library.insert_garmin import SyncWithGarmin
-from ...library.temperature import Temperature
 
 
 class Command(BaseCommand):
@@ -13,7 +12,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         sleep(10.12)
         try:
-            SyncWithGarmin(Temperature()).insert_data_all_users()
+            SyncWithGarmin().insert_data_all_users()
         except Exception as e:
             raise CommandError(f"Can't sync with Garmin - {e}") from e
 
