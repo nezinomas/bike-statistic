@@ -1,39 +1,55 @@
-import requests
-from bs4 import BeautifulSoup
+import json
+import urllib.request
+from datetime import datetime
+
+from django.core.cache import cache
+
+BASE_URL = "https://api.meteo.lt/v1/stations/vilniaus-ams/observations"
 
 
-class Temperature:
-    _url = "https://meteofor.lt/weather-vilnius-4230/now/"
+def get_temperature(dt: datetime, force_refresh: bool = False) -> float | None:
+    """
+    Retrieves the temperature for a specific hour using a flattened logic flow.
+    """
+    date_str = dt.strftime("%Y-%m-%d")
+    hour_key = str(dt.hour).zfill(2)
+    cache_key = f"weather_{date_str}"
 
-    def __init__(self):
-        try:
-            self._temperature = self._get_temperature()
-        except Exception:  # pylint: disable=broad-except
-            self._temperature = None
+    cached_data = cache.get(cache_key) or {}
 
-    @property
-    def temperature(self):
-        return self._temperature
+    # 2. Determine if we need to fetch
+    has_target_hour = hour_key in cached_data
+    if not force_refresh and has_target_hour:
+        return cached_data.get(hour_key)
 
-    def _get_temperature(self):
-        page = self._get_weather_page()
-        soup = BeautifulSoup(page, "html.parser")
+    # 3. Fetch from API
+    new_data = _fetch_daily_data(date_str)
+    if not new_data:
+        # If API fails, return what we had in cache (even if hour is missing)
+        return cached_data.get(hour_key)
 
-        element = soup.find("temperature-value")
+    # 4. Merge and Update Cache
+    updated_data = cached_data | new_data
+    cache.set(cache_key, updated_data)
 
-        temperature = element["value"]
-        temperature = temperature.replace(",", ".")
-        temperature = temperature.replace("−", "-")
+    return updated_data.get(hour_key)
 
-        return float(temperature)
 
-    def _get_weather_page(self):
-        try:
-            headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"  # noqa: E501
+def _fetch_daily_data(date_str: str) -> dict | None:
+    """Internal helper to fetch and parse the external API."""
+    url = f"{BASE_URL}/{date_str}"
+
+    try:
+        with urllib.request.urlopen(url, timeout=5) as response:
+            if response.status != 200:
+                return None
+
+            raw = json.loads(response.read().decode())
+            # Convert large observation list into a lean {hour: temp} dictionary
+            return {
+                obs["observationTimeUtc"][11:13]: obs.get("airTemperature")
+                for obs in raw.get("observations", [])
+                if obs.get("observationTimeUtc", "").startswith(date_str)
             }
-            html = requests.get(self._url, headers=headers)
-            return html.text
-
-        except Exception:  # pylint: disable=broad-except
-            return ""
+    except Exception as e:
+        return None
