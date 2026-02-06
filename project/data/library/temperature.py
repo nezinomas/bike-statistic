@@ -1,6 +1,6 @@
 import json
 import urllib.request
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.core.cache import cache
 
@@ -12,27 +12,33 @@ def get_temperature(dt: datetime, force_refresh: bool = False) -> float | None:
     Retrieves the temperature for a specific hour using a flattened logic flow.
     """
     date_str = dt.strftime("%Y-%m-%d")
-    hour_key = str(dt.hour).zfill(2)
     cache_key = f"weather_{date_str}"
 
+    # 1. Pull data from cache
     cached_data = cache.get(cache_key) or {}
+    target_hour_str = str(dt.hour).zfill(2)
 
-    # 2. Determine if we need to fetch
-    has_target_hour = hour_key in cached_data
-    if not force_refresh and has_target_hour:
-        return cached_data.get(hour_key)
+    # 2. Fetch from API if target is missing or refresh is forced
+    if force_refresh or target_hour_str not in cached_data:
+        if new_data := _fetch_daily_data(date_str):
+            cached_data = cached_data | new_data
+            cache.set(cache_key, cached_data)
 
-    # 3. Fetch from API
-    new_data = _fetch_daily_data(date_str)
-    if not new_data:
-        # If API fails, return what we had in cache (even if hour is missing)
-        return cached_data.get(hour_key)
+    # 3. Fallback Loop: 0h -> -1h -> -2h
+    for offset in [0, 1, 2]:
+        check_time = dt - timedelta(hours=offset)
 
-    # 4. Merge and Update Cache
-    updated_data = cached_data | new_data
-    cache.set(cache_key, updated_data)
+        # Guard: Stay within the same calendar day for simplicity
+        if check_time.date() != dt.date():
+            continue
 
-    return updated_data.get(hour_key)
+        hour_key = str(check_time.hour).zfill(2)
+
+        # CORRECTED: Actually return the value if it exists!
+        if hour_key in cached_data:
+            return cached_data[hour_key]
+
+    return None
 
 
 def _fetch_daily_data(date_str: str) -> dict | None:
