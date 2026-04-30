@@ -8,7 +8,6 @@ from garminconnect import (
     GarminConnectAuthenticationError,
     GarminConnectConnectionError,
     GarminConnectTooManyRequestsError,
-    GarthHTTPError,
 )
 
 from ...core.lib import utils
@@ -64,7 +63,6 @@ class GarminClient:
         except (
             GarminConnectAuthenticationError,
             FileNotFoundError,
-            GarthHTTPError,
             GarminConnectConnectionError,
             requests.exceptions.HTTPError,
         ):
