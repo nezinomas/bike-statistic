@@ -32,32 +32,14 @@ class GarminClient:
             tokenstore_path.parent.mkdir(parents=True, exist_ok=True)
 
         try:
-            garmin = Garmin()
-            garmin.login(str(tokenstore_path))
-            garmin.get_user_profile()
-            print("Successfully logged in using stored tokens.")
-            return garmin
-        except (GarminConnectAuthenticationError, Exception) as e:
-            print(f"Tokens expired or invalid ({e}). Cleaning up...")
-
-            try:
-                shutil.rmtree(tokenstore_path)
-                tokenstore_path.parent.mkdir(parents=True, exist_ok=True)
-            except Exception as cleanup_err:
-                print(f"Failed to delete old tokens: {cleanup_err}")
-
-        try:
             garmin = Garmin(
                 email=username,
                 password=utils.decrypt(password),
                 is_cn=False,
                 return_on_mfa=False,
             )
-            garmin.login()
+            garmin.login(str(tokenstore_path))
 
-            # Save tokens for future use
-            garmin.garth.dump(str(tokenstore_path))
-            print("Successfully logged using username and password.")
             return garmin
 
         except (
