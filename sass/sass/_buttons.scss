@@ -179,13 +179,15 @@
 
 
 .btn-temp-update {
+    position: absolute;
+    right: 0.25rem;
+    top: 50%;
+    transform: translateY(-50%);
     border: none;
     background: transparent;
     padding: 0;
-    margin-left: 0.25rem;
     color: #6c757d;
     cursor: pointer;
-    vertical-align: middle;
 
     &:hover {
         color: #0d6efd;

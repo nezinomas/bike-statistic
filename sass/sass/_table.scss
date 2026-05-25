@@ -98,6 +98,10 @@ $w20:  20rem;
     border-right: 1.5px solid black !important;
 }
 
+.temp-cell {
+    position: relative;
+}
+
 .data-cols {
     // all columns
     td {

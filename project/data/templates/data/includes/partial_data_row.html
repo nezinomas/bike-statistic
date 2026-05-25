@@ -11,7 +11,7 @@
     <td>{{ object.date|date:'Y-m-d' }}</td>
     <td>{{ object.distance }}</td>
     <td>{{ object.time }}</td>
-    <td>
+    <td class="temp-cell">
         {{ object.temperature|default_if_none:'-' }}
         {% url 'data:data_update_temperature' object.pk as url_temp %}
         <button
