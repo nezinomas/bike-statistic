@@ -11,7 +11,22 @@
     <td>{{ object.date|date:'Y-m-d' }}</td>
     <td>{{ object.distance }}</td>
     <td>{{ object.time }}</td>
-    <td>{{ object.temperature|default_if_none:'-' }}</td>
+    <td>
+        {% if object.temperature is not None %}
+            {{ object.temperature }}
+        {% else %}
+            {% url 'data:data_update_temperature' object.pk as url_temp %}
+            <button
+                type="button"
+                class="btn-secondary btn-edit"
+                hx-get="{{ url_temp }}"
+                hx-target="#{{ row_id }}"
+                hx-swap="outerHTML"
+                title="Update temperature">
+                <i class="bi bi-thermometer-half"></i>
+            </button>
+        {% endif %}
+    </td>
     <td>{{ object.ascent|floatformat:0|intcomma }}</td>
     <td>{{ object.descent|floatformat:0|intcomma }}</td>
     <td>{{ object.max_speed|floatformat:1 }}</td>

@@ -58,3 +58,4 @@ class DateFilterForm(forms.Form):
 
         self.helper = FormHelper()
         self.helper.form_show_labels = False
+

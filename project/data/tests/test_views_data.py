@@ -375,3 +375,71 @@ def test_data_quick_update(client_logged):
 
     actual = Data.objects.get(pk=obj.pk)
     assert actual.checked == "y"
+
+
+def test_data_update_temperature_func():
+    view = resolve("/data/update_temperature/1/")
+    assert views.DataUpdateTemperature is view.func.view_class
+
+
+def test_data_update_temperature_not_logged(client):
+    data = DataFactory()
+    url = reverse("data:data_update_temperature", kwargs={"pk": data.pk})
+    response = client.get(url, follow=True)
+    assert response.resolver_match.func.view_class is Login
+
+
+def test_data_update_temperature_view_updates_temp(client_logged, mocker):
+    mocker.patch("project.data.views.get_temperature", return_value=12.3)
+    data = DataFactory(temperature=None, checked="n")
+    url = reverse("data:data_update_temperature", kwargs={"pk": data.pk})
+    response = client_logged.get(url)
+    assert response.status_code == 200
+
+    data.refresh_from_db()
+    assert data.temperature == 12.3
+    assert data.checked == "y"
+
+    content = clean_content(response.content)
+    assert "12,3" in content
+
+
+def test_data_update_temperature_view_handles_none(client_logged, mocker):
+    mocker.patch("project.data.views.get_temperature", return_value=None)
+    data = DataFactory(temperature=None, checked="n")
+    url = reverse("data:data_update_temperature", kwargs={"pk": data.pk})
+    response = client_logged.get(url)
+    assert response.status_code == 200
+
+    data.refresh_from_db()
+    assert data.temperature is None
+    assert data.checked == "n"
+
+    content = clean_content(response.content)
+    assert "bi-thermometer-half" in content
+
+
+@time_machine.travel("2000-01-01")
+def test_data_list_shows_temperature_update_button_when_none(client_logged):
+    data = DataFactory(temperature=None)
+    url = reverse("data:data_list")
+    response = client_logged.get(url)
+    content = clean_content(response.content)
+
+    url_temp = reverse("data:data_update_temperature", kwargs={"pk": data.pk})
+    assert f'hx-get="{url_temp}"' in content
+    assert 'class="btn-secondary btn-edit"' in content
+    assert 'bi-thermometer-half' in content
+    assert f'hx-target="#row-id-{data.pk}"' in content
+    assert 'hx-swap="outerHTML"' in content
+
+
+@time_machine.travel("2000-01-01")
+def test_data_list_shows_temperature_when_present(client_logged):
+    data = DataFactory(temperature=15.6)
+    url = reverse("data:data_list")
+    response = client_logged.get(url)
+    content = clean_content(response.content)
+
+    assert "15,6" in content
+

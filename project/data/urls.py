@@ -14,6 +14,11 @@ urlpatterns = [
     path("create/", views.DataCreate.as_view(), name="data_create"),
     path("update/<int:pk>/", views.DataUpdate.as_view(), name="data_update"),
     path(
+        "update_temperature/<int:pk>/",
+        views.DataUpdateTemperature.as_view(),
+        name="data_update_temperature",
+    ),
+    path(
         "quick_update/<int:pk>/", views.QuickUpdate.as_view(), name="data_quick_update"
     ),
     path("delete/<int:pk>/", views.DataDelete.as_view(), name="data_delete"),
