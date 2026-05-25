@@ -176,3 +176,18 @@
     --padding-vertical: .25rem;
     --padding-horizontal: 1rem;
 }
+
+
+.btn-temp-update {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin-left: 0.25rem;
+    color: #6c757d;
+    cursor: pointer;
+    vertical-align: middle;
+
+    &:hover {
+        color: #0d6efd;
+    }
+}

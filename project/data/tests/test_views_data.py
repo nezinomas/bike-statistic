@@ -416,7 +416,7 @@ def test_data_update_temperature_view_handles_none(client_logged, mocker):
     assert data.checked == "n"
 
     content = clean_content(response.content)
-    assert "bi-thermometer-half" in content
+    assert "bi-arrow-repeat" in content
 
 
 @time_machine.travel("2000-01-01")
@@ -428,8 +428,8 @@ def test_data_list_shows_temperature_update_button_when_none(client_logged):
 
     url_temp = reverse("data:data_update_temperature", kwargs={"pk": data.pk})
     assert f'hx-get="{url_temp}"' in content
-    assert 'class="btn-secondary btn-edit"' in content
-    assert 'bi-thermometer-half' in content
+    assert 'class="btn-temp-update"' in content
+    assert 'bi-arrow-repeat' in content
     assert f'hx-target="#row-id-{data.pk}"' in content
     assert 'hx-swap="outerHTML"' in content
 
@@ -442,4 +442,8 @@ def test_data_list_shows_temperature_when_present(client_logged):
     content = clean_content(response.content)
 
     assert "15,6" in content
+    url_temp = reverse("data:data_update_temperature", kwargs={"pk": data.pk})
+    assert f'hx-get="{url_temp}"' in content
+    assert 'class="btn-temp-update"' in content
+    assert 'bi-arrow-repeat' in content
 
