@@ -71,7 +71,6 @@ class DataUpdateTemperature(DetailViewMixin):
         temp = get_temperature(self.object.date)
         if temp is not None:
             self.object.temperature = temp
-            self.object.checked = "y"
             self.object.save()
         context = {"obj": self.object}
         return super().get_context_data(**kwargs) | context
