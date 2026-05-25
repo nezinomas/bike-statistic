@@ -14,6 +14,7 @@ from ..core.mixins.views import (
 )
 from . import forms, models
 from .library.insert_garmin import SyncWithGarmin
+from .library.temperature import get_temperature
 
 
 class DataList(ListViewMixin):
@@ -60,6 +61,19 @@ class DataUpdate(UpdateViewMixin):
 
     def title(self):
         return "Update activity"
+
+
+class DataUpdateTemperature(DetailViewMixin):
+    model = models.Data
+    template_name = "data/includes/partial_data_row.html"
+
+    def get_context_data(self, **kwargs):
+        temp = get_temperature(self.object.date)
+        if temp is not None:
+            self.object.temperature = temp
+            self.object.save()
+        context = {"obj": self.object}
+        return super().get_context_data(**kwargs) | context
 
 
 class QuickUpdate(DetailViewMixin):
