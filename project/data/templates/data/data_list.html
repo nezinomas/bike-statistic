@@ -26,7 +26,17 @@
             <th>Date</th>
             <th>Distance</th>
             <th>Time</th>
-            <th>&#8451;</th>
+            <th class="temp-cell">
+                &#8451;
+                <button
+                    type="button"
+                    class="btn-temp-update"
+                    hx-get="{% url 'data:data_update_today_temperature' %}"
+                    hx-target="#htmx-container"
+                    title="Fetch today's temperature from Meteo API">
+                    <i class="bi bi-cloud-arrow-down"></i>
+                </button>
+            </th>
             <th>Ascent</th>
             <th>Descent</th>
             <th>Max Speed</th>

@@ -19,6 +19,11 @@ urlpatterns = [
         name="data_update_temperature",
     ),
     path(
+        "update_today_temperature/",
+        views.UpdateTodayTemperature.as_view(),
+        name="data_update_today_temperature",
+    ),
+    path(
         "quick_update/<int:pk>/", views.QuickUpdate.as_view(), name="data_quick_update"
     ),
     path("delete/<int:pk>/", views.DataDelete.as_view(), name="data_delete"),

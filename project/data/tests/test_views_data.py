@@ -447,3 +447,43 @@ def test_data_list_shows_temperature_when_present(client_logged):
     assert 'class="btn-temp-update"' in content
     assert 'bi-arrow-repeat' in content
 
+
+def test_data_update_today_temperature_func():
+    view = resolve("/data/update_today_temperature/")
+    assert views.UpdateTodayTemperature is view.func.view_class
+
+
+def test_data_update_today_temperature_not_logged(client):
+    url = reverse("data:data_update_today_temperature")
+    response = client.get(url, follow=True)
+    assert response.resolver_match.func.view_class is Login
+
+
+@time_machine.travel("2000-01-01")
+def test_data_update_today_temperature_view_fetches_cache_only(client_logged, mocker):
+    mock_get_temp = mocker.patch("project.data.views.get_temperature")
+    data = DataFactory(temperature=None, date=datetime(2000, 1, 1, 10, 0, tzinfo=timezone.utc))
+
+    url = reverse("data:data_update_today_temperature")
+    response = client_logged.get(url)
+    assert response.status_code == 200
+
+    mock_get_temp.assert_any_call(mocker.ANY, force_refresh=True)
+
+    data.refresh_from_db()
+    assert data.temperature is None
+
+
+@time_machine.travel("2000-01-01")
+def test_data_list_shows_header_update_button(client_logged):
+    DataFactory()
+    url = reverse("data:data_list")
+    response = client_logged.get(url)
+    content = clean_content(response.content)
+
+    url_today = reverse("data:data_update_today_temperature")
+    assert f'hx-get="{url_today}"' in content
+    assert 'hx-target="#htmx-container"' in content
+    assert 'bi-cloud-arrow-down' in content
+
+
