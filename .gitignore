@@ -8,6 +8,7 @@ __pycache__/
 # my folders
 media/
 .idea/
+.agents/
 project.pyproj*
 *.p
 
