@@ -32,7 +32,7 @@ input.text-center {
     color: #212529;
     border: 1px solid #dee2e6;
     border-radius: 0;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 
     &:focus {
         border-color: mix(white, $primary, 50%);
@@ -72,8 +72,8 @@ input.text-center {
     &.datepickerinput,
     &.yearpickerinput {
         background-position:
-        right 1.85rem center,
-        center right 2.25rem;
+            right 1.85rem center,
+            center right 2.25rem;
     }
 }
 
@@ -112,7 +112,7 @@ input.text-center {
 
     &.is-invalid {
         border-color: $danger;
-        background-color: $danger!important;
+        background-color: $danger !important;
     }
 }
 
