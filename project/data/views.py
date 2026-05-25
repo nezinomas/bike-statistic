@@ -1,6 +1,10 @@
 from datetime import date, timedelta
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from django.urls import reverse_lazy
+from django.utils.timezone import now
+from django.views import View
 
 from ..core.lib import utils
 from ..core.mixins.views import (
@@ -120,3 +124,9 @@ class DataInsert(TemplateViewMixin):
         else:
             message = rendered_content(self.request, DataList)
         return super().get_context_data(**kwargs) | {"message": message}
+
+
+class UpdateTodayTemperature(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        get_temperature(now(), force_refresh=True)
+        return HttpResponse(rendered_content(request, DataList))
