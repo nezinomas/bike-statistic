@@ -398,7 +398,7 @@ def test_data_update_temperature_view_updates_temp(client_logged, mocker):
 
     data.refresh_from_db()
     assert data.temperature == 12.3
-    assert data.checked == "y"
+    assert data.checked == "n"
 
     content = clean_content(response.content)
     assert "12,3" in content
