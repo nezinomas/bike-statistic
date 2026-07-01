@@ -42,6 +42,7 @@ CSRF_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = "DENY"
 
 
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -59,7 +60,7 @@ LOGGING = {
         # Log to a text file that can be rotated by logrotate
         "logfile": {
             "class": "logging.handlers.WatchedFileHandler",
-            "filename": "/data/django_projects/_bike.log",
+            "filename": ENV["LOG_FILE"],
         },
     },
     "loggers": {
