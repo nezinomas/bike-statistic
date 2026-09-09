@@ -20,7 +20,7 @@ dependencies = [
     "django-widget-tweaks>=1.5.1",
     "garminconnect>=0.3.3",
     "mysqlclient>=2.2.8",
-    "polars>=1.41.0",
+    "polars[rtcompat]>=1.41.0",
     "requests>=2.34.2",
     "slippers>=0.7.0",
 ]
