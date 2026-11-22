@@ -88,7 +88,9 @@ class ComponentWear:
             "median": 0,
         }
         if not self._df.is_empty():
-            col = self._df.transpose().to_series()
+            # Float first: polars 2.1 scales Decimal values by 10 in transpose(),
+            # and polars 1 dropped the decimal part of a filtered Decimal sum.
+            col = self._df.select(pl.all().cast(pl.Float64)).transpose().to_series()
             dicts["avg"] = col.mean()
             dicts["median"] = col.median()
 

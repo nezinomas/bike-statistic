@@ -99,8 +99,9 @@ def test_component_distance_no_components():
 def test_component_stats(stats, data):
     actual = ComponentWear(stats, data).component_stats
 
-    assert actual["avg"] == 17.0
-    assert actual["median"] == 17.0
+    # 22.0 and 12.5 km. Was 17.0: polars 1 truncated 12.5 to 12.
+    assert actual["avg"] == 17.25
+    assert actual["median"] == 17.25
 
 
 def test_component_stats_no_data(stats):
